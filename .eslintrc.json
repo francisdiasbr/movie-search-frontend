@@ -1,0 +1,54 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-native/all",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "env": {
+    "react-native/react-native": true
+  },
+  "plugins": [
+    "eslint-plugin-import-helpers",
+    "react",
+    "react-native",
+    "@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "indent": [1, 2, {"SwitchCase": 1}],
+    "quotes": ["error", "single", {"avoidEscape": true}],
+    "react-native/no-inline-styles": "off",
+    "react-native/no-color-literals": "off",
+    "no-unused-vars": ["warn"],
+    "object-curly-spacing": [2, "always"],
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-native/no-raw-text": "off",
+    "react/prop-types": "off",
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          "module", 
+          ["/^\\./", "parent", "sibling", "index"] 
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ]
+  }
+}
