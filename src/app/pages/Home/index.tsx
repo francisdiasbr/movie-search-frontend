@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Text, TextInput } from 'react-native-paper';
 
-import { fetchMovies } from '../../../api/service';
+import BaseService from '../../../api/service';
 import MainLayout from '../../components/MainLayout';
 import * as S from './styles';
+
+export const fetchMovies = async (query: any) => {
+  const url = `/search?query=${encodeURIComponent(query)}`;
+  const response = await BaseService.get(url);
+  return response;
+}
 
 const HomeScreen = () => {
 
