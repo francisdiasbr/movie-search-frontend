@@ -7,13 +7,19 @@
     "resolveJsonModule": true,
     "strict": true,
     "target": "ES6"
-},
-  "typeRoots": ["./node_modules/@types", "./src/types"],
+  },
+  "typeRoots": [
+    "./node_modules/@types",
+    "./src/types"
+  ],
   "include": [
     "*.ts",
     "*.tsx",
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ],
+  "extends": "expo/tsconfig.base"
 }
