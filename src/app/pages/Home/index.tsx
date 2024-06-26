@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Text, TextInput } from 'react-native-paper';
 
-import BaseService from '../../../api/service';
+import { fetchMovies } from '../../../api/store/actions/moviesActions';
+import { useAppDispatch } from '../../../api/store/dispatch';
+import { useGlobalState } from '../../../api/store/useState';
 import MainLayout from '../../components/MainLayout';
 import * as S from './styles';
 
-export const fetchMovies = async (query: any) => {
-  const url = `/search?query=${encodeURIComponent(query)}`;
-  const response = await BaseService.get(url);
-  return response;
-}
-
 const HomeScreen = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [text, setText] = useState<string>('');
 
-  const [text, setText] = useState('');
-  const [movieResponse, setMovieResponse] = useState([]);
+  const dispatch = useAppDispatch();
+  const movies = useGlobalState(state => state.movies);
+  const { status, moviesList } = movies;
 
-  const handleSearchMovies = async () => {
-    try {
-      const movies = await fetchMovies(text);
-      setMovieResponse(movies.response);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSearchMovies = () => {
+    setIsLoading(true)
+    dispatch(fetchMovies(text));
   }
+
+  useEffect(() => {
+    if(status === 'succeeded' || status === 'failed') {
+      setIsLoading(false)
+    }
+  }, [status])
 
   return (
     <MainLayout>
@@ -40,11 +41,19 @@ const HomeScreen = () => {
           value={text}
           onChangeText={setText}
         />
-        <Button mode="contained" onPress={handleSearchMovies}>
-          Buscar
+        <Button
+          mode="contained" 
+          onPress={handleSearchMovies}
+          loading={isLoading}
+        >
+          {isLoading ? '' : 'Buscar'}
         </Button>
         <Text variant='bodyMedium'>Sugestão de filme:</Text>
-        <Text variant='bodyMedium'>{movieResponse}</Text>
+        {status === 'loading' ? (
+          <Text>Carregando</Text>
+        ) : (
+          <Text variant='bodyMedium'>{moviesList}</Text>
+        )}
       </S.Container>
     </MainLayout>
   )
