@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import movieCuratorySlice from './features/movies/curatorySlice'
+import movieDetailsSlice from './features/details/detailsSlice'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       moviesCuratory: movieCuratorySlice,
+      moviesDetails: movieDetailsSlice,
     }
   })
 }

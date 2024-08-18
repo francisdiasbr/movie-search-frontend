@@ -13,7 +13,7 @@ export const fetchCuratory = createAsyncThunk(
   'movies/curatory',
   async () => {
     try {
-      const response = await BaseService.get('sync');
+      const response = await BaseService.get('listed-movies');
       if (response && response.data && Array.isArray(response.data)) {
         // console.log('response.data', response.data);
         return response.data;

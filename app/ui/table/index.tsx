@@ -1,51 +1,50 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import eyeIcon from '@iconify/icons-lucide/eye';
 
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { fetchCuratory } from '@/lib/features/movies/curatorySlice';
 import Icon from '../Icon';
-import styles from './table.module.css';
-import { MovieItemTableProps } from './types';
+import * as S from './styles';
+import {TableProps } from './types';
 
-const Table = () => {
+const Table = ({columns, data}: TableProps) => {
   const pathname = usePathname();
   const router = useRouter()
-  const dispatch = useAppDispatch();
-
-  const { data } = useAppSelector((state) => state.moviesCuratory);
-
-  useEffect(() => {
-    dispatch(fetchCuratory());
-  }, [dispatch]);
-
+  
   const handleClick = (tconst: string) => {
     router.push(`${pathname}/${tconst}`);
   };
 
   return (
-    <table className={styles.table}>
+    <S.StyledTable>
       <thead>
         <tr>
-          <th scope="col" className={styles.header}>IMDb code</th>
-          <th scope="col" className={styles.header}>Title</th>
-          <th scope="col" className={styles.header}>Year</th>
-          <th scope="col" className={styles.header}>Actions</th>
+          {columns.map((column) => (
+            <S.Header key={column.key}>
+              {column.label}
+            </S.Header>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item: MovieItemTableProps) => (
-          <tr key={item.tconst} className={styles.row}>
-            <td className={styles.cell}>{item.tconst}</td>
-            <td className={styles.cell}>{item.primaryTitle}</td>
-            <td className={styles.cell}>{item.startYear}</td>
-            <td className={styles.cell}><button onClick={() => handleClick(item.tconst)}><Icon icon={eyeIcon} fontSize={16} /></button></td>
-          </tr>
+        {data.map((item) => (
+          <S.Row key={item.tconst}>
+            {columns.map((column) => (
+              <S.Cell key={column.key}>
+                {column.isAction ? (
+                  <button onClick={() => handleClick(item.tconst)}>
+                    <Icon icon={eyeIcon} fontSize={16} />
+                  </button>
+                ) : (
+                  item[column.key]
+                )}
+              </S.Cell>
+            ))}
+          </S.Row>
         ))}
       </tbody>
-    </table>
+    </S.StyledTable>
   );
 };
 
