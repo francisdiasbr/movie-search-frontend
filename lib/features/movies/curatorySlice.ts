@@ -8,14 +8,30 @@ const initialState: MovieCuratoryState = {
     error: null,
     status: 'idle',
   };
+
+interface FetchCuratoryParams {
+  filters?: any
+  sorters?: any
+  page: number
+  pageSize?: number
+}
   
 export const fetchCuratory = createAsyncThunk(
   'movies/curatory',
-  async () => {
+  async (params: FetchCuratoryParams) => {
     try {
-      const response = await BaseService.get('listed-movies');
+
+      const fetchBody = {
+        filters: params.filters || {},
+        sorters: params.sorters || ["primaryTitle", 1],
+        page: params.page || 1,
+        page_size: params.pageSize || 5
+      }
+
+      const response = await BaseService.post('listed-movies/search', fetchBody);
+
       if (response && response.data && Array.isArray(response.data)) {
-        // console.log('response.data', response.data);
+        console.log('response.data', response.data);
         return response.data;
       } else {
         throw new Error('Invalid response format');

@@ -11,7 +11,13 @@ export default function Page() {
   const { data } = useAppSelector((state) => state.moviesCuratory);
 
   useEffect(() => {
-    dispatch(fetchCuratory());
+    const params = {
+      filters: {},
+      sorters: data.primaryTitle,
+      page: 1,
+      pageSize: 5
+    }
+    dispatch(fetchCuratory(params));
   }, [dispatch]);
 
   const columns = [
