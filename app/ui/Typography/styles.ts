@@ -3,65 +3,65 @@ import styled from 'styled-components';
 import { TypographyProps } from './types';
 
 const fontStyles = {
-  'heading-xs': {
-    fontSize: 12,
-    lineHeight: '13px',
+  'heading-2xl': {
+    fontSize: 28,
     fontWeight: '700',
-  },
-  'heading-sm': {
-    fontSize: 16,
-    lineHeight: '16px',
-    fontWeight: '700',
-  },
-  'heading-md': {
-    fontSize: 18,
-    lineHeight: '20px',
-    fontWeight: '700',
+    lineHeight: '32px',
   },
   'heading-lg': {
     fontSize: 20,
-    lineHeight: '25px',
     fontWeight: '700',
+    lineHeight: '25px',
+  },
+  'heading-md': {
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: '20px',
+  },
+  'heading-sm': {
+    fontSize: 16,
+    fontWeight: '700',
+    lineHeight: '16px',
   },
   'heading-xl': {
     fontSize: 24,
+    fontWeight: '700',
     lineHeight: '30px',
-    fontWeight: '700',
   },
-  'heading-2xl': {
-    fontSize: 28,
-    lineHeight: '32px',
+  'heading-xs': {
+    fontSize: 12,
     fontWeight: '700',
+    lineHeight: '13px',
   },
   'text-12': {
-    fontWeight: '400',
     fontSize: 12,
+    fontWeight: '400',
     lineHeight: '13px',
   },
   'text-14': {
-    fontWeight: '400',
     fontSize: 13,
+    fontWeight: '400',
     lineHeight: '17px',
   },
-  'text-md': {
+  'text-2xl': {
+    fontSize: 25,
     fontWeight: '400',
-    fontSize: 15,
-    lineHeight: '23px',
+    lineHeight: '32px',
   },
   'text-lg': {
-    fontWeight: '400',
     fontSize: 19,
+    fontWeight: '400',
     lineHeight: '25px',
   },
-  'text-xl': {
+  'text-md': {
+    fontSize: 15,
     fontWeight: '400',
-    fontSize: 23,
-    lineHeight: '30px',
+    lineHeight: '23px',
   },
-  'text-2xl': {
+  'text-xl': {
+    fontSize: 23,
     fontWeight: '400',
-    fontSize: 25,
-    lineHeight: '32px',
+    lineHeight: '30px',
   },
 };
 

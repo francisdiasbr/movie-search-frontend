@@ -1,11 +1,11 @@
 export interface MovieCardDetailsProps {
-  primaryTitle: string;
-  tconst: string;
-  startYear: string;
   averageRating: number;
   numVotes: number;
   plot: string;
+  primaryTitle: string;
   quote: string;
   spotifyUrl: string;
+  startYear: string;
+  tconst: string;
   wiki: string;
 }

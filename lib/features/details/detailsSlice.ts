@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
-import { MovieDetailsState, MovieDetailsItem } from './types';
+import { MovieDetailsItem, MovieDetailsState } from './types';
 
 const initialState: MovieDetailsState = {
   data: null,
@@ -29,9 +29,6 @@ export const fetchDetails = createAsyncThunk(
 );
 
 const movieDetailsSlice = createSlice({
-  name: 'moviesDetails',
-  initialState,
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchDetails.pending, (state) => {
@@ -46,6 +43,9 @@ const movieDetailsSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch details';
       });
   },
+  initialState,
+  name: 'moviesDetails',
+  reducers: {},
 });
 
 export default movieDetailsSlice.reducer;

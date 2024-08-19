@@ -2,7 +2,7 @@
 
 import Typography from '@/app/ui/Typography';
 import { fetchDetails } from '@/lib/features/details/detailsSlice';
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
 import { Icon } from '@iconify/react';
 import { useParams, useRouter } from 'next/navigation';
@@ -37,17 +37,17 @@ export default function MovieDetailsPage() {
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
-        <Icon icon={arrowLeft} fontSize={24} />
+        <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
       <MovieCardDetails
-        primaryTitle={data.primaryTitle}
-        tconst={data.tconst}
-        startYear={data.startYear}
         averageRating={data.averageRating}
         numVotes={data.numVotes}
         plot={data.plot}
+        primaryTitle={data.primaryTitle}
         quote={data.quote}
         spotifyUrl={data.soundtrack}
+        startYear={data.startYear}
+        tconst={data.tconst}
         wiki={data.wiki}
       />
       <Typography variant='heading-xl'>Similares</Typography>

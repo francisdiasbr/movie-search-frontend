@@ -1,4 +1,4 @@
-import { Inter, Figtree, Lustria } from 'next/font/google';
+import { Figtree, Inter, Lustria } from 'next/font/google';
 
 export const inter = Inter({
   subsets: ['latin'],

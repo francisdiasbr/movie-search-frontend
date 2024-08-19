@@ -9,7 +9,7 @@ export interface MovieItem {
 
 export interface MovieCuratoryState {
   entries: any;
+  error: null | string;
+  status: 'failed' | 'idle' | 'loading' | 'succeeded';
   total_documents: number;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
 }

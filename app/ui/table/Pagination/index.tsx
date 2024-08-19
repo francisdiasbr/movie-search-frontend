@@ -20,13 +20,13 @@ const Pagination = ({
   return (
     <S.PaginationContainer>
       <S.PaginationButtons>
-        <S.Button onClick={handlePrevPage} disabled={pageIndex === 0}>
+        <S.Button disabled={pageIndex === 0} onClick={handlePrevPage}>
           Previous
         </S.Button>
         <S.PageValue>{pageIndex + 1}</S.PageValue>
         <S.Button
-          onClick={handleNextPage}
           disabled={pageIndex + 1 >= totalPages}
+          onClick={handleNextPage}
         >
           Next
         </S.Button>

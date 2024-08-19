@@ -1,21 +1,21 @@
 type TypographyVariant =
-  | 'heading-xs'
-  | 'heading-sm'
-  | 'heading-md'
-  | 'heading-lg'
-  | 'heading-xl'
   | 'heading-2xl'
-  | 'text-xs'
-  | 'text-sm'
-  | 'text-md'
+  | 'heading-lg'
+  | 'heading-md'
+  | 'heading-sm'
+  | 'heading-xl'
+  | 'heading-xs'
+  | 'text-2xl'
   | 'text-lg'
+  | 'text-md'
+  | 'text-sm'
   | 'text-xl'
-  | 'text-2xl';
+  | 'text-xs';
 
 export type TypographyProps = {
   children: React.ReactNode;
   color?: string;
+  style?: React.CSSProperties;
   underline?: boolean;
   variant?: TypographyVariant;
-  style?: React.CSSProperties;
 };

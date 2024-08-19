@@ -13,6 +13,6 @@ export interface MovieDetailsItem {
 
 export interface MovieDetailsState {
   data: any;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
+  error: null | string;
+  status: 'failed' | 'idle' | 'loading' | 'succeeded';
 }

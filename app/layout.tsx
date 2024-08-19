@@ -7,8 +7,8 @@ import StoreProvider from './StoreProvider';
 const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata: Metadata = {
-  title: 'Movie Search Admin',
   description: 'Custom admin panel for Movie Search',
+  title: 'Movie Search Admin',
 };
 
 export default function RootLayout({

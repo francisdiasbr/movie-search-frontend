@@ -6,16 +6,16 @@ import { TypographyProps } from './types';
 const Typography: React.FC<TypographyProps> = ({
   children,
   color = '#2D2A26',
+  style,
   underline,
   variant = 'text-md',
-  style,
 }) => {
   return (
     <TextStyled
-      underline={underline}
-      variant={variant}
       color={color}
       style={style}
+      underline={underline}
+      variant={variant}
     >
       {children}
     </TextStyled>

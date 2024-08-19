@@ -12,11 +12,11 @@ import { TableProps } from './types';
 const Table = ({
   columns,
   entries,
-  totalDocuments,
-  pageIndex,
-  pageSize,
   onPageChange,
   onPageSizeChange,
+  pageIndex,
+  pageSize,
+  totalDocuments,
 }: TableProps) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -52,9 +52,9 @@ const Table = ({
           </tr>
         </thead>
         <TableBody
-          handleClick={handleClick}
           columns={columns}
           entries={entries}
+          handleClick={handleClick}
         />
       </S.StyledTable>
       <S.Footer>

@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchCuratory } from '@/lib/features/movies/curatorySlice';
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import React, { useEffect, useState } from 'react';
 
 import Table from '../../ui/Table';
@@ -18,15 +18,15 @@ export default function Page() {
   useEffect(() => {
     const params = {
       filters: {},
-      sorters: entries.primaryTitle,
       page: pageIndex + 1,
       pageSize,
+      sorters: entries.primaryTitle,
     };
     dispatch(fetchCuratory(params));
   }, [dispatch, pageIndex, pageSize]);
 
   const columnData = [
-    { key: 'actions', label: 'Actions', isAction: true, width: '15%' },
+    { isAction: true, key: 'actions', label: 'Actions', width: '15%' },
     { key: 'tconst', label: 'IMDb code', width: '15%' },
     { key: 'primaryTitle', label: 'Title', width: '50%' },
     { key: 'startYear', label: 'Year', width: '20%' },
@@ -38,11 +38,11 @@ export default function Page() {
       <Table
         columns={columnData}
         entries={entries}
-        totalDocuments={total_documents}
-        pageSize={pageSize}
-        pageIndex={pageIndex}
-        onPageSizeChange={setPageSize}
         onPageChange={setPageIndex}
+        onPageSizeChange={setPageSize}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        totalDocuments={total_documents}
       />
     </>
   );

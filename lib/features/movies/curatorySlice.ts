@@ -1,20 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
 import { MovieCuratoryState } from './types';
 
 const initialState: MovieCuratoryState = {
   entries: [],
-  total_documents: 0,
   error: null,
   status: 'idle',
+  total_documents: 0,
 };
 
 interface FetchCuratoryParams {
   filters?: any;
-  sorters?: any;
   page: number;
   pageSize?: number;
+  sorters?: any;
 }
 
 export const fetchCuratory = createAsyncThunk(
@@ -23,9 +23,9 @@ export const fetchCuratory = createAsyncThunk(
     try {
       const fetchBody = {
         filters: params.filters || {},
-        sorters: params.sorters || ['primaryTitle', 1],
         page: params.page,
         page_size: params.pageSize,
+        sorters: params.sorters || ['primaryTitle', 1],
       };
 
       const response = await BaseService.post(
@@ -46,9 +46,6 @@ export const fetchCuratory = createAsyncThunk(
 );
 
 const movieCuratorySlice = createSlice({
-  name: 'moviesCuratory',
-  initialState,
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCuratory.pending, (state) => {
@@ -66,6 +63,9 @@ const movieCuratorySlice = createSlice({
         state.error = 'error';
       });
   },
+  initialState,
+  name: 'moviesCuratory',
+  reducers: {},
 });
 
 export default movieCuratorySlice.reducer;

@@ -1,19 +1,19 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export type Column = {
+  isAction?: boolean;
   key: string;
   label: string;
-  isAction?: boolean;
   width?: any;
 };
 
 export type TableProps = {
   columns: Column[];
   entries: any[];
-  pageIndex: number;
-  pageSize: number;
   onPageChange: Dispatch<SetStateAction<number>>;
   onPageSizeChange: Dispatch<SetStateAction<number>>;
+  pageIndex: number;
+  pageSize: number;
   totalDocuments: number;
 };
 

@@ -3,26 +3,26 @@ import React from 'react';
 import * as S from './styles';
 
 type MovieCardDetailsProps = {
-  primaryTitle: string;
-  tconst: string;
-  startYear: string;
   averageRating: number;
   numVotes: number;
   plot: string;
+  primaryTitle: string;
   quote: string;
   spotifyUrl: string;
+  startYear: string;
+  tconst: string;
   wiki: string;
 };
 
 const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
-  primaryTitle,
-  tconst,
-  startYear,
   averageRating,
   numVotes,
   plot,
+  primaryTitle,
   quote,
   spotifyUrl,
+  startYear,
+  tconst,
   wiki,
 }) => {
   const spotifyId = spotifyUrl.split('/').pop();
@@ -59,17 +59,17 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
       <S.LineInfo>Sinopse: {plot}</S.LineInfo>
       <S.LineInfo>Citação: {formatQuote(quote)}</S.LineInfo>
       <S.LineInfo>
-        <a href={wiki} target='_blank' rel='noopener noreferrer'>
+        <a href={wiki} rel='noopener noreferrer' target='_blank'>
           {wiki}
         </a>
       </S.LineInfo>
       <iframe
-        src={`https://open.spotify.com/embed/album/${spotifyId}`}
-        width='100%'
-        height='300'
-        style={{ paddingTop: '4px', display: 'block', border: 'none' }}
         allow='encrypted-media'
+        height='300'
+        src={`https://open.spotify.com/embed/album/${spotifyId}`}
+        style={{ border: 'none', display: 'block', paddingTop: '4px' }}
         title='Spotify player'
+        width='100%'
       />
     </S.Container>
   );
