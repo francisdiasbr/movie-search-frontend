@@ -8,7 +8,8 @@ export interface MovieItem {
 }
 
 export interface MovieCuratoryState {
-    data: any;
+    entries: any;
+    total_documents: number
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }

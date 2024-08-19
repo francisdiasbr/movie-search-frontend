@@ -1,33 +1,32 @@
 import styled from "styled-components";
 
-export const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
+export const TableContainer = styled.div`
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
-export const Header = styled.th`
+export const StyledTable = styled.table`
+  border-collapse: collapse;
+  width: 100%;
+`;
+
+export const Header = styled.th<{width?: string}>`
   background-color: #f4f4f4;
+  border-bottom: 2px solid #ddd;
+  font-weight: bold;
   padding: 10px;
   text-align: left;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
+  width: ${({ width }) => width || 'auto'};
   &:first-child {
     text-align: center;
     width: 150px;
   };
 `;
 
-export const Row = styled.tr`
-  &:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-`;
-
-export const Cell = styled.td`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-  &:first-child {
-    text-align: center;
-  }
-`;
+export const Footer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+`

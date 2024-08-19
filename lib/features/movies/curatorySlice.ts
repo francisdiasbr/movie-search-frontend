@@ -4,7 +4,8 @@ import BaseService from '../../api/service';
 import { MovieCuratoryState, MovieItem } from './types';
 
 const initialState: MovieCuratoryState = {
-    data: [],
+    entries: [],
+    total_documents: 0,
     error: null,
     status: 'idle',
   };
@@ -24,15 +25,14 @@ export const fetchCuratory = createAsyncThunk(
       const fetchBody = {
         filters: params.filters || {},
         sorters: params.sorters || ["primaryTitle", 1],
-        page: params.page || 1,
-        page_size: params.pageSize || 5
+        page: params.page,
+        page_size: params.pageSize
       }
 
       const response = await BaseService.post('listed-movies/search', fetchBody);
 
-      if (response && response.data && Array.isArray(response.data)) {
-        console.log('response.data', response.data);
-        return response.data;
+      if (response && response.entries && Array.isArray(response.entries)) {
+        return response;
       } else {
         throw new Error('Invalid response format');
       }
@@ -54,7 +54,8 @@ const movieCuratorySlice = createSlice({
       })
       .addCase(fetchCuratory.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.data = action.payload as MovieItem[];
+        state.entries = Array.isArray(action.payload.entries) ? action.payload.entries : [];
+        state.total_documents = action.payload.total_documents;
       })
       .addCase(fetchCuratory.rejected, (state) => {
         state.status = 'failed';

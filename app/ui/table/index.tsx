@@ -2,49 +2,67 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import eyeIcon from '@iconify/icons-lucide/eye';
 
-import Icon from '../Icon';
+import Pagination from './Pagination';
+import PageSizeSelector from './Pagination/PageSizeSelector';
 import * as S from './styles';
-import {TableProps } from './types';
+import { TableProps } from './types';
+import TableBody from './Body';
 
-const Table = ({columns, data}: TableProps) => {
+const Table = ({ columns, entries, totalDocuments, pageIndex, pageSize, onPageChange, onPageSizeChange }: TableProps) => {
   const pathname = usePathname();
   const router = useRouter()
-  
+
   const handleClick = (tconst: string) => {
     router.push(`${pathname}/${tconst}`);
   };
 
+  const totalPages = Math.ceil(totalDocuments / pageSize);
+
+  const handleNextPage = () => {
+    if (pageIndex + 1 < totalPages) {
+      onPageChange(pageIndex + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (pageIndex > 0) {
+      onPageChange(pageIndex - 1);
+    }
+  };
+
+
   return (
-    <S.StyledTable>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <S.Header key={column.key}>
-              {column.label}
-            </S.Header>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <S.Row key={item.tconst}>
+    <S.TableContainer>
+      <S.StyledTable>
+        <thead>
+          <tr>
             {columns.map((column) => (
-              <S.Cell key={column.key}>
-                {column.isAction ? (
-                  <button onClick={() => handleClick(item.tconst)}>
-                    <Icon icon={eyeIcon} fontSize={16} />
-                  </button>
-                ) : (
-                  item[column.key]
-                )}
-              </S.Cell>
+              <S.Header key={column.key} width={column.width}>
+                {column.label}
+              </S.Header>
             ))}
-          </S.Row>
-        ))}
-      </tbody>
-    </S.StyledTable>
+          </tr>
+        </thead>
+        <TableBody
+          handleClick={handleClick}
+          columns={columns}
+          entries={entries}
+        />
+      </S.StyledTable>
+      <S.Footer>
+        <Pagination
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
+          pageIndex={pageIndex}
+          totalPages={totalPages}
+        />
+        <PageSizeSelector
+          onPageSizeChange={onPageSizeChange}
+          pageSize={pageSize}
+        />
+      </S.Footer>
+    </S.TableContainer>
   );
 };
 
