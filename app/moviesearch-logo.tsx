@@ -5,7 +5,7 @@ export default function AcmeLogo() {
     <div
       className={`${figtree.className} flex flex-row items-center leading-none text-white`}
     >
-      <p className="text-[44px]">Movie Search Admin</p>
+      <p className='text-[44px]'>Movie Search Admin</p>
     </div>
   );
 }

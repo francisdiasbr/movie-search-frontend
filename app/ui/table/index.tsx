@@ -1,36 +1,75 @@
-import React from 'react';
-import styles from './table.module.css';
+'use client';
 
-const Table = () => {
-  const data = [
-    { tconst: 'tt0084805', primaryTitle: 'Tootsie', year: 1982, averageRating: 7.5, numVotes: 1234 },
-    { tconst: 'tt0061512', primaryTitle: 'Cool Hand Luke', year: 1967, averageRating: 8.1, numVotes: 190000 },
-    { tconst: 'tt0064115', primaryTitle: 'Butch Cassidy and the Sundance Kid', year: 1967, averageRating: 8.0, numVotes: 220000 },
-  ];
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
+
+import TableBody from './Body';
+import Pagination from './Pagination';
+import PageSizeSelector from './Pagination/PageSizeSelector';
+import * as S from './styles';
+import { TableProps } from './types';
+
+const Table = ({
+  columns,
+  entries,
+  onPageChange,
+  onPageSizeChange,
+  pageIndex,
+  pageSize,
+  totalDocuments,
+}: TableProps) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleClick = (tconst: string) => {
+    router.push(`${pathname}/${tconst}`);
+  };
+
+  const totalPages = Math.ceil(totalDocuments / pageSize);
+
+  const handleNextPage = () => {
+    if (pageIndex + 1 < totalPages) {
+      onPageChange(pageIndex + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (pageIndex > 0) {
+      onPageChange(pageIndex - 1);
+    }
+  };
 
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th scope="col" className={styles.header}>IMDb code</th>
-          <th scope="col" className={styles.header}>Title</th>
-          <th scope="col" className={styles.header}>Year</th>
-          <th scope="col" className={styles.header}>Rating</th>
-          <th scope="col" className={styles.header}>Votes</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.tconst} className={styles.row}>
-            <td className={styles.cell}>{item.tconst}</td>
-            <td className={styles.cell}>{item.primaryTitle}</td>
-            <td className={styles.cell}>{item.year}</td>
-            <td className={styles.cell}>{item.averageRating}</td>
-            <td className={styles.cell}>{item.numVotes}</td>
+    <S.TableContainer>
+      <S.StyledTable>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <S.Header key={column.key} width={column.width}>
+                {column.label}
+              </S.Header>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <TableBody
+          columns={columns}
+          entries={entries}
+          handleClick={handleClick}
+        />
+      </S.StyledTable>
+      <S.Footer>
+        <Pagination
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
+          pageIndex={pageIndex}
+          totalPages={totalPages}
+        />
+        <PageSizeSelector
+          onPageSizeChange={onPageSizeChange}
+          pageSize={pageSize}
+        />
+      </S.Footer>
+    </S.TableContainer>
   );
 };
 

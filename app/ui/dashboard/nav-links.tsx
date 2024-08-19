@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  HomeIcon,
-  FilmIcon,
   BookmarkIcon,
+  FilmIcon,
+  HomeIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
 
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  { name: 'Movies', href: '/dashboard/movies', icon: MagnifyingGlassIcon },
-  { name: 'My Lists', href: '/dashboard/mylists', icon: BookmarkIcon },
-  { name: 'My Movies', href: '/dashboard/mymovies', icon: BookmarkIcon },
-  { name: 'Releases', href: '/dashboard/releases', icon: FilmIcon },
+  { href: '/dashboard', icon: HomeIcon, name: 'Home' },
+  { href: '/dashboard/movies', icon: MagnifyingGlassIcon, name: 'Movies' },
+  { href: '/dashboard/mylists', icon: BookmarkIcon, name: 'My Lists' },
+  { href: '/dashboard/mymovies', icon: BookmarkIcon, name: 'My Movies' },
+  { href: '/dashboard/releases', icon: FilmIcon, name: 'Releases' },
 ];
 
 export default function NavLinks() {
@@ -26,21 +26,20 @@ export default function NavLinks() {
         const LinkIcon = link.icon;
         return (
           <Link
-            key={link.name}
-            href={link.href}
             className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-sky-100 text-blue-600': pathname === link.href,
               }
             )}
+            href={link.href}
+            key={link.name}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className='w-6' />
+            <p className='hidden md:block'>{link.name}</p>
           </Link>
         );
       })}
     </>
   );
 }
-
