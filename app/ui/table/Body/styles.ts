@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from 'styled-components';
 
 export const Cell = styled.td`
   padding: 10px;
@@ -12,5 +11,4 @@ export const Cell = styled.td`
 
 export const Row = styled.tr``;
 
-export const TableBody = styled.tbody`
-`;
+export const TableBody = styled.tbody``;

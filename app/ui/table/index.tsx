@@ -1,17 +1,25 @@
 'use client';
 
-import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
 
+import TableBody from './Body';
 import Pagination from './Pagination';
 import PageSizeSelector from './Pagination/PageSizeSelector';
 import * as S from './styles';
 import { TableProps } from './types';
-import TableBody from './Body';
 
-const Table = ({ columns, entries, totalDocuments, pageIndex, pageSize, onPageChange, onPageSizeChange }: TableProps) => {
+const Table = ({
+  columns,
+  entries,
+  totalDocuments,
+  pageIndex,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
+}: TableProps) => {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
 
   const handleClick = (tconst: string) => {
     router.push(`${pathname}/${tconst}`);
@@ -30,7 +38,6 @@ const Table = ({ columns, entries, totalDocuments, pageIndex, pageSize, onPageCh
       onPageChange(pageIndex - 1);
     }
   };
-
 
   return (
     <S.TableContainer>

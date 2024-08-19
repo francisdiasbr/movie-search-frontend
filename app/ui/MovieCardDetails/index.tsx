@@ -1,4 +1,5 @@
 import React from 'react';
+
 import * as S from './styles';
 
 type MovieCardDetailsProps = {
@@ -24,7 +25,6 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
   spotifyUrl,
   wiki,
 }) => {
-
   const spotifyId = spotifyUrl.split('/').pop();
 
   const formatQuote = (quote: string) => {
@@ -37,9 +37,11 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
         <div key={index} style={{ marginBottom: '10px' }}>
           <strong>{character}:</strong>
           <span style={{ display: 'block', marginLeft: '20px' }}>
-            {dialogue.split(/(\[.*?\])/g).map((part, i) =>
-              part.startsWith('[') ? <em key={i}>{part}</em> : part
-            )}
+            {dialogue
+              .split(/(\[.*?\])/g)
+              .map((part, i) =>
+                part.startsWith('[') ? <em key={i}>{part}</em> : part
+              )}
           </span>
         </div>
       );
@@ -57,17 +59,17 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
       <S.LineInfo>Sinopse: {plot}</S.LineInfo>
       <S.LineInfo>Citação: {formatQuote(quote)}</S.LineInfo>
       <S.LineInfo>
-        <a href={wiki} target="_blank" rel="noopener noreferrer">
+        <a href={wiki} target='_blank' rel='noopener noreferrer'>
           {wiki}
         </a>
       </S.LineInfo>
       <iframe
         src={`https://open.spotify.com/embed/album/${spotifyId}`}
-        width="100%"
-        height="300"
+        width='100%'
+        height='300'
         style={{ paddingTop: '4px', display: 'block', border: 'none' }}
-        allow="encrypted-media"
-        allowTransparency={true}
+        allow='encrypted-media'
+        title='Spotify player'
       />
     </S.Container>
   );

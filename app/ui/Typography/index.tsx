@@ -15,7 +15,8 @@ const Typography: React.FC<TypographyProps> = ({
       underline={underline}
       variant={variant}
       color={color}
-      style={style}>
+      style={style}
+    >
       {children}
     </TextStyled>
   );

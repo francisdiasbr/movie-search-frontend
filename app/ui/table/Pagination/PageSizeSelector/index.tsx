@@ -1,23 +1,27 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import * as S from './styles'
+import * as S from './styles';
 
 interface PageSizeSelectorProps {
   onPageSizeChange: (pageSize: number) => void;
   pageSize: number;
 }
 
-const PageSizeSelector = ({ onPageSizeChange, pageSize }: PageSizeSelectorProps) => {
-
-  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+const PageSizeSelector = ({
+  onPageSizeChange,
+  pageSize,
+}: PageSizeSelectorProps) => {
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     onPageSizeChange(Number(event.target.value));
   };
 
   return (
     <S.SelectContainer
-      id="pageSize"
+      id='pageSize'
       onChange={handlePageSizeChange}
       value={pageSize}
     >
@@ -26,7 +30,7 @@ const PageSizeSelector = ({ onPageSizeChange, pageSize }: PageSizeSelectorProps)
       <option value={50}>50</option>
       <option value={100}>100</option>
     </S.SelectContainer>
-  )
-}
+  );
+};
 
 export default PageSizeSelector;

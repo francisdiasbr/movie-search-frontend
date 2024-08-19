@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const TableContainer = styled.div`
   min-height: 400px;
@@ -12,7 +12,7 @@ export const StyledTable = styled.table`
   width: 100%;
 `;
 
-export const Header = styled.th<{width?: string}>`
+export const Header = styled.th<{ width?: string }>`
   background-color: #f4f4f4;
   border-bottom: 2px solid #ddd;
   font-weight: bold;
@@ -22,11 +22,11 @@ export const Header = styled.th<{width?: string}>`
   &:first-child {
     text-align: center;
     width: 150px;
-  };
+  }
 `;
 
 export const Footer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
-`
+`;

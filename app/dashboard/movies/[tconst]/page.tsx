@@ -1,15 +1,15 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
-import { Icon } from '@iconify/react';
+import Typography from '@/app/ui/Typography';
+import { fetchDetails } from '@/lib/features/details/detailsSlice';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
+import { Icon } from '@iconify/react';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import MovieCardDetails from '../../../ui/MovieCardDetails/index'
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { fetchDetails } from '@/lib/features/details/detailsSlice';
+import MovieCardDetails from '../../../ui/MovieCardDetails/index';
 import * as S from './styles';
-import Typography from '@/app/ui/Typography';
 
 export default function MovieDetailsPage() {
   const router = useRouter();
@@ -36,9 +36,7 @@ export default function MovieDetailsPage() {
 
   return (
     <S.PageContainer>
-      <S.BackButton
-        onClick={() => router.back()}
-      >
+      <S.BackButton onClick={() => router.back()}>
         <Icon icon={arrowLeft} fontSize={24} />
       </S.BackButton>
       <MovieCardDetails

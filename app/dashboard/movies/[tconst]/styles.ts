@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const BackButton = styled.button`
   display: flex;
@@ -16,27 +16,27 @@ export const BackButton = styled.button`
 `;
 
 export const Container = styled.div`
-    align-items: start;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-`
+  align-items: start;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+`;
 
 export const LineInfo = styled.div`
-    font-size: 16px;
-`
+  font-size: 16px;
+`;
 
 export const PageTitle = styled.div`
-    font-size: 24px;
-    margin-bottom: 20px;
-`
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
 
 export const PageContainer = styled.div`
-    align-items: start;
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    width: 100%;
-`
+  align-items: start;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+`;
