@@ -20,7 +20,6 @@ export default function Page() {
       filters: {},
       page: pageIndex + 1,
       pageSize,
-      sorters: entries.primaryTitle,
     };
     dispatch(fetchCuratory(params));
   }, [dispatch, pageIndex, pageSize]);

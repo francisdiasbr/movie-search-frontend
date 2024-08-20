@@ -12,9 +12,13 @@ import { usePathname } from 'next/navigation';
 
 const links = [
   { href: '/dashboard', icon: HomeIcon, name: 'Home' },
-  { href: '/dashboard/movies', icon: MagnifyingGlassIcon, name: 'Movies' },
+  {
+    href: '/dashboard/search',
+    icon: MagnifyingGlassIcon,
+    name: 'Search Movies',
+  },
+  { href: '/dashboard/movies', icon: BookmarkIcon, name: 'My Movies' },
   { href: '/dashboard/mylists', icon: BookmarkIcon, name: 'My Lists' },
-  { href: '/dashboard/mymovies', icon: BookmarkIcon, name: 'My Movies' },
   { href: '/dashboard/releases', icon: FilmIcon, name: 'Releases' },
 ];
 
