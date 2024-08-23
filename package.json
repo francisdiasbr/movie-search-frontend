@@ -10,6 +10,11 @@
     "lint-fix": "next lint --fix"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@heroicons/react": "2.1.4",
     "@iconify/icons-lucide": "^1.2.135",
     "@iconify/react": "^5.0.2",
@@ -17,6 +22,7 @@
     "@tailwindcss/forms": "0.5.7",
     "autoprefixer": "10.4.19",
     "clsx": "2.1.1",
+    "framer-motion": "^11.3.28",
     "next": "14.2.5",
     "postcss": "8.4.38",
     "react": "^18",
