@@ -20,5 +20,7 @@ export type TableProps = {
 export type TableBodyProps = {
   columns: Column[];
   entries: any[];
-  handleClick: any;
+  handleDelete: any;
+  handleEdit: any;
+  handleView: any;
 };

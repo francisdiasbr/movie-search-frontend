@@ -11,4 +11,9 @@ export const Cell = styled.td`
 
 export const Row = styled.tr``;
 
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+`;
 export const TableBody = styled.tbody``;

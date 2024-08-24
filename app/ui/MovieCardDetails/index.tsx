@@ -25,7 +25,7 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
   tconst,
   wiki,
 }) => {
-  const spotifyId = spotifyUrl.split('/').pop();
+  const spotifyId = spotifyUrl ? spotifyUrl.split('/').pop() : null;
 
   const formatQuote = (quote: string) => {
     const lines = quote.split(/(?=\b[A-Z][a-z]*\s[A-Z][a-z]*\s*:)/);
@@ -38,10 +38,12 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
           <strong>{character}:</strong>
           <span style={{ display: 'block', marginLeft: '20px' }}>
             {dialogue
-              .split(/(\[.*?\])/g)
-              .map((part, i) =>
-                part.startsWith('[') ? <em key={i}>{part}</em> : part
-              )}
+              ? dialogue
+                .split(/(\[.*?\])/g)
+                .map((part, i) =>
+                  part.startsWith('[') ? <em key={i}>{part}</em> : part
+                ) : 'Quote not available'
+            }
           </span>
         </div>
       );

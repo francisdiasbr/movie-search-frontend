@@ -21,8 +21,16 @@ const Table = ({
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleClick = (tconst: string) => {
+  const handleView = (tconst: string) => {
     router.push(`${pathname}/${tconst}`);
+  };
+
+  const handleEdit = (tconst: string) => {
+    router.push(`${pathname}/${tconst}/edit`);
+  };
+
+  const handleDelete = (tconst: string) => {
+    console.log(`Delete item with tconst: ${tconst}`);
   };
 
   const totalPages = Math.ceil(totalDocuments / pageSize);
@@ -54,7 +62,9 @@ const Table = ({
         <TableBody
           columns={columns}
           entries={entries}
-          handleClick={handleClick}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+          handleView={handleView}
         />
       </S.StyledTable>
       <S.Footer>

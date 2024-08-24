@@ -17,9 +17,9 @@ const links = [
     icon: MagnifyingGlassIcon,
     name: 'Search Movies',
   },
-  { href: '/dashboard/movies', icon: BookmarkIcon, name: 'My Movies' },
-  { href: '/dashboard/mylists', icon: BookmarkIcon, name: 'My Lists' },
-  { href: '/dashboard/releases', icon: FilmIcon, name: 'Releases' },
+  { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favorites' },
+  // { href: '/dashboard/mylists', icon: BookmarkIcon, name: 'My Lists' },
+  // { href: '/dashboard/releases', icon: FilmIcon, name: 'Releases' },
 ];
 
 export default function NavLinks() {

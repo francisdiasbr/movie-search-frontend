@@ -37,7 +37,7 @@ export const searchMovie = createAsyncThunk(
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error search curatory:', error);
+      console.error('Error search favorites:', error);
       throw error;
     }
   }

@@ -7,7 +7,7 @@ export interface MovieItem {
   tconst: string;
 }
 
-export interface MovieCuratoryState {
+export interface MovieFavoritesState {
   entries: any;
   error: null | string;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';

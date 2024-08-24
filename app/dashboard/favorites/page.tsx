@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchCuratory } from '@/lib/features/movies/curatorySlice';
+import { fetchFavorites } from '@/lib/features/movies/movieFavoritesSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import React, { useEffect, useState } from 'react';
 
@@ -9,7 +9,7 @@ import Table from '../../ui/Table';
 export default function Page() {
   const dispatch = useAppDispatch();
   const { entries, total_documents } = useAppSelector(
-    (state) => state.moviesCuratory
+    (state) => state.moviesFavorites
   );
 
   const [pageIndex, setPageIndex] = useState(0);
@@ -21,7 +21,7 @@ export default function Page() {
       page: pageIndex + 1,
       pageSize,
     };
-    dispatch(fetchCuratory(params));
+    dispatch(fetchFavorites(params));
   }, [dispatch, pageIndex, pageSize]);
 
   const columnData = [
@@ -30,6 +30,10 @@ export default function Page() {
     { key: 'primaryTitle', label: 'Title', width: '50%' },
     { key: 'startYear', label: 'Year', width: '20%' },
   ];
+
+  const handleDelete = (tconst: string) => {
+    console.log(`Delete item with tconst: ${tconst}`);
+  };
 
   return (
     <>
@@ -42,6 +46,7 @@ export default function Page() {
         pageIndex={pageIndex}
         pageSize={pageSize}
         totalDocuments={total_documents}
+        handleDelete={() => {console.log('teste')}}
       />
     </>
   );

@@ -1,13 +1,21 @@
 'use client';
 
+import editIcon from '@iconify/icons-lucide/edit-2';
 import eyeIcon from '@iconify/icons-lucide/eye';
+import trashIcon from '@iconify/icons-lucide/trash-2';
 import React from 'react';
 
 import Icon from '../../Icon';
 import { TableBodyProps } from '../types';
 import * as S from './styles';
 
-const TableBody = ({ columns, entries, handleClick }: TableBodyProps) => {
+const TableBody = ({
+  columns,
+  entries,
+  handleDelete,
+  handleEdit,
+  handleView,
+}: TableBodyProps) => {
   return (
     <S.TableBody>
       {entries.map((item) => (
@@ -15,9 +23,17 @@ const TableBody = ({ columns, entries, handleClick }: TableBodyProps) => {
           {columns.map((column) => (
             <S.Cell key={column.key}>
               {column.isAction ? (
-                <button onClick={() => handleClick(item.tconst)}>
-                  <Icon fontSize={16} icon={eyeIcon} />
-                </button>
+                <S.ButtonGroup>
+                  <button onClick={() => handleView(item.tconst)}>
+                    <Icon fontSize={20} icon={eyeIcon} />
+                  </button>
+                  <button onClick={() => handleDelete(item.tconst)}>
+                    <Icon fontSize={20} icon={trashIcon} />
+                  </button>
+                  <button onClick={() => handleEdit(item.tconst)}>
+                    <Icon fontSize={20} icon={editIcon} />
+                  </button>
+                </S.ButtonGroup>
               ) : (
                 item[column.key]
               )}

@@ -1,25 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
-import { MovieCuratoryState } from './types';
+import { MovieFavoritesState } from './types';
 
-const initialState: MovieCuratoryState = {
+const initialState: MovieFavoritesState = {
   entries: [],
   error: null,
   status: 'idle',
   total_documents: 0,
 };
 
-interface FetchCuratoryParams {
+interface FetchFavoritesParams {
   filters?: any;
   page: number;
   pageSize?: number;
   sorters?: any;
 }
 
-export const fetchCuratory = createAsyncThunk(
-  'movies/curatory',
-  async (params: FetchCuratoryParams) => {
+export const fetchFavorites = createAsyncThunk(
+  'movies/favorites',
+  async (params: FetchFavoritesParams) => {
     try {
       const fetchBody = {
         filters: params.filters || {},
@@ -29,7 +29,7 @@ export const fetchCuratory = createAsyncThunk(
       };
 
       const response = await BaseService.post(
-        'listed-movies/search',
+        'favorited-movies/search',
         fetchBody
       );
 
@@ -39,33 +39,33 @@ export const fetchCuratory = createAsyncThunk(
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error fetching curatory:', error);
+      console.error('Error fetching favorites:', error);
       throw error;
     }
   }
 );
 
-const movieCuratorySlice = createSlice({
+const movieFavoritesSlice = createSlice({
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCuratory.pending, (state) => {
+      .addCase(fetchFavorites.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchCuratory.fulfilled, (state, action) => {
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.entries = Array.isArray(action.payload.entries)
           ? action.payload.entries
           : [];
         state.total_documents = action.payload.total_documents;
       })
-      .addCase(fetchCuratory.rejected, (state) => {
+      .addCase(fetchFavorites.rejected, (state) => {
         state.status = 'failed';
         state.error = 'error';
       });
   },
   initialState,
-  name: 'moviesCuratory',
+  name: 'moviesFavorites',
   reducers: {},
 });
 
-export default movieCuratorySlice.reducer;
+export default movieFavoritesSlice.reducer;

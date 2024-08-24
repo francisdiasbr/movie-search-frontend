@@ -1,7 +1,7 @@
 'use client';
 
 import Typography from '@/app/ui/Typography';
-import { fetchDetails } from '@/lib/features/details/detailsSlice';
+import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
 import { Icon } from '@iconify/react';
@@ -12,13 +12,11 @@ import MovieCardDetails from '../../../ui/MovieCardDetails/index';
 import * as S from './styles';
 
 export default function MovieDetailsPage() {
-  const router = useRouter();
-  const params = useParams();
   const dispatch = useAppDispatch();
-
-  const { tconst } = params;
-
+  const { tconst } = useParams();
+  const router = useRouter();
   const { data, status } = useAppSelector((state) => state.moviesDetails);
+  
 
   useEffect(() => {
     if (tconst) {
