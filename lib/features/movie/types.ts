@@ -13,6 +13,15 @@ export interface MovieDetailsItem {
 
 export interface MovieDetailsState {
   data: any;
-  error: null | string;
+  error: unknown;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  editStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
+}
+
+export interface EditDetailsPayload {
+  tconst: string;
+  primaryTitle?: string;
+  startYear?: number;
+  soundtrack?: string;
+  wiki?: string;
 }

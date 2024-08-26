@@ -1,37 +1,35 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
-import { MovieCuratoryState } from './types';
+import { MovieSearchState } from './types';
 
-const initialState: MovieCuratoryState = {
+const initialState: MovieSearchState = {
   entries: [],
   error: null,
   status: 'idle',
   total_documents: 0,
 };
 
-interface FetchCuratoryParams {
+interface SearchMovieParams {
   filters?: any;
   page: number;
   pageSize?: number;
+  searchTerm?: string;
   sorters?: any;
 }
 
-export const fetchCuratory = createAsyncThunk(
-  'movies/curatory',
-  async (params: FetchCuratoryParams) => {
+export const searchMovie = createAsyncThunk(
+  'movies/search',
+  async (params: SearchMovieParams) => {
     try {
-      const fetchBody = {
+      const searchBody = {
         filters: params.filters || {},
         page: params.page,
         page_size: params.pageSize,
-        sorters: params.sorters || ['primaryTitle', 1],
+        search_term: params.searchTerm || '',
+        sorters: params.sorters || ['startYear', 1],
       };
-
-      const response = await BaseService.post(
-        'listed-movies/search',
-        fetchBody
-      );
+      const response = await BaseService.post('movies/search', searchBody);
 
       if (response && response.entries && Array.isArray(response.entries)) {
         return response;
@@ -39,33 +37,34 @@ export const fetchCuratory = createAsyncThunk(
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error fetching curatory:', error);
+      console.error('Error search favorites:', error);
       throw error;
     }
   }
 );
 
-const movieCuratorySlice = createSlice({
+const movieSearchSlice = createSlice({
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCuratory.pending, (state) => {
+      .addCase(searchMovie.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchCuratory.fulfilled, (state, action) => {
+      .addCase(searchMovie.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.entries = Array.isArray(action.payload.entries)
           ? action.payload.entries
           : [];
         state.total_documents = action.payload.total_documents;
+        console.log('searchMovie action.payload:', action.payload);
       })
-      .addCase(fetchCuratory.rejected, (state) => {
+      .addCase(searchMovie.rejected, (state) => {
         state.status = 'failed';
         state.error = 'error';
       });
   },
   initialState,
-  name: 'moviesCuratory',
+  name: 'moviesSearch',
   reducers: {},
 });
 
-export default movieCuratorySlice.reducer;
+export default movieSearchSlice.reducer;

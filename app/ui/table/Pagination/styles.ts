@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const PaginationContainer = styled.div`
   background-color: #f9fafb;
   border-radius: 8px;
-  height: 50px;
+  // height: 50px;
   padding: 8px;
   width: 100%;
   display: flex;
@@ -29,4 +29,17 @@ export const PageValue = styled.div`
   border-radius: 5px;
   padding: 0 8px;
   border: 1px solid black;
+`;
+
+export const SelectContainer = styled.select`
+  display: flex;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+`;
+
+export const TotalDocs = styled.div`
+  font-size: 14px;
+  width: 160px;
 `;

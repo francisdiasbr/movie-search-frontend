@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import movieDetailsSlice from './features/details/detailsSlice';
-import movieCuratorySlice from './features/movies/curatorySlice';
+import movieDetailsSlice from './features/movie/movieDetailsSlice';
+import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
+import movieSearchSlice from './features/search/searchSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      moviesCuratory: movieCuratorySlice,
+      moviesFavorites: movieFavoritesSlice,
       moviesDetails: movieDetailsSlice,
+      moviesSearch: movieSearchSlice,
     },
   });
 };
