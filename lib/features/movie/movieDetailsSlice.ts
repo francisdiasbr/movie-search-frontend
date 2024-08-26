@@ -6,8 +6,9 @@ import { EditDetailsPayload, MovieDetailsItem, MovieDetailsState } from './types
 const initialState: MovieDetailsState = {
   data: null,
   error: null,
-  status: 'idle',
-  editStatus: 'idle'
+  addStatus: 'idle',
+  editStatus: 'idle',
+  fetchStatus: 'idle',
 };
 
 export const addFavorite = createAsyncThunk(
@@ -91,30 +92,30 @@ const movieDetailsSlice = createSlice({
       state.editStatus = 'idle';
     },
     resetAddStatus(state) {
-      state.status = 'idle';
+      state.addStatus = 'idle';
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(addFavorite.pending, (state) => {
-        state.status = 'loading';
+        state.addStatus = 'loading';
       })
-      .addCase(addFavorite.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+      .addCase(addFavorite.fulfilled, (state) => {
+        state.addStatus = 'succeeded';
       })
       .addCase(addFavorite.rejected, (state, action) => {
-        state.status = 'failed';
+        state.addStatus = 'failed';
         state.error = action.error.message || 'Failed to add favorite';
       })
       .addCase(fetchDetails.pending, (state) => {
-        state.status = 'loading';
+        state.fetchStatus = 'loading';
       })
       .addCase(fetchDetails.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.fetchStatus = 'succeeded';
         state.data = action.payload as MovieDetailsItem;
       })
       .addCase(fetchDetails.rejected, (state, action) => {
-        state.status = 'failed';
+        state.fetchStatus = 'failed';
         state.error = action.error.message || 'Failed to fetch details';
       })
       .addCase(editDetails.pending, (state) => {

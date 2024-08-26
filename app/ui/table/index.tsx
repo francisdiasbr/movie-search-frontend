@@ -1,12 +1,13 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 
 import TableBody from './Body';
 import Pagination from './Pagination';
 import * as S from './styles';
 import { TableProps } from './types';
+import Header from './Header';
 
 const Table = ({
   columns,
@@ -24,6 +25,8 @@ const Table = ({
   const pathname = usePathname();
   const router = useRouter();
 
+  const [sortedEntries, setSortedEntries] = useState(entries);
+  
   const totalPages = Math.ceil(totalDocuments / pageSize);
 
   const handleView = (tconst: string) => {
@@ -34,46 +37,27 @@ const Table = ({
     router.push(`${pathname}/${tconst}/edit`);
   };
 
-
-  const handleNextPage = () => {
-    if (page + 1 < totalPages) {
-      onPageChange(page + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (page > 0) {
-      onPageChange(page - 1);
-    }
-  };
-
-
   return (
     <S.TableContainer>
       <S.StyledTable>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <S.Header key={column.key} width={column.width}>
-                {column.label}
-              </S.Header>
-            ))}
-          </tr>
-        </thead>
-          <TableBody
-            columns={columns}
-            entries={entries}
-            isLoading={isLoading}
-            handleAdd={handleAdd}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-            handleView={handleView}
-          />
+        <Header 
+          columns={columns}
+          entries={entries}
+          setSortedEntries={setSortedEntries}
+        />
+        <TableBody
+          columns={columns}
+          entries={sortedEntries}
+          isLoading={isLoading}
+          handleAdd={handleAdd}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+          handleView={handleView}
+        />
       </S.StyledTable>
       <S.Footer>
         <Pagination
-          handleNextPage={handleNextPage}
-          handlePrevPage={handlePrevPage}
+          onPageChange={onPageChange}
           page={page}
           totalPages={totalPages}
           onPageSizeChange={onPageSizeChange}

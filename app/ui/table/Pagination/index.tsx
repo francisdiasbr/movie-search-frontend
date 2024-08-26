@@ -5,19 +5,17 @@ import React from 'react';
 import * as S from './styles';
 
 interface PaginationProps {
-  handleNextPage: any;
-  handlePrevPage: any;
   page: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
   pageSize: number;
   totalDocuments: number;
 }
 
 const Pagination = ({
-  handleNextPage,
-  handlePrevPage,
   onPageSizeChange,
+  onPageChange,
   pageSize,
   page,
   totalDocuments,
@@ -35,6 +33,18 @@ const Pagination = ({
   const firstRecordInPage = (page) * pageSize + 1;
   const lastRecordInPage = (page + 1 ) * pageSize;
   // const lastRecordInPage = Math.min((page + 1) * pageSize, totalDocuments);
+
+  const handleNextPage = () => {
+    if (page + 1 < totalPages) {
+      onPageChange(page + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 0) {
+      onPageChange(page - 1);
+    }
+  };
 
   return (
     <>

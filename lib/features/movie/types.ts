@@ -14,8 +14,9 @@ export interface MovieDetailsItem {
 export interface MovieDetailsState {
   data: any;
   error: unknown;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  addStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
   editStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
+  fetchStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
 }
 
 export interface EditDetailsPayload {

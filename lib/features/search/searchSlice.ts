@@ -15,7 +15,6 @@ interface SearchMovieParams {
   page: number;
   pageSize?: number;
   searchTerm?: string;
-  sorters?: any;
 }
 
 export const searchMovie = createAsyncThunk(
@@ -27,7 +26,6 @@ export const searchMovie = createAsyncThunk(
         page: params.page,
         page_size: params.pageSize,
         search_term: params.searchTerm || '',
-        sorters: params.sorters || ['startYear', 1],
       };
       const response = await BaseService.post('movies/search', searchBody);
 
@@ -55,7 +53,7 @@ const movieSearchSlice = createSlice({
           ? action.payload.entries
           : [];
         state.total_documents = action.payload.total_documents;
-        console.log('searchMovie action.payload:', action.payload);
+        // console.log('searchMovie action.payload:', action.payload);
       })
       .addCase(searchMovie.rejected, (state) => {
         state.status = 'failed';

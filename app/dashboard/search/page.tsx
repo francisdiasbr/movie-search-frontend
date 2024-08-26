@@ -8,11 +8,12 @@ import React, { useEffect, useState } from 'react';
 
 import { addFavorite, resetAddStatus } from '@/lib/features/movie/movieDetailsSlice';
 import { columnData } from './columnData';
+import Search from '@/app/ui/Search';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
   const { entries, total_documents } = useAppSelector((state) => state.moviesSearch);
-  const { status } = useAppSelector((state) => state.moviesDetails);
+  const { addStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,9 +28,7 @@ export default function SearchPage() {
       page: currentPage + 1,
       pageSize: currentPageSize,
       searchTerm: searchTerm,
-      sorters: entries.tconst,
     };
-    // console.log('params', params);
     dispatch(searchMovie(params))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
@@ -56,7 +55,7 @@ export default function SearchPage() {
   }
 
   useEffect(() => {
-    if (status === 'succeeded') {
+    if (addStatus === 'succeeded') {
       toast({
         title: 'Success',
         description: 'Movie added to favorites.',
@@ -66,29 +65,17 @@ export default function SearchPage() {
       });
       dispatch(resetAddStatus())
     }
-  }, [status]);
+  }, [addStatus]);
 
   return (
     <>
-      <h1>Search movie</h1>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '8px',
-          marginBottom: '16px',
-        }}
-      >
-        <Input
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder='Search for movies'
-          type='search'
-          value={searchTerm}
-        />
-        <Button isLoading={isLoading} onClick={() => handleSearch()}>
-          Buscar
-        </Button>
-      </div>
+      <h1>Search Page</h1>
+      <Search
+        isLoading={isLoading}
+        handleSearch={handleSearch}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <Table
         columns={columnData}
         entries={entries}

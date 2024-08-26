@@ -14,7 +14,7 @@ interface FetchFavoritesParams {
   filters?: any;
   page: number;
   pageSize?: number;
-  sorters?: any;
+  searchTerm?: string;
 }
 
 export const fetchFavorites = createAsyncThunk(
@@ -25,7 +25,7 @@ export const fetchFavorites = createAsyncThunk(
         filters: params.filters || {},
         page: params.page,
         page_size: params.pageSize,
-        sorters: params.sorters || ['primaryTitle', 1],
+        search_term: params.searchTerm || '',
       };
 
       const response = await BaseService.post(
