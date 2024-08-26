@@ -5,21 +5,26 @@ import React from 'react';
 
 import TableBody from './Body';
 import Pagination from './Pagination';
-import PageSizeSelector from './Pagination/PageSizeSelector';
 import * as S from './styles';
 import { TableProps } from './types';
 
 const Table = ({
   columns,
   entries,
+  handleAdd,
+  handleDelete,
+  isLoading,
   onPageChange,
   onPageSizeChange,
-  pageIndex,
+  page,
   pageSize,
   totalDocuments,
 }: TableProps) => {
+
   const pathname = usePathname();
   const router = useRouter();
+
+  const totalPages = Math.ceil(totalDocuments / pageSize);
 
   const handleView = (tconst: string) => {
     router.push(`${pathname}/${tconst}`);
@@ -29,23 +34,19 @@ const Table = ({
     router.push(`${pathname}/${tconst}/edit`);
   };
 
-  const handleDelete = (tconst: string) => {
-    console.log(`Delete item with tconst: ${tconst}`);
-  };
-
-  const totalPages = Math.ceil(totalDocuments / pageSize);
 
   const handleNextPage = () => {
-    if (pageIndex + 1 < totalPages) {
-      onPageChange(pageIndex + 1);
+    if (page + 1 < totalPages) {
+      onPageChange(page + 1);
     }
   };
 
   const handlePrevPage = () => {
-    if (pageIndex > 0) {
-      onPageChange(pageIndex - 1);
+    if (page > 0) {
+      onPageChange(page - 1);
     }
   };
+
 
   return (
     <S.TableContainer>
@@ -59,24 +60,25 @@ const Table = ({
             ))}
           </tr>
         </thead>
-        <TableBody
-          columns={columns}
-          entries={entries}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-          handleView={handleView}
-        />
+          <TableBody
+            columns={columns}
+            entries={entries}
+            isLoading={isLoading}
+            handleAdd={handleAdd}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            handleView={handleView}
+          />
       </S.StyledTable>
       <S.Footer>
         <Pagination
           handleNextPage={handleNextPage}
           handlePrevPage={handlePrevPage}
-          pageIndex={pageIndex}
+          page={page}
           totalPages={totalPages}
-        />
-        <PageSizeSelector
           onPageSizeChange={onPageSizeChange}
           pageSize={pageSize}
+          totalDocuments={totalDocuments}
         />
       </S.Footer>
     </S.TableContainer>

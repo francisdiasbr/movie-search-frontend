@@ -10,8 +10,33 @@ const initialState: MovieDetailsState = {
   editStatus: 'idle'
 };
 
+export const addFavorite = createAsyncThunk(
+  'movie/addFavorite',
+  async (tconst: string, { rejectWithValue }) => {
+    const url = `movie/${tconst}`;
+    console.log('post url', url)
+    try {
+      const response = await BaseService.post(url);
+      console.log('response', response)
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      console.error('Error adding favorite:', error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message)
+      } else {
+        return rejectWithValue('An unexpected error occurred')
+      }
+    }
+  }
+);
+
+
 export const fetchDetails = createAsyncThunk(
-  'movies/details',
+  'movie/details',
   async (tconst: string) => {
     try {
       const response = await BaseService.get(
@@ -64,10 +89,23 @@ const movieDetailsSlice = createSlice({
   reducers: {
     resetEditStatus(state) {
       state.editStatus = 'idle';
+    },
+    resetAddStatus(state) {
+      state.status = 'idle';
     }
   },
   extraReducers: (builder) => {
     builder
+      .addCase(addFavorite.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+      })
+      .addCase(addFavorite.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Failed to add favorite';
+      })
       .addCase(fetchDetails.pending, (state) => {
         state.status = 'loading';
       })
@@ -93,5 +131,5 @@ const movieDetailsSlice = createSlice({
   },
 });
 
-export const { resetEditStatus } = movieDetailsSlice.actions;
+export const { resetAddStatus, resetEditStatus } = movieDetailsSlice.actions;
 export default movieDetailsSlice.reducer;

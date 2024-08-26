@@ -16,6 +16,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@heroicons/react": "2.1.4",
+    "@iconify/icons-ic": "^1.2.13",
     "@iconify/icons-lucide": "^1.2.135",
     "@iconify/react": "^5.0.2",
     "@reduxjs/toolkit": "^2.2.7",

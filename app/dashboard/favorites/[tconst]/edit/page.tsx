@@ -24,7 +24,7 @@ export default function Page() {
 
   useEffect(() => {
     if (tconst) {
-      dispatch(fetchDetails(Array.isArray(tconst) ? tconst[0] : tconst));
+      dispatch(fetchDetails(tconst))
     }
   }, [dispatch, tconst]);
 
