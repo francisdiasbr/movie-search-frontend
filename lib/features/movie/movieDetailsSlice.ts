@@ -9,16 +9,15 @@ const initialState: MovieDetailsState = {
   addStatus: 'idle',
   editStatus: 'idle',
   fetchStatus: 'idle',
+  delStatus: 'idle'
 };
 
 export const addFavorite = createAsyncThunk(
   'movie/addFavorite',
   async (tconst: string, { rejectWithValue }) => {
     const url = `movie/${tconst}`;
-    console.log('post url', url)
     try {
       const response = await BaseService.post(url);
-      console.log('response', response)
       if (response && response.data) {
         return response.data;
       } else {
@@ -35,6 +34,29 @@ export const addFavorite = createAsyncThunk(
   }
 );
 
+export const deleteFavorite = createAsyncThunk(
+  'movie/deleteFavorite',
+  async (tconst: string, { rejectWithValue }) => {
+    const url = `movie/${tconst}`;
+    console.log('delete url', url)
+    try {
+      const response = await BaseService.delete(url);
+      console.log('response', response)
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      console.error('Error deleting favorite:', error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message)
+      } else {
+        return rejectWithValue('An unexpected error occurred')
+      }
+    }
+  }
+);
 
 export const fetchDetails = createAsyncThunk(
   'movie/details',
@@ -58,7 +80,7 @@ export const fetchDetails = createAsyncThunk(
 export const editDetails = createAsyncThunk(
   'movies/edit',
   async (data: EditDetailsPayload, { rejectWithValue }) => {
-    console.log('data', data)
+    // console.log('data', data)
     const url = `movie/${data.tconst}/edit`;
 
     const body: EditDetailsPayload = {
@@ -71,7 +93,7 @@ export const editDetails = createAsyncThunk(
 
     try {
       const response = await BaseService.put(url, body as any);
-      console.log('response', response)
+      // console.log('response', response)
       return response.data;
     } catch (error) {
       console.error('Error editing details:', error);
@@ -93,6 +115,9 @@ const movieDetailsSlice = createSlice({
     },
     resetAddStatus(state) {
       state.addStatus = 'idle';
+    },
+    resetDeleteStatus(state) {
+      state.delStatus = 'idle';
     }
   },
   extraReducers: (builder) => {
@@ -106,6 +131,16 @@ const movieDetailsSlice = createSlice({
       .addCase(addFavorite.rejected, (state, action) => {
         state.addStatus = 'failed';
         state.error = action.error.message || 'Failed to add favorite';
+      })
+      .addCase(deleteFavorite.pending, (state) => {
+        state.delStatus = 'loading';
+      })
+      .addCase(deleteFavorite.fulfilled, (state) => {
+        state.delStatus = 'succeeded';
+      })
+      .addCase(deleteFavorite.rejected, (state, action) => {
+        state.delStatus = 'failed';
+        state.error = action.error.message || 'Failed to delete favorite';
       })
       .addCase(fetchDetails.pending, (state) => {
         state.fetchStatus = 'loading';
@@ -132,5 +167,5 @@ const movieDetailsSlice = createSlice({
   },
 });
 
-export const { resetAddStatus, resetEditStatus } = movieDetailsSlice.actions;
+export const { resetAddStatus, resetEditStatus, resetDeleteStatus } = movieDetailsSlice.actions;
 export default movieDetailsSlice.reducer;

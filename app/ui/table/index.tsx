@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TableBody from './Body';
 import Pagination from './Pagination';
@@ -26,6 +26,10 @@ const Table = ({
   const router = useRouter();
 
   const [sortedEntries, setSortedEntries] = useState(entries);
+
+  useEffect(() => {
+    setSortedEntries(entries);
+  }, [entries]);
   
   const totalPages = Math.ceil(totalDocuments / pageSize);
 

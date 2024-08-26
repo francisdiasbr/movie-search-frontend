@@ -39,22 +39,34 @@ export default function Page() {
   }, [data]);
 
   useEffect(() => {
-    // console.log('editStatus', editStatus)
     if (editStatus === 'succeeded') {
       setPrimaryTitle(data?.primaryTitle);
       setStartYear(data?.startYear);
       setSoundtrack(data?.soundtrack);
       setWiki(data?.wiki);
       toast({
-        title: 'Success',
-        description: 'Movie details updated successfully.',
+        title: 'Filme atualizado',
+        description: 'Detalhes atualizados com sucesso',
         status: 'success',
+        duration: 2000,
+        isClosable: true,
+        variant: 'top-accent'
+      });
+    }
+    if (editStatus === 'failed') {
+      toast({
+        title: 'Erro ao atualizar',
+        description: 'Não foi possível atualizar os detalhes do filme',
+        status: 'error',
         duration: 3000,
         isClosable: true,
+        variant: 'top-accent'
       });
-      dispatch(resetEditStatus())
     }
-  }, [editStatus, data, toast]);
+    if (editStatus === 'succeeded' || editStatus === 'failed') {
+      dispatch(resetEditStatus());
+    }
+  }, [editStatus, data, toast, dispatch]);
 
   const handleSave = () => {
     if (!tconst) {

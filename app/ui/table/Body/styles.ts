@@ -11,12 +11,26 @@ export const Cell = styled.td`
 
 export const Row = styled.tr`
   height: 50px;
+  &:hover {
+    background: #f9f9f9;
+  }
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+    &:hover svg {
+      // background: #D7D7;
+      color: #ff69b4;
+    }
+  }
 `;
 
 export const TableBody = styled.tbody`
