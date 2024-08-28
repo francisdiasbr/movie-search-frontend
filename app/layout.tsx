@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 
 import './globals.css';
 import StoreProvider from './StoreProvider';
+import StyledComponentsRegistry from '@/lib/registry';
+import { ChakraProvider } from './providers';
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
@@ -18,8 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${inter.className} antialised`}>
-        <StoreProvider>{children}</StoreProvider>
+      <body className={`${inter.className} antialiased`}>
+        <StyledComponentsRegistry>
+          <ChakraProvider>
+          <StoreProvider>{children}</StoreProvider>
+          </ChakraProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

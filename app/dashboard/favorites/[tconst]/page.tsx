@@ -11,8 +11,6 @@ import PlotCard from '@/app/ui/Cards/PlotCard';
 import MovieCardDetails from '../../../ui/Cards/MovieCardDetails/index';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
-import ImagesCard from '@/app/ui/Cards/ImagesCard';
-import HeartIcon from '@/app/ui/HeartIcon';
 
 export default function MovieDetailsPage() {
   const dispatch = useAppDispatch();
@@ -40,14 +38,7 @@ export default function MovieDetailsPage() {
       <S.BackButton onClick={() => router.back()}>
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
-      <HeartIcon />
-      <br/>
-      <br/>
-      <br/>
       <S.CardsGrid>
-        <ImagesCard tconst={data.tconst} poster={data.poster}/>
-        
-        <MediaCard spotifyUrl={data.soundtrack} />
         <PlotCard plot={data.plot} />
         <MovieCardDetails
           primaryTitle={data.primaryTitle}
@@ -60,6 +51,7 @@ export default function MovieDetailsPage() {
         <PlotCard plot={data.plot} />
         <PlotCard plot={data.plot} />
       </S.CardsGrid>
+        <MediaCard spotifyUrl={data.soundtrack} />
     </S.PageContainer>
   );
 }

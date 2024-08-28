@@ -53,14 +53,6 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
           {wiki}
         </a>
       </S.LineInfo>
-      {/* <iframe
-        allow='encrypted-media'
-        height='300'
-        src={`https://open.spotify.com/embed/album/${spotifyId}`}
-        style={{ border: 'none', display: 'block', paddingTop: '4px' }}
-        title='Spotify player'
-        width='100%'
-      /> */}
     </GenericCard>
   );
 };

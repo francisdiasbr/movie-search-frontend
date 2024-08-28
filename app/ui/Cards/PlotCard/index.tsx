@@ -7,8 +7,10 @@ interface PlotCardProps {
 }
 
 const PlotCard = ({plot}: PlotCardProps) => {
+  
   return (
     <GenericCard>
+      <p>Plot</p>
       <div>{plot}</div>
     </GenericCard>
   )

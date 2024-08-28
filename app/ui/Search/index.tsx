@@ -38,7 +38,7 @@ const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, 
           value={searchTerm}
           onKeyDown={handleKeyDown}
         />
-        {setCountry && country && (
+        {country !== undefined && setCountry && (
           <Select
             onChange={(e) => setCountry(e.target.value)}
             placeholder='Select a country'

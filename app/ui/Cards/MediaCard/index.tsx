@@ -11,14 +11,13 @@ const MediaCard = ({spotifyUrl}: MediaCardProps) => {
   const spotifyId = spotifyUrl ? spotifyUrl.split('/').pop() : null;
   
   return (
-    <div>
+    <div style={{ height: '500px', width: '100%', display: 'flex' }}>
       <iframe
         allow='encrypted-media'
         height='100%'
         src={`https://open.spotify.com/embed/album/${spotifyId}`}
-        style={{ display: 'flex', height: '620px', border: 'none', width: '100%' }}
+        style={{ flex: '1', border: 'none' }}
         title='Spotify player'
-        width='100%'
       />
     </div>
   )

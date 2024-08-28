@@ -46,6 +46,7 @@ export const CardsGrid = styled.div`
   grid-template-columns: repeat(1, 1fr);
   gap: 16px;
   width: 100%;
+  margin-bottom: 20px;
 
   @media (min-width: 400px) {
     grid-template-columns: repeat(1, 1fr);
