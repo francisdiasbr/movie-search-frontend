@@ -15,6 +15,7 @@ export interface MovieDetailsState {
   data: any;
   error: unknown;
   addStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
+  delStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
   editStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
   fetchStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
 }

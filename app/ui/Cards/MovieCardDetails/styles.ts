@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 4px;
   padding: 16px;
-  width: 90%;
+  width: 50%;
 `;
 
 export const LineInfo = styled.div`
@@ -17,5 +17,5 @@ export const LineInfo = styled.div`
 export const PageTitle = styled.div`
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;

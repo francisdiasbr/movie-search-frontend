@@ -27,8 +27,7 @@ export const ButtonGroup = styled.div`
     cursor: pointer;
     
     &:hover svg {
-      // background: #D7D7;
-      color: #ff69b4;
+      color: #d7d7d7;
     }
   }
 `;

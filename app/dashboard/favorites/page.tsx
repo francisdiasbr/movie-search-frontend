@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useToast } from '@chakra-ui/react';
+import { Text, useToast } from '@chakra-ui/react';
 
 import { deleteFavorite, resetDeleteStatus } from '@/lib/features/movie/movieDetailsSlice';
 import { fetchFavorites } from '@/lib/features/movies/movieFavoritesSlice';
@@ -18,17 +18,19 @@ export default function Page() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [country, setCountry] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     setIsLoading(true);
     const params = {
-      filters: {},
+      filters: {
+        country: country
+      },
       page: currentPage + 1,
       pageSize: currentPageSize,
       searchTerm: searchTerm,
-      sorters: entries.tconst,
     };
     console.log('params', params);
     dispatch(fetchFavorites(params))
@@ -86,12 +88,14 @@ export default function Page() {
 
   return (
     <>
-      <p>Movies Page</p>
+      <Text fontSize='2xl' as='b'>Movies Page</Text>
       <Search
         isLoading={isLoading}
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        country={country ?? ''}
+        setCountry={setCountry}
       />
       <Table
         columns={columnData}

@@ -27,7 +27,7 @@ export const fetchFavorites = createAsyncThunk(
         page_size: params.pageSize,
         search_term: params.searchTerm || '',
       };
-
+      console.log('fetchBody', fetchBody);
       const response = await BaseService.post(
         'favorited-movies/search',
         fetchBody
@@ -46,6 +46,10 @@ export const fetchFavorites = createAsyncThunk(
 );
 
 const movieFavoritesSlice = createSlice({
+  initialState,
+  name: 'moviesFavorites',
+  reducers: {
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFavorites.pending, (state) => {
@@ -57,15 +61,14 @@ const movieFavoritesSlice = createSlice({
           ? action.payload.entries
           : [];
         state.total_documents = action.payload.total_documents;
+        console.log('state.entries', state.entries);
       })
       .addCase(fetchFavorites.rejected, (state) => {
         state.status = 'failed';
         state.error = 'error';
       });
   },
-  initialState,
-  name: 'moviesFavorites',
-  reducers: {},
 });
+
 
 export default movieFavoritesSlice.reducer;

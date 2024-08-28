@@ -40,3 +40,25 @@ export const PageContainer = styled.div`
   padding: 20px;
   width: 100%;
 `;
+
+export const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  width: 100%;
+
+  @media (min-width: 400px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1600px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+`;

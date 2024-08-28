@@ -3,7 +3,7 @@
 import Table from '@/app/ui/Table';
 import { searchMovie } from '@/lib/features/search/searchSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { Button, Input, useToast } from '@chakra-ui/react';
+import { Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { addFavorite, resetAddStatus } from '@/lib/features/movie/movieDetailsSlice';
@@ -16,6 +16,7 @@ export default function SearchPage() {
   const { addStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
+  console.log('entries', entries);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
@@ -35,14 +36,12 @@ export default function SearchPage() {
   };
 
   const handlePageSizeChange = (newPageSize: number) => {
-    // console.log('newPageSize em handlePageSizeChange', newPageSize);
     setPageSize(newPageSize);
     setPage(0);
     handleSearch(0, newPageSize);
   };
 
   const handlePageChange = (newPage: number) => {
-    // console.log('newPage em handlePageChange', newPage);
     setPage(newPage);
     handleSearch(newPage, pageSize);
   }
@@ -63,13 +62,13 @@ export default function SearchPage() {
         duration: 3000,
         isClosable: true,
       });
-      dispatch(resetAddStatus())
+      dispatch(resetAddStatus());
     }
   }, [addStatus]);
 
   return (
     <>
-      <h1>Search Page</h1>
+      <Text fontSize='2xl' as='b'>Search Page</Text>
       <Search
         isLoading={isLoading}
         handleSearch={handleSearch}

@@ -1,31 +1,23 @@
 import React from 'react';
 
+import GenericCard from '../GenericCard';
 import * as S from './styles';
 
 type MovieCardDetailsProps = {
-  averageRating: number;
-  numVotes: number;
-  plot: string;
   primaryTitle: string;
   quote: string;
-  spotifyUrl: string;
   startYear: string;
   tconst: string;
   wiki: string;
 };
 
 const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
-  averageRating,
-  numVotes,
-  plot,
   primaryTitle,
   quote,
-  spotifyUrl,
   startYear,
   tconst,
   wiki,
 }) => {
-  const spotifyId = spotifyUrl ? spotifyUrl.split('/').pop() : null;
 
   const formatQuote = (quote: string) => {
     const lines = quote.split(/(?=\b[A-Z][a-z]*\s[A-Z][a-z]*\s*:)/);
@@ -36,7 +28,7 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
       return (
         <div key={index} style={{ marginBottom: '10px' }}>
           <strong>{character}:</strong>
-          <span style={{ display: 'block', marginLeft: '20px' }}>
+          <td style={{ display: 'block', marginLeft: '20px' }}>
             {dialogue
               ? dialogue
                 .split(/(\[.*?\])/g)
@@ -44,36 +36,32 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
                   part.startsWith('[') ? <em key={i}>{part}</em> : part
                 ) : 'Quote not available'
             }
-          </span>
+          </td>
         </div>
       );
     });
   };
 
   return (
-    <S.Container>
-      <S.PageTitle>Detalhes do Filme</S.PageTitle>
-      <S.LineInfo>Título: {primaryTitle}</S.LineInfo>
-      <S.LineInfo>ID do filme: {tconst}</S.LineInfo>
-      <S.LineInfo>Ano: {startYear}</S.LineInfo>
-      <S.LineInfo>Avaliação: {averageRating}</S.LineInfo>
-      <S.LineInfo>Votos: {numVotes}</S.LineInfo>
-      <S.LineInfo>Sinopse: {plot}</S.LineInfo>
+    <GenericCard>
+      <S.PageTitle>{primaryTitle}</S.PageTitle>
+      <S.LineInfo>{tconst}</S.LineInfo>
+      <S.LineInfo>{startYear}</S.LineInfo>
       <S.LineInfo>Citação: {formatQuote(quote)}</S.LineInfo>
       <S.LineInfo>
         <a href={wiki} rel='noopener noreferrer' target='_blank'>
           {wiki}
         </a>
       </S.LineInfo>
-      <iframe
+      {/* <iframe
         allow='encrypted-media'
         height='300'
         src={`https://open.spotify.com/embed/album/${spotifyId}`}
         style={{ border: 'none', display: 'block', paddingTop: '4px' }}
         title='Spotify player'
         width='100%'
-      />
-    </S.Container>
+      /> */}
+    </GenericCard>
   );
 };
 

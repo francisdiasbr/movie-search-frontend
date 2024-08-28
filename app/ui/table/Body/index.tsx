@@ -11,6 +11,7 @@ import TableRowsLoader from '../RowsLoader';
 import Icon from '../../Icon';
 import { TableBodyProps } from '../types';
 import * as S from './styles';
+import { Tooltip } from '@chakra-ui/react';
 
 const TableBody = ({
   columns,
@@ -30,6 +31,8 @@ const handleStarClick = (tconst: string) => {
   handleAdd(tconst); 
 };
 
+console.log('entries', entries)
+
   return (
       <S.TableBody>
         {
@@ -40,6 +43,8 @@ const handleStarClick = (tconst: string) => {
 
               <S.Row key={item.tconst}>
                 {columns.map((column) => (
+                  <>
+                  <Tooltip bg="#fff" label={<img src={item.poster}/>} height='auto' width='auto'>
                   <S.Cell key={column.key}>
                     {column.isAction ? (
                       <S.ButtonGroup>
@@ -67,6 +72,8 @@ const handleStarClick = (tconst: string) => {
                       item[column.key]
                     )}
                   </S.Cell>
+                  </Tooltip>
+                  </>
                 ))}
               </S.Row>
             ))

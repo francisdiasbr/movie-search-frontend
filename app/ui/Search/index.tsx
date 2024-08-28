@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input, useToast } from '@chakra-ui/react';
+import { Button, Input, Select } from '@chakra-ui/react';
 import React from "react";
 
 interface SearchProps {
@@ -8,9 +8,11 @@ interface SearchProps {
   searchTerm: string;
   handleSearch: () => void;
   isLoading: boolean;
+  country?: string;
+  setCountry?: (value: string) => void;
 }
 
-const Search = ({ setSearchTerm, searchTerm, handleSearch, isLoading }: SearchProps) => {
+const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, isLoading }: SearchProps) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -36,6 +38,17 @@ const Search = ({ setSearchTerm, searchTerm, handleSearch, isLoading }: SearchPr
           value={searchTerm}
           onKeyDown={handleKeyDown}
         />
+        {setCountry && country && (
+          <Select
+            onChange={(e) => setCountry(e.target.value)}
+            placeholder='Select a country'
+            value={country}
+          >
+            <option value='Brazil'>Brazil</option>
+            <option value='United States'>United States</option>
+            <option value='Italy'>Italy</option>
+          </Select>
+        )}
         <Button
           isLoading={isLoading}
           onClick={() => handleSearch()}

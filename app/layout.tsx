@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata: Metadata = {
   description: 'Custom admin panel for Movie Search',
-  title: 'Movie Search Admin',
+  title: 'Movie Search',
 };
 
 export default function RootLayout({
