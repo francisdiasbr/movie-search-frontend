@@ -3,15 +3,15 @@ import React from "react";
 import GenericCard from "../GenericCard";
 
 interface PlotCardProps {
-  plot: string;
+  review?: string;
 }
 
-const PlotCard = ({plot}: PlotCardProps) => {
+const PlotCard = ({review}: PlotCardProps) => {
   
   return (
     <GenericCard>
       <p>Plot</p>
-      <div>{plot}</div>
+      <div>{review}</div>
     </GenericCard>
   )
 }

@@ -55,11 +55,7 @@ export const CardsGrid = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 1536px) {
     grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 1600px) {
-    grid-template-columns: repeat(5, 1fr);
   }
 `;

@@ -23,30 +23,31 @@ const TableBody = ({
   isLoading
 }: TableBodyProps) => {
 
-const [selectedTconst, setSelectedTconst] = useState<string | null>(null);
+  const [selectedTconst, setSelectedTconst] = useState<string | null>(null);
 
-const handleStarClick = (tconst: string) => {
-  console.log('tconst selecionado', tconst);
-  setSelectedTconst(tconst === selectedTconst ? null : tconst);
-  handleAdd(tconst); 
-};
-
-console.log('entries', entries)
+  const handleStarClick = (tconst: string) => {
+    console.log('tconst selecionado', tconst);
+    setSelectedTconst(tconst === selectedTconst ? null : tconst);
+    handleAdd(tconst);
+  };
 
   return (
-      <S.TableBody>
-        {
-          isLoading ? (
-            <TableRowsLoader rowsNum={10} columns={columns} />
-          ) : (
-            entries.map((item) => (
+    <S.TableBody>
+      {
+        isLoading ? (
+          <TableRowsLoader rowsNum={10} columns={columns} />
+        ) : (
+          entries.map((item) => (
 
-              <S.Row key={item.tconst}>
-                {columns.map((column) => (
-                  <>
-                  <Tooltip bg="#fff" label={<img src={item.poster}/>} height='auto' width='auto'>
+            <S.Row key={item.tconst}>
+              {columns.map((column) => (
+                <>
                   <S.Cell key={column.key}>
-                    {column.isAction ? (
+                    {column.key === 'primaryTitle' ? (
+                      <Tooltip label={<img src={item.poster} />} bg="#fff" height='auto' width='auto'>
+                        <span>{item[column.key]}</span>
+                      </Tooltip>
+                    ) : column.isAction ? (
                       <S.ButtonGroup>
                         <button onClick={() => handleView(item.tconst)}>
                           <Icon fontSize={20} icon={eyeIcon} />
@@ -61,25 +62,25 @@ console.log('entries', entries)
                     ) : column.isFavAction ? (
                       <S.ButtonGroup>
                         <button onClick={() => handleStarClick(item.tconst)}>
-                        <Icon 
-                            fontSize={20} 
-                            icon={selectedTconst === item.tconst ? starFilledIcon : starOutlineIcon} 
-                            style={{ color: selectedTconst === item.tconst ? '#907f0e' : '#ccc' }} 
+                          <Icon
+                            fontSize={20}
+                            icon={selectedTconst === item.tconst ? starFilledIcon : starOutlineIcon}
+                            style={{ color: selectedTconst === item.tconst ? '#907f0e' : '#ccc' }}
                           />
                         </button>
                       </S.ButtonGroup>
                     ) : (
                       item[column.key]
-                    )}
+                    )
+                    }
                   </S.Cell>
-                  </Tooltip>
-                  </>
-                ))}
-              </S.Row>
-            ))
-          )
-        }
-      </S.TableBody>
+                </>
+              ))}
+            </S.Row>
+          ))
+        )
+      }
+    </S.TableBody>
   );
 };
 

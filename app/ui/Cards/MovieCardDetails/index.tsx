@@ -4,18 +4,12 @@ import GenericCard from '../GenericCard';
 import * as S from './styles';
 
 type MovieCardDetailsProps = {
-  primaryTitle: string;
   quote: string;
-  startYear: string;
-  tconst: string;
   wiki: string;
 };
 
 const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
-  primaryTitle,
   quote,
-  startYear,
-  tconst,
   wiki,
 }) => {
 
@@ -44,10 +38,7 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
 
   return (
     <GenericCard>
-      <S.PageTitle>{primaryTitle}</S.PageTitle>
-      <S.LineInfo>{tconst}</S.LineInfo>
-      <S.LineInfo>{startYear}</S.LineInfo>
-      <S.LineInfo>Citação: {formatQuote(quote)}</S.LineInfo>
+      <S.LineInfo>Quote {formatQuote(quote)}</S.LineInfo>
       <S.LineInfo>
         <a href={wiki} rel='noopener noreferrer' target='_blank'>
           {wiki}

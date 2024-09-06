@@ -19,7 +19,7 @@ export const LogoLink = styled(Link)`
   height: 80px;
   border-radius: 8px;
   padding: 16px;
-  background-color: ${({ theme }) => theme.colors.primary[600]};
+  background-color: ${({ theme }) => theme.colors.primary[300]};
   @media (min-width: 768px) {
     height: 160px;
   }

@@ -13,6 +13,9 @@ const links = [
   { href: '/dashboard', icon: HomeIcon, name: 'Home' },
   { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Search Movies' },
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favorites' },
+  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write' },
+  { href: '/dashboard/generate-review', icon: FilmIcon, name: 'Generate review' },
+  { href: '/dashboard/reviews', icon: FilmIcon, name: 'Reviews' }
 ];
 
 export default function NavLinks() {

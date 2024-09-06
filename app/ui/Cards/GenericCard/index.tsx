@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 
 import * as S from "./styles";
 
@@ -9,7 +9,7 @@ interface GenericCardProps {
 
 const GenericCard = ({ children, style}: GenericCardProps) => {
   return (
-    <S.Container style={{ overflow: "auto", ...style }}>
+    <S.Container style={{ ...style }}>
       {children}
     </S.Container>
   );

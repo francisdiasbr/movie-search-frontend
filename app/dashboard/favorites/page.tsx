@@ -12,18 +12,16 @@ import Search from '@/app/ui/Search';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { entries, total_documents } = useAppSelector((state) => state.moviesFavorites);
+  const { entries, total_documents, status } = useAppSelector((state) => state.moviesFavorites);
   const { delStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
-    setIsLoading(true);
     const params = {
       filters: {
         country: country
@@ -32,10 +30,7 @@ export default function Page() {
       pageSize: currentPageSize,
       searchTerm: searchTerm,
     };
-    console.log('params', params);
     dispatch(fetchFavorites(params))
-      .then(() => setIsLoading(false))
-      .catch(() => setIsLoading(false));
   };
 
   const handleDelete = (tconst: string) => {
@@ -47,14 +42,12 @@ export default function Page() {
   }, []);
 
   const handlePageSizeChange = (newPageSize: number) => {
-    // console.log('newPageSize em handlePageSizeChange', newPageSize);
     setPageSize(newPageSize);
     setPage(0);
     handleSearch(0, newPageSize);
   };
 
   const handlePageChange = (newPage: number) => {
-    // console.log('newPage em handlePageChange', newPage);
     setPage(newPage);
     handleSearch(newPage, pageSize);
   }
@@ -90,7 +83,7 @@ export default function Page() {
     <>
       <Text fontSize='2xl' as='b'>Movies Page</Text>
       <Search
-        isLoading={isLoading}
+        isLoading={status === 'loading'}
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -100,7 +93,7 @@ export default function Page() {
       <Table
         columns={columnData}
         entries={entries}
-        isLoading={isLoading}
+        isLoading={status === 'loading'}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         page={page}

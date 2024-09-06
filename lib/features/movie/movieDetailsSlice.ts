@@ -81,7 +81,7 @@ export const editDetails = createAsyncThunk(
   'movies/edit',
   async (data: EditDetailsPayload, { rejectWithValue }) => {
     // console.log('data', data)
-    const url = `movie/${data.tconst}/edit`;
+    const url = `movie/${data.tconst}`;
 
     const body: EditDetailsPayload = {
       tconst: data.tconst,

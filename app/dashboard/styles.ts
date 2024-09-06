@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const LayoutContainer = styled.div`
   display: flex;
-  height: 100vh; 
+  height: 90vh; 
   flex-direction: column;
 
   @media (min-width: 768px) {
@@ -23,7 +23,7 @@ export const ContentWrapper = styled.div`
   // background-color: yellow;
   flex-grow: 1;
   padding: 24px;
-
+  overflow: scroll;
   @media (min-width: 768px) {
     overflow-y: auto;
     padding: 48px;

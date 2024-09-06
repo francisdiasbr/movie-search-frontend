@@ -52,6 +52,7 @@ const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, 
         <Button
           isLoading={isLoading}
           onClick={() => handleSearch()}
+          style={{ width: '150px' }}
         >
           Buscar
         </Button>
