@@ -1,4 +1,4 @@
-# CRUD-admin-screen
+# movie-search-frontend
 
 Is an aplication centered in the experience of a movie lover.
 
