@@ -5,6 +5,7 @@ import {
   FilmIcon,
   HomeIcon,
   MagnifyingGlassIcon,
+  SparklesIcon,
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import * as S from './styles';
@@ -12,10 +13,10 @@ import * as S from './styles';
 const links = [
   { href: '/dashboard', icon: HomeIcon, name: 'Home' },
   { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Search Movies' },
+  { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favorites' },
-  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write' },
-  { href: '/dashboard/generate-review', icon: FilmIcon, name: 'Generate review' },
-  { href: '/dashboard/reviews', icon: FilmIcon, name: 'Reviews' }
+  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
+  { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];
 
 export default function NavLinks() {

@@ -3,17 +3,17 @@ import { Text } from "@chakra-ui/react";
 const DashboardPage = () => {
   return (
     <>
-      <Text fontSize='2xl'>Dashboard Page</Text>
-      <p>Aqui aparece um mosaico dos últimos filmes assistidos</p>
+      <Text fontSize='2xl' as='b'>Movie search</Text>
       <br/>
-      <Text fontSize='2xl'>Festivais</Text>
-      <p>Aqui aparece um mosaico dos principais festivais de cinema europeu independente</p>
       <br/>
-      <Text fontSize='2xl'>Calendário</Text>
-      <p>Calendário dos festivais de cinema</p>
+      <Text fontSize='2xl'>Search movies</Text>
+      <p>Pesquise o filme através do nome ou IMDb ID (tconst do filme no IMDb)</p>
+      <br/>
+      <Text fontSize='2xl'>Favorites</Text>
+      <p>Consulte a sua lista de filmes favoritos e escute a playlist do filme através do Spotify</p>
       <br/>
       <Text fontSize='2xl'>Resenhas</Text>
-      <p>Resenhas dos últimos filmes assistidos</p>
+      <p>Escreva uma resenha para um filme assistido e leia resenhas autorais ou geradas por GenAI</p>
 
     </>
   )

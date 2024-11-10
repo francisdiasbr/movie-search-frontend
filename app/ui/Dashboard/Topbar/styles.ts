@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const TopBarContainer = styled.div`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.secondary[100]};
+  background-color: ${({ theme }) => theme.colors.primary[300]};
   color: white;
   display: flex;
   height: 70px;

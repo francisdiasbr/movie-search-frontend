@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -11,31 +10,8 @@ export const Container = styled.div`
   }
 `;
 
-export const LogoLink = styled(Link)`
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  margin-bottom: 8px;
-  height: 80px;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: ${({ theme }) => theme.colors.primary[300]};
-  @media (min-width: 768px) {
-    height: 160px;
-  }
-`;
-
-export const LogoContainer = styled.div`
-  // width: 128px;
-  color: white;
-  @media (min-width: 768px) {
-    // width: 160px;
-  }
-`;
-
 export const NavContainer = styled.div`
   display: flex;
-  // flex-grow: 1;
   flex-direction: row;
   justify-content: space-between;
   gap: 8px;
