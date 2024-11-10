@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import * as S from './styles';
-import { fetchAllGeneratedReviews, clearGenerateReviewStatus } from '@/lib/features/allGenReviews/allGenReviewsSlice';
+import { fetchAllGeneratedReviews, clearGenerateReview } from '@/lib/features/allGenReviews/allGenReviewsSlice';
 import { fetchAllAuthoralReviews, clearAuthoralReviewStatus } from '@/lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import ReviewCard from '@/app/ui/ReviewCard';
 
@@ -30,7 +30,7 @@ const ReviewsPage = () => {
       dispatch(clearAuthoralReviewStatus());
     } else {
       dispatch(fetchAllAuthoralReviews(params));
-      dispatch(clearGenerateReviewStatus());
+      dispatch(clearGenerateReview());
     }
   };
 

@@ -49,7 +49,7 @@ const allGenReviewsSlice = createSlice({
   initialState,
   name: "reviews",
   reducers: {
-    clearGenerateReviewStatus(state) {
+    clearGenerateReview(state) {
       state.status = "idle";
     },
   },
@@ -70,6 +70,6 @@ const allGenReviewsSlice = createSlice({
   },
 });
 
-export const { clearGenerateReviewStatus } = allGenReviewsSlice.actions;
+export const { clearGenerateReview } = allGenReviewsSlice.actions;
 
 export default allGenReviewsSlice.reducer;

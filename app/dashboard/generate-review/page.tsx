@@ -4,16 +4,22 @@ import { Button, Input, Text, useToast } from '@chakra-ui/react';
 
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useEffect, useState } from 'react';
-import { generateReview, clearGenerateReviewStatus } from '@/lib/features/review/reviewsSlice';
+import { generateReview, clearGenerateReviewState } from '@/lib/features/review/reviewsSlice';
 import * as S from './styles';
 
 const ReviewPage = () => {
   const dispatch = useAppDispatch();
-  const { data, status } = useAppSelector((state) => state.moviesReviews);
+  const { data, error, status } = useAppSelector((state) => state.moviesReviews);
   const toast = useToast();
 
   const [tconst, setTconst] = useState('');
 
+  const validateTconst = (tconst: any) => /^tt\d{7}$/.test(tconst);
+
+  useEffect(() => {
+    dispatch(clearGenerateReviewState());
+  }, [dispatch]);
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTconst(e.target.value);
   };
@@ -31,9 +37,13 @@ const ReviewPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      dispatch(clearGenerateReviewStatus())
+      setTconst('');
     }
-    if(status === 'failed') {
+
+    if (status === "failed") {
+      const errorMessage = error === "Movie not found in favorites" 
+        ? "Filme não encontrado nos favoritos"
+        : (typeof error === 'string' ? error : "Falha ao adicionar a review");
       toast({
         title: 'Error',
         description: 'Failed to generate review',
@@ -41,12 +51,8 @@ const ReviewPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      dispatch(clearGenerateReviewStatus())
     }
-  }, [status, toast, dispatch]);
-
-  console.log('data', data);
-  console.log('status', status);
+  }, [status, error, toast]);
 
   return (
     <S.PageContainer>
