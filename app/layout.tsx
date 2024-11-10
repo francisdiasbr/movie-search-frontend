@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ["latin"] });
+import './globals.css';
+import StoreProvider from './StoreProvider';
+import StyledComponentsRegistry from '@/lib/registry';
+import { ChakraProvider } from './providers';
+
+const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata: Metadata = {
-  title: "Movie Search Admin",
-  description: "Custom admin panel for Movie Search",
+  description: 'Custom admin panel for Movie Search',
+  title: 'Movie Search',
 };
 
 export default function RootLayout({
@@ -15,8 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialised`}>{children}</body>
+    <html lang='en'>
+      <body className={`${inter.className} antialiased`}>
+        <StyledComponentsRegistry>
+          <ChakraProvider>
+          <StoreProvider>{children}</StoreProvider>
+          </ChakraProvider>
+        </StyledComponentsRegistry>
+      </body>
     </html>
   );
 }
