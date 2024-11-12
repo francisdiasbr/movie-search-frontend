@@ -4,15 +4,19 @@ import { Button, Input, Select } from '@chakra-ui/react';
 import React from "react";
 
 interface SearchProps {
-  setSearchTerm: (value: string) => void;
-  searchTerm: string;
-  handleSearch: () => void;
-  isLoading: boolean;
   country?: string;
   setCountry?: (value: string) => void;
+  setYear?: (value: number) => void;
+  setSearchTerm: (value: string) => void;
+  searchTerm: string;
+  showAllFields?: boolean;
+  handleSearch: () => void;
+  isLoading: boolean;
+  isFavoritePage?: boolean;
+  year?: number;
 }
 
-const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, isLoading }: SearchProps) => {
+const Search = ({ country, isFavoritePage, setCountry, setSearchTerm, searchTerm, handleSearch, isLoading, showAllFields = false, year, setYear }: SearchProps) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -22,7 +26,7 @@ const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, 
 
   return (
     <>
-      <h1>Search movie</h1>
+      <h1>{isFavoritePage ? 'Favorite a movie in your personal collection' : 'Search movie in Internet Movie Database'}</h1>
       <div
         style={{
           display: 'flex',
@@ -38,16 +42,35 @@ const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, 
           value={searchTerm}
           onKeyDown={handleKeyDown}
         />
-        {country !== undefined && setCountry && (
-          <Select
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder='Select a country'
-            value={country}
-          >
-            <option value='Brazil'>Brazil</option>
-            <option value='United States'>United States</option>
-            <option value='Italy'>Italy</option>
-          </Select>
+        {showAllFields && (
+          <>
+            <Select
+              onChange={(e) => setCountry && setCountry(e.target.value)}
+              placeholder='Select country'
+              value={country}
+            >
+              <option value='USA'>USA</option>
+              <option value='Germany'>Germany</option>
+              <option value='Italy'>Italy</option>
+              <option value='UK'>UK</option>
+              <option value='Brazil'>Brazil</option>
+            </Select>
+            <Select
+              onChange={(e) => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : 0)} // Converte para número ou `0`
+              placeholder="Select year"
+              value={year ?? ""} // Exibe uma string vazia se `year` for `undefined`
+            >
+              {Array.from({ length: 100 }, (_, i) => {
+                const currentYear = new Date().getFullYear();
+                const yearOption = (currentYear - i).toString();
+                return (
+                  <option key={yearOption} value={yearOption}>
+                    {yearOption}
+                  </option>
+                );
+              })}
+            </Select>
+          </>
         )}
         <Button
           isLoading={isLoading}

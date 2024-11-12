@@ -1,12 +1,12 @@
 'use client';
 
 import Table from '@/app/ui/Table';
-import { searchMovie } from '@/lib/features/search/searchSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { addFavorite, resetAddStatus } from '@/lib/features/movie/movieDetailsSlice';
+import { searchMovie } from '@/lib/features/search/searchSlice';
 import { columnData } from './columnData';
 import Search from '@/app/ui/Search';
 
@@ -16,7 +16,6 @@ export default function SearchPage() {
   const { addStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
-  console.log('entries', entries);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
@@ -24,8 +23,9 @@ export default function SearchPage() {
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     setIsLoading(true);
+    const filters: { ttconst?: string } = {};
     const params = {
-      filters: {},
+      filters,
       page: currentPage + 1,
       pageSize: currentPageSize,
       searchTerm: searchTerm,

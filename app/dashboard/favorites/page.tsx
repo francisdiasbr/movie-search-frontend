@@ -20,11 +20,13 @@ export default function Page() {
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [year, setYear] = useState<number | undefined>(undefined);
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     const params = {
       filters: {
-        country: country
+        country: country,
+        startYear: year,
       },
       page: currentPage + 1,
       pageSize: currentPageSize,
@@ -81,14 +83,18 @@ export default function Page() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>Movies Page</Text>
+      <Text fontSize='2xl' as='b'>Favorite movies Page</Text>
       <Search
         isLoading={status === 'loading'}
+        isFavoritePage
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         country={country ?? ''}
         setCountry={setCountry}
+        showAllFields
+        setYear={setYear}
+        year={year}
       />
       <Table
         columns={columnData}
