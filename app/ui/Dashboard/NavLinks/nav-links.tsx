@@ -13,10 +13,10 @@ import * as S from './styles';
 const links = [
   { href: '/dashboard', icon: HomeIcon, name: 'Home' },
   { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Search Movies' },
-  { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
+  // { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favorites' },
-  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
-  { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
+  // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
+  // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];
 
 export default function NavLinks() {

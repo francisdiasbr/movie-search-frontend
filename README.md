@@ -1,6 +1,8 @@
 # movie-search-frontend
 
 Is an aplication centered in the experience of a movie lover.
+It is based on a consumption of the catalogue provided by IMDb (Internet Movie Database).
+The user can search for a movie, get information about it, save it on a watch list, and edit it.
 
 ## Features
 

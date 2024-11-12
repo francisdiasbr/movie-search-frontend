@@ -7,13 +7,14 @@ const DashboardPage = () => {
       <br/>
       <br/>
       <Text fontSize='2xl'>Search movies</Text>
-      <p>Pesquise o filme através do nome ou IMDb ID (tconst do filme no IMDb)</p>
+      <p>Pesquise um filme no banco de dados do Internet Movie Database</p>
+      <p>Veja as informações principais de um filme e adicione-o à lista de favoritos </p>
       <br/>
-      <Text fontSize='2xl'>Favorites</Text>
-      <p>Consulte a sua lista de filmes favoritos e escute a playlist do filme através do Spotify</p>
+      <Text fontSize='2xl'>Favorite movies (curatory)</Text>
+      <p>Pesquise filmes favoritos e escute a playlist do filme através do Spotify</p>
       <br/>
-      <Text fontSize='2xl'>Resenhas</Text>
-      <p>Escreva uma resenha para um filme assistido e leia resenhas autorais ou geradas por GenAI</p>
+      {/* <Text fontSize='2xl'>Resenhas</Text>
+      <p>Escreva uma resenha para um filme assistido e leia resenhas autorais ou geradas por GenAI</p> */}
 
     </>
   )
