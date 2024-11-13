@@ -12,7 +12,7 @@ export const columnData = [
     sort: true
   },
   { 
-    key: 'primaryTitle', 
+    key: 'originalTitle', 
     label: 'Title', 
     width: '40%', 
     sort: true

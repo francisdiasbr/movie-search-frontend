@@ -15,7 +15,7 @@ const ReviewsPage = () => {
   const { entries: authoralEntries, status: authoralStatus } = useAppSelector((state) => state.allAuthoralReviews);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showGeneratedReviews, setShowGeneratedReviews] = useState(true); // Alterna entre resenhas geradas e autorais
-  const [filters, setFilters] = useState({ primaryTitle: '', author: '', tconst: '' });
+  const [filters, setFilters] = useState({ originalTitle: '', author: '', tconst: '' });
 
   // Função para buscar resenhas com base no tipo selecionado
   const fetchReviews = (type) => {
@@ -94,7 +94,7 @@ const ReviewsPage = () => {
           {generatedEntries.map((entry: any) => (
             <ReviewCard
               key={entry.tconst}
-              primaryTitle={entry.primaryTitle}
+              originalTitle={entry.originalTitle}
               review={entry.review}
               plot={entry.plot}
             />
@@ -106,7 +106,7 @@ const ReviewsPage = () => {
           {authoralEntries.map((entry: any) => (
             <ReviewCard 
               key={entry.tconst}
-              primaryTitle={entry.primaryTitle}
+              originalTitle={entry.originalTitle}
               review={entry.review}
             />
           ))}

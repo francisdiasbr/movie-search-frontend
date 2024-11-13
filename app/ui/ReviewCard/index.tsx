@@ -2,12 +2,12 @@ import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
 
 interface ReviewCardProps {
-  primaryTitle: string;
+  originalTitle: string;
   review: string;
   plot?: string;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ primaryTitle, review, plot }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ originalTitle, review, plot }) => {
   return (
     <Box
       borderWidth="1px"
@@ -20,7 +20,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ primaryTitle, review, plot }) =
       _hover={{ boxShadow: 'md' }}
     >
       <Text fontSize="lg" fontWeight="bold" mb="2">
-        {primaryTitle}
+        {originalTitle}
       </Text>
       <Text fontSize="md" mb="4">
         {review}

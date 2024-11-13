@@ -2,7 +2,7 @@ export interface MovieItem {
   _id: string;
   averageRating: number;
   numVotes: number;
-  primaryTitle: string;
+  originalTitle: string;
   startYear: number;
   tconst: string;
 }

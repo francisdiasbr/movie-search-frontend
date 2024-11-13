@@ -44,12 +44,15 @@ export default function MovieDetailsPage() {
     });
   }
 
+  console.log('data', data);
+
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
-      <Text fontSize='2xl'>{data.primaryTitle}</Text>
+      <Text fontSize='2xl'>{data.originalTitle}</Text>
+      <Text fontSize='1xl'>{data.primaryTitle}</Text>
       <Text fontSize='1xl'>{data.country}</Text>
       <Text fontSize='1xl'>{data.startYear}</Text>
       <Text fontSize='1xl'>{data.tconst}</Text>

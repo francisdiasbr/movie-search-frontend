@@ -2,7 +2,7 @@ export interface MovieCardDetailsProps {
   averageRating: number;
   numVotes: number;
   plot: string;
-  primaryTitle: string;
+  originalTitle: string;
   quote: string;
   spotifyUrl: string;
   startYear: string;

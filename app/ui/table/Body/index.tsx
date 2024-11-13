@@ -43,7 +43,7 @@ const TableBody = ({
               {columns.map((column) => (
                 <>
                   <S.Cell key={column.key}>
-                    {column.key === 'primaryTitle' ? (
+                    {column.key === 'originalTitle' ? (
                       <Tooltip label={<img src={item.poster} />} bg="#fff" height='auto' width='auto'>
                         <span>{item[column.key]}</span>
                       </Tooltip>

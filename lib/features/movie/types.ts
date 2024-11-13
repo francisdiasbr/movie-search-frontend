@@ -3,7 +3,7 @@ export interface MovieDetailsItem {
   averageRating: number;
   numVotes: number;
   plot: string;
-  primaryTitle: string;
+  originalTitle: string;
   quote: string;
   soundtrack: string;
   startYear: number;
@@ -22,7 +22,7 @@ export interface MovieDetailsState {
 
 export interface EditDetailsPayload {
   tconst: string;
-  primaryTitle?: string;
+  originalTitle?: string;
   startYear?: number;
   soundtrack?: string;
   wiki?: string;

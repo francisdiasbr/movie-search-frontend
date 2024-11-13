@@ -17,7 +17,7 @@ export default function Page() {
   const router = useRouter();
   const toast = useToast();
 
-  const [primaryTitle, setPrimaryTitle] = useState('');
+  const [originalTitle, setOriginalTitle] = useState('');
   const [startYear, setStartYear] = useState<string>('')
   const [soundtrack, setSoundtrack] = useState<string>('')
   const [wiki, setWiki] = useState<string>('')
@@ -31,7 +31,7 @@ export default function Page() {
 
   useEffect(() => {
     if (data) {
-      setPrimaryTitle(data.primaryTitle || '');
+      setOriginalTitle(data.originalTitle || '');
       setStartYear(data.startYear || null);
       setSoundtrack(data.soundtrack || null);
       setWiki(data.wiki || null);
@@ -40,7 +40,7 @@ export default function Page() {
 
   useEffect(() => {
     if (editStatus === 'succeeded') {
-      setPrimaryTitle(data?.primaryTitle);
+      setOriginalTitle(data?.originalTitle);
       setStartYear(data?.startYear);
       setSoundtrack(data?.soundtrack);
       setWiki(data?.wiki);
@@ -76,7 +76,7 @@ export default function Page() {
 
     const updatedData = {
       tconst: tconst as string,
-      primaryTitle,
+      originalTitle,
       startYear: Number(startYear),
       soundtrack,
       wiki
@@ -98,9 +98,9 @@ export default function Page() {
       />
       <p>primary title</p>
       <Input
-        onChange={(e) => (setPrimaryTitle(e.target.value))}
+        onChange={(e) => (setOriginalTitle(e.target.value))}
         type="text"
-        value={primaryTitle}
+        value={originalTitle}
       />
       <p>Start year</p>
       <Input
