@@ -12,7 +12,7 @@ import Search from '@/app/ui/Search';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { entries, total_documents, status } = useAppSelector((state) => state.moviesFavorites);
+  const { countries, entries, total_documents, status, startYears } = useAppSelector((state) => state.moviesFavorites);
   const { delStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
@@ -21,6 +21,8 @@ export default function Page() {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [year, setYear] = useState<number | undefined>(undefined);
+  const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
+  const [yearOptions, setYearOptions] = useState<{ value: string; label: string }[]>([]);
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     const params = {
@@ -42,6 +44,11 @@ export default function Page() {
   useEffect(() => {
     handleSearch();
   }, []);
+
+  useEffect(() => {
+    setCountryOptions(countries.map(country => ({ value: country, label: country })));
+    setYearOptions(startYears.map(year => ({ value: year.toString(), label: year.toString() })));
+  }, [countries, startYears]);
 
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
@@ -95,6 +102,8 @@ export default function Page() {
         showAllFields
         setYear={setYear}
         year={year}
+        countryOptions={countryOptions}
+        yearOptions={yearOptions}
       />
       <Table
         columns={columnData}

@@ -8,8 +8,10 @@ export interface MovieItem {
 }
 
 export interface MovieFavoritesState {
+  countries: string[];
   entries: any;
   error: null | string;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  startYears: number[];
   total_documents: number;
 }

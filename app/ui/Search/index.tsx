@@ -1,10 +1,12 @@
-'use client';
-
-import { Button, Input, Select } from '@chakra-ui/react';
 import React from "react";
+import { Button, Input } from '@chakra-ui/react';
+import Select from 'react-select';
+
+import * as S from './styles';
 
 interface SearchProps {
   country?: string;
+  countryOptions: { value: string; label: string }[];
   setCountry?: (value: string) => void;
   setYear?: (value: number) => void;
   setSearchTerm: (value: string) => void;
@@ -14,27 +16,34 @@ interface SearchProps {
   isLoading: boolean;
   isFavoritePage?: boolean;
   year?: number;
+  yearOptions?: { value: string; label: string }[];
 }
 
-const Search = ({ country, isFavoritePage, setCountry, setSearchTerm, searchTerm, handleSearch, isLoading, showAllFields = false, year, setYear }: SearchProps) => {
+const Search = ({
+  country,
+  countryOptions,
+  isFavoritePage,
+  setCountry,
+  setSearchTerm,
+  searchTerm,
+  handleSearch,
+  isLoading,
+  showAllFields = false,
+  year,
+  setYear,
+  yearOptions,
+}: SearchProps) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
-  }
+  };
 
   return (
     <>
       <h1>{isFavoritePage ? 'Favorite a movie in your personal collection' : 'Search movie in Internet Movie Database'}</h1>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '8px',
-          marginBottom: '16px',
-        }}
-      >
+      <S.SearchContainer>
         <Input
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder='Search for movies'
@@ -43,43 +52,30 @@ const Search = ({ country, isFavoritePage, setCountry, setSearchTerm, searchTerm
           onKeyDown={handleKeyDown}
         />
         {showAllFields && (
-          <>
+            <>
             <Select
-              onChange={(e) => setCountry && setCountry(e.target.value)}
-              placeholder='Select country'
-              value={country}
-            >
-              <option value='USA'>USA</option>
-              <option value='Germany'>Germany</option>
-              <option value='Italy'>Italy</option>
-              <option value='UK'>UK</option>
-              <option value='Brazil'>Brazil</option>
-            </Select>
+              isClearable
+              isSearchable
+              onChange={(selectedOption) => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
+              options={countryOptions}
+              placeholder="Select country"
+              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
+              value={countryOptions.find(option => option.value === country) || null}
+            />
             <Select
-              onChange={(e) => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : 0)} // Converte para número ou `0`
+              isClearable
+              onChange={(e) => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
+              options={yearOptions}
               placeholder="Select year"
-              value={year ?? ""} // Exibe uma string vazia se `year` for `undefined`
-            >
-              {Array.from({ length: 100 }, (_, i) => {
-                const currentYear = new Date().getFullYear();
-                const yearOption = (currentYear - i).toString();
-                return (
-                  <option key={yearOption} value={yearOption}>
-                    {yearOption}
-                  </option>
-                );
-              })}
-            </Select>
-          </>
+              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
+              value={year ? { value: year.toString(), label: year.toString() } : null}
+            />
+            </>
         )}
-        <Button
-          isLoading={isLoading}
-          onClick={() => handleSearch()}
-          style={{ width: '150px' }}
-        >
-          Buscar
+        <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>
+          Go
         </Button>
-      </div>
+      </S.SearchContainer>
     </>
   );
 };

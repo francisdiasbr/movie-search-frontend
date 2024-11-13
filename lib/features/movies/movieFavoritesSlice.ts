@@ -4,10 +4,12 @@ import BaseService from '../../api/service';
 import { MovieFavoritesState } from './types';
 
 const initialState: MovieFavoritesState = {
+  countries: [],
   entries: [],
   error: null,
+  startYears: [],
   status: 'idle',
-  total_documents: 0,
+  total_documents: 0
 };
 
 interface FetchFavoritesParams {
@@ -56,12 +58,11 @@ const movieFavoritesSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.countries = action.payload.countries || [];
+        state.entries = Array.isArray(action.payload.entries) ? action.payload.entries : [];
         state.status = 'succeeded';
-        state.entries = Array.isArray(action.payload.entries)
-          ? action.payload.entries
-          : [];
+        state.startYears = action.payload.years || [];
         state.total_documents = action.payload.total_documents;
-        console.log('state.entries', state.entries);
       })
       .addCase(fetchFavorites.rejected, (state) => {
         state.status = 'failed';
