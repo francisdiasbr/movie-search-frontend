@@ -20,7 +20,13 @@ export const columnData = [
   { 
     key: 'startYear',
     label: 'Year', 
-    width: '20%', 
+    width: '15%', 
     sort: true
   },
+  {
+    key: 'director',
+    label: 'Director',
+    width: '25%',
+    sort: true
+  }
 ];

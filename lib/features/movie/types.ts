@@ -9,6 +9,7 @@ export interface MovieDetailsItem {
   startYear: number;
   tconst: string;
   wiki: string;
+  plot_keywords: string[];
 }
 
 export interface MovieDetailsState {

@@ -42,7 +42,7 @@ const Search = ({
 
   return (
     <>
-      <h1>{isFavoritePage ? 'Favorite a movie in your personal collection' : 'Search movie in Internet Movie Database'}</h1>
+      <h1>{isFavoritePage ? 'Favorite a movie in your personal collection' : 'Search movie by search term (IMDb ID or Original Title - ex: tt0068361, Le charme discret de la bourgeoisie'}</h1>
       <S.SearchContainer>
         <Input
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -70,6 +70,14 @@ const Search = ({
               styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
               value={year ? { value: year.toString(), label: year.toString() } : null}
             />
+            {/* <Select
+              isClearable
+              onChange={(e) => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
+              options={yearOptions}
+              placeholder="Select director"
+              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
+              value={year ? { value: year.toString(), label: year.toString() } : null}
+            /> */}
             </>
         )}
         <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>

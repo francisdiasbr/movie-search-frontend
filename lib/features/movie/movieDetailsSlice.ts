@@ -148,6 +148,7 @@ const movieDetailsSlice = createSlice({
       .addCase(fetchDetails.fulfilled, (state, action) => {
         state.fetchStatus = 'succeeded';
         state.data = action.payload as MovieDetailsItem;
+        console.log('action.payload', action.payload)
       })
       .addCase(fetchDetails.rejected, (state, action) => {
         state.fetchStatus = 'failed';
