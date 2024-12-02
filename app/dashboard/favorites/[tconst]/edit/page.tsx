@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useParams } from 'next/navigation';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
 import { Icon } from '@iconify/react';
-import { Button, Input, Text, useToast } from '@chakra-ui/react'
+import { Button, Input, Text, useToast, Checkbox } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation';
 import { editDetails, fetchDetails, resetEditStatus } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
@@ -20,6 +20,7 @@ export default function Page() {
   const [originalTitle, setOriginalTitle] = useState('');
   const [soundtrack, setSoundtrack] = useState<string>('')
   const [wiki, setWiki] = useState<string>('')
+  const [watched, setWatched] = useState<boolean>(false)
 
   useEffect(() => {
     if (typeof tconst === 'string') {
@@ -33,6 +34,7 @@ export default function Page() {
       setOriginalTitle(data.originalTitle || '');
       setSoundtrack(data.soundtrack || null);
       setWiki(data.wiki || null);
+      setWatched(data.watched || false);
     }
   }, [data]);
 
@@ -41,6 +43,7 @@ export default function Page() {
       setOriginalTitle(data?.originalTitle);
       setSoundtrack(data?.soundtrack);
       setWiki(data?.wiki);
+      setWatched(data.watched || false);
       toast({
         title: 'Filme atualizado',
         description: 'Detalhes atualizados com sucesso',
@@ -75,7 +78,8 @@ export default function Page() {
       tconst: tconst as string,
       originalTitle,
       soundtrack,
-      wiki
+      wiki,
+      watched
     };
     dispatch(editDetails(updatedData));
   };
@@ -95,6 +99,7 @@ export default function Page() {
         cursor="not-allowed"
         _hover={{ bg: "gray.100" }}
       />
+      <br />
       <p>Original title</p>
       <Input
         isReadOnly
@@ -104,19 +109,29 @@ export default function Page() {
         cursor="not-allowed"
         _hover={{ bg: "gray.100" }}
       />
+      <br /> 
       <p>Soundtrack</p>
       <Input
         onChange={(e) => setSoundtrack(e.target.value)}
         type="text"
         value={soundtrack}
       />
+      <br />
       <p>Wiki</p>
       <Input
         onChange={(e) => setWiki(e.target.value)}
         type="text"
         value={wiki}
       />
-      <br/>
+      <br />
+      <p>Watched</p>
+      <Checkbox
+        isChecked={watched}
+        onChange={(e) => setWatched(e.target.checked)}
+      >
+        Watched
+      </Checkbox>
+        <br />
       <Button colorScheme="blue" onClick={handleSave}>Save</Button>
     </S.PageContainer>
   );

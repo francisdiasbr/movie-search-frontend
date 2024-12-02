@@ -22,9 +22,9 @@ export interface MovieDetailsState {
 }
 
 export interface EditDetailsPayload {
+  watched: boolean;
   tconst: string;
-  originalTitle?: string;
-  startYear?: number;
-  soundtrack?: string;
-  wiki?: string;
+  originalTitle: string;
+  soundtrack: string;
+  wiki: string;
 }

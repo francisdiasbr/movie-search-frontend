@@ -80,25 +80,26 @@ export const fetchDetails = createAsyncThunk(
 export const editDetails = createAsyncThunk(
   'movies/edit',
   async (data: EditDetailsPayload, { rejectWithValue }) => {
-    // console.log('data', data)
+    // console.log('data', data);
     const url = `favorites/${data.tconst}`;
 
     const body: EditDetailsPayload = {
       tconst: data.tconst,
+      originalTitle: data.originalTitle,
       soundtrack: data.soundtrack,
-      wiki: data.wiki
+      wiki: data.wiki,
+      watched: data.watched
     };
 
     try {
       const response = await BaseService.put(url, body as any);
-      // console.log('response', response)
       return response.data;
     } catch (error) {
       console.error('Error editing details:', error);
       if (error instanceof Error) {
-        return rejectWithValue(error.message)
+        return rejectWithValue(error.message);
       } else {
-        return rejectWithValue('An unexpected error occurred')
+        return rejectWithValue('An unexpected error occurred');
       }
     }
   }
