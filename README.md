@@ -2,7 +2,7 @@
 
 É uma aplicação centrada na experiência do amante de cinema. 
 
-Baseia-se no consumo do catálogo fornecido pelo IMDb (Internet Movie Database). 
+Backend deste projeto: https://github.com/francisdiasbr/movie-search-backend
 
 O usuário pode pesquisar por filmes, obter informações sobre eles, salvá-los em uma lista de favoritos e editá-los.
 
@@ -14,47 +14,61 @@ O usuário pode pesquisar por filmes, obter informações sobre eles, salvá-los
 
 ## Features
 
-### 1. Pesquisar Filme
+### 1. Pesquisa de Filmes
 
-Pesquise um filme em um banco de dados completo de filmes. 
+O usuário pode pesquisar por um filme através do nome do filme ou do código IMDb (ex: tt0111161). O catálogo de filmes é fornecido pelo IMDb e contém a base de dados completa.
+
 Como resultado, a resposta fornece uma tabela populada contendo filmes relacionados à pesquisa.
 
-Na tabela de filmes, você pode ver o nome do filme, o ano de produção, a classificação e o número de votos:
-- Salve um filme em uma lista de desejos classificada
-- Obtenha informações sobre o filme: ano, , principais atores, país
-- Edite as informações de um filme (nome do filme, ano de lançamento, link da trilha sonora, link da Wikipedia)
+Ao pesquisar por um filme, o usuário pode:
+  - Ver apenas 3 informações do filme: o nome do filme, o código IMDb o ano de produção.
+  - Favoritar um filme em sua coleção de favoritos.
 
 
+### 2. Coleção de Favoritos
+
+O usuário tem uma lista de favoritos onde pode:
+  - Ver todos os filmes favoritos.
+  - Editar as informações de um filme favorito (link da Wikipedia e trilha sonora do filme no Spotify).
+  - Excluir um filme favorito.
 
 
-- Ouça a trilha sonora no Spotify
-- Tenha acesso ao Magnet Link do torrent para assistir ao filme
+### 3. Visualização de Filme Favorito
 
-Next:
-- Salve suas citações favoritas no cartão do filme
-- Percepções do filme
-  - Contexto histórico
-  - Figurino
-  - Premiações
-
-
-## Getting Started
-
-instale as dependências
-```bash
-npm install
-# or
-yarn
-```
+O usuário pode visualizar as informações de um filme favorito:
+  - Nome do filme
+  - Código IMDb
+  - Diretor
+  - País
+  - Ano de lançamento
+  - Roteiro / Plot
+  - Plot Keywords (palavras chaves associadas ao filme)
+  - Link do filme na Wikipedia
+  - Trivia / Curiosidades (lista de fatos interessantes sobre o filme)
+  - Quotes (lista de frases célebres do filme)
+  - Trilha sonora do filme (integração com o Spotify)
+  - Magnet Link para download do filme
 
 
-Rode o servidor de desenvolvimento
+## Rodando a aplicação
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Antes de iniciar a aplicação, é imprescindível que o backend esteja em execução. Você pode encontrar as instruções para configurar e rodar o backend neste repositório: [movie-search-backend](https://github.com/francisdiasbr/movie-search-backend).
+
+### Passos para rodar a aplicação:
+
+1. **Instale as dependências**:
+   ```bash
+   npm install
+   # ou
+   yarn
+   ```
+
+2. **Inicie o servidor de desenvolvimento**:
+   ```bash
+   npm run dev
+   # ou
+   yarn dev
+   ```
 
 ## Uso de Magnet Links
 
