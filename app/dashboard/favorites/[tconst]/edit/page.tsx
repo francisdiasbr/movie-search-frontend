@@ -86,7 +86,7 @@ export default function Page() {
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
       <Text fontSize='2xl' as='b'>Editar Filme</Text>
-      <p>tconst</p>
+      <p>IMDB ID (tconst)</p>
       <Input
         isReadOnly
         type="text"
@@ -95,7 +95,7 @@ export default function Page() {
         cursor="not-allowed"
         _hover={{ bg: "gray.100" }}
       />
-      <p>primary title</p>
+      <p>Original title</p>
       <Input
         isReadOnly
         type="text"

@@ -85,8 +85,6 @@ export const editDetails = createAsyncThunk(
 
     const body: EditDetailsPayload = {
       tconst: data.tconst,
-      originalTitle: data.originalTitle,
-      startYear: data.startYear,
       soundtrack: data.soundtrack,
       wiki: data.wiki
     };
