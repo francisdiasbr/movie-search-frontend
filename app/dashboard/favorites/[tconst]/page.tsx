@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
-import { fetchMagnetLink } from '@/lib/features/movie/magnetLinkSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
 

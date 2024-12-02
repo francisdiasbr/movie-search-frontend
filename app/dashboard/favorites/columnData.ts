@@ -6,15 +6,9 @@ export const columnData = [
     width: '20%'
   },
   {
-    key: 'tconst',
-    label: 'IMDb ID',
+    key: 'watched',
+    label: 'Já vi?',
     width: '20%',
-    sort: true
-  },
-  { 
-    key: 'originalTitle', 
-    label: 'Título', 
-    width: '40%', 
     sort: true
   },
   { 
@@ -28,5 +22,17 @@ export const columnData = [
     label: 'Diretor',
     width: '25%',
     sort: true
-  }
+  },
+  { 
+    key: 'originalTitle', 
+    label: 'Título', 
+    width: '40%', 
+    sort: true
+  },
+  {
+    key: 'tconst',
+    label: 'IMDb ID',
+    width: '20%',
+    sort: true
+  },
 ];
