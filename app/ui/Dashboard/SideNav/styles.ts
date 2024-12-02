@@ -33,10 +33,10 @@ export const SignOutButton = styled.button`
   padding: 12px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.colors.primary[600]};
+  color: ${({ theme }) => theme.colors.primary[50]};
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary[100]};
-    color: ${({ theme }) => theme.colors.primary[500]};
+    background-color: ${({ theme }) => theme.colors.primary[50]};
+    color: ${({ theme }) => theme.colors.primary[50]};
   }
   @media (min-width: 768px) {
     justify-content: flex-start;

@@ -1,6 +1,6 @@
 'use client';
 
-import { Tag, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
 import { Icon } from '@iconify/react';
 import { useParams, useRouter } from 'next/navigation';
@@ -8,8 +8,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
-import TriviaCard from '@/app/ui/Cards/TriviaCard';
-import MovieCardDetails from '../../../ui/Cards/MovieCardDetails/index';
+import { fetchMagnetLink } from '@/lib/features/movie/magnetLinkSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
 
@@ -36,53 +35,79 @@ export default function MovieDetailsPage() {
   const sanitizeTrivia = (trivia: string) => {
     return trivia.split('\n\n').map((item, index) => {
       return (
-        <>
-          <li key={index}>{item}</li>
-          <br />
-        </>
+        <li key={index} style={{ marginLeft: '20px', paddingBottom: '10px' }}>
+          {item}
+        </li>
       );
     });
   }
 
-  console.log('data', data);
+  const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
 
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
-      <Text fontSize='2xl'>Original title: {data.originalTitle}</Text>
-      <Text fontSize='1xl'>{data.tconst}</Text>
-      <Text fontSize='1xl'>Primary title: {data.primaryTitle}</Text>
-      <Text fontSize='1xl'>Country: {data.country}</Text>
-      <Text fontSize='1xl'>Year: {data.startYear}</Text>
-      <Text fontSize='1xl'>Director: {data.director}</Text>
-      <Text fontSize='1xl'>Plot: {data.plot}</Text>
-      <Text fontSize="1xl">Plot keywords:</Text>
-<Wrap spacing={2}>
-  {data.plot_keywords.map((keyword, index) => (
-    <WrapItem key={index}>
-      <Tag size="md" variant="solid" colorScheme="pink" borderRadius='full'>
-        {keyword}
-      </Tag>
-    </WrapItem>
-  ))}
-</Wrap>
-      <Text fontSize='1xl'>Director: {data.director}</Text>
-      <Text fontSize="1xl">
-        Wiki:{' '}
-        <a href={data.wiki} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'blue' }}>
-          {data.wiki}
-        </a>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Original title:</Text>
+        <Text>{data.originalTitle}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Primary title:</Text>
+        <Text>{data.primaryTitle}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Director:</Text>
+        <Text>{data.director}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Country:</Text>
+        <Text>{data.country}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Year:</Text>
+        <Text>{data.startYear}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Plot:</Text>
+        <Text>{data.plot}</Text>
+      </Box>
+      <Text fontWeight='bold'>Plot keywords:</Text>
+      <Wrap spacing={2}>
+        {plotKeywords.map((keyword, index) => (
+          <WrapItem key={index}>
+            <Tag size="md" variant="solid" bg="primary.100" borderRadius='full'>
+              {keyword}
+            </Tag>
+          </WrapItem>
+        ))}
+      </Wrap>
+      <Box mb={4} mt={4}>
+        <Text fontWeight='bold'>Wiki:</Text>
+        <Text>
+          <a href={data.wiki} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'blue' }}>
+            {data.wiki}
+          </a>
+        </Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Trivia:</Text>
+        <Text>
+        <ul>
+          {sanitizeTrivia(data.trivia)}
+        </ul>
       </Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Quote:</Text>
+        <Text>{data.quote}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Magnet Link:</Text>
+        <Text style={{ wordBreak: 'break-all' }}>{data.magnet_link}</Text>
+      </Box>
       <br />
-      {/* <S.CardsGrid>
-        <MovieCardDetails
-          quote={data.quote}
-          wiki={data.wiki}
-        />
-        <TriviaCard trivia={sanitizeTrivia(data.trivia)} />
-      </S.CardsGrid> */}
       <MediaCard spotifyUrl={data.soundtrack} />
     </S.PageContainer>
   );

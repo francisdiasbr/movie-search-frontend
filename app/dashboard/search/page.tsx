@@ -20,16 +20,22 @@ export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [tconst, setTconst] = useState('');
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     setIsLoading(true);
-    const filters: { ttconst?: string } = {};
+    const filters: { tconst?: string } = {};
+    if (tconst) {
+        filters.tconst = tconst; // Adiciona tconst apenas se não estiver vazio
+    }
+
     const params = {
       filters,
       page: currentPage + 1,
       pageSize: currentPageSize,
       searchTerm: searchTerm,
     };
+    console.log('params', params)
     dispatch(searchMovie(params))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
@@ -56,24 +62,35 @@ export default function SearchPage() {
   useEffect(() => {
     if (addStatus === 'succeeded') {
       toast({
-        title: 'Success',
-        description: 'Movie added to favorites.',
+        title: 'Sucesso',
+        description: 'Filme adicionado aos favoritos.',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
       dispatch(resetAddStatus());
+    } else if (addStatus === 'failed') {
+      toast({
+        title: 'Erro ao adicionar',
+        description: 'Filme já está na lista de favoritos.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch(resetAddStatus());
     }
-  }, [addStatus]);
+  }, [addStatus, toast, dispatch]);
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>Search Page</Text>
+      <Text fontSize='2xl' as='b'>Pesquisar Filme</Text>
       <Search
         isLoading={isLoading}
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        tconst={tconst}
+        setTconst={setTconst}
       />
       <Table
         columns={columnData}

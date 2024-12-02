@@ -56,7 +56,7 @@ export default function Page() {
     if (editStatus === 'failed') {
       toast({
         title: 'Erro ao atualizar',
-        description: 'Não foi possível atualizar os detalhes do filme',
+        description: data?.error || 'Não foi possível atualizar os detalhes do filme',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -89,7 +89,7 @@ export default function Page() {
       <S.BackButton onClick={() => router.back()}>
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
-      <Text fontSize='2xl' as='b'>Movie Edit Page</Text>
+      <Text fontSize='2xl' as='b'>Editar Filme</Text>
       <p>tconst</p>
       <Input
         isReadOnly

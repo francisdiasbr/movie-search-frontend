@@ -31,7 +31,7 @@ export const fetchFavorites = createAsyncThunk(
       };
       console.log('fetchBody', fetchBody);
       const response = await BaseService.post(
-        'favorited-movies/search',
+        'favorites/search',
         fetchBody
       );
 

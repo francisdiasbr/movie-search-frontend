@@ -28,6 +28,7 @@ export const searchMovie = createAsyncThunk(
         search_term: params.searchTerm || '',
       };
       const response = await BaseService.post('movies/search', searchBody);
+      console.log('response', response)
 
       if (response && response.entries && Array.isArray(response.entries)) {
         return response;

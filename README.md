@@ -1,65 +1,65 @@
-# movie-search-frontend
+# The Movie Search
 
-Is an aplication centered in the experience of a movie lover.
-It is based on a consumption of the catalogue provided by IMDb (Internet Movie Database).
-The user can search for a movie, get information about it, save it on a watch list, and edit it.
+É uma aplicação centrada na experiência do amante de cinema. 
+
+Baseia-se no consumo do catálogo fornecido pelo IMDb (Internet Movie Database). 
+
+O usuário pode pesquisar por filmes, obter informações sobre eles, salvá-los em uma lista de favoritos e editá-los.
+
+
+![Home](public/home-page.png)
+![Pesquisar Filme](public/search-page.png)
+![Favoritos](public/favorites-page.png)
+![Página de um filme favorito](public/favorite-page.png)
 
 ## Features
 
-### SEARCH MOVIES
+### 1. Pesquisar Filme
 
-Search a movie from a complete movie database. As an output, the response provides a populated table containing movies related to the search.
+Pesquise um filme em um banco de dados completo de filmes. 
+Como resultado, a resposta fornece uma tabela populada contendo filmes relacionados à pesquisa.
 
-In the Movies table you can see the name of the movie, the year that the movie has been produced, the rating, the number of votes,  
-- Save a movie on a ranked watch list
-- Get information about the movie: year, brand, casting, main actors, country
-- Edit a movie
+Na tabela de filmes, você pode ver o nome do filme, o ano de produção, a classificação e o número de votos:
+- Salve um filme em uma lista de desejos classificada
+- Obtenha informações sobre o filme: ano, , principais atores, país
+- Edite as informações de um filme (nome do filme, ano de lançamento, link da trilha sonora, link da Wikipedia)
 
 
+
+
+- Ouça a trilha sonora no Spotify
+- Tenha acesso ao Magnet Link do torrent para assistir ao filme
 
 Next:
-- Movie details
+- Salve suas citações favoritas no cartão do filme
+- Percepções do filme
+  - Contexto histórico
+  - Figurino
+  - Premiações
 
-Hear the soundtrack on Spotify
-Watch the movie
-Give a note for the movie
-Write a review
-Save your favorite quotes on movie card
-
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+instale as dependências
+```bash
+npm install
+# or
+yarn
+```
+
+
+Rode o servidor de desenvolvimento
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Uso de Magnet Links
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Esta aplicação permite o uso de magnet links para download de conteúdo. Os magnet links são uma forma de compartilhar arquivos via protocolo BitTorrent, permitindo downloads descentralizados.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Aviso Legal
+- **Conteúdo**: Certifique-se de que o conteúdo que você está baixando ou compartilhando é legal e não infringe direitos autorais.
+- **Responsabilidade**: A responsabilidade pelo uso de magnet links e pelo conteúdo baixado é exclusivamente do usuário. A aplicação não se responsabiliza por qualquer uso ilegal.

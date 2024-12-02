@@ -22,10 +22,10 @@ export const SideNavWrapper = styled.div`
 export const ContentWrapper = styled.div`
   // background-color: yellow;
   flex-grow: 1;
-  padding: 24px;
+  padding: 16px;
   overflow: scroll;
   @media (min-width: 768px) {
     overflow-y: auto;
-    padding: 48px;
+    padding: 16px;
   }
 `;

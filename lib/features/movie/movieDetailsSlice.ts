@@ -15,7 +15,7 @@ const initialState: MovieDetailsState = {
 export const addFavorite = createAsyncThunk(
   'movie/addFavorite',
   async (tconst: string, { rejectWithValue }) => {
-    const url = `movie/${tconst}`;
+    const url = `favorites/${tconst}`;
     try {
       const response = await BaseService.post(url);
       if (response && response.data) {
@@ -37,7 +37,7 @@ export const addFavorite = createAsyncThunk(
 export const deleteFavorite = createAsyncThunk(
   'movie/deleteFavorite',
   async (tconst: string, { rejectWithValue }) => {
-    const url = `movie/${tconst}`;
+    const url = `favorites/${tconst}`;
     console.log('delete url', url)
     try {
       const response = await BaseService.delete(url);
@@ -63,7 +63,7 @@ export const fetchDetails = createAsyncThunk(
   async (tconst: string) => {
     try {
       const response = await BaseService.get(
-        `movie/${tconst}`
+        `favorites/${tconst}`
       );
       if (response && response.data) {
         return response.data;
@@ -81,7 +81,7 @@ export const editDetails = createAsyncThunk(
   'movies/edit',
   async (data: EditDetailsPayload, { rejectWithValue }) => {
     // console.log('data', data)
-    const url = `movie/${data.tconst}`;
+    const url = `favorites/${data.tconst}`;
 
     const body: EditDetailsPayload = {
       tconst: data.tconst,
@@ -130,7 +130,11 @@ const movieDetailsSlice = createSlice({
       })
       .addCase(addFavorite.rejected, (state, action) => {
         state.addStatus = 'failed';
-        state.error = action.error.message || 'Failed to add favorite';
+        if (action.payload === "Movie already listed") {
+          state.error = "Este filme já está na lista de favoritos.";
+        } else {
+          state.error = action.error.message || 'Failed to add favorite';
+        }
       })
       .addCase(deleteFavorite.pending, (state) => {
         state.delStatus = 'loading';

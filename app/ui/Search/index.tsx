@@ -17,6 +17,8 @@ interface SearchProps {
   isFavoritePage?: boolean;
   year?: number;
   yearOptions?: { value: string; label: string }[];
+  setTconst?: (value: string) => void;
+  tconst?: string;
 }
 
 const Search = ({
@@ -32,6 +34,8 @@ const Search = ({
   year,
   setYear,
   yearOptions,
+  setTconst,
+  tconst,
 }: SearchProps) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -42,13 +46,20 @@ const Search = ({
 
   return (
     <>
-      <h1>{isFavoritePage ? 'Favorite a movie in your personal collection' : 'Search movie by search term (IMDb ID or Original Title - ex: tt0068361, Le charme discret de la bourgeoisie'}</h1>
+      <h1>{isFavoritePage ? 'Favorite um filme em sua coleção pessoal' : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}</h1>
       <S.SearchContainer>
         <Input
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder='Search for movies'
           type='search'
           value={searchTerm}
+          onKeyDown={handleKeyDown}
+        />
+        <Input
+          onChange={(e) => setTconst && setTconst(e.target.value)}
+          placeholder='Search by tconst'
+          type='text'
+          value={tconst}
           onKeyDown={handleKeyDown}
         />
         {showAllFields && (

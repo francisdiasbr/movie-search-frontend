@@ -2,30 +2,30 @@ export const columnData = [
   {
     isAction: true,
     key: 'actions',
-    label: 'Actions',
+    label: 'Ações',
     width: '20%'
   },
   {
     key: 'tconst',
-    label: 'IMDb code',
+    label: 'IMDb ID',
     width: '20%',
     sort: true
   },
   { 
     key: 'originalTitle', 
-    label: 'Title', 
+    label: 'Título', 
     width: '40%', 
     sort: true
   },
   { 
     key: 'startYear',
-    label: 'Year', 
+    label: 'Ano', 
     width: '15%', 
     sort: true
   },
   {
     key: 'director',
-    label: 'Director',
+    label: 'Diretor',
     width: '25%',
     sort: true
   }

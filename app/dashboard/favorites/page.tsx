@@ -88,9 +88,15 @@ export default function Page() {
     }
   }, [delStatus, dispatch, toast]);
 
+    // Log dos dados que chegam na tabela
+    useEffect(() => {
+      console.log('Entries:', entries); // Log das entradas
+      console.log('Total Documents:', total_documents); // Log do total de documentos
+    }, [entries, total_documents]);
+
   return (
     <>
-      <Text fontSize='2xl' as='b'>Favorite movies Page</Text>
+      <Text fontSize='2xl' as='b'>Favoritos</Text>
       <Search
         isLoading={status === 'loading'}
         isFavoritePage

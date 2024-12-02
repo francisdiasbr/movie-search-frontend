@@ -12,9 +12,9 @@ import * as S from './styles';
 
 const links = [
   { href: '/dashboard', icon: HomeIcon, name: 'Home' },
-  { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Search Movie by ID' },
+  { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Pesquisar Filme' },
   // { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
-  { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favorites' },
+  { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favoritos' },
   // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
   // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];

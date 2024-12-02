@@ -51,14 +51,14 @@ const Pagination = ({
       <S.PaginationContainer>
         <S.PaginationButtons>
           <S.Button disabled={page === 0} onClick={handlePrevPage}>
-            Previous
+            Anterior
           </S.Button>
           <S.PageValue>{page + 1}</S.PageValue>
           <S.Button
             disabled={page + 1 >= totalPages}
             onClick={handleNextPage}
           >
-            Next
+            Próximo
           </S.Button>
         </S.PaginationButtons>
       </S.PaginationContainer>
