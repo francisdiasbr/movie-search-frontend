@@ -18,12 +18,11 @@ export default function Page() {
   const toast = useToast();
 
   const [originalTitle, setOriginalTitle] = useState('');
-  const [startYear, setStartYear] = useState<string>('')
   const [soundtrack, setSoundtrack] = useState<string>('')
   const [wiki, setWiki] = useState<string>('')
 
   useEffect(() => {
-    if (tconst) {
+    if (typeof tconst === 'string') {
       dispatch(fetchDetails(tconst))
     }
   }, [dispatch, tconst]);
@@ -32,7 +31,6 @@ export default function Page() {
   useEffect(() => {
     if (data) {
       setOriginalTitle(data.originalTitle || '');
-      setStartYear(data.startYear || null);
       setSoundtrack(data.soundtrack || null);
       setWiki(data.wiki || null);
     }
@@ -41,7 +39,6 @@ export default function Page() {
   useEffect(() => {
     if (editStatus === 'succeeded') {
       setOriginalTitle(data?.originalTitle);
-      setStartYear(data?.startYear);
       setSoundtrack(data?.soundtrack);
       setWiki(data?.wiki);
       toast({
@@ -77,7 +74,6 @@ export default function Page() {
     const updatedData = {
       tconst: tconst as string,
       originalTitle,
-      startYear: Number(startYear),
       soundtrack,
       wiki
     };
@@ -95,18 +91,18 @@ export default function Page() {
         isReadOnly
         type="text"
         value={data?.tconst}
+        bg="gray.100"
+        cursor="not-allowed"
+        _hover={{ bg: "gray.100" }}
       />
       <p>primary title</p>
       <Input
-        onChange={(e) => (setOriginalTitle(e.target.value))}
+        isReadOnly
         type="text"
         value={originalTitle}
-      />
-      <p>Start year</p>
-      <Input
-        onChange={(e) => setStartYear(e.target.value)}
-        type="number"
-        value={startYear}
+        bg="gray.100"
+        cursor="not-allowed"
+        _hover={{ bg: "gray.100" }}
       />
       <p>Soundtrack</p>
       <Input
