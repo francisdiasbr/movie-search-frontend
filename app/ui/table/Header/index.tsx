@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import * as S from './styles';
 
 interface TableHeaderProps {
-  columns: Array<{ key: string; label: string; width?: string, sort?: boolean }>;
+  columns: Array<{ key: string; label: string; minWidth?: string, width?: string, sort?: boolean }>;
   entries: any[];
   setSortedEntries: (entries: any[]) => void;
 }
@@ -42,6 +42,7 @@ const TableHeader = ({ columns, entries, setSortedEntries }: TableHeaderProps) =
           <S.Header
             key={column.key}
             width={column.width}
+            minWidth={column.minWidth}
             onClick={column.sort ? () => requestSort(column.key) : undefined}
             style={{ cursor: column.sort ? 'pointer' : 'default' }}
           >

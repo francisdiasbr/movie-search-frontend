@@ -43,6 +43,16 @@ export default function MovieDetailsPage() {
 
   const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
 
+  const formatQuote = (quote: string) => {
+    return quote.split(/(?<=\.\s)|(?<=:\s)/).map((line, index) => {
+      return (
+        <Text key={index} style={{ marginBottom: '5px' }}>
+          {line.trim()}
+        </Text>
+      );
+    });
+  };
+
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
@@ -104,7 +114,9 @@ export default function MovieDetailsPage() {
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Quote:</Text>
-        <Text>{data.quote}</Text>
+        <Text>
+          {formatQuote(data.quote)}
+        </Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Magnet Link:</Text>

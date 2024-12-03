@@ -50,7 +50,7 @@ const Search = ({
       <S.SearchContainer>
         <Input
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder='Pesquisar por nome, diretor ou IMDb ID'
+          placeholder='Pesquisar'
           type='search'
           value={searchTerm}
           onKeyDown={handleKeyDown}
@@ -62,7 +62,7 @@ const Search = ({
               isSearchable
               onChange={(selectedOption) => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
               options={countryOptions}
-              placeholder="Select country"
+              placeholder="Selecione país"
               styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
               value={countryOptions.find(option => option.value === country) || null}
             />
@@ -70,7 +70,7 @@ const Search = ({
               isClearable
               onChange={(e) => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
               options={yearOptions}
-              placeholder="Select year"
+              placeholder="Selecione ano"
               styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
               value={year ? { value: year.toString(), label: year.toString() } : null}
             />

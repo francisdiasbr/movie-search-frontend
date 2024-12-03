@@ -61,18 +61,18 @@ const Pagination = ({
             Próximo
           </S.Button>
         </S.PaginationButtons>
-      </S.PaginationContainer>
       <S.SelectContainer
         id='pageSize'
         onChange={handlePageSizeChange}
         value={pageSize}
-      >
+        >
         <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={50}>50</option>
         <option value={100}>100</option>
       </S.SelectContainer>
       <S.TotalDocs>{firstRecordInPage} a {lastRecordInPage} de {totalDocuments}</S.TotalDocs>
+        </S.PaginationContainer>
     </>
   );
 };
