@@ -46,11 +46,11 @@ const Search = ({
 
   return (
     <>
-      <h1>{isFavoritePage ? 'Favorite um filme em sua coleção pessoal' : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}</h1>
+      <h1>{isFavoritePage ? 'Bem-vindo à sua coleção pessoal!' : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}</h1>
       <S.SearchContainer>
         <Input
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder='Search for movies'
+          placeholder='Pesquisar por nome, diretor ou IMDb ID'
           type='search'
           value={searchTerm}
           onKeyDown={handleKeyDown}
