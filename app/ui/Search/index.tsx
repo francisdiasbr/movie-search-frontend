@@ -55,15 +55,8 @@ const Search = ({
           value={searchTerm}
           onKeyDown={handleKeyDown}
         />
-        <Input
-          onChange={(e) => setTconst && setTconst(e.target.value)}
-          placeholder='Search by tconst'
-          type='text'
-          value={tconst}
-          onKeyDown={handleKeyDown}
-        />
         {showAllFields && (
-            <>
+          <>
             <Select
               isClearable
               isSearchable
@@ -81,15 +74,7 @@ const Search = ({
               styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
               value={year ? { value: year.toString(), label: year.toString() } : null}
             />
-            {/* <Select
-              isClearable
-              onChange={(e) => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
-              options={yearOptions}
-              placeholder="Select director"
-              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
-              value={year ? { value: year.toString(), label: year.toString() } : null}
-            /> */}
-            </>
+          </>
         )}
         <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>
           Go

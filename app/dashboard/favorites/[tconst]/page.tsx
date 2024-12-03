@@ -49,6 +49,10 @@ export default function MovieDetailsPage() {
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
       <Box mb={4}>
+        <Text fontWeight='bold'>Watched:</Text>
+        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
+      </Box>
+      <Box mb={4}>
         <Text fontWeight='bold'>Original title:</Text>
         <Text>{data.originalTitle}</Text>
       </Box>
@@ -74,7 +78,7 @@ export default function MovieDetailsPage() {
       </Box>
       <Text fontWeight='bold'>Plot keywords:</Text>
       <Wrap spacing={2}>
-        {plotKeywords.map((keyword, index) => (
+        {plotKeywords.map((keyword: string, index: number) => (
           <WrapItem key={index}>
             <Tag size="md" variant="solid" bg="primary.100" borderRadius='full'>
               {keyword}
