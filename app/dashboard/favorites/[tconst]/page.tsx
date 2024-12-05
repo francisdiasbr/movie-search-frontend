@@ -1,22 +1,30 @@
 'use client';
 
-import { Box, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Tag, Text, Wrap, WrapItem, useToast } from '@chakra-ui/react';
 import arrowLeft from '@iconify/icons-lucide/arrow-left';
 import { Icon } from '@iconify/react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
+import { postKeyword } from '@/lib/features/keywords/keywordsSlice';
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
 
 export default function MovieDetailsPage() {
+
+  const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
+
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
-  const router = useRouter();
-  const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
 
+  const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
+  
+  const router = useRouter();
+  
+  const toast = useToast();
+  
   useEffect(() => {
     if (tconst) {
       dispatch(fetchDetails(tconst));
@@ -53,6 +61,34 @@ export default function MovieDetailsPage() {
     });
   };
 
+
+  const handleKeywordClick = async (keyword: string) => {
+    setSelectedKeyword((prevKeyword) => (prevKeyword === keyword ? null : keyword));
+
+    if (selectedKeyword !== keyword) {
+      const resultAction = await dispatch(postKeyword(keyword));
+
+      if (postKeyword.fulfilled.match(resultAction)) {
+        toast({
+          title: "Palavra-chave adicionada.",
+          description: `A palavra-chave "${keyword}" foi adicionada com sucesso na lista`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Erro ao adicionar palavra-chave.",
+          description: typeof resultAction.payload === 'string' ? resultAction.payload : "Ocorreu um erro ao adicionar a palavra-chave.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
+  };
+
+  console.log('selectedKeyword', selectedKeyword)
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
@@ -90,7 +126,14 @@ export default function MovieDetailsPage() {
       <Wrap spacing={2}>
         {plotKeywords.map((keyword: string, index: number) => (
           <WrapItem key={index}>
-            <Tag size="md" variant="solid" bg="primary.100" borderRadius='full'>
+            <Tag
+              size="md"
+              variant="solid"
+              bg={selectedKeyword === keyword ? 'red.500' : 'primary.100'}
+              borderRadius='full'
+              onClick={() => handleKeywordClick(keyword)}
+              cursor='pointer'
+            >
               {keyword}
             </Tag>
           </WrapItem>

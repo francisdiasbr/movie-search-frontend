@@ -7,6 +7,7 @@ import movieDetailsSlice from './features/movie/movieDetailsSlice';
 import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
 import movieSearchSlice from './features/search/searchSlice';
 import reviewsSlice from './features/review/reviewsSlice';
+import keywordsSlice from './features/keywords/keywordsSlice';
 
 export const makeStore = () => {
 
@@ -19,6 +20,7 @@ export const makeStore = () => {
       moviesFavorites: movieFavoritesSlice,
       moviesDetails: movieDetailsSlice,
       moviesSearch: movieSearchSlice,
+      keywords: keywordsSlice,
     },
   });
 };
