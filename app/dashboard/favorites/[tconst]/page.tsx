@@ -7,14 +7,16 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
-import { postKeyword } from '@/lib/features/keywords/keywordsSlice';
+import { postKeyword, getKeywords } from '@/lib/features/keywords/keywordsSlice';
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
+import FavoriteTag from './components/FavoriteTag';
 
 export default function MovieDetailsPage() {
 
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
+  const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
@@ -29,6 +31,11 @@ export default function MovieDetailsPage() {
     if (tconst) {
       dispatch(fetchDetails(tconst));
     }
+    dispatch(getKeywords()).then((action) => {
+      if (getKeywords.fulfilled.match(action)) {
+        setExistingKeywords(action.payload.map((kw: any) => kw.keyword));
+      }
+    });
   }, [dispatch, tconst]);
 
   if (fetchStatus === 'loading') {
@@ -69,6 +76,8 @@ export default function MovieDetailsPage() {
       const resultAction = await dispatch(postKeyword(keyword));
 
       if (postKeyword.fulfilled.match(resultAction)) {
+        setExistingKeywords(prev => [...prev, keyword]);
+        
         toast({
           title: "Palavra-chave adicionada.",
           description: `A palavra-chave "${keyword}" foi adicionada com sucesso na lista`,
@@ -88,7 +97,6 @@ export default function MovieDetailsPage() {
     }
   };
 
-  console.log('selectedKeyword', selectedKeyword)
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
@@ -123,22 +131,12 @@ export default function MovieDetailsPage() {
         <Text>{data.plot}</Text>
       </Box>
       <Text fontWeight='bold'>Plot keywords:</Text>
-      <Wrap spacing={2}>
-        {plotKeywords.map((keyword: string, index: number) => (
-          <WrapItem key={index}>
-            <Tag
-              size="md"
-              variant="solid"
-              bg={selectedKeyword === keyword ? 'red.500' : 'primary.100'}
-              borderRadius='full'
-              onClick={() => handleKeywordClick(keyword)}
-              cursor='pointer'
-            >
-              {keyword}
-            </Tag>
-          </WrapItem>
-        ))}
-      </Wrap>
+      <FavoriteTag 
+        keywords={plotKeywords} 
+        selectedKeyword={selectedKeyword} 
+        onKeywordClick={handleKeywordClick} 
+        existingKeywords={existingKeywords}
+      />
       <Box mb={4} mt={4}>
         <Text fontWeight='bold'>Wiki:</Text>
         <Text>
