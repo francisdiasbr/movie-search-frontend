@@ -36,7 +36,7 @@ const FavoriteTag: React.FC<FavoriteTagProps> = ({
         <WrapItem key={index}>
           <Tag
             size="md"
-            variant="solid"
+            variant="surface"
             bg={
               existingKeywords.includes(keyword)
                 ? hoveredKeyword === keyword
@@ -44,9 +44,10 @@ const FavoriteTag: React.FC<FavoriteTagProps> = ({
                   : 'red.400'
                 : clickedKeyword === keyword
                 ? 'red.400'
-                : 'secondary.300'
+                : hoveredKeyword === keyword
+                  ? 'quaternary.100'
+                  : 'secondary.300'
             }
-            borderRadius='full'
             onClick={() => handleClick(keyword)}
             cursor='pointer'
             display="flex"
