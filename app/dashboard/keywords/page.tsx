@@ -80,6 +80,8 @@ export default function Page() {
   return (
     <div>
       <Text fontSize='2xl' as='b'>Keywords</Text>
+      <br/>
+      <br/>
       <FavoriteTag 
         keywords={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []} 
         selectedKeyword={selectedKeyword} 

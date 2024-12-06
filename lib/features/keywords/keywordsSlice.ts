@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import BaseService from '../../api/service';
-import { Keyword } from './types';
+
+
+interface Keyword {
+  _id: string;
+  keyword: string;
+} 
 
 interface KeywordsState {
   data: Keyword[];
