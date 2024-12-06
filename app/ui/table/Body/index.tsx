@@ -42,7 +42,11 @@ const TableBody = ({
         ) : (
           entries.map((item) => (
 
-            <S.Row key={item.tconst}>
+            <S.Row 
+              key={item.tconst}
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleView(item.tconst)}
+            >
               {columns.map((column) => (
                 <S.Cell key={column.key}>
                   {column.isAction ? (
