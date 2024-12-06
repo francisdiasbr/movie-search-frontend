@@ -12,6 +12,7 @@ import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
 import FavoriteTag from './components/FavoriteTag';
+import GoBack from '@/app/ui/GoBack';
 
 export default function MovieDetailsPage() {
 
@@ -106,9 +107,7 @@ export default function MovieDetailsPage() {
 
   return (
     <S.PageContainer>
-      <S.BackButton onClick={() => router.back()}>
-        <Icon fontSize={24} icon={arrowLeft} />
-      </S.BackButton>
+      <GoBack centerText={data.originalTitle} />
       <Box mb={4}>
         <Text fontWeight='bold'>Original title:</Text>
         <Text>{data.originalTitle}</Text>
