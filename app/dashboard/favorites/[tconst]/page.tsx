@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
-import { postKeyword, getKeywords } from '@/lib/features/keywords/keywordsSlice';
+import { postKeyword, getKeywords, deleteKeyword } from '@/lib/features/keywords/keywordsSlice';
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
@@ -97,6 +97,13 @@ export default function MovieDetailsPage() {
     }
   };
 
+  const handleKeywordDelete = async (keyword: string) => {
+    const resultAction = await dispatch(deleteKeyword(keyword));
+    if (deleteKeyword.fulfilled.match(resultAction)) {
+      setExistingKeywords(prev => prev.filter(kw => kw !== keyword));
+    }
+  };
+
   return (
     <S.PageContainer>
       <S.BackButton onClick={() => router.back()}>
@@ -135,6 +142,7 @@ export default function MovieDetailsPage() {
         keywords={plotKeywords} 
         selectedKeyword={selectedKeyword} 
         onKeywordClick={handleKeywordClick} 
+        onKeywordDelete={handleKeywordDelete}
         existingKeywords={existingKeywords}
       />
       <Box mb={4} mt={4}>
