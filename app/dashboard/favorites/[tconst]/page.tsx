@@ -1,13 +1,12 @@
 'use client';
 
-import { Box, Tag, Text, Wrap, WrapItem, useToast } from '@chakra-ui/react';
-import arrowLeft from '@iconify/icons-lucide/arrow-left';
-import { Icon } from '@iconify/react';
-import { useParams, useRouter } from 'next/navigation';
+import { Box, Tag, Text, useToast } from '@chakra-ui/react';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
 import { postKeyword, getKeywords, deleteKeyword } from '@/lib/features/keywords/keywordsSlice';
+import { postDirector } from '@/lib/features/directors/directorsSlice';
 import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
 import * as S from './styles';
 import MediaCard from '@/app/ui/Cards/MediaCard';
@@ -23,8 +22,6 @@ export default function MovieDetailsPage() {
   const { tconst } = useParams() as { tconst: string };
 
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
-  
-  const router = useRouter();
   
   const toast = useToast();
   
@@ -105,6 +102,28 @@ export default function MovieDetailsPage() {
     }
   };
 
+  const handleDirectorClick = async (director: string) => {
+    const resultAction = await dispatch(postDirector(director));
+
+    if (postDirector.fulfilled.match(resultAction)) {
+      toast({
+        title: "Diretor adicionado.",
+        description: `O diretor "${director}" foi adicionado com sucesso na lista`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Erro ao adicionar diretor.",
+        description: typeof resultAction.payload === 'string' ? resultAction.payload : "Ocorreu um erro ao adicionar o diretor.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <S.PageContainer>
       <GoBack centerText={data.originalTitle} />
@@ -122,7 +141,12 @@ export default function MovieDetailsPage() {
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Director:</Text>
-        <Text>{data.director}</Text>
+        <Text 
+          onClick={() => handleDirectorClick(data.director)} 
+          style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
+        >
+          {data.director}
+        </Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Country:</Text>

@@ -33,9 +33,9 @@ export const getDirectors = createAsyncThunk(
 
 export const postDirector = createAsyncThunk(
   'directors/postDirector',
-  async (name: string, { rejectWithValue }) => {
+  async (director: string, { rejectWithValue }) => {
     try {
-      const response = await BaseService.post('directors', { name });
+      const response = await BaseService.post('directors', { director });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "An error occurred");
