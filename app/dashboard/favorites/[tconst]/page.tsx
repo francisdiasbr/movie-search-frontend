@@ -110,16 +110,16 @@ export default function MovieDetailsPage() {
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
       <Box mb={4}>
-        <Text fontWeight='bold'>Watched:</Text>
-        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
-      </Box>
-      <Box mb={4}>
         <Text fontWeight='bold'>Original title:</Text>
         <Text>{data.originalTitle}</Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Primary title:</Text>
         <Text>{data.primaryTitle}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Watched:</Text>
+        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Director:</Text>
@@ -169,7 +169,18 @@ export default function MovieDetailsPage() {
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Magnet Link:</Text>
-        <Text style={{ wordBreak: 'break-all' }}>{data.magnet_link}</Text>
+        <Text style={{ wordBreak: 'break-all' }}>
+          <a 
+            href={encodeURI(data.magnet_link)}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = data.magnet_link;
+            }}
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
+            {data.magnet_link}
+          </a>
+        </Text>
       </Box>
       <br />
       <MediaCard spotifyUrl={data.soundtrack} />
