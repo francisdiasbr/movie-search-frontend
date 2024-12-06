@@ -15,6 +15,7 @@ const links = [
   { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Pesquisar Filme' },
   // { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favoritos' },
+  { href: '/dashboard/keywords', icon: BookmarkIcon, name: 'Movie Keywords' },
   // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
   // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];
