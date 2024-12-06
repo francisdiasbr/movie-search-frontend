@@ -160,6 +160,10 @@ export default function MovieDetailsPage() {
         <Text fontWeight='bold'>Plot:</Text>
         <Text>{data.plot}</Text>
       </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Genres:</Text>
+        <Text>{data.genres.join(', ')}</Text>
+      </Box>
       <Text fontWeight='bold'>Plot keywords:</Text>
       <FavoriteTag 
         keywords={plotKeywords} 

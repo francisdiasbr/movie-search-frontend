@@ -6,7 +6,7 @@ import * as S from './styles';
 
 interface SearchProps {
   country?: string;
-  countryOptions: { value: string; label: string }[];
+  countryOptions?: { value: string; label: string }[];
   setCountry?: (value: string) => void;
   setYear?: (value: number) => void;
   setSearchTerm: (value: string) => void;
@@ -64,7 +64,7 @@ const Search = ({
               options={countryOptions}
               placeholder="Selecione país"
               styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
-              value={countryOptions.find(option => option.value === country) || null}
+              value={countryOptions?.find(option => option.value === country) || null}
             />
             <Select
               isClearable
