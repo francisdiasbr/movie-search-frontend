@@ -9,6 +9,8 @@ import movieSearchSlice from './features/search/searchSlice';
 import reviewsSlice from './features/review/reviewsSlice';
 import keywordsSlice from './features/keywords/keywordsSlice';
 import directorsSlice from './features/directors/directorsSlice';
+import blogPostsSlice from './features/blogPosts/blogPostsSlice';
+
 
 export const makeStore = () => {
 
@@ -23,6 +25,7 @@ export const makeStore = () => {
       moviesSearch: movieSearchSlice,
       keywords: keywordsSlice,
       directors: directorsSlice,
+      blogPosts: blogPostsSlice,
     },
   });
 };

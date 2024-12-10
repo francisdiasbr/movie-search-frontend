@@ -17,6 +17,7 @@ const links = [
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favoritos' },
   { href: '/dashboard/keywords', icon: BookmarkIcon, name: 'Movie Keywords' },
   { href: '/dashboard/directors', icon: BookmarkIcon, name: 'Directors' },
+  { href: '/dashboard/blogposts', icon: SparklesIcon, name: 'Blog Posts' },
   // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
   // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];
