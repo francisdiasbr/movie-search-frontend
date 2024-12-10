@@ -8,6 +8,7 @@ export type TableProps = {
   onPageSizeChange: (newPageSize: number) => void;
   page: number;
   pageSize: number;
+  renderRow?: (entry: any) => JSX.Element;
   totalDocuments: number;
 };
 

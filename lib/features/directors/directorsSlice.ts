@@ -1,10 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import BaseService from '../../api/service';
+import { inter } from '@/app/fonts';
 
+
+interface DirectorMovie {
+  originalTitle: string;
+  year: number;
+}
 
 interface Director {
   _id: string;
   director: string;
+  filmography: DirectorMovie[];
 } 
 
 interface DirectorsState {
@@ -24,6 +31,7 @@ export const getDirectors = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await BaseService.get('directors');
+      console.log('getDirectors', response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "An error occurred");

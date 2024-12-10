@@ -19,7 +19,7 @@ export const ButtonGroup = styled.div`
 export const Cell = styled.td`
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  text-align: left;
+  text-align: center;
 
   &:first-child {
     text-align: center;

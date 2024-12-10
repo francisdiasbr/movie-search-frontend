@@ -5,7 +5,7 @@ export const columnData = [
     label: 'Ações',
     style: { 
       minWidth: '100px',
-      width: '20%'
+      width: '10%'
     }
   },
   {
@@ -13,7 +13,7 @@ export const columnData = [
     label: 'Já vi?',
     style: { 
       minWidth: '100px',
-      width: '20%'
+      width: '10%'
     },
     sort: true
   },
@@ -22,7 +22,7 @@ export const columnData = [
     label: 'Ano', 
     style: { 
       minWidth: '85px',
-      width: '15%'
+      width: '10%'
     },
     sort: true
   },
@@ -31,7 +31,7 @@ export const columnData = [
     label: 'Diretor',
     style: { 
       minWidth: '100px',
-      width: '25%'
+      width: '10%'
     }
   },
   { 
@@ -39,16 +39,24 @@ export const columnData = [
     label: 'Título', 
     style: { 
       minWidth: '200px',
-      width: '40%'
+      width: '20%'
     },
     sort: true
+  },
+  {
+    key: 'plot_keywords',
+    label: 'Palavras-chave',
+    style: { 
+      minWidth: '200px',
+      width: '25%'
+    }
   },
   {
     key: 'tconst',
     label: 'IMDb ID',
     style: { 
       minWidth: '100px',
-      width: '20%'
+      width: '10%'
     },
     sort: true
   },

@@ -4,7 +4,7 @@ import { Box, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
 interface GoBackProps {
-  centerText: string;
+  centerText?: string;
 }
 
 const GoBack: React.FC<GoBackProps> = ({ centerText }) => {

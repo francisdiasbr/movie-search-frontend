@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Text, useToast } from '@chakra-ui/react';
+import { Text, useToast, Tag } from '@chakra-ui/react';
 
 import { deleteFavorite, resetDeleteStatus } from '@/lib/features/movie/movieDetailsSlice';
 import { fetchFavorites } from '@/lib/features/movies/movieFavoritesSlice';
@@ -9,6 +9,17 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import Table from '../../ui/Table';
 import { columnData } from './columnData';
 import Search from '@/app/ui/Search';
+import KeywordTags from './components/KeywordTags';
+
+interface MovieEntry {
+  plot_keywords: string[];
+  watched: boolean;
+  [key: string]: any;
+}
+
+function truncatePlotKeywords(keywords: string[]): string[] {
+  return keywords.slice(0, 5);
+}
 
 export default function Page() {
   const dispatch = useAppDispatch();
@@ -113,7 +124,10 @@ export default function Page() {
       />
       <Table
         columns={columnData}
-        entries={entries}
+        entries={entries.map((entry: MovieEntry) => ({
+          ...entry,
+          plot_keywords: <KeywordTags keywords={entry.plot_keywords} />
+        }))}
         isLoading={status === 'loading'}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}

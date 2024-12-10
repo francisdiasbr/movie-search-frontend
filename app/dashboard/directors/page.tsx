@@ -1,81 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Text, useToast } from '@chakra-ui/react';
-
+import { useEffect } from 'react';
+import { Box, Tag, Text } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { getDirectors, postDirector, deleteDirector } from '@/lib/features/directors/directorsSlice';
-import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
-
+import { getDirectors } from '@/lib/features/directors/directorsSlice';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { data: directors = [], loading, error } = useAppSelector((state) => state.directors);
-  const [selectedDirector, setSelectedDirector] = useState<string | null>(null);
-  const [existingDirectors, setExistingDirectors] = useState<string[]>([]);
-  const toast = useToast();
+  const { data: directors = [], loading: directorsLoading, error: directorsError } = useAppSelector((state) => state.directors);
 
   useEffect(() => {
-    dispatch(getDirectors()).then((action) => {
-      if (getDirectors.fulfilled.match(action)) {
-        setExistingDirectors(action.payload.map((director: any) => director.director));
-      }
-    });
+    dispatch(getDirectors());
   }, [dispatch]);
 
-  const handleDirectorClick = async (director: string) => {
-    if (selectedDirector !== director) {
-      setSelectedDirector(director);
-      const resultAction = await dispatch(postDirector(director));
-
-      if (postDirector.fulfilled.match(resultAction)) {
-        setExistingDirectors(prev => [...prev, director]);
-        
-        toast({
-          title: "Diretor adicionado.",
-          description: `O diretor "${director}" foi adicionado com sucesso na lista`,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Erro ao adicionar diretor.",
-          description: typeof resultAction.payload === 'string' ? resultAction.payload : "Ocorreu um erro ao adicionar o diretor.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    }
-  };
-
-  const handleDirectorDelete = async (director: string) => {
-    try {
-      const resultAction = await dispatch(deleteDirector(director));
-      if (deleteDirector.fulfilled.match(resultAction)) {
-        setExistingDirectors(prev => prev.filter(kw => kw !== director));
-        dispatch(getDirectors());
-      } else {
-        throw new Error("Failed to delete director");
-      }
-    } catch (error) {
-      toast({
-        title: "Erro ao deletar diretor.",
-        description: "Ocorreu um erro ao tentar deletar o diretor.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (directorsLoading) {
+    return <div>Loading directors...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (directorsError) {
+    return <div>Error: {directorsError}</div>;
   }
 
   return (
@@ -83,13 +26,27 @@ export default function Page() {
       <Text fontSize='2xl' as='b'>Directors</Text>
       <br/>
       <br/>
-      <FavoriteTag 
-        keywords={Array.isArray(directors) ? directors.map(kw => kw.director) : []}
-        selectedKeyword={selectedDirector} 
-        onKeywordClick={handleDirectorClick} 
-        onKeywordDelete={handleDirectorDelete}
-        existingKeywords={existingDirectors}
-      />
+      <Box>
+        {directors.map((director, index) => (
+          <Tag
+            key={index}
+            colorScheme="red"
+            mr={2}
+            mb={2}
+          >
+            {director.director}
+          </Tag>
+        ))}
+      </Box>
+      <Box mt={4}>
+        {directors.map((director, index) => (
+          <div key={index}>
+            {Array.isArray(director.filmography) && director.filmography.map((movie, index) => (
+              <div key={index}>{movie.originalTitle} - {movie.year}</div>
+            ))}
+          </div>
+        ))}
+      </Box>
     </div>
   );
 }

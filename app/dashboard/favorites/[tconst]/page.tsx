@@ -23,6 +23,7 @@ export default function MovieDetailsPage() {
 
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
   
+  console.log('data', data);
   const toast = useToast();
   
   useEffect(() => {
@@ -147,6 +148,14 @@ export default function MovieDetailsPage() {
         >
           {data.director}
         </Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Writers:</Text>
+        <Text>{data.writers && data.writers.length > 0 ? data.writers.join(', ') : 'N/A'}</Text>
+      </Box>
+      <Box mb={4}>
+        <Text fontWeight='bold'>Stars:</Text>
+        <Text>{data.stars.join(', ')}</Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Country:</Text>

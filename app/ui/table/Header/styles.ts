@@ -5,7 +5,7 @@ export const Header = styled.th`
   border-bottom: 2px solid #ddd;
   font-weight: bold;
   padding: 10px;
-  text-align: left;
+  text-align: center;
   &:first-child {
     text-align: center;
   }
