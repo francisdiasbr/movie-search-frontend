@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { Input, Button } from '@chakra-ui/react';
 
-import { searchBlogPosts } from '../../../lib/features/blogPosts/searchBlogPostsSlice';
+import { createBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
+import { searchBlogPosts } from '@/lib/features/blogPosts/searchBlogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { RootState } from '../../../lib/store';
 import * as S from './styles';
@@ -16,7 +18,11 @@ export default function BlogPostsPage() {
   const { data, loading, error } = useAppSelector(
     (state: RootState) => state.searchBlogPost
   );
+  const { loading: creating } = useAppSelector(
+    (state: RootState) => state.blogPosts
+  );
   const [query, setQuery] = useState('');
+  const [movieId, setMovieId] = useState('');
 
   const handleSearch = useCallback(async () => {
     console.log('Texto digitado:', query);
@@ -38,6 +44,18 @@ export default function BlogPostsPage() {
     await dispatch(searchBlogPosts(params));
   }, [query, dispatch]);
 
+  const handleGeneratePost = async () => {
+    if (movieId) {
+      try {
+        await dispatch(createBlogPost(movieId));
+        setMovieId('');
+        await handleSearch();
+      } catch (error) {
+        console.error('Erro ao gerar o post:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     handleSearch();
   }, [handleSearch]);
@@ -49,13 +67,23 @@ export default function BlogPostsPage() {
   const entries = data?.entries || [];
   const hasEntries = entries.length > 0;
 
-  console.log(entries);
   return (
     <S.Container>
-      {!hasEntries && (
-        <S.NoPostsMessage>Nenhum post encontrado.</S.NoPostsMessage>
-      )}
-      {hasEntries && (
+      <div>
+        <Input
+          type="text"
+          value={movieId}
+          onChange={(e) => setMovieId(e.target.value)}
+          placeholder="Digite o tconst do filme"
+          mb={4}
+        />
+        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme="gray">
+          Gerar Post
+        </Button>
+      </div>
+      {loading && <p>Carregando...</p>}
+      {!loading && !hasEntries && <p>Nenhum post encontrado.</p>}
+      {!loading && hasEntries && (
         <S.PostsGrid>
           {entries.map(post => (
             <S.StyledCard

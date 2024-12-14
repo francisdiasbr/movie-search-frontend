@@ -43,6 +43,20 @@ export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
   }
 );
 
+export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
+  'blogPost/create',
+  async (movieId: string, { rejectWithValue }) => {
+    try {
+      const response = await BaseService.post(
+        `generate-blogpost/${movieId}`
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || 'An error occurred');
+    }
+  }
+);
+
 const blogPostSlice = createSlice({
   name: 'blogPost',
   initialState,
@@ -71,6 +85,19 @@ const blogPostSlice = createSlice({
         state.loading = false;
         state.error =
           'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
+      })
+      .addCase(createBlogPost.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createBlogPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+      })
+      .addCase(createBlogPost.rejected, state => {
+        state.loading = false;
+        state.error =
+          'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });

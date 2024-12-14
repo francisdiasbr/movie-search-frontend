@@ -95,7 +95,7 @@ const Search = ({
           onClick={() => handleSearch()}
           style={{ width: '150px' }}
         >
-          Go
+          Pesquisar
         </Button>
       </S.SearchContainer>
     </>
