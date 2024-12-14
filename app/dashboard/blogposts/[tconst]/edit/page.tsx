@@ -1,8 +1,6 @@
 'use client';
 
-import { Input, Button, Text, Checkbox } from '@chakra-ui/react';
-import arrowLeft from '@iconify/icons-lucide/arrow-left';
-import { Icon } from '@iconify/react';
+import { Input, Button, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -10,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
 import { fetchBlogPost, updateBlogPost } from '../../../../../lib/features/blogPosts/blogPostsSlice';
 import * as S from './styles';
-import { formatDate } from '../../../../../utils/dateUtils';
 import GoBack from '@/app/ui/GoBack';
 
 export default function Page() {
@@ -18,6 +15,7 @@ export default function Page() {
   const router = useRouter();
   const { tconst } = useParams();
   const tconstString = Array.isArray(tconst) ? tconst[0] : tconst;
+  const toast = useToast();
 
   const { data } = useAppSelector(state => state.blogPosts);
   const [title, setTitle] = useState('');
@@ -54,22 +52,48 @@ export default function Page() {
     }
   }, [data]);
 
-  const handleSave = () => {
-    const updatedData = {
-      tconst: tconstString,
-      title,
-      primaryTitle,
-      introduction,
-      stars_and_characters: starsAndCharacters,
-      historical_context: historicalContext,
-      cultural_importance: culturalImportance,
-      technical_analysis: technicalAnalysis,
-      original_movie_soundtrack: originalMovieSoundtrack,
-      conclusion,
-      poster_url: posterUrl,
-      created_at: createdAt,
-    };
-    dispatch(updateBlogPost(updatedData));
+  const handleSave = async () => {
+    toast({
+      title: 'Salvando...',
+      description: 'Por favor, aguarde enquanto salvamos suas alterações.',
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
+
+    try {
+      const updatedData = {
+        tconst: tconstString,
+        title,
+        primaryTitle,
+        introduction,
+        stars_and_characters: starsAndCharacters,
+        historical_context: historicalContext,
+        cultural_importance: culturalImportance,
+        technical_analysis: technicalAnalysis,
+        original_movie_soundtrack: originalMovieSoundtrack,
+        conclusion,
+        poster_url: posterUrl,
+        created_at: createdAt,
+      };
+      await dispatch(updateBlogPost(updatedData)).unwrap();
+
+      toast({
+        title: 'Sucesso!',
+        description: 'As alterações foram salvas com sucesso.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: 'Erro ao salvar',
+        description: 'Ocorreu um erro ao tentar salvar as alterações.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (

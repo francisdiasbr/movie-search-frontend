@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Input, Button } from '@chakra-ui/react';
+import { Input, Button, useToast, Text } from '@chakra-ui/react';
 
 import { createBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
 import { searchBlogPosts } from '@/lib/features/blogPosts/searchBlogPostsSlice';
@@ -14,6 +14,7 @@ import * as S from './styles';
 export default function BlogPostsPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const toast = useToast();
 
   const { data, loading, error } = useAppSelector(
     (state: RootState) => state.searchBlogPost
@@ -45,21 +46,39 @@ export default function BlogPostsPage() {
   }, [query, dispatch]);
 
   const handleGeneratePost = async () => {
-    if (movieId) {
-      try {
-        await dispatch(createBlogPost(movieId));
-        setMovieId('');
-        await handleSearch();
-      } catch (error) {
-        console.error('Erro ao gerar o post:', error);
-      }
+    if (!movieId) {
+      toast({
+        title: 'Campo vazio',
+        description: 'Por favor, insira o tconst do filme antes de gerar um post.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await dispatch(createBlogPost(movieId));
+      setMovieId('');
+      await handleSearch();
+    } catch (error) {
+      console.error('Erro ao gerar o post:', error);
     }
   };
 
   const handleEditPost = async () => {
-    if (movieId) {
-      router.push(`/dashboard/blogposts/${movieId}/edit`);
+    if (!movieId) {
+      toast({
+        title: 'Campo vazio',
+        description: 'Por favor, insira o tconst do filme antes de editar um post.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
     }
+
+    router.push(`/dashboard/blogposts/${movieId}/edit`);
   };
 
   useEffect(() => {
@@ -75,7 +94,13 @@ export default function BlogPostsPage() {
 
   return (
     <>
+      <Text fontSize='2xl' as='b'>
+        Blog Posts
+      </Text>
+      <br />
+      <br />
       <div>
+      <h1>Gere ou edite um post</h1>
         <Input
           type="text"
           value={movieId}

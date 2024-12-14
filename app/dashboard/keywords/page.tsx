@@ -80,14 +80,6 @@ export default function Page() {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <div>
       <Text fontSize='2xl' as='b'>
@@ -95,13 +87,17 @@ export default function Page() {
       </Text>
       <br />
       <br />
-      <FavoriteTag
-        keywords={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []}
-        selectedKeyword={selectedKeyword}
-        onKeywordClick={handleKeywordClick}
-        onKeywordDelete={handleKeywordDelete}
-        existingKeywords={existingKeywords}
-      />
+      {loading && <div>Carregando...</div>}
+      {error && <div>Error: {error}</div>}
+      {!loading && !error && (
+        <FavoriteTag
+          keywords={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []}
+          selectedKeyword={selectedKeyword}
+          onKeywordClick={handleKeywordClick}
+          onKeywordDelete={handleKeywordDelete}
+          existingKeywords={existingKeywords}
+        />
+      )}
     </div>
   );
 }

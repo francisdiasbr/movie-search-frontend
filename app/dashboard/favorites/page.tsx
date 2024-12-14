@@ -122,9 +122,9 @@ export default function Page() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>
-        Favoritos
-      </Text>
+      <Text fontSize='2xl' as='b'>Favoritos</Text>
+      <br />
+      <br />
       <Search
         isLoading={status === 'loading'}
         isFavoritePage
