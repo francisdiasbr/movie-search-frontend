@@ -11,6 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import * as S from './styles';
+import { fetchBlogPostTrivia } from '../../../../lib/features/blogPosts/blogPostsTriviaSlice';
 
 function BlogPost() {
   const { tconst: movieId } = useParams();
@@ -18,10 +19,14 @@ function BlogPost() {
   const { data, loading, error } = useAppSelector(
     (state: RootState) => state.blogPosts
   );
+  const triviaData = useAppSelector(
+    (state: RootState) => state.blogPostsTrivia.data
+  );
 
   useEffect(() => {
     if (typeof movieId === 'string') {
       dispatch(fetchBlogPost(movieId));
+      dispatch(fetchBlogPostTrivia(movieId));
     }
 
     return () => {
@@ -63,6 +68,16 @@ function BlogPost() {
           content={data.original_movie_soundtrack}
         />
         <Section title='Conclusão' content={data.conclusion} />
+        {triviaData && (
+          <>
+            <Section title='Histórico do Diretor' content={triviaData.director_history} />
+            <Section title='Citações do Diretor' content={triviaData.director_quotes} />
+            <Section title='Curiosidades' content={triviaData.curiosities} />
+            <Section title='Recepção' content={triviaData.reception} />
+            <Section title='Destaques' content={triviaData.highlights} />
+            <Section title='Enredo' content={triviaData.plot} />
+          </>
+        )}
       </S.Container>
     </S.PageContainer>
   );

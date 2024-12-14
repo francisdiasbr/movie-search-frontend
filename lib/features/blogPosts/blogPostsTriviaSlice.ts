@@ -3,39 +3,34 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { formatDate } from '../../../utils/dateUtils';
 import BaseService from '../../api/service';
 
-export interface BlogPostEntry {
+export interface BlogPostTriviaEntry {
   tconst: string;
   primaryTitle: string;
-  title: string;
-  introduction: string;
-  stars_and_characters: string;
-  historical_context: string;
-  cultural_importance: string;
-  technical_analysis: string;
-  original_movie_soundtrack: string;
-  conclusion: string;
-  poster_url: string;
-  created_at: string;
-  references: string[];
+  director_history: string;
+  director_quotes: string;
+  curiosities: string;
+  reception: string;
+  highlights: string;
+  plot: string;
 }
 
-interface BlogPostState {
-  data: BlogPostEntry | null;
+interface BlogPostTriviaState {
+  data: BlogPostTriviaEntry | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: BlogPostState = {
+const initialState: BlogPostTriviaState = {
   data: null,
   loading: false,
   error: null,
 };
 
-export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
-  'blogPost/fetchById',
+export const fetchBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, string>(
+  'blogPostTrivia/fetchById',
   async movieId => {
     try {
-      const response = await BaseService.get(`generate-blogpost/${movieId}`);
+      const response = await BaseService.get(`generate-blogpost-trivia/${movieId}`);
       return response.data;
     } catch (error) {
       console.error('Erro ao buscar o post do blog:', error);
@@ -44,12 +39,12 @@ export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
   }
 );
 
-export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
-  'blogPost/create',
+export const createBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, string>(
+  'blogPostTrivia/create',
   async (movieId: string, { rejectWithValue }) => {
     try {
       const response = await BaseService.post(
-        `generate-blogpost/${movieId}`
+        `generate-blogpost-trivia/${movieId}`
       );
       return response.data;
     } catch (error: any) {
@@ -58,26 +53,21 @@ export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
   }
 );
 
-export const updateBlogPost = createAsyncThunk<BlogPostEntry, BlogPostEntry>(
-  'blogPost/update',
-  async (data: BlogPostEntry, { rejectWithValue }) => {
-    console.log('data entrada updateblogpost', data);
-    const url = `generate-blogpost/${data.tconst}`;
+export const updateBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, BlogPostTriviaEntry>(
+  'blogPostTrivia/update',
+  async (data: BlogPostTriviaEntry, { rejectWithValue }) => {
+    console.log('data entrada updateblogpost trivia', data);
+    const url = `generate-blogpost-trivia/${data.tconst}`;
 
-    const body: BlogPostEntry = {
+    const body: BlogPostTriviaEntry = {
       tconst: data.tconst,
       primaryTitle: data.primaryTitle,
-      title: data.title,
-      introduction: data.introduction,
-      stars_and_characters: data.stars_and_characters,
-      historical_context: data.historical_context,
-      cultural_importance: data.cultural_importance,
-      technical_analysis: data.technical_analysis,
-      original_movie_soundtrack: data.original_movie_soundtrack,
-      conclusion: data.conclusion,
-      poster_url: data.poster_url,
-      created_at: data.created_at,
-      references: data.references,
+      director_history: data.director_history,
+      director_quotes: data.director_quotes,
+      curiosities: data.curiosities,
+      reception: data.reception,
+      highlights: data.highlights,
+      plot: data.plot,
     };
 
     try {
@@ -96,11 +86,11 @@ export const updateBlogPost = createAsyncThunk<BlogPostEntry, BlogPostEntry>(
 );
 
 
-const blogPostSlice = createSlice({
-  name: 'blogPosts',
+const blogPostTriviaSlice = createSlice({
+  name: 'blogPostsTrivia',
   initialState,
   reducers: {
-    clearBlogPost: state => {
+    clearBlogPostTrivia: state => {
       state.data = null;
       state.loading = false;
       state.error = null;
@@ -108,45 +98,44 @@ const blogPostSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchBlogPost.pending, state => {
+      .addCase(fetchBlogPostTrivia.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBlogPost.fulfilled, (state, action) => {
+      .addCase(fetchBlogPostTrivia.fulfilled, (state, action) => {
         state.loading = false;
         state.data = {
           ...action.payload,
-          created_at: formatDate(action.payload.created_at),
         };
         console.log('action.payload', action.payload);
       })
-      .addCase(fetchBlogPost.rejected, state => {
+      .addCase(fetchBlogPostTrivia.rejected, state => {
         state.loading = false;
         state.error =
           'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
       })
-      .addCase(createBlogPost.pending, state => {
+      .addCase(createBlogPostTrivia.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createBlogPost.fulfilled, (state, action) => {
+      .addCase(createBlogPostTrivia.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(createBlogPost.rejected, state => {
+      .addCase(createBlogPostTrivia.rejected, state => {
         state.loading = false;
         state.error =
           'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
       })
-      .addCase(updateBlogPost.pending, state => {
+      .addCase(updateBlogPostTrivia.pending, state => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateBlogPost.fulfilled, (state, action) => {
+      .addCase(updateBlogPostTrivia.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(updateBlogPost.rejected, state => {
+      .addCase(updateBlogPostTrivia.rejected, state => {
         state.loading = false;
         state.error =
           'Falha ao atualizar o post do blog. Por favor, tente novamente mais tarde.';
@@ -154,5 +143,5 @@ const blogPostSlice = createSlice({
   },
 });
 
-export const { clearBlogPost } = blogPostSlice.actions;
-export default blogPostSlice.reducer;
+export const { clearBlogPostTrivia } = blogPostTriviaSlice.actions;
+export default blogPostTriviaSlice.reducer;

@@ -4,6 +4,7 @@ import allAuthoralReviewsSlice from './features/allAuthoralReviews/allAuthoralRe
 import allGenReviewsSlice from './features/allGenReviews/allGenReviewsSlice';
 import authoralReviewsSlice from './features/authoralReview/authoralReviewSlice';
 import blogPostsSlice from './features/blogPosts/blogPostsSlice';
+import blogPostsTriviaSlice from './features/blogPosts/blogPostsTriviaSlice';
 import searchBlogPostSlice from './features/blogPosts/searchBlogPostsSlice';
 import directorsSlice from './features/directors/directorsSlice';
 import keywordsSlice from './features/keywords/keywordsSlice';
@@ -28,6 +29,7 @@ export const makeStore = () => {
       blogPosts: blogPostsSlice,
       searchBlogPost: searchBlogPostSlice,
       opinion: opinionSlice,
+      blogPostsTrivia: blogPostsTriviaSlice,
     },
   });
 };

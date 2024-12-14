@@ -197,18 +197,18 @@ export default function Page() {
       </Checkbox>
       <br />
       <div style={{ display: 'flex', gap: '16px' }}>
-        <Button colorScheme='teal' onClick={() => setIsOpen(true)}>
+        <Button colorScheme='gray' onClick={() => setIsOpen(true)}>
           Adicionar Opinião
         </Button>
         <Button colorScheme='blue' onClick={handleSave}>
-          Save
+          Salvar
         </Button>
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Insira sua opinião</ModalHeader>
+          <ModalHeader>Insira a sua opinião</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <p>Rate</p>
