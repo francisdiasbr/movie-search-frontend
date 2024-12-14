@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
+  align-items: start;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
 `;
 
 export const NoPostsMessage = styled.p`

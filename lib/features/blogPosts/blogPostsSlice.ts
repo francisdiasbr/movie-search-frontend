@@ -57,8 +57,20 @@ export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
   }
 );
 
+export const updateBlogPost = createAsyncThunk<BlogPostEntry, BlogPostEntry>(
+  'blogPost/update',
+  async (updatedPost, { rejectWithValue }) => {
+    try {
+      const response = await BaseService.put(`generate-blogpost/${updatedPost.tconst}`, updatedPost);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || 'An error occurred');
+    }
+  }
+);
+
 const blogPostSlice = createSlice({
-  name: 'blogPost',
+  name: 'blogPosts',
   initialState,
   reducers: {
     clearBlogPost: state => {
@@ -98,6 +110,19 @@ const blogPostSlice = createSlice({
         state.loading = false;
         state.error =
           'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
+      })
+      .addCase(updateBlogPost.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateBlogPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+      })
+      .addCase(updateBlogPost.rejected, state => {
+        state.loading = false;
+        state.error =
+          'Falha ao atualizar o post do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });

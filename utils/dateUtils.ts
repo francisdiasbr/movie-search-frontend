@@ -6,8 +6,7 @@ import { ptBR } from 'date-fns/locale';
 export const formatDate = (data: string): string => {
   const date = new Date(data);
   if (isNaN(date.getTime())) {
-    console.error('Data inválida:', data);
-    return 'Data inválida';
+    return data;
   }
   const formattedDate = format(date, 'dd/MM/yyyy', { locale: ptBR });
   return formattedDate;

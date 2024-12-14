@@ -56,9 +56,15 @@ export default function BlogPostsPage() {
     }
   };
 
+  const handleEditPost = async () => {
+    if (movieId) {
+      router.push(`/dashboard/blogposts/${movieId}/edit`);
+    }
+  };
+
   useEffect(() => {
     handleSearch();
-  }, [handleSearch]);
+  }, []);
 
   const handleCardClick = (tconst: string) => {
     router.push(`/dashboard/blogposts/${tconst}`);
@@ -68,7 +74,7 @@ export default function BlogPostsPage() {
   const hasEntries = entries.length > 0;
 
   return (
-    <S.Container>
+    <>
       <div>
         <Input
           type="text"
@@ -77,8 +83,11 @@ export default function BlogPostsPage() {
           placeholder="Digite o tconst do filme"
           mb={4}
         />
-        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme="gray">
+        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme="gray" mr={4}>
           Gerar Post
+        </Button>
+        <Button onClick={handleEditPost} isLoading={creating} colorScheme="gray">
+          Editar Post
         </Button>
       </div>
       {loading && <p>Carregando...</p>}
@@ -109,6 +118,6 @@ export default function BlogPostsPage() {
           ))}
         </S.PostsGrid>
       )}
-    </S.Container>
+    </>
   );
 }
