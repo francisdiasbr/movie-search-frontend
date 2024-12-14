@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import Link, { LinkProps } from 'next/link';
+import styled from 'styled-components';
 
 // Excluir `isActive` do LinkProps
 interface StyledLinkProps extends LinkProps {
@@ -7,7 +7,7 @@ interface StyledLinkProps extends LinkProps {
 }
 
 export const StyledLink = styled(Link).withConfig({
-  shouldForwardProp: (prop) => prop !== 'isActive',
+  shouldForwardProp: prop => prop !== 'isActive',
 })<StyledLinkProps>`
   display: flex;
   height: 48px;

@@ -3,34 +3,37 @@
 import { Box, Tag, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 
-import { postKeyword, getKeywords, deleteKeyword } from '@/lib/features/keywords/keywordsSlice';
-import { postDirector } from '@/lib/features/directors/directorsSlice';
-import { fetchDetails } from '@/lib/features/movie/movieDetailsSlice';
-import * as S from './styles';
-import MediaCard from '@/app/ui/Cards/MediaCard';
+import MediaCard from '../../../../app/ui/Cards/MediaCard';
+import GoBack from '../../../../app/ui/GoBack';
+import { postDirector } from '../../../../lib/features/directors/directorsSlice';
+import {
+  postKeyword,
+  getKeywords,
+  deleteKeyword,
+} from '../../../../lib/features/keywords/keywordsSlice';
+import { fetchDetails } from '../../../../lib/features/movie/movieDetailsSlice';
+import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import FavoriteTag from './components/FavoriteTag';
-import GoBack from '@/app/ui/GoBack';
+import * as S from './styles';
 
 export default function MovieDetailsPage() {
-
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
 
-  const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
-  
+  const { data, fetchStatus } = useAppSelector(state => state.moviesDetails);
+
   console.log('data', data);
   const toast = useToast();
-  
+
   useEffect(() => {
     if (tconst) {
       dispatch(fetchDetails(tconst));
     }
-    dispatch(getKeywords()).then((action) => {
+    dispatch(getKeywords()).then(action => {
       if (getKeywords.fulfilled.match(action)) {
         setExistingKeywords(action.payload.map((kw: any) => kw.keyword));
       }
@@ -53,9 +56,11 @@ export default function MovieDetailsPage() {
         </li>
       );
     });
-  }
+  };
 
-  const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
+  const plotKeywords = Array.isArray(data.plot_keywords)
+    ? data.plot_keywords
+    : [];
 
   const formatQuote = (quote: string) => {
     return quote.split(/(?<=\.\s)|(?<=:\s)/).map((line, index) => {
@@ -67,28 +72,32 @@ export default function MovieDetailsPage() {
     });
   };
 
-
   const handleKeywordClick = async (keyword: string) => {
-    setSelectedKeyword((prevKeyword) => (prevKeyword === keyword ? null : keyword));
+    setSelectedKeyword(prevKeyword =>
+      prevKeyword === keyword ? null : keyword
+    );
 
     if (selectedKeyword !== keyword) {
       const resultAction = await dispatch(postKeyword(keyword));
 
       if (postKeyword.fulfilled.match(resultAction)) {
         setExistingKeywords(prev => [...prev, keyword]);
-        
+
         toast({
-          title: "Palavra-chave adicionada.",
+          title: 'Palavra-chave adicionada.',
           description: `A palavra-chave "${keyword}" foi adicionada com sucesso na lista`,
-          status: "success",
+          status: 'success',
           duration: 3000,
           isClosable: true,
         });
       } else {
         toast({
-          title: "Erro ao adicionar palavra-chave.",
-          description: typeof resultAction.payload === 'string' ? resultAction.payload : "Ocorreu um erro ao adicionar a palavra-chave.",
-          status: "error",
+          title: 'Erro ao adicionar palavra-chave.',
+          description:
+            typeof resultAction.payload === 'string'
+              ? resultAction.payload
+              : 'Ocorreu um erro ao adicionar a palavra-chave.',
+          status: 'error',
           duration: 3000,
           isClosable: true,
         });
@@ -108,17 +117,20 @@ export default function MovieDetailsPage() {
 
     if (postDirector.fulfilled.match(resultAction)) {
       toast({
-        title: "Diretor adicionado.",
+        title: 'Diretor adicionado.',
         description: `O diretor "${director}" foi adicionado com sucesso na lista`,
-        status: "success",
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
     } else {
       toast({
-        title: "Erro ao adicionar diretor.",
-        description: typeof resultAction.payload === 'string' ? resultAction.payload : "Ocorreu um erro ao adicionar o diretor.",
-        status: "error",
+        title: 'Erro ao adicionar diretor.',
+        description:
+          typeof resultAction.payload === 'string'
+            ? resultAction.payload
+            : 'Ocorreu um erro ao adicionar o diretor.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -138,20 +150,30 @@ export default function MovieDetailsPage() {
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Watched:</Text>
-        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
+        <Tag colorScheme={data.watched ? 'green' : 'red'}>
+          {data.watched ? 'Já vi' : 'Não vi'}
+        </Tag>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Director:</Text>
-        <Text 
-          onClick={() => handleDirectorClick(data.director)} 
-          style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
+        <Text
+          onClick={() => handleDirectorClick(data.director)}
+          style={{
+            cursor: 'pointer',
+            textDecoration: 'underline',
+            color: 'blue',
+          }}
         >
           {data.director}
         </Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Writers:</Text>
-        <Text>{data.writers && data.writers.length > 0 ? data.writers.join(', ') : 'N/A'}</Text>
+        <Text>
+          {data.writers && data.writers.length > 0
+            ? data.writers.join(', ')
+            : 'N/A'}
+        </Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Stars:</Text>
@@ -174,17 +196,22 @@ export default function MovieDetailsPage() {
         <Text>{data.genres.join(', ')}</Text>
       </Box>
       <Text fontWeight='bold'>Plot keywords:</Text>
-      <FavoriteTag 
-        keywords={plotKeywords} 
-        selectedKeyword={selectedKeyword} 
-        onKeywordClick={handleKeywordClick} 
+      <FavoriteTag
+        keywords={plotKeywords}
+        selectedKeyword={selectedKeyword}
+        onKeywordClick={handleKeywordClick}
         onKeywordDelete={handleKeywordDelete}
         existingKeywords={existingKeywords}
       />
       <Box mb={4} mt={4}>
         <Text fontWeight='bold'>Wiki:</Text>
         <Text>
-          <a href={data.wiki} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'blue' }}>
+          <a
+            href={data.wiki}
+            target='_blank'
+            rel='noopener noreferrer'
+            style={{ textDecoration: 'underline', color: 'blue' }}
+          >
             {data.wiki}
           </a>
         </Text>
@@ -192,23 +219,19 @@ export default function MovieDetailsPage() {
       <Box mb={4}>
         <Text fontWeight='bold'>Trivia:</Text>
         <Text>
-        <ul>
-          {sanitizeTrivia(data.trivia)}
-        </ul>
-      </Text>
+          <ul>{sanitizeTrivia(data.trivia)}</ul>
+        </Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Quote:</Text>
-        <Text>
-          {formatQuote(data.quote)}
-        </Text>
+        <Text>{formatQuote(data.quote)}</Text>
       </Box>
       <Box mb={4}>
         <Text fontWeight='bold'>Magnet Link:</Text>
         <Text style={{ wordBreak: 'break-all' }}>
-          <a 
+          <a
             href={encodeURI(data.magnet_link)}
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
               window.location.href = data.magnet_link;
             }}

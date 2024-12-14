@@ -1,19 +1,24 @@
 'use client';
 
-import Table from '@/app/ui/Table';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-import { addFavorite, resetAddStatus } from '@/lib/features/movie/movieDetailsSlice';
-import { searchMovie } from '@/lib/features/search/searchSlice';
+import {
+  addFavorite,
+  resetAddStatus,
+} from '../../../lib/features/movie/movieDetailsSlice';
+import { searchMovie } from '../../../lib/features/search/searchSlice';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import Search from '../../ui/Search';
+import Table from '../../ui/Table';
 import { columnData } from './columnData';
-import Search from '@/app/ui/Search';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
-  const { entries, total_documents } = useAppSelector((state) => state.moviesSearch);
-  const { addStatus } = useAppSelector((state) => state.moviesDetails);
+  const { entries, total_documents } = useAppSelector(
+    state => state.moviesSearch
+  );
+  const { addStatus } = useAppSelector(state => state.moviesDetails);
   const toast = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +31,7 @@ export default function SearchPage() {
     setIsLoading(true);
     const filters: { tconst?: string } = {};
     if (tconst) {
-        filters.tconst = tconst; // Adiciona tconst apenas se não estiver vazio
+      filters.tconst = tconst; // Adiciona tconst apenas se não estiver vazio
     }
 
     const params = {
@@ -35,7 +40,7 @@ export default function SearchPage() {
       pageSize: currentPageSize,
       searchTerm: searchTerm,
     };
-    console.log('params', params)
+    console.log('params', params);
     dispatch(searchMovie(params))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
@@ -50,14 +55,14 @@ export default function SearchPage() {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     handleSearch(newPage, pageSize);
-  }
+  };
 
   const handleAdd = (tconst: string) => {
     setIsLoading(true);
     dispatch(addFavorite(tconst))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }
+  };
 
   useEffect(() => {
     if (addStatus === 'succeeded') {
@@ -83,7 +88,9 @@ export default function SearchPage() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>Pesquisar Filme</Text>
+      <Text fontSize='2xl' as='b'>
+        Pesquisar Filme
+      </Text>
       <Search
         isLoading={isLoading}
         handleSearch={handleSearch}

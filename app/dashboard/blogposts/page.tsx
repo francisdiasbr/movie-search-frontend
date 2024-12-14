@@ -1,55 +1,86 @@
 'use client';
 
-import { Box, Text, SimpleGrid, Card, CardBody, Heading, Button } from '@chakra-ui/react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { useEffect } from 'react';
-import { fetchFavorites } from '@/lib/features/movies/movieFavoritesSlice';
+import { useCallback, useEffect, useState } from 'react';
+
+import { searchBlogPosts } from '../../../lib/features/blogPosts/searchBlogPostsSlice';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { RootState } from '../../../lib/store';
+import * as S from './styles';
 
 export default function BlogPostsPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { entries, status } = useAppSelector((state) => state.moviesFavorites);
+
+  const { data, loading, error } = useAppSelector(
+    (state: RootState) => state.searchBlogPost
+  );
+  const [query, setQuery] = useState('');
+
+  const handleSearch = useCallback(async () => {
+    console.log('Texto digitado:', query);
+    console.log('Texto após trim:', query.trim());
+
+    const params = {
+      filters: query.trim()
+        ? {
+            $or: [
+              { title: { $regex: query.trim(), $options: 'i' } },
+              { primaryTitle: { $regex: query.trim(), $options: 'i' } },
+              { introduction: { $regex: query.trim(), $options: 'i' } },
+            ],
+          }
+        : {},
+    };
+    console.log('Parâmetros enviados para API:', params);
+
+    await dispatch(searchBlogPosts(params));
+  }, [query, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchFavorites({ page: 1 }));
-  }, [dispatch]);
+    handleSearch();
+  }, [handleSearch]);
 
-  const handleViewBlogPost = (tconst: string) => {
+  const handleCardClick = (tconst: string) => {
     router.push(`/dashboard/blogposts/${tconst}`);
   };
 
-  if (status === 'loading') {
-    return (
-      <Box p={4}>
-        <Text fontSize='2xl' as='b' mb={6}>Blog Posts</Text>
-        <Text>Carregando...</Text>
-      </Box>
-    );
-  }
+  const entries = data?.entries || [];
+  const hasEntries = entries.length > 0;
 
+  console.log(entries);
   return (
-    <Box p={4}>
-      <Text fontSize='2xl' as='b' mb={6}>Blog Posts</Text>
-      
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
-        {entries.map((movie: any) => (
-          <Card key={movie.tconst} variant="outline">
-            <CardBody>
-              <Heading size="md" mb={4}>{movie.originalTitle}</Heading>
-              <Text mb={4} color="gray.600">
-                {movie.director} ({movie.startYear})
-              </Text>
-              <Button 
-                colorScheme="blue" 
-                onClick={() => handleViewBlogPost(movie.tconst)}
-              >
-                Ver Blog Post
-              </Button>
-            </CardBody>
-          </Card>
-        ))}
-      </SimpleGrid>
-    </Box>
+    <S.Container>
+      {!hasEntries && (
+        <S.NoPostsMessage>Nenhum post encontrado.</S.NoPostsMessage>
+      )}
+      {hasEntries && (
+        <S.PostsGrid>
+          {entries.map(post => (
+            <S.StyledCard
+              key={`${post.tconst}-${post.title}`}
+              onClick={() => handleCardClick(post.tconst)}
+            >
+              <S.CardContent>
+                <S.CardHeader>
+                  <Image
+                    src='https://github.com/francisdiasbr.png'
+                    alt='Francis Dias'
+                    width={40}
+                    height={40}
+                    style={{
+                      borderRadius: '50%',
+                    }}
+                  />
+                  <h3>{post.title}</h3>
+                </S.CardHeader>
+                <S.CardDate>{post.created_at}</S.CardDate>
+              </S.CardContent>
+            </S.StyledCard>
+          ))}
+        </S.PostsGrid>
+      )}
+    </S.Container>
   );
 }

@@ -9,7 +9,7 @@ export const ButtonGroup = styled.div`
     background: none;
     border: none;
     cursor: pointer;
-    
+
     &:hover svg {
       color: #d7d7d7;
     }

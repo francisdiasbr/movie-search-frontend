@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import BaseService from '../../api/service';
 
+import BaseService from '../../api/service';
 
 interface Keyword {
   _id: string;
   keyword: string;
-} 
+}
 
 interface KeywordsState {
   data: Keyword[];
@@ -26,7 +26,7 @@ export const getKeywords = createAsyncThunk(
       const response = await BaseService.get('keywords');
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -36,10 +36,10 @@ export const postKeyword = createAsyncThunk(
   async (keyword: string, { rejectWithValue }) => {
     try {
       const response = await BaseService.post('keywords', { keyword });
-      // console.log('response', response) 
+      // console.log('response', response)
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -51,7 +51,7 @@ export const deleteKeyword = createAsyncThunk(
       const response = await BaseService.delete(`keywords/${keyword}`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -60,9 +60,9 @@ const keywordsSlice = createSlice({
   name: 'keywords',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getKeywords.pending, (state) => {
+      .addCase(getKeywords.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -74,7 +74,7 @@ const keywordsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to get keywords';
       })
-      .addCase(postKeyword.pending, (state) => {
+      .addCase(postKeyword.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -86,7 +86,7 @@ const keywordsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to post keyword';
       })
-      .addCase(deleteKeyword.pending, (state) => {
+      .addCase(deleteKeyword.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -101,4 +101,4 @@ const keywordsSlice = createSlice({
   },
 });
 
-export default keywordsSlice.reducer; 
+export default keywordsSlice.reducer;

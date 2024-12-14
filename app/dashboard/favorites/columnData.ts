@@ -3,61 +3,61 @@ export const columnData = [
     isAction: true,
     key: 'actions',
     label: 'Ações',
-    style: { 
+    style: {
       minWidth: '100px',
-      width: '10%'
-    }
+      width: '10%',
+    },
   },
   {
     key: 'watched',
     label: 'Já vi?',
-    style: { 
+    style: {
       minWidth: '100px',
-      width: '10%'
+      width: '10%',
     },
-    sort: true
+    sort: true,
   },
-  { 
+  {
     key: 'startYear',
-    label: 'Ano', 
-    style: { 
+    label: 'Ano',
+    style: {
       minWidth: '85px',
-      width: '10%'
+      width: '10%',
     },
-    sort: true
+    sort: true,
   },
   {
     key: 'director',
     label: 'Diretor',
-    style: { 
+    style: {
       minWidth: '100px',
-      width: '10%'
-    }
-  },
-  { 
-    key: 'originalTitle', 
-    label: 'Título', 
-    style: { 
-      minWidth: '200px',
-      width: '20%'
+      width: '10%',
     },
-    sort: true
+  },
+  {
+    key: 'originalTitle',
+    label: 'Título',
+    style: {
+      minWidth: '200px',
+      width: '20%',
+    },
+    sort: true,
   },
   {
     key: 'plot_keywords',
     label: 'Palavras-chave',
-    style: { 
+    style: {
       minWidth: '200px',
-      width: '25%'
-    }
+      width: '25%',
+    },
   },
   {
     key: 'tconst',
     label: 'IMDb ID',
-    style: { 
+    style: {
       minWidth: '100px',
-      width: '10%'
+      width: '10%',
     },
-    sort: true
+    sort: true,
   },
 ];

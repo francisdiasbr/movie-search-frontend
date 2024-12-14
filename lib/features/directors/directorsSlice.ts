@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import BaseService from '../../api/service';
-import { inter } from '@/app/fonts';
 
+import BaseService from '../../api/service';
 
 interface DirectorMovie {
   originalTitle: string;
@@ -12,7 +11,7 @@ interface Director {
   _id: string;
   director: string;
   filmography: DirectorMovie[];
-} 
+}
 
 interface DirectorsState {
   data: Director[];
@@ -34,7 +33,7 @@ export const getDirectors = createAsyncThunk(
       console.log('getDirectors', response.data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -46,7 +45,7 @@ export const postDirector = createAsyncThunk(
       const response = await BaseService.post('directors', { director });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -58,7 +57,7 @@ export const deleteDirector = createAsyncThunk(
       const response = await BaseService.delete(`directors/${director}`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || 'An error occurred');
     }
   }
 );
@@ -67,9 +66,9 @@ const directorsSlice = createSlice({
   name: 'directors',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getDirectors.pending, (state) => {
+      .addCase(getDirectors.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -81,7 +80,7 @@ const directorsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to get directors';
       })
-      .addCase(postDirector.pending, (state) => {
+      .addCase(postDirector.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -93,13 +92,15 @@ const directorsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to post director';
       })
-      .addCase(deleteDirector.pending, (state) => {
+      .addCase(deleteDirector.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(deleteDirector.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = state.data.filter(director => director._id !== action.meta.arg);
+        state.data = state.data.filter(
+          director => director._id !== action.meta.arg
+        );
       })
       .addCase(deleteDirector.rejected, (state, action) => {
         state.loading = false;

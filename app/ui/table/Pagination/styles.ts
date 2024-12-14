@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const PaginationContainer = styled.div`
-  align-items: center;  
+  align-items: center;
   background-color: #f9fafb;
   border-radius: 8px;
   display: flex;

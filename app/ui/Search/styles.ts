@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { theme } from "@chakra-ui/react";
+import { theme } from '@chakra-ui/react';
+import styled from 'styled-components';
 
 export const SearchContainer = styled.div`
   display: flex;
@@ -8,7 +8,7 @@ export const SearchContainer = styled.div`
   margin-bottom: 16px;
   justify-content: center;
 
-    @media (max-width: ${theme.breakpoints.lg}) {
+  @media (max-width: ${theme.breakpoints.lg}) {
     flex-direction: column;
   }
 `;

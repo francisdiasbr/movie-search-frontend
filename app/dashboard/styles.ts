@@ -2,20 +2,20 @@ import styled from 'styled-components';
 
 export const LayoutContainer = styled.div`
   display: flex;
-  height: 90vh; 
+  height: 90vh;
   flex-direction: column;
 
   @media (min-width: 768px) {
-    flex-direction: row; 
-    overflow: hidden; 
+    flex-direction: row;
+    overflow: hidden;
   }
 `;
 
 export const SideNavWrapper = styled.div`
-  flex-shrink: 0; 
-  width: 100%; 
+  flex-shrink: 0;
+  width: 100%;
   @media (min-width: 768px) {
-    width: 16rem; 
+    width: 16rem;
   }
 `;
 

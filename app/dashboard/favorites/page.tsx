@@ -1,14 +1,17 @@
 'use client';
 
+import { Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Text, useToast, Tag } from '@chakra-ui/react';
 
-import { deleteFavorite, resetDeleteStatus } from '@/lib/features/movie/movieDetailsSlice';
-import { fetchFavorites } from '@/lib/features/movies/movieFavoritesSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import Search from '../../../app/ui/Search';
+import {
+  deleteFavorite,
+  resetDeleteStatus,
+} from '../../../lib/features/movie/movieDetailsSlice';
+import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import Table from '../../ui/Table';
 import { columnData } from './columnData';
-import Search from '@/app/ui/Search';
 import KeywordTags from './components/KeywordTags';
 
 interface MovieEntry {
@@ -23,8 +26,9 @@ function truncatePlotKeywords(keywords: string[]): string[] {
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { countries, entries, total_documents, status, startYears } = useAppSelector((state) => state.moviesFavorites);
-  const { delStatus } = useAppSelector((state) => state.moviesDetails);
+  const { countries, entries, total_documents, status, startYears } =
+    useAppSelector(state => state.moviesFavorites);
+  const { delStatus } = useAppSelector(state => state.moviesDetails);
   const toast = useToast();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,8 +36,12 @@ export default function Page() {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [year, setYear] = useState<number | undefined>(undefined);
-  const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
-  const [yearOptions, setYearOptions] = useState<{ value: string; label: string }[]>([]);
+  const [countryOptions, setCountryOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [yearOptions, setYearOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     const params = {
@@ -45,11 +53,11 @@ export default function Page() {
       pageSize: currentPageSize,
       searchTerm: searchTerm,
     };
-    dispatch(fetchFavorites(params))
+    dispatch(fetchFavorites(params));
   };
 
   const handleDelete = (tconst: string) => {
-    dispatch(deleteFavorite(tconst))
+    dispatch(deleteFavorite(tconst));
   };
 
   useEffect(() => {
@@ -57,8 +65,15 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    setCountryOptions(countries.map(country => ({ value: country, label: country })));
-    setYearOptions(startYears.map(year => ({ value: year.toString(), label: year.toString() })));
+    setCountryOptions(
+      countries.map(country => ({ value: country, label: country }))
+    );
+    setYearOptions(
+      startYears.map(year => ({
+        value: year.toString(),
+        label: year.toString(),
+      }))
+    );
   }, [countries, startYears]);
 
   const handlePageSizeChange = (newPageSize: number) => {
@@ -70,10 +85,10 @@ export default function Page() {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     handleSearch(newPage, pageSize);
-  }
+  };
 
   useEffect(() => {
-    if(delStatus === 'succeeded') {
+    if (delStatus === 'succeeded') {
       toast({
         title: 'Success',
         description: 'Movie removed from favs.',
@@ -91,23 +106,25 @@ export default function Page() {
         status: 'error',
         duration: 3000,
         isClosable: true,
-        variant: 'top-accent'
+        variant: 'top-accent',
       });
     }
-    if(delStatus === 'succeeded' || delStatus === 'failed') {
+    if (delStatus === 'succeeded' || delStatus === 'failed') {
       dispatch(resetDeleteStatus());
     }
   }, [delStatus, dispatch, toast]);
 
-    // Log dos dados que chegam na tabela
-    useEffect(() => {
-      console.log('Entries:', entries); // Log das entradas
-      console.log('Total Documents:', total_documents); // Log do total de documentos
-    }, [entries, total_documents]);
+  // Log dos dados que chegam na tabela
+  useEffect(() => {
+    console.log('Entries:', entries); // Log das entradas
+    console.log('Total Documents:', total_documents); // Log do total de documentos
+  }, [entries, total_documents]);
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>Favoritos</Text>
+      <Text fontSize='2xl' as='b'>
+        Favoritos
+      </Text>
       <Search
         isLoading={status === 'loading'}
         isFavoritePage
@@ -126,7 +143,7 @@ export default function Page() {
         columns={columnData}
         entries={entries.map((entry: MovieEntry) => ({
           ...entry,
-          plot_keywords: <KeywordTags keywords={entry.plot_keywords} />
+          plot_keywords: <KeywordTags keywords={entry.plot_keywords} />,
         }))}
         isLoading={status === 'loading'}
         onPageChange={handlePageChange}

@@ -1,80 +1,79 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import BaseService from "../../api/service";
+import { formatDate } from '../../../utils/dateUtils';
+import BaseService from '../../api/service';
 
-interface BlogPost {
-  title: string;
+export interface BlogPostEntry {
+  tconst: string;
   primaryTitle: string;
+  title: string;
   introduction: string;
-  stars_and_characters?: string;
+  stars_and_characters: string;
   historical_context: string;
   cultural_importance: string;
   technical_analysis: string;
-  conclusion: string;
   original_movie_soundtrack: string;
-  poster_url?: string;
+  conclusion: string;
+  poster_url: string;
+  created_at: string;
 }
 
-interface BlogPostsState {
-  data: BlogPost | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+interface BlogPostState {
+  data: BlogPostEntry | null;
+  loading: boolean;
   error: string | null;
 }
 
-const initialState: BlogPostsState = {
+const initialState: BlogPostState = {
   data: null,
-  status: 'idle',
-  error: null
+  loading: false,
+  error: null,
 };
 
-export const generateBlogPost = createAsyncThunk(
-  'blogPosts/generate',
-  async (tconst: string) => {
-    const response = await BaseService.post(`/generate-blogpost/${tconst}`);
-    console.log('response generateBlogPost', response.data);
-    return response.data;
+export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
+  'blogPost/fetchById',
+  async movieId => {
+    try {
+      const response = await BaseService.get(`generate-blogpost/${movieId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar o post do blog:', error);
+      throw error;
+    }
   }
 );
 
-export const getBlogPosts = createAsyncThunk(
-  'blogPosts/get',
-  async (tconst: string) => {
-    const response = await BaseService.get(`/generate-blogpost/${tconst}`);
-    console.log('response getBlogPosts', response.data);
-    return response.data;
-  }
-);
-
-const blogPostsSlice = createSlice({
-  name: 'blogPosts',
+const blogPostSlice = createSlice({
+  name: 'blogPost',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
+  reducers: {
+    clearBlogPost: state => {
+      state.data = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
+  extraReducers: builder => {
     builder
-      .addCase(generateBlogPost.pending, (state) => {
-        state.status = 'loading';
+      .addCase(fetchBlogPost.pending, state => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(generateBlogPost.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.data = action.payload;
+      .addCase(fetchBlogPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = {
+          ...action.payload,
+          created_at: formatDate(action.payload.created_at),
+        };
+        console.log('action.payload', action.payload);
       })
-      .addCase(generateBlogPost.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Algo deu errado';
-      })
-      .addCase(getBlogPosts.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(getBlogPosts.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.data = action.payload;
-        console.log('state.data getBlogPosts', state.data);
-      })
-      .addCase(getBlogPosts.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Algo deu errado';
+      .addCase(fetchBlogPost.rejected, state => {
+        state.loading = false;
+        state.error =
+          'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });
 
-export default blogPostsSlice.reducer; 
+export const { clearBlogPost } = blogPostSlice.actions;
+export default blogPostSlice.reducer;

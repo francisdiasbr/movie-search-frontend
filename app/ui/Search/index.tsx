@@ -1,5 +1,5 @@
-import React from "react";
 import { Button, Input } from '@chakra-ui/react';
+import React from 'react';
 import Select from 'react-select';
 
 import * as S from './styles';
@@ -37,7 +37,6 @@ const Search = ({
   setTconst,
   tconst,
 }: SearchProps) => {
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
@@ -46,10 +45,14 @@ const Search = ({
 
   return (
     <>
-      <h1>{isFavoritePage ? 'Bem-vindo à sua coleção pessoal!' : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}</h1>
+      <h1>
+        {isFavoritePage
+          ? 'Bem-vindo à sua coleção pessoal!'
+          : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}
+      </h1>
       <S.SearchContainer>
         <Input
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           placeholder='Pesquisar'
           type='search'
           value={searchTerm}
@@ -60,23 +63,38 @@ const Search = ({
             <Select
               isClearable
               isSearchable
-              onChange={(selectedOption) => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
+              onChange={selectedOption =>
+                setCountry &&
+                setCountry(selectedOption ? selectedOption.value : '')
+              }
               options={countryOptions}
-              placeholder="Selecione país"
-              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
-              value={countryOptions?.find(option => option.value === country) || null}
+              placeholder='Selecione país'
+              styles={{
+                container: provided => ({ ...provided, minWidth: '200px' }),
+              }}
+              value={
+                countryOptions?.find(option => option.value === country) || null
+              }
             />
             <Select
               isClearable
-              onChange={(e) => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
+              onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
               options={yearOptions}
-              placeholder="Selecione ano"
-              styles={{ container: (provided) => ({ ...provided, minWidth: '200px' }) }}
-              value={year ? { value: year.toString(), label: year.toString() } : null}
+              placeholder='Selecione ano'
+              styles={{
+                container: provided => ({ ...provided, minWidth: '200px' }),
+              }}
+              value={
+                year ? { value: year.toString(), label: year.toString() } : null
+              }
             />
           </>
         )}
-        <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>
+        <Button
+          isLoading={isLoading}
+          onClick={() => handleSearch()}
+          style={{ width: '150px' }}
+        >
           Go
         </Button>
       </S.SearchContainer>
