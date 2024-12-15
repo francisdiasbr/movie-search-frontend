@@ -1,14 +1,8 @@
-input[type='number'] {
-  -moz-appearance: textfield;
-  appearance: textfield;
+a {
+  color: blue;
+  text-decoration: underline;
 }
 
-input[type='number']::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+a:hover {
+  color: darkblue;
 }

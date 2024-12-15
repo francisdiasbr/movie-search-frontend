@@ -20,22 +20,24 @@ export const makeStore = () => {
       allAuthoralReviews: allAuthoralReviewsSlice,
       allGenReviews: allGenReviewsSlice,
       authoralReviews: authoralReviewsSlice,
-      moviesReviews: reviewsSlice,
-      moviesFavorites: movieFavoritesSlice,
-      moviesDetails: movieDetailsSlice,
-      moviesSearch: movieSearchSlice,
-      keywords: keywordsSlice,
-      directors: directorsSlice,
       blogPosts: blogPostsSlice,
-      searchBlogPost: searchBlogPostSlice,
-      opinion: opinionSlice,
       blogPostsTrivia: blogPostsTriviaSlice,
+      directors: directorsSlice,
+      keywords: keywordsSlice,
+      moviesDetails: movieDetailsSlice,
+      moviesFavorites: movieFavoritesSlice,
+      moviesReviews: reviewsSlice,
+      moviesSearch: movieSearchSlice,
+      opinion: opinionSlice,
+      searchBlogPost: searchBlogPostSlice,
     },
   });
 };
+
+
+export type AppDispatch = AppStore['dispatch'];
 
 export type AppStore = ReturnType<typeof makeStore>;
 
 export type RootState = ReturnType<AppStore['getState']>;
 
-export type AppDispatch = AppStore['dispatch'];

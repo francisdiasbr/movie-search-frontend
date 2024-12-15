@@ -88,7 +88,9 @@ export default function SearchPage() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>Pesquisar Filme</Text>
+      <Text fontSize='2xl' as='b'>
+        Pesquisar Filme
+      </Text>
       <br />
       <br />
       <Search

@@ -48,9 +48,7 @@ export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
   'blogPost/create',
   async (movieId: string, { rejectWithValue }) => {
     try {
-      const response = await BaseService.post(
-        `generate-blogpost/${movieId}`
-      );
+      const response = await BaseService.post(`generate-blogpost/${movieId}`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'An error occurred');
@@ -94,7 +92,6 @@ export const updateBlogPost = createAsyncThunk<BlogPostEntry, BlogPostEntry>(
     }
   }
 );
-
 
 const blogPostSlice = createSlice({
   name: 'blogPosts',

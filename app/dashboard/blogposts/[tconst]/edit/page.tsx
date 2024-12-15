@@ -1,14 +1,16 @@
 'use client';
 
-import { Input, Button, Text, useToast } from '@chakra-ui/react';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { Input, Button, Text, useToast, Textarea } from '@chakra-ui/react';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+import GoBack from '../../../../../app/ui/GoBack';
+import {
+  fetchBlogPost,
+  updateBlogPost,
+} from '../../../../../lib/features/blogPosts/blogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
-import { fetchBlogPost, updateBlogPost } from '../../../../../lib/features/blogPosts/blogPostsSlice';
 import * as S from './styles';
-import GoBack from '@/app/ui/GoBack';
 
 export default function Page() {
   const dispatch = useAppDispatch();
@@ -29,6 +31,7 @@ export default function Page() {
   const [conclusion, setConclusion] = useState('');
   const [posterUrl, setPosterUrl] = useState('');
   const [createdAt, setCreatedAt] = useState('');
+  const [references, setReferences] = useState<string[]>(['', '', '', '', '']);
 
   useEffect(() => {
     if (tconstString) {
@@ -49,6 +52,7 @@ export default function Page() {
       setConclusion(data.conclusion || '');
       setPosterUrl(data.poster_url || '');
       setCreatedAt(data.created_at || '');
+      setReferences(data.references || []);
     }
   }, [data]);
 
@@ -75,6 +79,7 @@ export default function Page() {
         conclusion,
         poster_url: posterUrl,
         created_at: createdAt,
+        references: references,
       };
       await dispatch(updateBlogPost(updatedData)).unwrap();
 
@@ -117,52 +122,53 @@ export default function Page() {
       />
       <br />
       <p>Introduction</p>
-      <Input
+      <Textarea
         onChange={e => setIntroduction(e.target.value)}
-        type='text'
         value={introduction}
+        rows={6}
       />
       <br />
       <p>Stars and Characters</p>
-      <Input
+      <Textarea
         onChange={e => setStarsAndCharacters(e.target.value)}
-        type='text'
         value={starsAndCharacters}
+        rows={6}
       />
       <br />
       <p>Historical Context</p>
-      <Input
+      <Textarea
         onChange={e => setHistoricalContext(e.target.value)}
-        type='text'
         value={historicalContext}
+        rows={6}
       />
       <br />
       <p>Cultural Importance</p>
-      <Input
+      <Textarea
         onChange={e => setCulturalImportance(e.target.value)}
-        type='text'
         value={culturalImportance}
+        rows={6}
       />
       <br />
       <p>Technical Analysis</p>
-      <Input
+      <Textarea
         onChange={e => setTechnicalAnalysis(e.target.value)}
-        type='text'
         value={technicalAnalysis}
+        rows={6}
       />
       <br />
+      <br />
       <p>Original Movie Soundtrack</p>
-      <Input
+      <Textarea
         onChange={e => setOriginalMovieSoundtrack(e.target.value)}
-        type='text'
         value={originalMovieSoundtrack}
+        rows={6}
       />
       <br />
       <p>Conclusion</p>
-      <Input
+      <Textarea
         onChange={e => setConclusion(e.target.value)}
-        type='text'
         value={conclusion}
+        rows={6}
       />
       <br />
       <p>Poster URL</p>
@@ -179,9 +185,34 @@ export default function Page() {
         value={createdAt}
       />
       <br />
-      <Button colorScheme='blue' onClick={handleSave}>
-        Save
-      </Button>
+      <p>References</p>
+      {references.map((reference, index) => (
+        <div key={index}>
+          <p>Reference {index + 1}</p>
+          <Input
+            onChange={e => {
+              const newReferences = [...references];
+              newReferences[index] = e.target.value;
+              setReferences(newReferences);
+            }}
+            type='text'
+            value={reference}
+            style={{ marginBottom: '10px' }}
+          />
+          <br />
+        </div>
+      ))}
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <Button
+          onClick={() => setReferences([...references, ''])}
+          colorScheme='blue'
+        >
+          Adicionar referência
+        </Button>
+        <Button colorScheme='blue' onClick={handleSave}>
+          Salvar
+        </Button>
+      </div>
     </S.PageContainer>
   );
 }

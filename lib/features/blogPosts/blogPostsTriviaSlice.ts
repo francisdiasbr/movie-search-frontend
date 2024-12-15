@@ -26,34 +26,39 @@ const initialState: BlogPostTriviaState = {
   error: null,
 };
 
-export const fetchBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, string>(
-  'blogPostTrivia/fetchById',
-  async movieId => {
-    try {
-      const response = await BaseService.get(`generate-blogpost-trivia/${movieId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Erro ao buscar o post do blog:', error);
-      throw error;
-    }
+export const fetchBlogPostTrivia = createAsyncThunk<
+  BlogPostTriviaEntry,
+  string
+>('blogPostTrivia/fetchById', async movieId => {
+  try {
+    const response = await BaseService.get(
+      `generate-blogpost-trivia/${movieId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar o post do blog:', error);
+    throw error;
   }
-);
+});
 
-export const createBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, string>(
-  'blogPostTrivia/create',
-  async (movieId: string, { rejectWithValue }) => {
-    try {
-      const response = await BaseService.post(
-        `generate-blogpost-trivia/${movieId}`
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || 'An error occurred');
-    }
+export const createBlogPostTrivia = createAsyncThunk<
+  BlogPostTriviaEntry,
+  string
+>('blogPostTrivia/create', async (movieId: string, { rejectWithValue }) => {
+  try {
+    const response = await BaseService.post(
+      `generate-blogpost-trivia/${movieId}`
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data || 'An error occurred');
   }
-);
+});
 
-export const updateBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, BlogPostTriviaEntry>(
+export const updateBlogPostTrivia = createAsyncThunk<
+  BlogPostTriviaEntry,
+  BlogPostTriviaEntry
+>(
   'blogPostTrivia/update',
   async (data: BlogPostTriviaEntry, { rejectWithValue }) => {
     console.log('data entrada updateblogpost trivia', data);
@@ -84,7 +89,6 @@ export const updateBlogPostTrivia = createAsyncThunk<BlogPostTriviaEntry, BlogPo
     }
   }
 );
-
 
 const blogPostTriviaSlice = createSlice({
   name: 'blogPostsTrivia',

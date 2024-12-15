@@ -8,10 +8,10 @@ import {
   fetchBlogPost,
   clearBlogPost,
 } from '../../../../lib/features/blogPosts/blogPostsSlice';
+import { fetchBlogPostTrivia } from '../../../../lib/features/blogPosts/blogPostsTriviaSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import * as S from './styles';
-import { fetchBlogPostTrivia } from '../../../../lib/features/blogPosts/blogPostsTriviaSlice';
 
 function BlogPost() {
   const { tconst: movieId } = useParams();
@@ -67,11 +67,21 @@ function BlogPost() {
           title='Trilha Sonora Original'
           content={data.original_movie_soundtrack}
         />
+        <Section
+          title='Referências'
+          content={renderReferences(data.references)}
+        />
         <Section title='Conclusão' content={data.conclusion} />
         {triviaData && (
           <>
-            <Section title='Histórico do Diretor' content={triviaData.director_history} />
-            <Section title='Citações do Diretor' content={triviaData.director_quotes} />
+            <Section
+              title='Histórico do Diretor'
+              content={triviaData.director_history}
+            />
+            <Section
+              title='Citações do Diretor'
+              content={triviaData.director_quotes}
+            />
             <Section title='Curiosidades' content={triviaData.curiosities} />
             <Section title='Recepção' content={triviaData.reception} />
             <Section title='Destaques' content={triviaData.highlights} />
@@ -83,8 +93,32 @@ function BlogPost() {
   );
 }
 
-// Componente auxiliar para as seções
-function Section({ title, content }: { title: string; content: string }) {
+function renderReferences(references: string[]) {
+  return (
+    <div>
+      {references.map((reference, index) => (
+        <div key={index}>
+          <a
+            href={reference}
+            target='_blank'
+            rel='noopener noreferrer'
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
+            {reference}
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Section({
+  title,
+  content,
+}: {
+  title: string;
+  content: string | JSX.Element;
+}) {
   if (!content) return null;
 
   return (

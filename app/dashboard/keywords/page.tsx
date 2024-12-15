@@ -91,7 +91,9 @@ export default function Page() {
       {error && <div>Error: {error}</div>}
       {!loading && !error && (
         <FavoriteTag
-          keywords={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []}
+          keywords={
+            Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []
+          }
           selectedKeyword={selectedKeyword}
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}

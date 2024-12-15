@@ -1,12 +1,12 @@
 'use client';
 
+import { Input, Button, useToast, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Input, Button, useToast, Text } from '@chakra-ui/react';
 
 import { createBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
-import { searchBlogPosts } from '@/lib/features/blogPosts/searchBlogPostsSlice';
+import { searchBlogPosts } from '../../../lib/features/blogPosts/searchBlogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { RootState } from '../../../lib/store';
 import * as S from './styles';
@@ -49,7 +49,8 @@ export default function BlogPostsPage() {
     if (!movieId) {
       toast({
         title: 'Campo vazio',
-        description: 'Por favor, insira o tconst do filme antes de gerar um post.',
+        description:
+          'Por favor, insira o tconst do filme antes de gerar um post.',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -70,7 +71,8 @@ export default function BlogPostsPage() {
     if (!movieId) {
       toast({
         title: 'Campo vazio',
-        description: 'Por favor, insira o tconst do filme antes de editar um post.',
+        description:
+          'Por favor, insira o tconst do filme antes de editar um post.',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -100,18 +102,27 @@ export default function BlogPostsPage() {
       <br />
       <br />
       <div>
-      <h1>Gere ou edite um post</h1>
+        <h1>Gere ou edite um post</h1>
         <Input
-          type="text"
+          type='text'
           value={movieId}
-          onChange={(e) => setMovieId(e.target.value)}
-          placeholder="Digite o tconst do filme"
+          onChange={e => setMovieId(e.target.value)}
+          placeholder='Digite o tconst do filme'
           mb={4}
         />
-        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme="gray" mr={4}>
+        <Button
+          onClick={handleGeneratePost}
+          isLoading={creating}
+          colorScheme='gray'
+          mr={4}
+        >
           Gerar Post
         </Button>
-        <Button onClick={handleEditPost} isLoading={creating} colorScheme="gray">
+        <Button
+          onClick={handleEditPost}
+          isLoading={creating}
+          colorScheme='gray'
+        >
           Editar Post
         </Button>
       </div>
