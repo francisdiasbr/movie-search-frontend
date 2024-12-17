@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import MediaCard from '../../../../app/ui/Cards/MediaCard';
-import GoBack from '../../../../app/ui/GoBack';
+import GoBack from '../../../ui/GoBack';
 import { postDirector } from '../../../../lib/features/directors/directorsSlice';
 import {
   postKeyword,

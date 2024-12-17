@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-import GoBack from '../../../../app/ui/GoBack';
+import GoBack from '../../../ui/GoBack';
 import {
   fetchBlogPost,
   clearBlogPost,
@@ -69,7 +69,7 @@ function BlogPost() {
         />
         <Section
           title='Referências'
-          content={renderReferences(data.references)}
+          content={renderReferences(data.references) || null}
         />
         <Section title='Conclusão' content={data.conclusion} />
         {triviaData && (
@@ -93,9 +93,11 @@ function BlogPost() {
   );
 }
 
-function renderReferences(references: string[]) {
+function renderReferences(references: string[] | null) {
+  if (!references) return null;
+
   return (
-    <div>
+    <>
       {references.map((reference, index) => (
         <div key={index}>
           <a
@@ -108,7 +110,7 @@ function renderReferences(references: string[]) {
           </a>
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -117,7 +119,7 @@ function Section({
   content,
 }: {
   title: string;
-  content: string | JSX.Element;
+  content: string | JSX.Element | null;
 }) {
   if (!content) return null;
 

@@ -1,20 +1,19 @@
 'use client';
 
 import { Input, Button, Text, useToast, Textarea } from '@chakra-ui/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import GoBack from '../../../../../app/ui/GoBack';
 import {
   fetchBlogPost,
   updateBlogPost,
 } from '../../../../../lib/features/blogPosts/blogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
+import GoBack from '../../../../ui/GoBack';
 import * as S from './styles';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const { tconst } = useParams();
   const tconstString = Array.isArray(tconst) ? tconst[0] : tconst;
   const toast = useToast();
@@ -59,7 +58,7 @@ export default function Page() {
   const handleSave = async () => {
     toast({
       title: 'Salvando...',
-      description: 'Por favor, aguarde enquanto salvamos suas alterações.',
+      description: 'Aguarde enquanto salvamos as alterações.',
       status: 'info',
       duration: 3000,
       isClosable: true,
@@ -107,49 +106,49 @@ export default function Page() {
       <Text fontSize='2xl' as='b'>
         Editar Post
       </Text>
-      <p>Title</p>
+      <strong>Título do Post</strong>
       <Input
         onChange={e => setTitle(e.target.value)}
         type='text'
         value={title}
       />
       <br />
-      <p>Primary Title</p>
+      <p style={{ fontWeight: 'bold' }}>Título Original</p>
       <Input
         onChange={e => setPrimaryTitle(e.target.value)}
         type='text'
         value={primaryTitle}
       />
       <br />
-      <p>Introduction</p>
+      <p style={{ fontWeight: 'bold' }}>Introdução</p>
       <Textarea
         onChange={e => setIntroduction(e.target.value)}
         value={introduction}
         rows={6}
       />
       <br />
-      <p>Stars and Characters</p>
+      <p style={{ fontWeight: 'bold' }}>Elenco e Personagens</p>
       <Textarea
         onChange={e => setStarsAndCharacters(e.target.value)}
         value={starsAndCharacters}
         rows={6}
       />
       <br />
-      <p>Historical Context</p>
+      <p style={{ fontWeight: 'bold' }}>Contexto Histórico</p>
       <Textarea
         onChange={e => setHistoricalContext(e.target.value)}
         value={historicalContext}
         rows={6}
       />
       <br />
-      <p>Cultural Importance</p>
+      <p style={{ fontWeight: 'bold' }}>Importância Cultural</p>
       <Textarea
         onChange={e => setCulturalImportance(e.target.value)}
         value={culturalImportance}
         rows={6}
       />
       <br />
-      <p>Technical Analysis</p>
+      <p style={{ fontWeight: 'bold' }}>Análise Técnica</p>
       <Textarea
         onChange={e => setTechnicalAnalysis(e.target.value)}
         value={technicalAnalysis}
@@ -157,38 +156,38 @@ export default function Page() {
       />
       <br />
       <br />
-      <p>Original Movie Soundtrack</p>
+      <p style={{ fontWeight: 'bold' }}>Trilha Sonora Original</p>
       <Textarea
         onChange={e => setOriginalMovieSoundtrack(e.target.value)}
         value={originalMovieSoundtrack}
         rows={6}
       />
       <br />
-      <p>Conclusion</p>
+      <p style={{ fontWeight: 'bold' }}>Conclusão</p>
       <Textarea
         onChange={e => setConclusion(e.target.value)}
         value={conclusion}
         rows={6}
       />
       <br />
-      <p>Poster URL</p>
+      <p style={{ fontWeight: 'bold' }}>URL do Poster de divulgação do filme</p>
       <Input
         onChange={e => setPosterUrl(e.target.value)}
         type='text'
         value={posterUrl}
       />
       <br />
-      <p>Created At</p>
+      <p style={{ fontWeight: 'bold' }}>Data de Criação</p>
       <Input
         onChange={e => setCreatedAt(e.target.value)}
         type='text'
         value={createdAt}
       />
       <br />
-      <p>References</p>
+      <p style={{ fontWeight: 'bold' }}>Referências</p>
       {references.map((reference, index) => (
-        <div key={index}>
-          <p>Reference {index + 1}</p>
+        <>
+          <p>Referência {index + 1}</p>
           <Input
             onChange={e => {
               const newReferences = [...references];
@@ -197,10 +196,10 @@ export default function Page() {
             }}
             type='text'
             value={reference}
-            style={{ marginBottom: '10px' }}
+            style={{ marginBottom: '24px' }}
           />
           <br />
-        </div>
+        </>
       ))}
       <div style={{ display: 'flex', gap: '10px' }}>
         <Button
