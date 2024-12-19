@@ -13,7 +13,7 @@ import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
 import opinionSlice from './features/opinion/opinionSlice';
 import reviewsSlice from './features/review/reviewsSlice';
 import movieSearchSlice from './features/search/searchSlice';
-
+import uploadImagesSlice from './features/uploadImages/uploadImagesSlice';
 export const makeStore = () => {
   return configureStore({
     reducer: {
@@ -30,14 +30,13 @@ export const makeStore = () => {
       moviesSearch: movieSearchSlice,
       opinion: opinionSlice,
       searchBlogPost: searchBlogPostSlice,
+      uploadImages: uploadImagesSlice,
     },
   });
 };
-
 
 export type AppDispatch = AppStore['dispatch'];
 
 export type AppStore = ReturnType<typeof makeStore>;
 
 export type RootState = ReturnType<AppStore['getState']>;
-

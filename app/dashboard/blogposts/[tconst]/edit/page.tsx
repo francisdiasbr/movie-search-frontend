@@ -8,6 +8,7 @@ import {
   fetchBlogPost,
   updateBlogPost,
 } from '../../../../../lib/features/blogPosts/blogPostsSlice';
+import { uploadOpinionImage } from '../../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
 import GoBack from '../../../../ui/GoBack';
 import * as S from './styles';
@@ -19,6 +20,10 @@ export default function Page() {
   const toast = useToast();
 
   const { data } = useAppSelector(state => state.blogPosts);
+  const { objectName } = useAppSelector(state => state.uploadImages);
+
+  console.log('objectName', objectName);
+
   const [title, setTitle] = useState('');
   const [primaryTitle, setPrimaryTitle] = useState('');
   const [introduction, setIntroduction] = useState('');
@@ -31,6 +36,7 @@ export default function Page() {
   const [posterUrl, setPosterUrl] = useState('');
   const [createdAt, setCreatedAt] = useState('');
   const [references, setReferences] = useState<string[]>(['', '', '', '', '']);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (tconstString) {
@@ -54,6 +60,23 @@ export default function Page() {
       setReferences(data.references || []);
     }
   }, [data]);
+
+  const handleUploadImage = async () => {
+    if (selectedFile) {
+      await dispatch(
+        uploadOpinionImage({ tconst: tconstString, file: selectedFile })
+      );
+      console.log('objectName', objectName);
+    } else {
+      toast({
+        title: 'Nenhum arquivo selecionado',
+        description: 'Por favor, selecione um arquivo antes de enviar.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handleSave = async () => {
     toast({
@@ -106,6 +129,25 @@ export default function Page() {
       <Text fontSize='2xl' as='b'>
         Editar Post
       </Text>
+
+      <br />
+      <br />
+      <p>Inserir imagens do filme</p>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+        <Input
+          type='file'
+          onChange={e => {
+            if (e.target.files && e.target.files[0]) {
+              setSelectedFile(e.target.files[0]);
+            }
+          }}
+        />
+        <br />
+        <Button onClick={handleUploadImage} colorScheme='blue'>
+          Enviar Foto
+        </Button>
+      </div>
+      <br />
       <strong>Título do Post</strong>
       <Input
         onChange={e => setTitle(e.target.value)}
@@ -196,7 +238,6 @@ export default function Page() {
             }}
             type='text'
             value={reference}
-            style={{ marginBottom: '24px' }}
           />
           <br />
         </>
@@ -208,10 +249,11 @@ export default function Page() {
         >
           Adicionar referência
         </Button>
-        <Button colorScheme='blue' onClick={handleSave}>
-          Salvar
-        </Button>
       </div>
+      <br />
+      <Button colorScheme='blue' onClick={handleSave}>
+        Salvar
+      </Button>
     </S.PageContainer>
   );
 }
