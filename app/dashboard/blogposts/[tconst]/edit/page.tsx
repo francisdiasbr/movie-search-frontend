@@ -1,6 +1,7 @@
 'use client';
 
 import { Input, Button, Text, useToast, Textarea } from '@chakra-ui/react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -8,7 +9,11 @@ import {
   fetchBlogPost,
   updateBlogPost,
 } from '../../../../../lib/features/blogPosts/blogPostsSlice';
-import { uploadOpinionImage } from '../../../../../lib/features/uploadImages/uploadImagesSlice';
+import {
+  fetchAllImageUrls,
+  selectImageUrls,
+  uploadOpinionImage,
+} from '../../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
 import GoBack from '../../../../ui/GoBack';
 import * as S from './styles';
@@ -21,8 +26,9 @@ export default function Page() {
 
   const { data } = useAppSelector(state => state.blogPosts);
   const { objectName } = useAppSelector(state => state.uploadImages);
+  const imageUrls = useAppSelector(selectImageUrls);
 
-  console.log('objectName', objectName);
+  // console.log('objectName', objectName);
 
   const [title, setTitle] = useState('');
   const [primaryTitle, setPrimaryTitle] = useState('');
@@ -41,6 +47,12 @@ export default function Page() {
   useEffect(() => {
     if (tconstString) {
       dispatch(fetchBlogPost(tconstString));
+    }
+  }, [dispatch, tconstString]);
+
+  useEffect(() => {
+    if (typeof tconstString === 'string') {
+      dispatch(fetchAllImageUrls({ tconst: tconstString }));
     }
   }, [dispatch, tconstString]);
 
@@ -129,7 +141,18 @@ export default function Page() {
       <Text fontSize='2xl' as='b'>
         Editar Post
       </Text>
-
+      <div>
+        {imageUrls.map((url, index) => (
+          <Image
+            key={index}
+            src={url}
+            alt={`Imagem ${index + 1}`}
+            width={406}
+            height={295}
+            layout='fixed'
+          />
+        ))}
+      </div>
       <br />
       <br />
       <p>Inserir imagens do filme</p>
@@ -254,6 +277,18 @@ export default function Page() {
       <Button colorScheme='blue' onClick={handleSave}>
         Salvar
       </Button>
+      <div>
+        {imageUrls.map((url, index) => (
+          <Image
+            key={index}
+            src={url}
+            alt={`Imagem ${index + 1}`}
+            width={406}
+            height={295}
+            layout='fixed'
+          />
+        ))}
+      </div>
     </S.PageContainer>
   );
 }
