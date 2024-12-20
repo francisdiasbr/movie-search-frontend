@@ -5,8 +5,6 @@ import './globals.css';
 import { ChakraProvider } from './providers';
 import StoreProvider from './StoreProvider';
 
-// const inter = Inter({ subsets: ['latin'], weight: ['400', '600', '700'] });
-
 export const metadata: Metadata = {
   description: 'Custom admin panel for Movie Search',
   title: 'The Movie Search',

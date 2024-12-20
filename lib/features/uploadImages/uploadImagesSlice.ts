@@ -8,6 +8,7 @@ interface UploadImageState {
   objectName: string | null;
   imageUrl: string | null;
   imageUrls: string[];
+  imageNames: string[];
 }
 
 const initialState: UploadImageState = {
@@ -16,6 +17,7 @@ const initialState: UploadImageState = {
   objectName: null,
   imageUrl: null,
   imageUrls: [],
+  imageNames: [],
 };
 
 export const uploadOpinionImage = createAsyncThunk<
@@ -74,14 +76,20 @@ export const fetchPublicImageUrl = createAsyncThunk<
 );
 
 export const fetchAllImageUrls = createAsyncThunk<
-  { urls: string[] },
+  { urls: string[]; names: string[] },
   { tconst: string }
 >('uploadImages/fetchAllImageUrls', async ({ tconst }, { rejectWithValue }) => {
   try {
     const response = await baseService.get(
       `personal-opinion/get-all-image-urls/${tconst}`
     );
-    return response;
+
+    const urls = response.images.map((image: { url: string }) => image.url);
+    const names = response.images.map(
+      (image: { filename: string }) => image.filename
+    );
+
+    return { urls, names };
   } catch (error) {
     console.error('Error fetching all image URLs:', error);
     if (error instanceof Error) {
@@ -91,6 +99,28 @@ export const fetchAllImageUrls = createAsyncThunk<
     }
   }
 });
+
+export const deleteImage = createAsyncThunk<
+  void,
+  { tconst: string; filename: string }
+>(
+  'uploadImages/deleteImage',
+  async ({ tconst, filename }, { rejectWithValue }) => {
+    try {
+      await baseService.delete(
+        `personal-opinion/delete-image/${tconst}/${filename}`
+      );
+      console.log(`Imagem ${filename} deletada com sucesso.`);
+    } catch (error) {
+      console.error('Erro ao deletar imagem:', error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue('An unexpected error occurred');
+      }
+    }
+  }
+);
 
 const uploadImagesSlice = createSlice({
   name: 'uploadImages',
@@ -105,6 +135,10 @@ const uploadImagesSlice = createSlice({
       .addCase(uploadOpinionImage.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.objectName = action.payload.object_name;
+        console.log(
+          'Nome do objeto (imagem) no slice:',
+          action.payload.object_name
+        );
       })
       .addCase(uploadOpinionImage.rejected, (state, action) => {
         state.status = 'failed';
@@ -129,8 +163,22 @@ const uploadImagesSlice = createSlice({
       .addCase(fetchAllImageUrls.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.imageUrls = action.payload.urls;
+        state.imageNames = action.payload.names;
+        console.log('Nomes das imagens no slice:', action.payload.names);
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      })
+      .addCase(deleteImage.pending, state => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(deleteImage.fulfilled, state => {
+        state.status = 'succeeded';
+        state.error = null;
+      })
+      .addCase(deleteImage.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
@@ -142,5 +190,8 @@ export const selectImageUrl = (state: { uploadImages: UploadImageState }) =>
 
 export const selectImageUrls = (state: { uploadImages: UploadImageState }) =>
   state.uploadImages.imageUrls;
+
+export const selectImageNames = (state: { uploadImages: UploadImageState }) =>
+  state.uploadImages.imageNames;
 
 export default uploadImagesSlice.reducer;

@@ -13,6 +13,8 @@ import {
   fetchAllImageUrls,
   selectImageUrls,
   uploadOpinionImage,
+  selectImageNames,
+  deleteImage,
 } from '../../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
 import GoBack from '../../../../ui/GoBack';
@@ -27,6 +29,7 @@ export default function Page() {
   const { data } = useAppSelector(state => state.blogPosts);
   const { objectName } = useAppSelector(state => state.uploadImages);
   const imageUrls = useAppSelector(selectImageUrls);
+  const imageNames = useAppSelector(selectImageNames);
 
   // console.log('objectName', objectName);
 
@@ -73,12 +76,49 @@ export default function Page() {
     }
   }, [data]);
 
+  useEffect(() => {
+    console.log('Nomes das imagens:', imageNames);
+  }, [imageNames]);
+
   const handleUploadImage = async () => {
     if (selectedFile) {
-      await dispatch(
-        uploadOpinionImage({ tconst: tconstString, file: selectedFile })
-      );
-      console.log('objectName', objectName);
+      const loadingToastId = toast({
+        title: 'Enviando imagem...',
+        description: 'Aguarde enquanto a imagem é enviada.',
+        status: 'info',
+        duration: null,
+        isClosable: true,
+      });
+
+      try {
+        const result = await dispatch(
+          uploadOpinionImage({ tconst: tconstString, file: selectedFile })
+        ).unwrap();
+
+        console.log('Nome do objeto (imagem):', result.object_name);
+
+        toast.close(loadingToastId);
+
+        toast({
+          title: 'Sucesso!',
+          description: 'A imagem foi enviada com sucesso.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+
+        dispatch(fetchAllImageUrls({ tconst: tconstString }));
+      } catch (error) {
+        toast.close(loadingToastId);
+
+        toast({
+          title: 'Erro ao enviar',
+          description: 'Ocorreu um erro ao tentar enviar a imagem.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } else {
       toast({
         title: 'Nenhum arquivo selecionado',
@@ -90,10 +130,34 @@ export default function Page() {
     }
   };
 
+  const handleDeleteImage = async (filename: string) => {
+    try {
+      await dispatch(deleteImage({ tconst: tconstString, filename })).unwrap();
+      toast({
+        title: 'Imagem deletada',
+        description: `A imagem ${filename} foi deletada com sucesso.`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // Atualiza a lista de imagens após a exclusão
+      dispatch(fetchAllImageUrls({ tconst: tconstString }));
+    } catch (error) {
+      toast({
+        title: 'Erro ao deletar',
+        description: 'Ocorreu um erro ao tentar deletar a imagem.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   const handleSave = async () => {
     toast({
-      title: 'Salvando...',
-      description: 'Aguarde enquanto salvamos as alterações.',
+      title: 'Salvando',
+      description: 'Salvando as alterações.',
       status: 'info',
       duration: 3000,
       isClosable: true,
@@ -138,24 +202,29 @@ export default function Page() {
   return (
     <S.PageContainer>
       <GoBack />
-      <Text fontSize='2xl' as='b'>
-        Editar Post
-      </Text>
+      <h1>Editar Post</h1>
       <div>
         {imageUrls.map((url, index) => (
-          <Image
-            key={index}
-            src={url}
-            alt={`Imagem ${index + 1}`}
-            width={406}
-            height={295}
-            layout='fixed'
-          />
+          <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Image
+              src={url}
+              alt={`Imagem ${index + 1}`}
+              width={406}
+              height={295}
+              layout='fixed'
+            />
+            <Button
+              onClick={() => handleDeleteImage(imageNames[index])}
+              colorScheme='red'
+            >
+              Deletar
+            </Button>
+          </div>
         ))}
       </div>
       <br />
       <br />
-      <p>Inserir imagens do filme</p>
+      <h2>Inserir imagens do filme</h2>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
         <Input
           type='file'
@@ -167,53 +236,53 @@ export default function Page() {
         />
         <br />
         <Button onClick={handleUploadImage} colorScheme='blue'>
-          Enviar Foto
+          Enviar
         </Button>
       </div>
       <br />
-      <strong>Título do Post</strong>
+      <h2>Título do Post</h2>
       <Input
         onChange={e => setTitle(e.target.value)}
         type='text'
         value={title}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Título Original</p>
+      <h2>Título Original</h2>
       <Input
         onChange={e => setPrimaryTitle(e.target.value)}
         type='text'
         value={primaryTitle}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Introdução</p>
+      <h2>Introdução</h2>
       <Textarea
         onChange={e => setIntroduction(e.target.value)}
         value={introduction}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Elenco e Personagens</p>
+      <h2>Elenco e Personagens</h2>
       <Textarea
         onChange={e => setStarsAndCharacters(e.target.value)}
         value={starsAndCharacters}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Contexto Histórico</p>
+      <h2>Contexto Histórico</h2>
       <Textarea
         onChange={e => setHistoricalContext(e.target.value)}
         value={historicalContext}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Importância Cultural</p>
+      <h2>Importância Cultural</h2>
       <Textarea
         onChange={e => setCulturalImportance(e.target.value)}
         value={culturalImportance}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Análise Técnica</p>
+      <h2>Análise Técnica</h2>
       <Textarea
         onChange={e => setTechnicalAnalysis(e.target.value)}
         value={technicalAnalysis}
@@ -221,38 +290,38 @@ export default function Page() {
       />
       <br />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Trilha Sonora Original</p>
+      <h2>Trilha Sonora Original</h2>
       <Textarea
         onChange={e => setOriginalMovieSoundtrack(e.target.value)}
         value={originalMovieSoundtrack}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Conclusão</p>
+      <h2>Conclusão</h2>
       <Textarea
         onChange={e => setConclusion(e.target.value)}
         value={conclusion}
         rows={6}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>URL do Poster de divulgação do filme</p>
+      <h2>URL do Poster de divulgação do filme</h2>
       <Input
         onChange={e => setPosterUrl(e.target.value)}
         type='text'
         value={posterUrl}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Data de Criação</p>
+      <h2>Data de Criação</h2>
       <Input
         onChange={e => setCreatedAt(e.target.value)}
         type='text'
         value={createdAt}
       />
       <br />
-      <p style={{ fontWeight: 'bold' }}>Referências</p>
+      <h2>Referências</h2>
       {references.map((reference, index) => (
         <>
-          <p>Referência {index + 1}</p>
+          <h3>Referência {index + 1}</h3>
           <Input
             onChange={e => {
               const newReferences = [...references];
@@ -277,18 +346,6 @@ export default function Page() {
       <Button colorScheme='blue' onClick={handleSave}>
         Salvar
       </Button>
-      <div>
-        {imageUrls.map((url, index) => (
-          <Image
-            key={index}
-            src={url}
-            alt={`Imagem ${index + 1}`}
-            width={406}
-            height={295}
-            layout='fixed'
-          />
-        ))}
-      </div>
     </S.PageContainer>
   );
 }
