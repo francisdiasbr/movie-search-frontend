@@ -7,6 +7,7 @@ const nextConfig = {
         hostname: 'github.com',
       },
     ],
+    domains: ['themoviesearch.s3.us-east-2.amazonaws.com'],
   },
 };
 

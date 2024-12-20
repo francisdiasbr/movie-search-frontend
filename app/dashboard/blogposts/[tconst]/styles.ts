@@ -4,6 +4,31 @@ export const Container = styled.div`
   max-width: 4xl;
   margin: 0 auto;
   padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+`;
+
+export const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ContentColumn = styled.div`
+  width: 62%;
+  padding-right: 1rem;
+`;
+
+export const ImageColumn = styled.div`
+  width: 36%;
+  padding-left: 1rem;
+
+  img {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 `;
 
 export const FlexContainer = styled.div`
@@ -14,7 +39,6 @@ export const FlexContainer = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  align-items: start;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;

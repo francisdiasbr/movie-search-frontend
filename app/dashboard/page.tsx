@@ -1,17 +1,13 @@
-import { Text } from '@chakra-ui/react';
-
 const DashboardPage = () => {
   return (
     <>
-      <Text fontSize='3xl' as='b'>
-        Bem-vindo(a) ao The Movie Search!
-      </Text>
+      <h1>Bem-vindo(a) ao The Movie Search!</h1>
       <br />
       <br />
-      <Text fontSize='2xl'>
+      <h2>
         🎥 Pesquisar Filme: Busque pelos filmes que deseja incluir na lista de
         favoritos
-      </Text>
+      </h2>
       <br />
       <p>
         <b>Pesquise</b> por filmes consultando no banco de dados do Internet
@@ -26,9 +22,7 @@ const DashboardPage = () => {
       <br />
       <br />
       <br />
-      <Text fontSize='2xl'>
-        🍿 Favoritos: Faça a sua curadoria única de filmes
-      </Text>
+      <h2>🍿 Favoritos: Faça a sua curadoria única de filmes</h2>
       <br />
       <p>
         <b>Descubra e salve seus filmes favoritos</b>
@@ -48,7 +42,7 @@ const DashboardPage = () => {
       <br />
       <br />
       <br />
-      <Text fontSize='2xl'>📑 Blog Posts</Text>
+      <h2>📑 Blog Posts</h2>
       <br />
       <p>Gere e leia artigos sobre os filmes favoritos assistidos</p>
     </>
