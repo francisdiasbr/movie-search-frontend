@@ -3,10 +3,7 @@
 import { Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-import {
-  addFavorite,
-  resetAddStatus,
-} from '../../../lib/features/movie/movieDetailsSlice';
+import { addFavorite, resetAddStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { searchMovie } from '../../../lib/features/search/searchSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import Search from '../../ui/Search';
@@ -15,9 +12,7 @@ import { columnData } from './columnData';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
-  const { entries, total_documents } = useAppSelector(
-    state => state.moviesSearch
-  );
+  const { entries, total_documents } = useAppSelector(state => state.moviesSearch);
   const { addStatus } = useAppSelector(state => state.moviesDetails);
   const toast = useToast();
 
@@ -88,11 +83,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>
-        Pesquisar Filme
-      </Text>
-      <br />
-      <br />
+      <h2>Pesquisar Filme</h2>
       <Search
         isLoading={isLoading}
         handleSearch={handleSearch}

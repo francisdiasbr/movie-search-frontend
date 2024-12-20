@@ -20,16 +20,8 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import {
-  editDetails,
-  fetchDetails,
-  resetEditStatus,
-} from '../../../../../lib/features/movie/movieDetailsSlice';
-import {
-  submitOpinion,
-  selectOpinionStatus,
-  selectOpinionError,
-} from '../../../../../lib/features/opinion/opinionSlice';
+import { editDetails, fetchDetails, resetEditStatus } from '../../../../../lib/features/movie/movieDetailsSlice';
+import { submitOpinion, selectOpinionStatus, selectOpinionError } from '../../../../../lib/features/opinion/opinionSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
 import * as S from './styles';
 
@@ -83,8 +75,7 @@ export default function Page() {
     if (editStatus === 'failed') {
       toast({
         title: 'Erro ao atualizar',
-        description:
-          data?.error || 'Não foi possível atualizar os detalhes do filme',
+        description: data?.error || 'Não foi possível atualizar os detalhes do filme',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -118,9 +109,7 @@ export default function Page() {
 
   const handleSubmitOpinion = () => {
     if (!tconst || Array.isArray(tconst)) {
-      console.error(
-        'tconst is undefined or is an array! Cannot submit opinion without a valid tconst.'
-      );
+      console.error('tconst is undefined or is an array! Cannot submit opinion without a valid tconst.');
       return;
     }
 
@@ -155,44 +144,21 @@ export default function Page() {
       <S.BackButton onClick={() => router.back()}>
         <Icon fontSize={24} icon={arrowLeft} />
       </S.BackButton>
-      <Text fontSize='2xl' as='b'>
-        Editar Filme
-      </Text>
+      <h2>Editar Filme</h2>
       <p>IMDB ID (tconst)</p>
-      <Input
-        isReadOnly
-        type='text'
-        value={data?.tconst}
-        bg='gray.100'
-        cursor='not-allowed'
-        _hover={{ bg: 'gray.100' }}
-      />
+      <Input isReadOnly type='text' value={data?.tconst} bg='gray.100' cursor='not-allowed' _hover={{ bg: 'gray.100' }} />
       <br />
       <p>Original title</p>
-      <Input
-        isReadOnly
-        type='text'
-        value={originalTitle}
-        bg='gray.100'
-        cursor='not-allowed'
-        _hover={{ bg: 'gray.100' }}
-      />
+      <Input isReadOnly type='text' value={originalTitle} bg='gray.100' cursor='not-allowed' _hover={{ bg: 'gray.100' }} />
       <br />
       <p>Soundtrack</p>
-      <Input
-        onChange={e => setSoundtrack(e.target.value)}
-        type='text'
-        value={soundtrack}
-      />
+      <Input onChange={e => setSoundtrack(e.target.value)} type='text' value={soundtrack} />
       <br />
       <p>Wiki</p>
       <Input onChange={e => setWiki(e.target.value)} type='text' value={wiki} />
       <br />
       <p>Watched</p>
-      <Checkbox
-        isChecked={watched}
-        onChange={e => setWatched(e.target.checked)}
-      >
+      <Checkbox isChecked={watched} onChange={e => setWatched(e.target.checked)}>
         Watched
       </Checkbox>
       <br />
@@ -212,17 +178,9 @@ export default function Page() {
           <ModalCloseButton />
           <ModalBody>
             <p>Rate</p>
-            <Input
-              type='text'
-              value={rate}
-              onChange={e => setRate(e.target.value)}
-            />
+            <Input type='text' value={rate} onChange={e => setRate(e.target.value)} />
             <p>Opinion</p>
-            <Input
-              type='text'
-              value={opinion}
-              onChange={e => setOpinion(e.target.value)}
-            />
+            <Input type='text' value={opinion} onChange={e => setOpinion(e.target.value)} />
           </ModalBody>
           <ModalFooter>
             <Button colorScheme='blue' onClick={handleSubmitOpinion}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Input, Button, Text, useToast, Textarea } from '@chakra-ui/react';
+import { Input, Button, useToast, Textarea } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -76,9 +76,9 @@ export default function Page() {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log('Nomes das imagens:', imageNames);
-  }, [imageNames]);
+  // useEffect(() => {
+  //   console.log('Nomes das imagens:', imageNames);
+  // }, [imageNames]);
 
   const handleUploadImage = async () => {
     if (selectedFile) {
@@ -95,7 +95,7 @@ export default function Page() {
           uploadOpinionImage({ tconst: tconstString, file: selectedFile })
         ).unwrap();
 
-        console.log('Nome do objeto (imagem):', result.object_name);
+        // console.log('Nome do objeto (imagem):', result.object_name);
 
         toast.close(loadingToastId);
 
@@ -107,6 +107,7 @@ export default function Page() {
           isClosable: true,
         });
 
+        // Atualiza a lista de imagens após o upload
         dispatch(fetchAllImageUrls({ tconst: tconstString }));
       } catch (error) {
         toast.close(loadingToastId);
@@ -159,7 +160,7 @@ export default function Page() {
       title: 'Salvando',
       description: 'Salvando as alterações.',
       status: 'info',
-      duration: 3000,
+      duration: 1000,
       isClosable: true,
     });
 

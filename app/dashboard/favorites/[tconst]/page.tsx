@@ -5,15 +5,11 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import MediaCard from '../../../../app/ui/Cards/MediaCard';
-import GoBack from '../../../ui/GoBack';
 import { postDirector } from '../../../../lib/features/directors/directorsSlice';
-import {
-  postKeyword,
-  getKeywords,
-  deleteKeyword,
-} from '../../../../lib/features/keywords/keywordsSlice';
+import { postKeyword, getKeywords, deleteKeyword } from '../../../../lib/features/keywords/keywordsSlice';
 import { fetchDetails } from '../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import GoBack from '../../../ui/GoBack';
 import FavoriteTag from './components/FavoriteTag';
 import * as S from './styles';
 
@@ -58,9 +54,7 @@ export default function MovieDetailsPage() {
     });
   };
 
-  const plotKeywords = Array.isArray(data.plot_keywords)
-    ? data.plot_keywords
-    : [];
+  const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
 
   const formatQuote = (quote: string) => {
     return quote.split(/(?<=\.\s)|(?<=:\s)/).map((line, index) => {
@@ -73,9 +67,7 @@ export default function MovieDetailsPage() {
   };
 
   const handleKeywordClick = async (keyword: string) => {
-    setSelectedKeyword(prevKeyword =>
-      prevKeyword === keyword ? null : keyword
-    );
+    setSelectedKeyword(prevKeyword => (prevKeyword === keyword ? null : keyword));
 
     if (selectedKeyword !== keyword) {
       const resultAction = await dispatch(postKeyword(keyword));
@@ -93,10 +85,7 @@ export default function MovieDetailsPage() {
       } else {
         toast({
           title: 'Erro ao adicionar palavra-chave.',
-          description:
-            typeof resultAction.payload === 'string'
-              ? resultAction.payload
-              : 'Ocorreu um erro ao adicionar a palavra-chave.',
+          description: typeof resultAction.payload === 'string' ? resultAction.payload : 'Ocorreu um erro ao adicionar a palavra-chave.',
           status: 'error',
           duration: 3000,
           isClosable: true,
@@ -126,10 +115,7 @@ export default function MovieDetailsPage() {
     } else {
       toast({
         title: 'Erro ao adicionar diretor.',
-        description:
-          typeof resultAction.payload === 'string'
-            ? resultAction.payload
-            : 'Ocorreu um erro ao adicionar o diretor.',
+        description: typeof resultAction.payload === 'string' ? resultAction.payload : 'Ocorreu um erro ao adicionar o diretor.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -140,95 +126,95 @@ export default function MovieDetailsPage() {
   return (
     <S.PageContainer>
       <GoBack centerText={data.originalTitle} />
-      <Box mb={4}>
-        <Text fontWeight='bold'>Original title:</Text>
-        <Text>{data.originalTitle}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Primary title:</Text>
-        <Text>{data.primaryTitle}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Watched:</Text>
-        <Tag colorScheme={data.watched ? 'green' : 'red'}>
-          {data.watched ? 'Já vi' : 'Não vi'}
-        </Tag>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Director:</Text>
-        <Text
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Original title:</h3>
+        <p>{data.originalTitle}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Primary title:</h3>
+        <p>{data.primaryTitle}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Watched:</h3>
+        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Director:</h3>
+        <button
           onClick={() => handleDirectorClick(data.director)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleDirectorClick(data.director);
+            }
+          }}
           style={{
             cursor: 'pointer',
             textDecoration: 'underline',
             color: 'blue',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            font: 'inherit',
           }}
         >
           {data.director}
-        </Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Writers:</Text>
-        <Text>
-          {data.writers && data.writers.length > 0
-            ? data.writers.join(', ')
-            : 'N/A'}
-        </Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Stars:</Text>
-        <Text>{data.stars.join(', ')}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Country:</Text>
-        <Text>{data.country}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Year:</Text>
-        <Text>{data.startYear}</Text>
-      </Box>
-      <Box mb={4}>
+        </button>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Writers:</h3>
+        <p>{data.writers && data.writers.length > 0 ? data.writers.join(', ') : 'N/A'}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Stars:</h3>
+        <p>{data.stars.join(', ')}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Country:</h3>
+        <p>{data.country}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Year:</h3>
+        <p>{data.startYear}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
         <Text fontWeight='bold'>Plot:</Text>
-        <Text>{data.plot}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Genres:</Text>
-        <Text>{data.genres.join(', ')}</Text>
-      </Box>
-      <Text fontWeight='bold'>Plot keywords:</Text>
-      <FavoriteTag
-        keywords={plotKeywords}
-        selectedKeyword={selectedKeyword}
-        onKeywordClick={handleKeywordClick}
-        onKeywordDelete={handleKeywordDelete}
-        existingKeywords={existingKeywords}
+        <p>{data.plot}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Genres:</h3>
+        <p>{data.genres.join(', ')}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Plot keywords:</h3>
+        <FavoriteTag
+          keywords={plotKeywords}
+          selectedKeyword={selectedKeyword}
+          onKeywordClick={handleKeywordClick}
+          onKeywordDelete={handleKeywordDelete}
+          existingKeywords={existingKeywords}
       />
-      <Box mb={4} mt={4}>
-        <Text fontWeight='bold'>Wiki:</Text>
-        <Text>
-          <a
-            href={data.wiki}
-            target='_blank'
-            rel='noopener noreferrer'
-            style={{ textDecoration: 'underline', color: 'blue' }}
-          >
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Wiki:</h3>
+        <p>
+          <a href={data.wiki} target='_blank' rel='noopener noreferrer' style={{ textDecoration: 'underline', color: 'blue' }}>
             {data.wiki}
           </a>
-        </Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Trivia:</Text>
-        <Text>
+        </p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Trivia:</h3>
+        <p>
           <ul>{sanitizeTrivia(data.trivia)}</ul>
-        </Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Quote:</Text>
-        <Text>{formatQuote(data.quote)}</Text>
-      </Box>
-      <Box mb={4}>
-        <Text fontWeight='bold'>Magnet Link:</Text>
-        <Text style={{ wordBreak: 'break-all' }}>
+        </p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Quote:</h3>
+        <p>{formatQuote(data.quote)}</p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Magnet Link:</h3>
+        <p style={{ wordBreak: 'break-all' }}>
           <a
             href={encodeURI(data.magnet_link)}
             onClick={e => {
@@ -239,8 +225,8 @@ export default function MovieDetailsPage() {
           >
             {data.magnet_link}
           </a>
-        </Text>
-      </Box>
+        </p>
+      </div>
       <br />
       <MediaCard spotifyUrl={data.soundtrack} />
     </S.PageContainer>

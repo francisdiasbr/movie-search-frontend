@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Tag, Text } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { getDirectors } from '../../../lib/features/directors/directorsSlice';
@@ -8,11 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const {
-    data: directors = [],
-    loading: directorsLoading,
-    error: directorsError,
-  } = useAppSelector(state => state.directors);
+  const { data: directors = [], loading: directorsLoading, error: directorsError } = useAppSelector(state => state.directors);
 
   useEffect(() => {
     dispatch(getDirectors());
@@ -20,23 +16,21 @@ export default function Page() {
 
   return (
     <div>
-      <Text fontSize='2xl' as='b'>
-        Directors
-      </Text>
+      <h2>Directors</h2>
       <br />
       <br />
       {directorsLoading && <div>Carregando...</div>}
       {directorsError && <div>Error: {directorsError}</div>}
       {!directorsLoading && !directorsError && (
         <>
-          <Box>
+          <div>
             {directors.map((director, index) => (
               <Tag key={index} colorScheme='red' mr={2} mb={2}>
                 {director.director}
               </Tag>
             ))}
-          </Box>
-          <Box mt={4}>
+          </div>
+          <div style={{ marginTop: '10px' }}>
             {directors.map((director, index) => (
               <div key={index}>
                 {Array.isArray(director.filmography) &&
@@ -47,7 +41,7 @@ export default function Page() {
                   ))}
               </div>
             ))}
-          </Box>
+          </div>
         </>
       )}
     </div>

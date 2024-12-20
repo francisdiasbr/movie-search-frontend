@@ -1,6 +1,6 @@
 'use client';
 
-import { Input, Button, useToast, Text } from '@chakra-ui/react';
+import { Input, Button, useToast } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -16,12 +16,8 @@ export default function BlogPostsPage() {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-  const { data, loading, error } = useAppSelector(
-    (state: RootState) => state.searchBlogPost
-  );
-  const { loading: creating } = useAppSelector(
-    (state: RootState) => state.blogPosts
-  );
+  const { data, loading, error } = useAppSelector((state: RootState) => state.searchBlogPost);
+  const { loading: creating } = useAppSelector((state: RootState) => state.blogPosts);
   const [query, setQuery] = useState('');
   const [movieId, setMovieId] = useState('');
 
@@ -49,8 +45,7 @@ export default function BlogPostsPage() {
     if (!movieId) {
       toast({
         title: 'Campo vazio',
-        description:
-          'Por favor, insira o tconst do filme antes de gerar um post.',
+        description: 'Por favor, insira o tconst do filme antes de gerar um post.',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -71,8 +66,7 @@ export default function BlogPostsPage() {
     if (!movieId) {
       toast({
         title: 'Campo vazio',
-        description:
-          'Por favor, insira o tconst do filme antes de editar um post.',
+        description: 'Por favor, insira o tconst do filme antes de editar um post.',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -96,33 +90,14 @@ export default function BlogPostsPage() {
 
   return (
     <>
-      <Text fontSize='2xl' as='b'>
-        Blog Posts
-      </Text>
-      <br />
-      <br />
+      <h2>Blog Posts</h2>
       <div>
-        <h1>Gere ou edite um post</h1>
-        <Input
-          type='text'
-          value={movieId}
-          onChange={e => setMovieId(e.target.value)}
-          placeholder='Digite o tconst do filme'
-          mb={4}
-        />
-        <Button
-          onClick={handleGeneratePost}
-          isLoading={creating}
-          colorScheme='gray'
-          mr={4}
-        >
+        <p>Gere ou edite um post</p>
+        <Input type='text' value={movieId} onChange={e => setMovieId(e.target.value)} placeholder='Digite o tconst do filme' mb={4} />
+        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme='gray' mr={4}>
           Gerar Post
         </Button>
-        <Button
-          onClick={handleEditPost}
-          isLoading={creating}
-          colorScheme='gray'
-        >
+        <Button onClick={handleEditPost} isLoading={creating} colorScheme='gray'>
           Editar Post
         </Button>
       </div>
@@ -131,10 +106,7 @@ export default function BlogPostsPage() {
       {!loading && hasEntries && (
         <S.PostsGrid>
           {entries.map(post => (
-            <S.StyledCard
-              key={`${post.tconst}-${post.title}`}
-              onClick={() => handleCardClick(post.tconst)}
-            >
+            <S.StyledCard key={`${post.tconst}-${post.title}`} onClick={() => handleCardClick(post.tconst)}>
               <S.CardContent>
                 <S.CardHeader>
                   <Image

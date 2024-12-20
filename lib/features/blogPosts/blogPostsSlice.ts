@@ -31,30 +31,24 @@ const initialState: BlogPostState = {
   error: null,
 };
 
-export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
-  'blogPost/fetchById',
-  async movieId => {
-    try {
-      const response = await BaseService.get(`generate-blogpost/${movieId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Erro ao buscar o post do blog:', error);
-      throw error;
-    }
+export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>('blogPost/fetchById', async movieId => {
+  try {
+    const response = await BaseService.get(`generate-blogpost/${movieId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar o post do blog:', error);
+    throw error;
   }
-);
+});
 
-export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
-  'blogPost/create',
-  async (movieId: string, { rejectWithValue }) => {
-    try {
-      const response = await BaseService.post(`generate-blogpost/${movieId}`);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || 'An error occurred');
-    }
+export const createBlogPost = createAsyncThunk<BlogPostEntry, string>('blogPost/create', async (movieId: string, { rejectWithValue }) => {
+  try {
+    const response = await BaseService.post(`generate-blogpost/${movieId}`);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data || 'An error occurred');
   }
-);
+});
 
 export const updateBlogPost = createAsyncThunk<BlogPostEntry, BlogPostEntry>(
   'blogPost/update',
@@ -119,8 +113,7 @@ const blogPostSlice = createSlice({
       })
       .addCase(fetchBlogPost.rejected, state => {
         state.loading = false;
-        state.error =
-          'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
+        state.error = 'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
       })
       .addCase(createBlogPost.pending, state => {
         state.loading = true;
@@ -132,8 +125,7 @@ const blogPostSlice = createSlice({
       })
       .addCase(createBlogPost.rejected, state => {
         state.loading = false;
-        state.error =
-          'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
+        state.error = 'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
       })
       .addCase(updateBlogPost.pending, state => {
         state.loading = true;
@@ -145,8 +137,7 @@ const blogPostSlice = createSlice({
       })
       .addCase(updateBlogPost.rejected, state => {
         state.loading = false;
-        state.error =
-          'Falha ao atualizar o post do blog. Por favor, tente novamente mais tarde.';
+        state.error = 'Falha ao atualizar o post do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });

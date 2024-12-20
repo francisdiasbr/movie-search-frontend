@@ -2,32 +2,22 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   max-width: 4xl;
-  margin: 0 auto;
-  padding: 1rem;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-`;
 
-export const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
 export const ContentColumn = styled.div`
   width: 62%;
   padding-right: 1rem;
-`;
 
-export const ImageColumn = styled.div`
-  width: 36%;
-  padding-left: 1rem;
-
-  img {
-    margin-bottom: 30px;
-    margin-top: 30px;
-    margin-left: 20px;
-    margin-right: 20px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding-right: 0;
   }
 `;
 
@@ -38,27 +28,24 @@ export const FlexContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-export const PageContainer = styled.div`
-  border: 1px solid #ccc;
+export const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  width: 100%;
 `;
 
-export const PosterWrapper = styled.div`
-  width: 25%;
-  margin: 0 auto;
-  aspect-ratio: 2 / 3;
-  background-color: #f1f5f9;
-  border-radius: 0.5rem;
-  overflow: hidden;
-`;
+export const ImageColumn = styled.div`
+  width: 36%;
+  padding-left: 1rem;
 
-export const PosterImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  img {
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding-left: 0;
+  }
 `;
 
 export const SectionContainer = styled.div`

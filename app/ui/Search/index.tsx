@@ -45,11 +45,11 @@ const Search = ({
 
   return (
     <>
-      <h1>
+      <p>
         {isFavoritePage
           ? 'Bem-vindo à sua coleção pessoal!'
           : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}
-      </h1>
+      </p>
       <S.SearchContainer>
         <Input
           onChange={e => setSearchTerm(e.target.value)}
@@ -63,18 +63,13 @@ const Search = ({
             <Select
               isClearable
               isSearchable
-              onChange={selectedOption =>
-                setCountry &&
-                setCountry(selectedOption ? selectedOption.value : '')
-              }
+              onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
               options={countryOptions}
               placeholder='Selecione país'
               styles={{
                 container: provided => ({ ...provided, minWidth: '200px' }),
               }}
-              value={
-                countryOptions?.find(option => option.value === country) || null
-              }
+              value={countryOptions?.find(option => option.value === country) || null}
             />
             <Select
               isClearable
@@ -84,17 +79,11 @@ const Search = ({
               styles={{
                 container: provided => ({ ...provided, minWidth: '200px' }),
               }}
-              value={
-                year ? { value: year.toString(), label: year.toString() } : null
-              }
+              value={year ? { value: year.toString(), label: year.toString() } : null}
             />
           </>
         )}
-        <Button
-          isLoading={isLoading}
-          onClick={() => handleSearch()}
-          style={{ width: '150px' }}
-        >
+        <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>
           Pesquisar
         </Button>
       </S.SearchContainer>
