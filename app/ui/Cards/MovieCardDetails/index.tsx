@@ -8,11 +8,7 @@ type MovieCardDetailsProps = {
   wiki: string;
 };
 
-const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
-  quote,
-  wiki,
-}) => {
-
+const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({ quote, wiki }) => {
   const formatQuote = (quote: string) => {
     const lines = quote.split(/(?=\b[A-Z][a-z]*\s[A-Z][a-z]*\s*:)/);
 
@@ -25,11 +21,11 @@ const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
           <td style={{ display: 'block', marginLeft: '20px' }}>
             {dialogue
               ? dialogue
-                .split(/(\[.*?\])/g)
-                .map((part, i) =>
-                  part.startsWith('[') ? <em key={i}>{part}</em> : part
-                ) : 'Quote not available'
-            }
+                  .split(/(\[.*?\])/g)
+                  .map((part, i) =>
+                    part.startsWith('[') ? <em key={i}>{part}</em> : part
+                  )
+              : 'Quote not available'}
           </td>
         </div>
       );

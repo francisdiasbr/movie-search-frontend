@@ -1,63 +1,83 @@
-# movie-search-frontend
+# The Movie Search
 
-Is an aplication centered in the experience of a movie lover.
+É uma aplicação centrada na experiência do amante de cinema.
+
+Backend deste projeto: https://github.com/francisdiasbr/movie-search-backend
+
+O usuário pode pesquisar por filmes, obter informações sobre eles, salvá-los em uma lista de favoritos e editá-los.
+
+![Home](public/home-page.png)
+![Pesquisar Filme](public/search-page.png)
+![Favoritos](public/favorites-page.png)
+![Página de um filme favorito](public/favorite-page.png)
+![Página das postagens](public/blogposts-page.png)
 
 ## Features
 
-### SEARCH MOVIES
+### 1. Pesquisa de Filmes
 
-Search a movie from a complete movie database. As an output, the response provides a populated table containing movies related to the search.
+O usuário pode pesquisar por um filme através do nome do filme ou do código IMDb (ex: tt0111161). O catálogo de filmes é fornecido pelo IMDb e contém a base de dados completa.
 
-In the Movies table you can see the name of the movie, the year that the movie has been produced, the rating, the number of votes,  
-- Save a movie on a ranked watch list
-- Get information about the movie: year, brand, casting, main actors, country
-- Edit a movie
+Como resultado, a resposta fornece uma tabela populada contendo filmes relacionados à pesquisa.
 
+Ao pesquisar por um filme, o usuário pode:
 
+- Ver apenas 3 informações do filme: o nome do filme, o código IMDb o ano de produção.
+- Favoritar um filme em sua coleção de favoritos.
 
-Next:
-- Movie details
+### 2. Coleção de Favoritos
 
-Hear the soundtrack on Spotify
-Watch the movie
-Give a note for the movie
-Write a review
-Save your favorite quotes on movie card
+O usuário tem uma lista de favoritos onde pode:
 
+- Ver todos os filmes favoritos.
+- Editar as informações de um filme favorito (link da Wikipedia e trilha sonora do filme no Spotify).
+- Excluir um filme favorito.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Favoritos](public/favorites_table.png)
 
-## Getting Started
+### 3. Visualização de Filme Favorito
 
-First, run the development server:
+O usuário pode visualizar as informações de um filme favorito:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Nome do filme
+- Código IMDb
+- Diretor
+- País
+- Ano de lançamento
+- Roteiro / Plot
+- Plot Keywords (palavras chaves associadas ao filme)
+- Link do filme na Wikipedia
+- Trivia / Curiosidades (lista de fatos interessantes sobre o filme)
+- Quotes (lista de frases célebres do filme)
+- Trilha sonora do filme (integração com o Spotify)
+- Magnet Link para download do filme
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Rodando a aplicação
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Antes de iniciar a aplicação, é imprescindível que o backend esteja em execução. Você pode encontrar as instruções para configurar e rodar o backend neste repositório: [movie-search-backend](https://github.com/francisdiasbr/movie-search-backend).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Passos para rodar a aplicação:
 
-## Learn More
+1. **Instale as dependências**:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   # ou
+   yarn
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Inicie o servidor de desenvolvimento**:
+   ```bash
+   npm run dev
+   # ou
+   yarn dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Uso de Magnet Links
 
-## Deploy on Vercel
+Esta aplicação permite o uso de magnet links para download de conteúdo. Os magnet links são uma forma de compartilhar arquivos via protocolo BitTorrent, permitindo downloads descentralizados.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Aviso Legal
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Conteúdo**: Certifique-se de que o conteúdo que você está baixando ou compartilhando é legal e não infringe direitos autorais.
+- **Responsabilidade**: A responsabilidade pelo uso de magnet links e pelo conteúdo baixado é exclusivamente do usuário. A aplicação não se responsabiliza por qualquer uso ilegal.

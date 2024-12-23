@@ -1,7 +1,7 @@
 // 'use client';
 
 import NavLinks from '../NavLinks/nav-links';
-import * as S from './styles'
+import * as S from './styles';
 
 export default function SideNav() {
   return (

@@ -4,10 +4,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import TableBody from './Body';
+import Header from './Header';
 import Pagination from './Pagination';
 import * as S from './styles';
 import { TableProps } from './types';
-import Header from './Header';
 
 const Table = ({
   columns,
@@ -21,7 +21,6 @@ const Table = ({
   pageSize,
   totalDocuments,
 }: TableProps) => {
-
   const pathname = usePathname();
   const router = useRouter();
 
@@ -30,7 +29,7 @@ const Table = ({
   useEffect(() => {
     setSortedEntries(entries);
   }, [entries]);
-  
+
   const totalPages = Math.ceil(totalDocuments / pageSize);
 
   const handleView = (tconst: string) => {
@@ -44,7 +43,7 @@ const Table = ({
   return (
     <S.TableContainer>
       <S.StyledTable>
-        <Header 
+        <Header
           columns={columns}
           entries={entries}
           setSortedEntries={setSortedEntries}

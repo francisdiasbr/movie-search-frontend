@@ -1,14 +1,22 @@
 export interface MovieDetailsItem {
+  director: string;
   _id: string;
-  averageRating: number;
-  numVotes: number;
+  country: string;
+  genres: string[];
+  magnet_link: string | null;
+  originalTitle: string;
   plot: string;
+  plot_keywords: string[];
   primaryTitle: string;
   quote: string;
   soundtrack: string;
+  stars: string[];
   startYear: number;
   tconst: string;
+  trivia: string;
+  watched: boolean;
   wiki: string;
+  writers: string[];
 }
 
 export interface MovieDetailsState {
@@ -21,9 +29,9 @@ export interface MovieDetailsState {
 }
 
 export interface EditDetailsPayload {
+  originalTitle: string;
+  soundtrack: string;
   tconst: string;
-  primaryTitle?: string;
-  startYear?: number;
-  soundtrack?: string;
-  wiki?: string;
+  watched: boolean;
+  wiki: string;
 }

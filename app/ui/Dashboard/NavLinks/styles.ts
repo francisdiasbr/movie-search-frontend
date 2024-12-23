@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import Link, { LinkProps } from 'next/link';
+import styled from 'styled-components';
 
 // Excluir `isActive` do LinkProps
 interface StyledLinkProps extends LinkProps {
@@ -7,7 +7,7 @@ interface StyledLinkProps extends LinkProps {
 }
 
 export const StyledLink = styled(Link).withConfig({
-  shouldForwardProp: (prop) => prop !== 'isActive',
+  shouldForwardProp: prop => prop !== 'isActive',
 })<StyledLinkProps>`
   display: flex;
   height: 48px;
@@ -23,10 +23,12 @@ export const StyledLink = styled(Link).withConfig({
   font-weight: 500;
   margin-bottom: 8px;
   color: ${({ theme, isActive }) =>
-    isActive ? theme.colors.primary[600] : 'inherit'};
+    isActive ? theme.colors.primary[50] : 'inherit'};
+
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary[100]};
-    color: ${({ theme }) => theme.colors.primary[600]};
+    background-color: ${({ theme, isActive }) =>
+      isActive ? theme.colors.primary[100] : theme.colors.primary[50]};
+    color: ${({ theme }) => theme.colors.primary[900]};
   }
 
   @media (min-width: 768px) {

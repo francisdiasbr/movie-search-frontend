@@ -3,22 +3,36 @@
 import { Checkbox, Text, Input, Button, Switch, Stack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import {
+  fetchAllAuthoralReviews,
+  clearAuthoralReviewStatus,
+} from '../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
+import {
+  fetchAllGeneratedReviews,
+  clearGenerateReview,
+} from '../../../lib/features/allGenReviews/allGenReviewsSlice';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import ReviewCard from '../../ui/ReviewCard';
 import * as S from './styles';
-import { fetchAllGeneratedReviews, clearGenerateReview } from '@/lib/features/allGenReviews/allGenReviewsSlice';
-import { fetchAllAuthoralReviews, clearAuthoralReviewStatus } from '@/lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
-import ReviewCard from '@/app/ui/ReviewCard';
 
 const ReviewsPage = () => {
   const dispatch = useAppDispatch();
-  const { entries: generatedEntries, status: generatedStatus } = useAppSelector((state) => state.allGenReviews);
-  const { entries: authoralEntries, status: authoralStatus } = useAppSelector((state) => state.allAuthoralReviews);
+  const { entries: generatedEntries, status: generatedStatus } = useAppSelector(
+    state => state.allGenReviews
+  );
+  const { entries: authoralEntries, status: authoralStatus } = useAppSelector(
+    state => state.allAuthoralReviews
+  );
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showGeneratedReviews, setShowGeneratedReviews] = useState(true); // Alterna entre resenhas geradas e autorais
-  const [filters, setFilters] = useState({ primaryTitle: '', author: '', tconst: '' });
+  const [filters, setFilters] = useState({
+    originalTitle: '',
+    author: '',
+    tconst: '',
+  });
 
   // Função para buscar resenhas com base no tipo selecionado
-  const fetchReviews = (type) => {
+  const fetchReviews = (type: boolean) => {
     const params = {
       page: 1,
       pageSize: 10,
@@ -36,9 +50,9 @@ const ReviewsPage = () => {
 
   useEffect(() => {
     fetchReviews(showGeneratedReviews);
-  }, [showAllReviews, filters, showGeneratedReviews]);
+  }, [showAllReviews, filters, showGeneratedReviews, fetchReviews]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({
       ...filters,
       [e.target.name]: e.target.value,
@@ -49,7 +63,7 @@ const ReviewsPage = () => {
     fetchReviews(showGeneratedReviews);
   };
 
-  const handleToggleChange = (e) => {
+  const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isGenerated = e.target.checked;
     setShowGeneratedReviews(isGenerated);
     fetchReviews(isGenerated);
@@ -57,17 +71,19 @@ const ReviewsPage = () => {
 
   return (
     <S.PageContainer>
-      <Text fontSize='2xl' as='b'>Reviews</Text>
+      <Text fontSize='2xl' as='b'>
+        Reviews
+      </Text>
       <p>The reviews for the movie you watched</p>
-      
+
       <Checkbox
         isChecked={showAllReviews}
-        onChange={(e) => setShowAllReviews(e.target.checked)}
+        onChange={e => setShowAllReviews(e.target.checked)}
       >
         Show All Reviews
       </Checkbox>
 
-      <Stack direction="row" alignItems="center" marginY="1rem">
+      <Stack direction='row' alignItems='center' marginY='1rem'>
         <Text>Show Authoral Reviews</Text>
         <Switch
           isChecked={showGeneratedReviews}
@@ -79,8 +95,8 @@ const ReviewsPage = () => {
       {!showAllReviews && (
         <S.FilterContainer>
           <Input
-            placeholder="Filter by Tconst"
-            name="tconst"
+            placeholder='Filter by Tconst'
+            name='tconst'
             value={filters.tconst}
             onChange={handleFilterChange}
           />
@@ -90,11 +106,13 @@ const ReviewsPage = () => {
 
       {showGeneratedReviews ? (
         <>
-          <Text fontSize='1xl' as='b'>Generated Reviews</Text>
+          <Text fontSize='1xl' as='b'>
+            Generated Reviews
+          </Text>
           {generatedEntries.map((entry: any) => (
             <ReviewCard
               key={entry.tconst}
-              primaryTitle={entry.primaryTitle}
+              originalTitle={entry.originalTitle}
               review={entry.review}
               plot={entry.plot}
             />
@@ -102,11 +120,13 @@ const ReviewsPage = () => {
         </>
       ) : (
         <>
-          <Text fontSize='1xl' as='b'>Authoral Reviews</Text>
+          <Text fontSize='1xl' as='b'>
+            Authoral Reviews
+          </Text>
           {authoralEntries.map((entry: any) => (
-            <ReviewCard 
+            <ReviewCard
               key={entry.tconst}
-              primaryTitle={entry.primaryTitle}
+              originalTitle={entry.originalTitle}
               review={entry.review}
             />
           ))}
@@ -114,6 +134,6 @@ const ReviewsPage = () => {
       )}
     </S.PageContainer>
   );
-}
+};
 
 export default ReviewsPage;

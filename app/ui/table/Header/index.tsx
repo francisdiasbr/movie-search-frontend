@@ -1,16 +1,29 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+
 import * as S from './styles';
 
 interface TableHeaderProps {
-  columns: Array<{ key: string; label: string; width?: string, sort?: boolean }>;
+  columns: Array<{
+    key: string;
+    label: string;
+    sort?: boolean;
+    style?: React.CSSProperties;
+  }>;
   entries: any[];
   setSortedEntries: (entries: any[]) => void;
 }
 
-const TableHeader = ({ columns, entries, setSortedEntries }: TableHeaderProps) => {
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: string } | null>(null);
+const TableHeader = ({
+  columns,
+  entries,
+  setSortedEntries,
+}: TableHeaderProps) => {
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  } | null>(null);
 
   useEffect(() => {
     if (sortConfig) {
@@ -29,7 +42,11 @@ const TableHeader = ({ columns, entries, setSortedEntries }: TableHeaderProps) =
 
   const requestSort = (key: string) => {
     let direction = 'ascending';
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === 'ascending'
+    ) {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
@@ -38,17 +55,21 @@ const TableHeader = ({ columns, entries, setSortedEntries }: TableHeaderProps) =
   return (
     <thead>
       <tr>
-        {columns.map((column) => (
+        {columns.map(column => (
           <S.Header
-            key={column.key}
-            width={column.width}
             onClick={column.sort ? () => requestSort(column.key) : undefined}
-            style={{ cursor: column.sort ? 'pointer' : 'default' }}
+            key={column.key}
+            style={{
+              cursor: column.sort ? 'pointer' : 'default',
+              ...column.style,
+            }}
           >
             {column.label}
-            {column.sort && sortConfig?.key === column.key ? (
-              sortConfig.direction === 'ascending' ? ' 🔼' : ' 🔽'
-            ) : null}
+            {column.sort && sortConfig?.key === column.key
+              ? sortConfig.direction === 'ascending'
+                ? ' 🔼'
+                : ' 🔽'
+              : null}
           </S.Header>
         ))}
       </tr>

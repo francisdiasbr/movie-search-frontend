@@ -1,62 +1,92 @@
-'use client';
+import { Button, Input } from '@chakra-ui/react';
+import React from 'react';
+import Select from 'react-select';
 
-import { Button, Input, Select } from '@chakra-ui/react';
-import React from "react";
+import * as S from './styles';
 
 interface SearchProps {
+  country?: string;
+  countryOptions?: { value: string; label: string }[];
+  setCountry?: (value: string) => void;
+  setYear?: (value: number) => void;
   setSearchTerm: (value: string) => void;
   searchTerm: string;
+  showAllFields?: boolean;
   handleSearch: () => void;
   isLoading: boolean;
-  country?: string;
-  setCountry?: (value: string) => void;
+  isFavoritePage?: boolean;
+  year?: number;
+  yearOptions?: { value: string; label: string }[];
+  setTconst?: (value: string) => void;
+  tconst?: string;
 }
 
-const Search = ({ country, setCountry, setSearchTerm, searchTerm, handleSearch, isLoading }: SearchProps) => {
-
+const Search = ({
+  country,
+  countryOptions,
+  isFavoritePage,
+  setCountry,
+  setSearchTerm,
+  searchTerm,
+  handleSearch,
+  isLoading,
+  showAllFields = false,
+  year,
+  setYear,
+  yearOptions,
+  setTconst,
+  tconst,
+}: SearchProps) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
-  }
+  };
 
   return (
     <>
-      <h1>Search movie</h1>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '8px',
-          marginBottom: '16px',
-        }}
-      >
+      <p>
+        {isFavoritePage
+          ? 'Bem-vindo à sua coleção pessoal!'
+          : 'Pesquise um filme por Título Original ou IMDb ID. Ex: Le charme discret de la bourgeoisie, tt0068361'}
+      </p>
+      <S.SearchContainer>
         <Input
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder='Search for movies'
+          onChange={e => setSearchTerm(e.target.value)}
+          placeholder='Pesquisar'
           type='search'
           value={searchTerm}
           onKeyDown={handleKeyDown}
         />
-        {country !== undefined && setCountry && (
-          <Select
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder='Select a country'
-            value={country}
-          >
-            <option value='Brazil'>Brazil</option>
-            <option value='United States'>United States</option>
-            <option value='Italy'>Italy</option>
-          </Select>
+        {showAllFields && (
+          <>
+            <Select
+              isClearable
+              isSearchable
+              onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
+              options={countryOptions}
+              placeholder='Selecione país'
+              styles={{
+                container: provided => ({ ...provided, minWidth: '200px' }),
+              }}
+              value={countryOptions?.find(option => option.value === country) || null}
+            />
+            <Select
+              isClearable
+              onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
+              options={yearOptions}
+              placeholder='Selecione ano'
+              styles={{
+                container: provided => ({ ...provided, minWidth: '200px' }),
+              }}
+              value={year ? { value: year.toString(), label: year.toString() } : null}
+            />
+          </>
         )}
-        <Button
-          isLoading={isLoading}
-          onClick={() => handleSearch()}
-          style={{ width: '150px' }}
-        >
-          Buscar
+        <Button isLoading={isLoading} onClick={() => handleSearch()} style={{ width: '150px' }}>
+          Pesquisar
         </Button>
-      </div>
+      </S.SearchContainer>
     </>
   );
 };

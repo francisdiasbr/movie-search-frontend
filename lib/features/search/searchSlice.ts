@@ -28,6 +28,7 @@ export const searchMovie = createAsyncThunk(
         search_term: params.searchTerm || '',
       };
       const response = await BaseService.post('movies/search', searchBody);
+      console.log('response', response);
 
       if (response && response.entries && Array.isArray(response.entries)) {
         return response;
@@ -42,9 +43,9 @@ export const searchMovie = createAsyncThunk(
 );
 
 const movieSearchSlice = createSlice({
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(searchMovie.pending, (state) => {
+      .addCase(searchMovie.pending, state => {
         state.status = 'loading';
       })
       .addCase(searchMovie.fulfilled, (state, action) => {
@@ -55,7 +56,7 @@ const movieSearchSlice = createSlice({
         state.total_documents = action.payload.total_documents;
         // console.log('searchMovie action.payload:', action.payload);
       })
-      .addCase(searchMovie.rejected, (state) => {
+      .addCase(searchMovie.rejected, state => {
         state.status = 'failed';
         state.error = 'error';
       });

@@ -8,11 +8,12 @@ export const TableContainer = styled.div`
   flex: 1;
   flex-grow: 1;
   width: 100%;
+  overflow-x: auto;
 `;
 
 export const StyledTable = styled.table`
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
   width: 100%;
 `;
 

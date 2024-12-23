@@ -1,11 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import BaseService from "../../api/service";
-import { AuthoralReviewState } from "./types";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import BaseService from '../../api/service';
+import { AuthoralReviewState } from './types';
 
 const initialState: AuthoralReviewState = {
   data: null,
   error: null,
-  status: "idle",
+  status: 'idle',
 };
 
 interface AuthoralReviewProps {
@@ -31,15 +32,19 @@ export const postAuthoralReview = createAsyncThunk(
       const response = await BaseService.post(url, reviewBody);
       return response;
     } catch (error) {
-      console.error("Error generating authoral review:", error);
+      console.error('Error generating authoral review:', error);
 
       // Extrai a mensagem específica da API se existir
-      if ((error as any).response && (error as any).response && (error as any).response.message) {
+      if (
+        (error as any).response &&
+        (error as any).response &&
+        (error as any).response.message
+      ) {
         return rejectWithValue((error as any).response.message);
       } else if (error instanceof Error) {
         return rejectWithValue(error.message);
       } else {
-        return rejectWithValue("An unexpected error occurred");
+        return rejectWithValue('An unexpected error occurred');
       }
     }
   }
@@ -47,27 +52,27 @@ export const postAuthoralReview = createAsyncThunk(
 
 const authoralReviewsSlice = createSlice({
   initialState,
-  name: "authoralReviews",
+  name: 'authoralReviews',
   reducers: {
-    clearState: (state) => {
+    clearState: state => {
       state.data = null;
       state.error = null;
-      state.status = "idle";
-    }
+      state.status = 'idle';
+    },
   },
-  extraReducers: (builder) => {
-    builder.addCase(postAuthoralReview.pending, (state) => {
-      state.status = "loading";
+  extraReducers: builder => {
+    builder.addCase(postAuthoralReview.pending, state => {
+      state.status = 'loading';
     });
     builder.addCase(postAuthoralReview.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.data = action.payload;
     });
     builder.addCase(postAuthoralReview.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload; // Armazena a mensagem de erro específica
     });
-  }
+  },
 });
 
 export const { clearState } = authoralReviewsSlice.actions;

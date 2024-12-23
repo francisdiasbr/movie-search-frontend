@@ -1,13 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import BaseService from "../../api/service";
-import { MovieReviewState } from "./types";
+import BaseService from '../../api/service';
+import { MovieReviewState } from './types';
 
 const initialState: MovieReviewState = {
   data: null,
   entries: [],
   error: null,
-  status: "idle",
+  status: 'idle',
 };
 
 interface FetchAllAuthoralReviewsParams {
@@ -17,9 +17,9 @@ interface FetchAllAuthoralReviewsParams {
 }
 
 export const fetchAllAuthoralReviews = createAsyncThunk(
-  "review/fetchAllAuthoral",
+  'review/fetchAllAuthoral',
   async (params: FetchAllAuthoralReviewsParams, { rejectWithValue }) => {
-    const url = `favorited-movies/write-review/search`;
+    const url = 'favorited-movies/write-review/search';
     try {
       const fetchBody = {
         filters: params.filters || {},
@@ -27,19 +27,19 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
         page_size: params.pageSize,
       };
       console.log('fetchBody allAuthoralReviews', fetchBody);
-      const response = await BaseService.post(url, fetchBody)
+      const response = await BaseService.post(url, fetchBody);
       console.log('response fetchAllAuthoralReviews', response);
       if (response) {
         return response.entries;
       } else {
-        throw new Error("Invalid response format");
+        throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error("Error fetching all Authoral reviews:", error);
+      console.error('Error fetching all Authoral reviews:', error);
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       } else {
-        return rejectWithValue("An unexpected error occurred");
+        return rejectWithValue('An unexpected error occurred');
       }
     }
   }
@@ -47,26 +47,26 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
 
 const allAuthoralReviewsSlice = createSlice({
   initialState,
-  name: "reviews",
+  name: 'reviews',
   reducers: {
     clearAuthoralReviewStatus(state) {
-      state.status = "idle";
+      state.status = 'idle';
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchAllAuthoralReviews.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchAllAuthoralReviews.pending, state => {
+        state.status = 'loading';
       })
       .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = 'succeeded';
         state.entries = action.payload;
         console.log('state.entries', state.entries);
       })
       .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = 'failed';
         state.error = action.payload;
-      })
+      });
   },
 });
 

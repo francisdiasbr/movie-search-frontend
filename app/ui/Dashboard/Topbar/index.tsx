@@ -7,9 +7,11 @@ import * as S from './styles';
 const Topbar = () => {
   return (
     <S.TopBarContainer>
-      <Text fontSize='2xl'>Movie Search</Text>
+      <Text fontSize='4xl' as='b'>
+        The Movie Search
+      </Text>
     </S.TopBarContainer>
   );
-}
+};
 
 export default Topbar;
