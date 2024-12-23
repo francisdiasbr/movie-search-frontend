@@ -10,6 +10,7 @@ O usuário pode pesquisar por filmes, obter informações sobre eles, salvá-los
 ![Pesquisar Filme](public/search-page.png)
 ![Favoritos](public/favorites-page.png)
 ![Página de um filme favorito](public/favorite-page.png)
+![Página das postagens](public/blogposts-page.png)
 
 ## Features
 
@@ -31,6 +32,8 @@ O usuário tem uma lista de favoritos onde pode:
 - Ver todos os filmes favoritos.
 - Editar as informações de um filme favorito (link da Wikipedia e trilha sonora do filme no Spotify).
 - Excluir um filme favorito.
+
+![Favoritos](public/favorites_table.png)
 
 ### 3. Visualização de Filme Favorito
 
