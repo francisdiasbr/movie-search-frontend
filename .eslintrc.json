@@ -25,8 +25,7 @@
     "react",
     "@typescript-eslint",
     "eslint-plugin-import-helpers",
-    "jsx-a11y",
-    "prettier"
+    "jsx-a11y"
   ],
   "settings": {
     "react": {
@@ -34,7 +33,6 @@
     }
   },
   "rules": {
-    // "indent": ["warn", 2, { "SwitchCase": 1 }],
     "no-unused-vars": "off",
     "object-curly-spacing": ["error", "always"],
     "quotes": ["error", "single", { "avoidEscape": true }],
@@ -62,24 +60,24 @@
     "jsx-a11y/heading-has-content": "error",
     "jsx-a11y/interactive-supports-focus": "error",
     "jsx-a11y/no-noninteractive-element-interactions": "error",
-    "prettier/prettier": [
-      "error",
-      {
-        "useTabs": false,
-        "tabWidth": 2,
-        "endOfLine": "auto",
-        "semi": true,
-        "singleQuote": true,
-        "printWidth": 140,
-        "trailingComma": "es5",
-        "bracketSpacing": true,
-        "arrowParens": "avoid",
-        "proseWrap": "preserve",
-        "htmlWhitespaceSensitivity": "css",
-        "vueIndentScriptAndStyle": false,
-        "indent": "off"
-      }
-    ],
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     "useTabs": false,
+    //     "tabWidth": 2,
+    //     "endOfLine": "auto",
+    //     "semi": true,
+    //     "singleQuote": true,
+    //     "printWidth": 140,
+    //     "trailingComma": "es5",
+    //     "bracketSpacing": true,
+    //     "arrowParens": "avoid",
+    //     "proseWrap": "preserve",
+    //     "htmlWhitespaceSensitivity": "css",
+    //     "vueIndentScriptAndStyle": false,
+    //     "indent": "off"
+    //   }
+    // ],
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "off",

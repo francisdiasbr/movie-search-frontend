@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
+import { fetchAllAuthoralReviews } from '../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { createBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
 import { searchBlogPosts } from '../../../lib/features/blogPosts/searchBlogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
@@ -17,6 +18,7 @@ export default function BlogPostsPage() {
   const toast = useToast();
 
   const { data, loading, error } = useAppSelector((state: RootState) => state.searchBlogPost);
+  const { entries: allAuthoralReviews } = useAppSelector((state: RootState) => state.allAuthoralReviews);
   const { loading: creating } = useAppSelector((state: RootState) => state.blogPosts);
   const [query, setQuery] = useState('');
   const [movieId, setMovieId] = useState('');
@@ -39,6 +41,7 @@ export default function BlogPostsPage() {
     console.log('Parâmetros enviados para API:', params);
 
     await dispatch(searchBlogPosts(params));
+    dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
   }, [query, dispatch]);
 
   const handleGeneratePost = async () => {
@@ -79,21 +82,35 @@ export default function BlogPostsPage() {
 
   useEffect(() => {
     handleSearch();
+    dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
   }, []);
 
   const handleCardClick = (tconst: string) => {
-    router.push(`/dashboard/blogposts/${tconst}`);
+    const post = allEntries.find((entry) => entry.tconst === tconst);
+    if (post && post.isAiGenerated === false) {
+      router.push(`/dashboard/reviews/${tconst}`);
+    } else {
+      router.push(`/dashboard/blogposts/${tconst}`);
+    }
   };
 
-  const entries = data?.entries || [];
-  const hasEntries = entries.length > 0;
+  const blogPostEntries = data?.entries || [];
+  const authoralReviewEntries = allAuthoralReviews || [];
+  const allEntries = [...blogPostEntries, ...authoralReviewEntries];
+  const hasEntries = allEntries.length > 0;
 
   return (
     <>
       <h2>Blog Posts</h2>
       <div>
         <p>Gere ou edite um post</p>
-        <Input type='text' value={movieId} onChange={e => setMovieId(e.target.value)} placeholder='Digite o tconst do filme' mb={4} />
+        <Input
+          type='text'
+          value={movieId}
+          onChange={(e) => setMovieId(e.target.value)}
+          placeholder='Digite o tconst do filme'
+          mb={4}
+        />
         <Button onClick={handleGeneratePost} isLoading={creating} colorScheme='gray' mr={4}>
           Gerar Post
         </Button>
@@ -105,8 +122,8 @@ export default function BlogPostsPage() {
       {!loading && !hasEntries && <p>Nenhum post encontrado.</p>}
       {!loading && hasEntries && (
         <S.PostsGrid>
-          {entries.map(post => (
-            <S.StyledCard key={`${post.tconst}-${post.title}`} onClick={() => handleCardClick(post.tconst)}>
+          {allEntries.map((post) => (
+            <S.StyledCard key={`${post.tconst}-${post.primaryTitle}`} onClick={() => handleCardClick(post.tconst)}>
               <S.CardContent>
                 <S.CardHeader>
                   <Image
@@ -118,7 +135,8 @@ export default function BlogPostsPage() {
                       borderRadius: '50%',
                     }}
                   />
-                  <h3>{post.title}</h3>
+                  <h3>{post.primaryTitle}</h3>
+                  <p>{post.tconst}</p>
                 </S.CardHeader>
                 <S.CardDate>{post.created_at}</S.CardDate>
               </S.CardContent>

@@ -40,10 +40,7 @@ export const searchBlogPosts = createAsyncThunk<SearchResponse, SearchParams>(
     }
   ) => {
     try {
-      const response = await BaseService.post(
-        'generate-blogpost/search',
-        params
-      );
+      const response = await BaseService.post('generate-blogpost/search', params);
       return response as SearchResponse;
     } catch (error) {
       console.error('Error searching blog posts:', error);
@@ -56,26 +53,25 @@ const searchBlogPostSlice = createSlice({
   name: 'searchBlogPost',
   initialState,
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(searchBlogPosts.pending, state => {
+      .addCase(searchBlogPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(searchBlogPosts.fulfilled, (state, action) => {
         state.loading = false;
         state.data = {
-          entries: action.payload.entries.map(entry => ({
+          entries: action.payload.entries.map((entry) => ({
             ...entry,
             created_at: formatDate(entry.created_at),
           })),
           total_documents: action.payload.total_documents,
         };
       })
-      .addCase(searchBlogPosts.rejected, state => {
+      .addCase(searchBlogPosts.rejected, (state) => {
         state.loading = false;
-        state.error =
-          'Falha ao buscar posts do blog. Por favor, tente novamente mais tarde.';
+        state.error = 'Falha ao buscar posts do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });

@@ -10,22 +10,31 @@ const initialState: AuthoralReviewState = {
 };
 
 interface AuthoralReviewProps {
-  author: string;
-  title: string;
-  review: string;
+  content: string;
   tconst: string;
-  message?: string;
+  primaryTitle: string;
+  references: string[];
+  isAiGenerated?: boolean;
 }
+
+export const fetchAuthoralReview = createAsyncThunk(
+  'authoralReview/fetchById',
+  async (tconst: string, { rejectWithValue }) => {
+    const url = `write-review/${tconst}`;
+    const response = await BaseService.get(url);
+    return response.entries[0];
+  }
+);
 
 export const postAuthoralReview = createAsyncThunk(
   'authoralReview/create',
   async (review: AuthoralReviewProps, { rejectWithValue }) => {
     const { tconst } = review;
-    const url = `favorited-movies/${tconst}/write-review`;
+    const url = `write-review/${tconst}`;
     const reviewBody = {
-      author: review.author,
-      title: review.title,
-      review: review.review,
+      content: review.content,
+      primaryTitle: review.primaryTitle,
+      references: review.references,
     };
 
     try {
@@ -34,12 +43,7 @@ export const postAuthoralReview = createAsyncThunk(
     } catch (error) {
       console.error('Error generating authoral review:', error);
 
-      // Extrai a mensagem específica da API se existir
-      if (
-        (error as any).response &&
-        (error as any).response &&
-        (error as any).response.message
-      ) {
+      if ((error as any).response && (error as any).response && (error as any).response.message) {
         return rejectWithValue((error as any).response.message);
       } else if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -54,24 +58,36 @@ const authoralReviewsSlice = createSlice({
   initialState,
   name: 'authoralReviews',
   reducers: {
-    clearState: state => {
+    clearState: (state) => {
       state.data = null;
       state.error = null;
       state.status = 'idle';
     },
   },
-  extraReducers: builder => {
-    builder.addCase(postAuthoralReview.pending, state => {
-      state.status = 'loading';
-    });
-    builder.addCase(postAuthoralReview.fulfilled, (state, action) => {
-      state.status = 'succeeded';
-      state.data = action.payload;
-    });
-    builder.addCase(postAuthoralReview.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload; // Armazena a mensagem de erro específica
-    });
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAuthoralReview.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAuthoralReview.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(fetchAuthoralReview.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(postAuthoralReview.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(postAuthoralReview.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(postAuthoralReview.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      });
   },
 });
 

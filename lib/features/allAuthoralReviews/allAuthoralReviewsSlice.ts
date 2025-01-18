@@ -19,7 +19,7 @@ interface FetchAllAuthoralReviewsParams {
 export const fetchAllAuthoralReviews = createAsyncThunk(
   'review/fetchAllAuthoral',
   async (params: FetchAllAuthoralReviewsParams, { rejectWithValue }) => {
-    const url = 'favorited-movies/write-review/search';
+    const url = 'write-review/search';
     try {
       const fetchBody = {
         filters: params.filters || {},
@@ -53,15 +53,14 @@ const allAuthoralReviewsSlice = createSlice({
       state.status = 'idle';
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      .addCase(fetchAllAuthoralReviews.pending, state => {
+      .addCase(fetchAllAuthoralReviews.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.entries = action.payload;
-        console.log('state.entries', state.entries);
       })
       .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
         state.status = 'failed';

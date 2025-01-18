@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  BookmarkIcon,
-  FilmIcon,
-  HomeIcon,
-  MagnifyingGlassIcon,
-  SparklesIcon,
-} from '@heroicons/react/24/outline';
+import { BookmarkIcon, FilmIcon, HomeIcon, MagnifyingGlassIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 
 import * as S from './styles';
@@ -23,7 +17,7 @@ const links = [
   { href: '/dashboard/keywords', icon: BookmarkIcon, name: 'Movie Keywords' },
   { href: '/dashboard/directors', icon: BookmarkIcon, name: 'Directors' },
   { href: '/dashboard/blogposts', icon: SparklesIcon, name: 'Blog Posts' },
-  // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
+  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
   // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
 ];
 

@@ -1,8 +1,10 @@
 export interface MovieReviewResponse {
   review: string;
-  plot: string;
   title: string;
   tconst: string;
+  primaryTitle: string;
+  isAiGenerated: boolean;
+  created_at: string;
 }
 
 export interface MovieReviewState {

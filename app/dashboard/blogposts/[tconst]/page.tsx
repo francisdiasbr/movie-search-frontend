@@ -40,18 +40,18 @@ function BlogPost() {
         <S.ContentColumn>
           <S.FlexContainer>
             <div>
-              <h2>{data.title}</h2>
+              <h2>{data.content.pt.title}</h2>
               <p>{data.created_at}</p>
             </div>
           </S.FlexContainer>
-          <Section title='Introdução' content={data.introduction} />
-          <Section title='Elenco e Personagens' content={data.stars_and_characters} />
-          <Section title='Contexto Histórico' content={data.historical_context} />
-          <Section title='Importância Cultural' content={data.cultural_importance} />
-          <Section title='Análise Técnica' content={data.technical_analysis} />
+          <Section title='Introdução' content={data.content.pt.introduction} />
+          <Section title='Elenco e Personagens' content={data.content.pt.stars_and_characters} />
+          <Section title='Contexto Histórico' content={data.content.pt.historical_context} />
+          <Section title='Importância Cultural' content={data.content.pt.cultural_importance} />
+          <Section title='Análise Técnica' content={data.content.pt.technical_analysis} />
           <Section title='Trilha Sonora Original' content={data.original_movie_soundtrack} />
           <Section title='Referências' content={renderReferences(data.references) || null} />
-          <Section title='Conclusão' content={data.conclusion} />
+          <Section title='Conclusão' content={data.content.pt.conclusion} />
           {triviaData && (
             <>
               <Section title='Histórico do Diretor' content={triviaData.director_history} />
@@ -82,7 +82,12 @@ function renderReferences(references: string[] | null) {
     <>
       {references.map((reference, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
-          <a href={reference} target='_blank' rel='noopener noreferrer' style={{ color: 'blue', textDecoration: 'underline' }}>
+          <a
+            href={reference}
+            target='_blank'
+            rel='noopener noreferrer'
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
             {reference}
           </a>
         </div>

@@ -1,8 +1,8 @@
 export interface MovieReviewResponse {
-  review: string;
-  author: string;
-  title: string;
+  primaryTitle: string;
+  content: any;
   tconst: string;
+  isAiGenerated: boolean;
 }
 
 export interface AuthoralReviewState {
