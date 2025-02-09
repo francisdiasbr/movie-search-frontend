@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Tag, Text, useToast } from '@chakra-ui/react';
+import { Tag, Text, useToast } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +20,7 @@ export default function MovieDetailsPage() {
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
 
-  const { data, fetchStatus } = useAppSelector(state => state.moviesDetails);
+  const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
 
   console.log('data', data);
   const toast = useToast();
@@ -29,7 +29,7 @@ export default function MovieDetailsPage() {
     if (tconst) {
       dispatch(fetchDetails(tconst));
     }
-    dispatch(getKeywords()).then(action => {
+    dispatch(getKeywords()).then((action) => {
       if (getKeywords.fulfilled.match(action)) {
         setExistingKeywords(action.payload.map((kw: any) => kw.keyword));
       }
@@ -67,13 +67,13 @@ export default function MovieDetailsPage() {
   };
 
   const handleKeywordClick = async (keyword: string) => {
-    setSelectedKeyword(prevKeyword => (prevKeyword === keyword ? null : keyword));
+    setSelectedKeyword((prevKeyword) => (prevKeyword === keyword ? null : keyword));
 
     if (selectedKeyword !== keyword) {
       const resultAction = await dispatch(postKeyword(keyword));
 
       if (postKeyword.fulfilled.match(resultAction)) {
-        setExistingKeywords(prev => [...prev, keyword]);
+        setExistingKeywords((prev) => [...prev, keyword]);
 
         toast({
           title: 'Palavra-chave adicionada.',
@@ -85,7 +85,10 @@ export default function MovieDetailsPage() {
       } else {
         toast({
           title: 'Erro ao adicionar palavra-chave.',
-          description: typeof resultAction.payload === 'string' ? resultAction.payload : 'Ocorreu um erro ao adicionar a palavra-chave.',
+          description:
+            typeof resultAction.payload === 'string'
+              ? resultAction.payload
+              : 'Ocorreu um erro ao adicionar a palavra-chave.',
           status: 'error',
           duration: 3000,
           isClosable: true,
@@ -97,7 +100,7 @@ export default function MovieDetailsPage() {
   const handleKeywordDelete = async (keyword: string) => {
     const resultAction = await dispatch(deleteKeyword(keyword));
     if (deleteKeyword.fulfilled.match(resultAction)) {
-      setExistingKeywords(prev => prev.filter(kw => kw !== keyword));
+      setExistingKeywords((prev) => prev.filter((kw) => kw !== keyword));
     }
   };
 
@@ -115,7 +118,8 @@ export default function MovieDetailsPage() {
     } else {
       toast({
         title: 'Erro ao adicionar diretor.',
-        description: typeof resultAction.payload === 'string' ? resultAction.payload : 'Ocorreu um erro ao adicionar o diretor.',
+        description:
+          typeof resultAction.payload === 'string' ? resultAction.payload : 'Ocorreu um erro ao adicionar o diretor.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -137,6 +141,36 @@ export default function MovieDetailsPage() {
       <div style={{ marginBottom: '10px' }}>
         <h3>Watched:</h3>
         <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Magnet Link:</h3>
+        <p style={{ wordBreak: 'break-all' }}>
+          <a
+            href={encodeURI(data.magnet_link)}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = data.magnet_link;
+            }}
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
+            {data.magnet_link}
+          </a>
+        </p>
+      </div>
+      <div style={{ marginBottom: '10px' }}>
+        <h3>Subtitles:</h3>
+        <p style={{ wordBreak: 'break-all' }}>
+          <a
+            href={encodeURI(data.subtitle_url)}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = data.subtitle_url;
+            }}
+            style={{ color: 'blue', textDecoration: 'underline' }}
+          >
+            {data.subtitle_url}
+          </a>
+        </p>
       </div>
       <div style={{ marginBottom: '10px' }}>
         <h3>Director:</h3>
@@ -192,12 +226,17 @@ export default function MovieDetailsPage() {
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}
           existingKeywords={existingKeywords}
-      />
+        />
       </div>
       <div style={{ marginBottom: '10px' }}>
         <h3>Wiki:</h3>
         <p>
-          <a href={data.wiki} target='_blank' rel='noopener noreferrer' style={{ textDecoration: 'underline', color: 'blue' }}>
+          <a
+            href={data.wiki}
+            target='_blank'
+            rel='noopener noreferrer'
+            style={{ textDecoration: 'underline', color: 'blue' }}
+          >
             {data.wiki}
           </a>
         </p>
@@ -212,22 +251,6 @@ export default function MovieDetailsPage() {
         <h3>Quote:</h3>
         <p>{formatQuote(data.quote)}</p>
       </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Magnet Link:</h3>
-        <p style={{ wordBreak: 'break-all' }}>
-          <a
-            href={encodeURI(data.magnet_link)}
-            onClick={e => {
-              e.preventDefault();
-              window.location.href = data.magnet_link;
-            }}
-            style={{ color: 'blue', textDecoration: 'underline' }}
-          >
-            {data.magnet_link}
-          </a>
-        </p>
-      </div>
-      <br />
       <MediaCard spotifyUrl={data.soundtrack} />
     </S.PageContainer>
   );
