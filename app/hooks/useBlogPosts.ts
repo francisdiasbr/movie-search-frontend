@@ -1,10 +1,13 @@
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
-import { fetchAllAuthoralReviews } from '../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
+import {
+  clearAuthoralReviewStatus,
+  fetchAllAuthoralReviews,
+} from '../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { createBlogPost } from '../../lib/features/blogPosts/blogPostsSlice';
-import { searchBlogPosts } from '../../lib/features/blogPosts/searchBlogPostsSlice';
+import { clearSearchState, searchBlogPosts } from '../../lib/features/blogPosts/searchBlogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { RootState } from '../../lib/store';
 
@@ -13,28 +16,30 @@ export function useBlogPosts() {
   const dispatch = useAppDispatch();
   const toast = useToast();
 
-  const { data, loading, error } = useAppSelector((state: RootState) => state.searchBlogPost);
+  const { data, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
   const { entries: allAuthoralReviews } = useAppSelector((state: RootState) => state.allAuthoralReviews);
   const { loading: creating } = useAppSelector((state: RootState) => state.blogPosts);
   const [query, setQuery] = useState('');
   const [movieId, setMovieId] = useState('');
 
-  const handleSearch = useCallback(async () => {
-    const params = {
-      filters: query.trim()
-        ? {
-            $or: [
-              { title: { $regex: query.trim(), $options: 'i' } },
-              { primaryTitle: { $regex: query.trim(), $options: 'i' } },
-              { introduction: { $regex: query.trim(), $options: 'i' } },
-            ],
-          }
-        : {},
+  useEffect(() => {
+    dispatch(clearSearchState());
+    dispatch(clearAuthoralReviewStatus());
+    return () => {
+      dispatch(clearSearchState());
+      dispatch(clearAuthoralReviewStatus());
     };
+  }, [dispatch]);
 
-    await dispatch(searchBlogPosts(params));
-    dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
-  }, [query, dispatch]);
+  const handleSearch = useCallback(async () => {
+    try {
+      dispatch(clearSearchState());
+      await dispatch(searchBlogPosts({}));
+      await dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
+    } catch (error) {
+      console.error('Erro ao buscar posts:', error);
+    }
+  }, [dispatch]);
 
   const handleGeneratePost = async () => {
     if (!movieId) {

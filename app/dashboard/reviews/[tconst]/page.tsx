@@ -16,7 +16,7 @@ import GoBack from '../../../ui/GoBack';
 function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
-  const { data } = useAppSelector((state: RootState) => state.authoralReviews);
+  const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
 
   useEffect(() => {
     if (typeof movieId === 'string') {
@@ -28,6 +28,7 @@ function Reviews() {
     };
   }, [dispatch, movieId]);
 
+  if (status === 'loading') return <div>Carregando...</div>;
   if (!data) return null;
 
   return (
@@ -42,7 +43,21 @@ function Reviews() {
           lineHeight: '1.6',
         }}
       >
-        {data.content.pt.text}
+        {data.content?.pt?.text && (
+          <>
+            <h2>Português</h2>
+            <div>{data.content.pt.text}</div>
+          </>
+        )}
+        {data.content?.en?.text && (
+          <>
+            <h2>English</h2>
+            <div>{data.content.en.text}</div>
+          </>
+        )}
+        {!data.content?.pt?.text && !data.content?.en?.text && (
+          <div>Nenhuma resenha encontrada</div>
+        )}
       </div>
     </>
   );

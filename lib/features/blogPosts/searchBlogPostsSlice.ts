@@ -26,7 +26,7 @@ interface SearchResponse {
 
 const initialState: SearchBlogPostState = {
   data: null,
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -52,22 +52,23 @@ export const searchBlogPosts = createAsyncThunk<SearchResponse, SearchParams>(
 const searchBlogPostSlice = createSlice({
   name: 'searchBlogPost',
   initialState,
-  reducers: {},
+  reducers: {
+    clearSearchState: (state) => {
+      state.data = null;
+      state.loading = true;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(searchBlogPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.data = null;
       })
       .addCase(searchBlogPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = {
-          entries: action.payload.entries.map((entry) => ({
-            ...entry,
-            created_at: formatDate(entry.created_at),
-          })),
-          total_documents: action.payload.total_documents,
-        };
+        state.data = action.payload;
       })
       .addCase(searchBlogPosts.rejected, (state) => {
         state.loading = false;
@@ -76,4 +77,5 @@ const searchBlogPostSlice = createSlice({
   },
 });
 
+export const { clearSearchState } = searchBlogPostSlice.actions;
 export default searchBlogPostSlice.reducer;

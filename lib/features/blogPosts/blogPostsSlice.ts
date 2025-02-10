@@ -37,12 +37,16 @@ interface BlogPostState {
   data: BlogPostEntry | null;
   loading: boolean;
   error: string | null;
+  entries: BlogPostEntry[];
+  status: string;
 }
 
 const initialState: BlogPostState = {
   data: null,
   loading: false,
   error: null,
+  entries: [],
+  status: 'idle',
 };
 
 export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>('blogPost/fetchById', async (movieId) => {
@@ -125,6 +129,8 @@ const blogPostSlice = createSlice({
       state.data = null;
       state.loading = false;
       state.error = null;
+      state.entries = [];
+      state.status = 'idle';
     },
   },
   extraReducers: (builder) => {
@@ -132,9 +138,11 @@ const blogPostSlice = createSlice({
       .addCase(fetchBlogPost.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = 'loading';
       })
       .addCase(fetchBlogPost.fulfilled, (state, action) => {
         state.loading = false;
+        state.status = 'succeeded';
         state.data = {
           ...action.payload,
           created_at: formatDate(action.payload.created_at),

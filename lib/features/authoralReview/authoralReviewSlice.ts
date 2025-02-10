@@ -9,8 +9,17 @@ const initialState: AuthoralReviewState = {
   status: 'idle',
 };
 
+interface ContentLanguage {
+  text: string;
+}
+
+interface Content {
+  pt: ContentLanguage;
+  en: ContentLanguage;
+}
+
 interface AuthoralReviewProps {
-  content: string;
+  content: Content;
   tconst: string;
   primaryTitle: string;
   references: string[];
@@ -32,7 +41,10 @@ export const postAuthoralReview = createAsyncThunk(
     const { tconst } = review;
     const url = `write-review/${tconst}`;
     const reviewBody = {
-      content: review.content,
+      content: {
+        pt: { text: review.content.pt.text },
+        en: { text: review.content.en.text },
+      },
       primaryTitle: review.primaryTitle,
       references: review.references,
     };

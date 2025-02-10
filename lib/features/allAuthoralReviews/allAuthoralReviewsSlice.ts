@@ -26,9 +26,7 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
         page: params.page,
         page_size: params.pageSize,
       };
-      console.log('fetchBody allAuthoralReviews', fetchBody);
       const response = await BaseService.post(url, fetchBody);
-      console.log('response fetchAllAuthoralReviews', response);
       if (response) {
         return response.entries;
       } else {
@@ -51,20 +49,26 @@ const allAuthoralReviewsSlice = createSlice({
   reducers: {
     clearAuthoralReviewStatus(state) {
       state.status = 'idle';
+      state.entries = [];
+      state.error = null;
+      state.data = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllAuthoralReviews.pending, (state) => {
         state.status = 'loading';
+        state.error = null;
       })
       .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.entries = action.payload;
+        state.error = null;
       })
       .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
+        state.entries = [];
       });
   },
 });

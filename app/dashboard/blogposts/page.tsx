@@ -22,14 +22,28 @@ export default function BlogPostsPage() {
   } = useBlogPosts();
 
   useEffect(() => {
-    handleSearch();
-  }, []);
+    const fetchData = async () => {
+      await handleSearch();
+    };
+    fetchData();
+  }, [handleSearch]);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh' }}>
+        <h2>Blog Posts</h2>
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <p>Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
+    <div style={{ minHeight: '100vh' }}>
       <h2>Blog Posts</h2>
       <div>
-        <p>Gere ou edite um post</p>
+        <p>Gere ou edite um post feito com IA</p>
         <Input
           type='text'
           value={movieId}
@@ -37,16 +51,19 @@ export default function BlogPostsPage() {
           placeholder='Digite o tconst do filme'
           mb={4}
         />
-        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme='gray' mr={4}>
+        <Button onClick={handleGeneratePost} isLoading={creating} colorScheme='gray' mr={4} isDisabled={loading}>
           Gerar Post
         </Button>
-        <Button onClick={handleEditPost} isLoading={creating} colorScheme='gray'>
+        <Button onClick={handleEditPost} isLoading={creating} colorScheme='gray' isDisabled={loading}>
           Editar Post
         </Button>
       </div>
-      {loading && <p>Carregando...</p>}
-      {!loading && !hasEntries && <p>Nenhum post encontrado.</p>}
-      {!loading && hasEntries && (
+
+      {!hasEntries ? (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <p>Nenhum post encontrado.</p>
+        </div>
+      ) : (
         <S.PostsGrid>
           {allEntries.map((post) => (
             <S.StyledCard key={`${post.tconst}-${post.primaryTitle}`} onClick={() => handleCardClick(post.tconst)}>
@@ -70,6 +87,6 @@ export default function BlogPostsPage() {
           ))}
         </S.PostsGrid>
       )}
-    </>
+    </div>
   );
 }
