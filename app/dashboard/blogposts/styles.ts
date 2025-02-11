@@ -61,3 +61,21 @@ export const CardDate = styled.p`
   color: #757575;
   font-size: 0.9rem;
 `;
+
+export const PostsList = styled.div`
+  margin-top: 2rem;
+  width: 100%;
+`;
+
+export const ListItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #eaeaea;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;

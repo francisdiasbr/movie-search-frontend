@@ -20,7 +20,6 @@ function Reviews() {
 
   useEffect(() => {
     if (typeof movieId === 'string') {
-      dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
       dispatch(fetchAuthoralReview(movieId));
     }
     return () => {
@@ -43,21 +42,21 @@ function Reviews() {
           lineHeight: '1.6',
         }}
       >
-        {data.content?.pt?.text && (
+        {data.content?.pt?.text ? (
           <>
             <h2>Português</h2>
             <div>{data.content.pt.text}</div>
           </>
-        )}
-        {data.content?.en?.text && (
+        ) : null}
+
+        {data.content?.en?.text ? (
           <>
             <h2>English</h2>
             <div>{data.content.en.text}</div>
           </>
-        )}
-        {!data.content?.pt?.text && !data.content?.en?.text && (
-          <div>Nenhuma resenha encontrada</div>
-        )}
+        ) : null}
+
+        {!data.content?.pt?.text && !data.content?.en?.text && <div>Nenhuma resenha encontrada!</div>}
       </div>
     </>
   );

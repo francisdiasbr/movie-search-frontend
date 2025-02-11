@@ -20,10 +20,21 @@ interface Content {
 
 interface AuthoralReviewProps {
   content: Content;
-  tconst: string;
-  primaryTitle: string;
-  references: string[];
   isAiGenerated?: boolean;
+  primaryTitle: string;
+  references?: string[];
+  tconst: string;
+}
+
+interface AuthoralReviewResponse {
+  _id: string;
+  content: Content;
+  created_at: string;
+  images: string[];
+  isAiGenerated: boolean;
+  primaryTitle: string;
+  references?: string[];
+  tconst: string;
 }
 
 export const fetchAuthoralReview = createAsyncThunk(
@@ -45,13 +56,14 @@ export const postAuthoralReview = createAsyncThunk(
         pt: { text: review.content.pt.text },
         en: { text: review.content.en.text },
       },
+      isAiGenerated: review.isAiGenerated,
       primaryTitle: review.primaryTitle,
-      references: review.references,
+      tconst: review.tconst,
     };
 
     try {
       const response = await BaseService.post(url, reviewBody);
-      return response;
+      return response.data as AuthoralReviewResponse;
     } catch (error) {
       console.error('Error generating authoral review:', error);
 

@@ -64,28 +64,14 @@ export default function BlogPostsPage() {
           <p>Nenhum post encontrado.</p>
         </div>
       ) : (
-        <S.PostsGrid>
+        <S.PostsList>
           {allEntries.map((post) => (
-            <S.StyledCard key={`${post.tconst}-${post.primaryTitle}`} onClick={() => handleCardClick(post.tconst)}>
-              <S.CardContent>
-                <S.CardHeader>
-                  <Image
-                    src='https://github.com/francisdiasbr.png'
-                    alt='Francis Dias'
-                    width={40}
-                    height={40}
-                    style={{
-                      borderRadius: '50%',
-                    }}
-                  />
-                  <h3>{post.primaryTitle}</h3>
-                  <p>{post.tconst}</p>
-                </S.CardHeader>
-                <S.CardDate>{post.created_at}</S.CardDate>
-              </S.CardContent>
-            </S.StyledCard>
+            <S.ListItem key={`${post.tconst}-${post.primaryTitle}`} onClick={() => handleCardClick(post.tconst)}>
+              <span>{post.primaryTitle}</span>
+              <span>{post.tconst}</span>
+            </S.ListItem>
           ))}
-        </S.PostsGrid>
+        </S.PostsList>
       )}
     </div>
   );

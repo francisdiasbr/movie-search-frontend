@@ -9,12 +9,10 @@ const AuthoralReviewForm = () => {
   const { data, status, error } = useAppSelector((state) => state.authoralReviews);
   const toast = useToast();
 
-  console.log('data', data);
   const [primaryTitle, setPrimaryTitle] = useState('');
   const [contentPt, setContentPt] = useState('');
   const [contentEn, setContentEn] = useState('');
   const [tconst, setTconst] = useState('');
-  const [references] = useState<string[]>([]);
 
   useEffect(() => {
     dispatch(clearState());
@@ -40,19 +38,15 @@ const AuthoralReviewForm = () => {
 
     const reviewData = {
       content: {
-        pt: {
-          text: contentPt,
-        },
-        en: {
-          text: contentEn,
-        },
+        pt: { text: contentPt },
+        en: { text: contentEn },
       },
       tconst,
       primaryTitle,
-      references,
       isAiGenerated: false,
     };
 
+    console.log('Dados sendo enviados:', reviewData);
     dispatch(postAuthoralReview(reviewData));
   };
 
