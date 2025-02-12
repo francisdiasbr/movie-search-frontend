@@ -58,22 +58,22 @@ export const fetchAllImageUrls = createAsyncThunk<
   }
 );
 
-export const uploadOpinionImage = createAsyncThunk<
+export const uploadMovieImage = createAsyncThunk<
   { object_name: string },
   { tconst: string; file: File }
 >(
-  'uploadImages/uploadOpinionImage',
+  'uploadImages/uploadMovieImage',
   async ({ tconst, file }, { rejectWithValue }) => {
     const formData = new FormData();
     formData.append('file', file);
 
     try {
       const response = await baseService.post(
-        `/images/upload-image/${tconst}`,
+        `images/${tconst}`,
         formData
       );
       if (response.object_name) {
-        console.log('response uploadOpinionImage full', response);
+        console.log('response uploadMovieImage full', response);
         return response;
       } else {
         throw new Error('Invalid response structure');
@@ -117,34 +117,22 @@ const uploadImagesSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      // .addCase(uploadOpinionImage.pending, state => {
-      //   state.status = 'loading';
-      //   state.error = null;
-      // })
-      // .addCase(uploadOpinionImage.fulfilled, (state, action) => {
-      //   state.status = 'succeeded';
-      //   state.objectName = action.payload.object_name;
-      //   console.log(
-      //     'Nome do objeto (imagem) no slice:',
-      //     action.payload.object_name
-      //   );
-      // })
-      // .addCase(uploadOpinionImage.rejected, (state, action) => {
-      //   state.status = 'failed';
-      //   state.error = action.payload as string;
-      // })
-      // .addCase(fetchPublicImageUrl.pending, state => {
-      //   state.status = 'loading';
-      //   state.error = null;
-      // })
-      // .addCase(fetchPublicImageUrl.fulfilled, (state, action) => {
-      //   state.status = 'succeeded';
-      //   state.imageUrl = action.payload.url;
-      // })
-      // .addCase(fetchPublicImageUrl.rejected, (state, action) => {
-      //   state.status = 'failed';
-      //   state.error = action.payload as string;
-      // })
+      .addCase(uploadMovieImage.pending, state => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(uploadMovieImage.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.objectName = action.payload.object_name;
+        console.log(
+          'Nome do objeto (imagem) no slice:',
+          action.payload.object_name
+        );
+      })
+      .addCase(uploadMovieImage.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      })
       .addCase(fetchAllImageUrls.pending, state => {
         state.status = 'loading';
         state.error = null;
