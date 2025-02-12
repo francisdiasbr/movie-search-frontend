@@ -13,7 +13,7 @@ export const columnData = [
     label: 'Já vi?',
     style: {
       minWidth: '100px',
-      width: '10%',
+      width: '5%',
     },
     sort: true,
   },
@@ -22,7 +22,7 @@ export const columnData = [
     label: 'Ano',
     style: {
       minWidth: '85px',
-      width: '10%',
+      width: '5%',
     },
     sort: true,
   },
@@ -36,10 +36,19 @@ export const columnData = [
   },
   {
     key: 'originalTitle',
-    label: 'Título',
+    label: 'Título Original',
     style: {
       minWidth: '200px',
-      width: '20%',
+      width: '15%',
+    },
+    sort: true,
+  },
+  {
+    key: 'primaryTitle',
+    label: 'Título Principal',
+    style: {
+      minWidth: '200px',
+      width: '15%',
     },
     sort: true,
   },

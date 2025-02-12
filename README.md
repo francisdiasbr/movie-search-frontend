@@ -27,7 +27,16 @@ Ao pesquisar por um filme, o usuário pode:
 
 ### 2. Coleção de Favoritos
 
-O usuário tem uma lista de favoritos onde pode:
+O usuário tem uma tabela contendo os filmes favoritos:
+
+- Coluna "Ações" com os botões de visualizar, editar e excluir.
+- Coluna "Já vi?" com um botão para marcar se o filme foi visto.
+- Coluna "Ano" com o ano de lançamento do filme.
+- Coluna "Diretor" com o nome do diretor do filme.
+- Coluna "Título Original" com o título original, na língua original do filme.
+- Coluna "Título" com o título do filme.
+- Coluna "Palavras-chave" com as palavras-chave associadas ao filme.
+- Coluna "IMDb ID" com o código IMDb do filme.
 
 - Ver todos os filmes favoritos.
 - Editar as informações de um filme favorito (link da Wikipedia e trilha sonora do filme no Spotify).

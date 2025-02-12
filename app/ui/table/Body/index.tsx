@@ -6,6 +6,7 @@ import starOutlineIcon from '@iconify/icons-ic/outline-star';
 import editIcon from '@iconify/icons-lucide/edit-2';
 import eyeIcon from '@iconify/icons-lucide/eye';
 import trashIcon from '@iconify/icons-lucide/trash-2';
+import writeIcon from '@iconify/icons-lucide/edit-3';
 import React, { useState } from 'react';
 
 import Icon from '../../Icon';
@@ -20,6 +21,7 @@ const TableBody = ({
   handleDelete,
   handleEdit,
   handleView,
+  handleWriteReview,
   isLoading,
 }: TableBodyProps) => {
   const [selectedTconst, setSelectedTconst] = useState<string | null>(null);
@@ -52,6 +54,9 @@ const TableBody = ({
                     <button onClick={() => handleDelete(item.tconst)}>
                       <Icon fontSize={20} icon={trashIcon} />
                     </button>
+                    <button onClick={() => handleWriteReview(item.tconst, item.primaryTitle, item.originalTitle)}>
+                      <Icon fontSize={20} icon={writeIcon} />
+                    </button>
                   </S.ButtonGroup>
                 ) : column.isFavAction ? (
                   <S.ButtonGroup>
@@ -72,9 +77,9 @@ const TableBody = ({
                   </S.ButtonGroup>
                 ) : column.key === 'watched' ? (
                   item[column.key] ? (
-                    <Tag colorScheme='green'>já vi</Tag>
+                    <Tag colorScheme='green'>Sim</Tag>
                   ) : (
-                    <Tag colorScheme='red'>não vi</Tag>
+                    <Tag colorScheme='red'>Não</Tag>
                   )
                 ) : (
                   item[column.key]

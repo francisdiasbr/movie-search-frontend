@@ -12,7 +12,7 @@ const KeywordTags: React.FC<KeywordTagsProps> = ({ keywords, maxTags = 5 }) => {
   return (
     <>
       {truncatedKeywords.map((keyword, index) => (
-        <Tag key={index} colorScheme='teal' m={1}>
+        <Tag key={index} colorScheme='cyan' m={1}>
           {keyword}
         </Tag>
       ))}

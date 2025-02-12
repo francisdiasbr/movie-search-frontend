@@ -4,7 +4,6 @@ import { FaTimes, FaHeart } from 'react-icons/fa';
 
 interface FavoriteTagProps {
   keywords: string[];
-  selectedKeyword: string | null;
   onKeywordClick: (keyword: string) => void;
   onKeywordDelete: (keyword: string) => void;
   existingKeywords: string[];
@@ -12,7 +11,6 @@ interface FavoriteTagProps {
 
 const FavoriteTag: React.FC<FavoriteTagProps> = ({
   keywords,
-  selectedKeyword,
   onKeywordClick,
   onKeywordDelete,
   existingKeywords,
@@ -36,17 +34,10 @@ const FavoriteTag: React.FC<FavoriteTagProps> = ({
         <WrapItem key={index}>
           <Tag
             size='md'
-            variant='surface'
-            bg={
+            colorScheme={
               existingKeywords.includes(keyword)
-                ? hoveredKeyword === keyword
-                  ? 'red.400'
-                  : 'red.400'
-                : clickedKeyword === keyword
-                  ? 'red.400'
-                  : hoveredKeyword === keyword
-                    ? 'quaternary.100'
-                    : 'secondary.300'
+                ? 'red'
+                : 'cyan'
             }
             onClick={() => handleClick(keyword)}
             cursor='pointer'

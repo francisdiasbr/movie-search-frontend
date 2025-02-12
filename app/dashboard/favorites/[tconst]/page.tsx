@@ -10,8 +10,8 @@ import { postKeyword, getKeywords, deleteKeyword } from '../../../../lib/feature
 import { fetchDetails } from '../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import GoBack from '../../../ui/GoBack';
-import FavoriteTag from './components/FavoriteTag';
 import * as S from './styles';
+import { getSections } from './sections';
 
 export default function MovieDetailsPage() {
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
@@ -127,130 +127,30 @@ export default function MovieDetailsPage() {
     }
   };
 
+  const handlers = {
+    handleDirectorClick,
+    handleKeywordClick,
+    handleKeywordDelete,
+    sanitizeTrivia,
+    formatQuote,
+  };
+
+  const sections = getSections({
+    data,
+    handlers,
+    existingKeywords,
+    plotKeywords,
+  });
+
   return (
     <S.PageContainer>
       <GoBack centerText={data.originalTitle} />
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Original title:</h3>
-        <p>{data.originalTitle}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Primary title:</h3>
-        <p>{data.primaryTitle}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Watched:</h3>
-        <Tag colorScheme={data.watched ? 'green' : 'red'}>{data.watched ? 'Já vi' : 'Não vi'}</Tag>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Magnet Link:</h3>
-        <p style={{ wordBreak: 'break-all' }}>
-          <a
-            href={encodeURI(data.magnet_link)}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = data.magnet_link;
-            }}
-            style={{ color: 'blue', textDecoration: 'underline' }}
-          >
-            {data.magnet_link}
-          </a>
-        </p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Subtitles:</h3>
-        <p style={{ wordBreak: 'break-all' }}>
-          <a
-            href={encodeURI(data.subtitle_url)}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = data.subtitle_url;
-            }}
-            style={{ color: 'blue', textDecoration: 'underline' }}
-          >
-            {data.subtitle_url}
-          </a>
-        </p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Director:</h3>
-        <button
-          onClick={() => handleDirectorClick(data.director)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleDirectorClick(data.director);
-            }
-          }}
-          style={{
-            cursor: 'pointer',
-            textDecoration: 'underline',
-            color: 'blue',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            font: 'inherit',
-          }}
-        >
-          {data.director}
-        </button>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Writers:</h3>
-        <p>{data.writers && data.writers.length > 0 ? data.writers.join(', ') : 'N/A'}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Stars:</h3>
-        <p>{data.stars.join(', ')}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Country:</h3>
-        <p>{data.country}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Year:</h3>
-        <p>{data.startYear}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <Text fontWeight='bold'>Plot:</Text>
-        <p>{data.plot}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Genres:</h3>
-        <p>{data.genres.join(', ')}</p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Plot keywords:</h3>
-        <FavoriteTag
-          keywords={plotKeywords}
-          selectedKeyword={selectedKeyword}
-          onKeywordClick={handleKeywordClick}
-          onKeywordDelete={handleKeywordDelete}
-          existingKeywords={existingKeywords}
-        />
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Wiki:</h3>
-        <p>
-          <a
-            href={data.wiki}
-            target='_blank'
-            rel='noopener noreferrer'
-            style={{ textDecoration: 'underline', color: 'blue' }}
-          >
-            {data.wiki}
-          </a>
-        </p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Trivia:</h3>
-        <p>
-          <ul>{sanitizeTrivia(data.trivia)}</ul>
-        </p>
-      </div>
-      <div style={{ marginBottom: '10px' }}>
-        <h3>Quote:</h3>
-        <p>{formatQuote(data.quote)}</p>
-      </div>
+      {sections.map((section: { title: string; content: string }, index: number) => (
+        <S.SectionContainer key={index}>
+          <S.SectionTitle>{section.title}:</S.SectionTitle>
+          <S.SectionContent>{section.content}</S.SectionContent>
+        </S.SectionContainer>
+      ))}
       <MediaCard spotifyUrl={data.soundtrack} />
     </S.PageContainer>
   );

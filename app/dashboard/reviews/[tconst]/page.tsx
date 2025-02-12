@@ -12,15 +12,18 @@ import { fetchAllImageUrls, selectImageUrls } from '../../../../lib/features/upl
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import GoBack from '../../../ui/GoBack';
+import * as S from './styles';
 
 function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
+  const imageUrls = useAppSelector(selectImageUrls);
 
   useEffect(() => {
     if (typeof movieId === 'string') {
       dispatch(fetchAuthoralReview(movieId));
+      dispatch(fetchAllImageUrls({ tconst: movieId }));
     }
     return () => {
       dispatch(clearAuthoralReviewStatus());
@@ -31,34 +34,35 @@ function Reviews() {
   if (!data) return null;
 
   return (
-    <>
-      <GoBack />
-      <h1>{data.primaryTitle}</h1>
-      <div
-        style={{
-          whiteSpace: 'pre-wrap',
-          maxWidth: '800px',
-          margin: '0 auto',
-          lineHeight: '1.6',
-        }}
-      >
-        {data.content?.pt?.text ? (
-          <>
-            <h2>Português</h2>
-            <div>{data.content.pt.text}</div>
-          </>
-        ) : null}
+    <S.Container>
+      <S.ContentColumn>
+        <GoBack />
+        <h1>{data.primaryTitle}</h1>
+        <div>
+          {data.content?.pt?.text ? (
+            <S.SectionContainer>
+              <S.SectionTitle>Português</S.SectionTitle>
+              <S.SectionContent>{data.content.pt.text}</S.SectionContent>
+            </S.SectionContainer>
+          ) : null}
 
-        {data.content?.en?.text ? (
-          <>
-            <h2>English</h2>
-            <div>{data.content.en.text}</div>
-          </>
-        ) : null}
+          {data.content?.en?.text ? (
+            <S.SectionContainer>
+              <S.SectionTitle>English</S.SectionTitle>
+              <S.SectionContent>{data.content.en.text}</S.SectionContent>
+            </S.SectionContainer>
+          ) : null}
 
-        {!data.content?.pt?.text && !data.content?.en?.text && <div>Nenhuma resenha encontrada!</div>}
-      </div>
-    </>
+          {!data.content?.pt?.text && !data.content?.en?.text && <div>Nenhuma resenha encontrada!</div>}
+        </div>
+      </S.ContentColumn>
+      
+      <S.ImageColumn>
+        {imageUrls.map((url, index) => (
+          <img key={index} src={url} alt={`Imagem ${index + 1} do filme`} style={{ width: '100%' }} />
+        ))}
+      </S.ImageColumn>
+    </S.Container>
   );
 }
 

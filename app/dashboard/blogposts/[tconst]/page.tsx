@@ -1,12 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { fetchBlogPost, clearBlogPost } from '../../../../lib/features/blogPosts/blogPostsSlice';
-import { fetchBlogPostTrivia } from '../../../../lib/features/blogPosts/blogPostsTriviaSlice';
-import { fetchAllImageUrls, selectImageUrls } from '../../../../lib/features/uploadImages/uploadImagesSlice';
+import { fetchAllImageUrls } from '../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import GoBack from '../../../ui/GoBack';
@@ -15,14 +13,12 @@ import * as S from './styles';
 function BlogPost() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
-  const { data, loading, error } = useAppSelector((state: RootState) => state.blogPosts);
-  const triviaData = useAppSelector((state: RootState) => state.blogPostsTrivia.data);
-  const imageUrls = useAppSelector(selectImageUrls);
+  const { data, loading } = useAppSelector((state: RootState) => state.blogPosts);
+  const { imageUrls, status: imageStatus } = useAppSelector((state: RootState) => state.uploadImages);
 
   useEffect(() => {
     if (typeof movieId === 'string') {
       dispatch(fetchBlogPost(movieId));
-      dispatch(fetchBlogPostTrivia(movieId));
       dispatch(fetchAllImageUrls({ tconst: movieId }));
     }
     return () => {
@@ -31,6 +27,9 @@ function BlogPost() {
   }, [dispatch, movieId]);
 
   if (!data) return null;
+
+  const isLoadingImages = imageStatus === 'loading';
+  const hasImages = imageUrls && imageUrls.length > 0;
 
   return (
     <>
@@ -52,23 +51,30 @@ function BlogPost() {
           <Section title='Trilha Sonora Original' content={data.original_movie_soundtrack} />
           <Section title='Referências' content={renderReferences(data.references) || null} />
           <Section title='Conclusão' content={data.content.pt.conclusion} />
-          {triviaData && (
-            <>
-              <Section title='Histórico do Diretor' content={triviaData.director_history} />
-              <Section title='Citações do Diretor' content={triviaData.director_quotes} />
-              <Section title='Curiosidades' content={triviaData.curiosities} />
-              <Section title='Recepção' content={triviaData.reception} />
-              <Section title='Destaques' content={triviaData.highlights} />
-              <Section title='Enredo' content={triviaData.plot} />
-            </>
-          )}
         </S.ContentColumn>
         <S.ImageColumn>
-          <div>
-            {imageUrls.map((url, index) => (
-              <Image key={index} src={url} alt={`Imagem ${index + 1}`} layout='responsive' width={800} height={600} />
-            ))}
-          </div>
+          {isLoadingImages ? (
+            <p>Carregando imagens...</p>
+          ) : hasImages ? (
+            <div>
+              {imageUrls.map((url, index) => (
+                <img 
+                  key={index} 
+                  src={url} 
+                  alt={`Imagem ${index + 1} do filme`}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    marginBottom: '20px',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <p>Nenhuma imagem disponível</p>
+          )}
         </S.ImageColumn>
       </S.Container>
     </>

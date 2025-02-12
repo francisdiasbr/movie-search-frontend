@@ -23,8 +23,8 @@ function truncatePlotKeywords(keywords: string[]): string[] {
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { countries, entries, total_documents, status, startYears } = useAppSelector(state => state.moviesFavorites);
-  const { delStatus } = useAppSelector(state => state.moviesDetails);
+  const { countries, entries, total_documents, status, startYears } = useAppSelector((state) => state.moviesFavorites);
+  const { delStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,9 +57,9 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    setCountryOptions(countries.map(country => ({ value: country, label: country })));
+    setCountryOptions(countries.map((country) => ({ value: country, label: country })));
     setYearOptions(
-      startYears.map(year => ({
+      startYears.map((year) => ({
         value: year.toString(),
         label: year.toString(),
       }))

@@ -94,7 +94,6 @@ export default function Page() {
           keywords={
             Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []
           }
-          selectedKeyword={selectedKeyword}
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}
           existingKeywords={existingKeywords}

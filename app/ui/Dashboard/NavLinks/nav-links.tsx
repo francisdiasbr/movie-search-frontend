@@ -6,19 +6,15 @@ import { usePathname } from 'next/navigation';
 import * as S from './styles';
 
 const links = [
-  { href: '/dashboard', icon: HomeIcon, name: 'Home' },
-  {
-    href: '/dashboard/search',
-    icon: MagnifyingGlassIcon,
-    name: 'Pesquisar Filme',
-  },
-  // { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
+  // { href: '/dashboard', icon: HomeIcon, name: 'Home' },
+  { href: '/dashboard/search', icon: MagnifyingGlassIcon, name: 'Pesquisar Filme' },
   { href: '/dashboard/favorites', icon: BookmarkIcon, name: 'Favoritos' },
-  { href: '/dashboard/keywords', icon: BookmarkIcon, name: 'Movie Keywords' },
-  { href: '/dashboard/directors', icon: BookmarkIcon, name: 'Directors' },
+  { href: '/dashboard/directors', icon: BookmarkIcon, name: 'Diretores' },
+  { href: '/dashboard/keywords', icon: BookmarkIcon, name: 'Palavras-chave' },
   { href: '/dashboard/blogposts', icon: SparklesIcon, name: 'Blog Posts' },
-  { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
+  // { href: '/dashboard/write-review', icon: FilmIcon, name: 'Write authoral review' },
   // { href: '/dashboard/generate-review', icon: SparklesIcon, name: 'Generate review' }
+  // { href: '/dashboard/reviews', icon: MagnifyingGlassIcon, name: 'Search reviews' },
 ];
 
 export default function NavLinks() {

@@ -12,13 +12,14 @@ export type TableProps = {
   totalDocuments: number;
 };
 
-export type TableBodyProps = {
+export interface TableBodyProps {
   columns: Column[];
   entries: any[];
-  handleAdd: any;
-  handleDelete: any;
-  handleEdit: any;
-  handleView: any;
+  handleAdd: (tconst: string) => void;
+  handleDelete: (tconst: string) => void;
+  handleEdit: (tconst: string) => void;
+  handleView: (tconst: string) => void;
+  handleWriteReview: (tconst: string, primaryTitle: string, originalTitle: string) => void;
   isLoading: boolean;
 };
 

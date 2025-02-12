@@ -40,6 +40,10 @@ const Table = ({
     router.push(`${pathname}/${tconst}/edit`);
   };
 
+  const handleWriteReview = (tconst: string, primaryTitle: string, originalTitle: string) => {
+    router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}&originalTitle=${encodeURIComponent(originalTitle)}`);
+  };
+
   return (
     <S.TableContainer>
       <S.StyledTable>
@@ -56,6 +60,7 @@ const Table = ({
           handleDelete={handleDelete}
           handleEdit={handleEdit}
           handleView={handleView}
+          handleWriteReview={handleWriteReview}
         />
       </S.StyledTable>
       <S.Footer>

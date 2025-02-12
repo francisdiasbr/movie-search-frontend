@@ -1,8 +1,8 @@
 'use client';
 
 import { Input, Button } from '@chakra-ui/react';
-import Image from 'next/image';
 import { useEffect } from 'react';
+import { FaStar } from 'react-icons/fa';
 
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
@@ -67,9 +67,12 @@ export default function BlogPostsPage() {
         <S.PostsList>
           {allEntries.map((post) => (
             <S.ListItem key={`${post.tconst}-${post.primaryTitle}`} onClick={() => handleCardClick(post.tconst)}>
-              <span>{post.primaryTitle}</span>
+              <div style={{ display: 'flex', alignItems: 'center' }}  >
+                <span style={{ marginRight: '8px' }}>{post.isAiGenerated ? '✨' : '🖋️'}</span>
+                <span>{post.primaryTitle}</span>
+              </div>
               <span>{post.tconst}</span>
-            </S.ListItem>
+          </S.ListItem>
           ))}
         </S.PostsList>
       )}
