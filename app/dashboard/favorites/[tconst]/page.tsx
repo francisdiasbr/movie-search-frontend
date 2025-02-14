@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import GoBack from '../../../ui/GoBack';
 import * as S from './styles';
 import { getSections } from './sections';
+import EditModal from './edit/editModal';
 
 export default function MovieDetailsPage() {
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
@@ -163,40 +164,6 @@ export default function MovieDetailsPage() {
     });
   };
 
-  const handleUpdate = async () => {
-    if (!data) return;
-
-    const updateData = {
-      tconst: data.tconst,
-      originalTitle: data.originalTitle,
-      soundtrack: data.soundtrack || '',
-      wiki: data.wiki || '',
-      watched: !data.watched,
-    };
-
-    dispatch(editDetails(updateData)).then((resultAction) => {
-      if (editDetails.fulfilled.match(resultAction)) {
-        toast({
-          title: 'Sucesso',
-          description: 'Filme atualizado com sucesso.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        onClose();
-        dispatch(fetchDetails(tconst));
-      } else {
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível atualizar o filme.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    });
-  };
-
   const handlers = {
     handleDirectorClick,
     handleKeywordClick,
@@ -229,74 +196,12 @@ export default function MovieDetailsPage() {
         />
       </HStack>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Editar Favorito</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={4}>
-              <FormLabel>IMDB ID (tconst)</FormLabel>
-              <Input 
-                isReadOnly 
-                value={data?.tconst} 
-                bg='gray.100' 
-                cursor='not-allowed' 
-                _hover={{ bg: 'gray.100' }} 
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel>Título Original</FormLabel>
-              <Input 
-                isReadOnly 
-                value={data?.originalTitle} 
-                bg='gray.100' 
-                cursor='not-allowed' 
-                _hover={{ bg: 'gray.100' }} 
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel>Trilha Sonora (Spotify URL)</FormLabel>
-              <Input 
-                value={data?.soundtrack || ''} 
-                onChange={(e) => dispatch(editDetails({ ...data, soundtrack: e.target.value }))}
-                placeholder="URL da trilha sonora no Spotify"
-              />
-            </FormControl>
-
-            <FormControl mb={4}>
-              <FormLabel>Wiki</FormLabel>
-              <Input 
-                value={data?.wiki || ''} 
-                onChange={(e) => dispatch(editDetails({ ...data, wiki: e.target.value }))}
-                placeholder="URL da página Wiki"
-              />
-            </FormControl>
-
-            <FormControl display='flex' alignItems='center' mb={4}>
-              <FormLabel htmlFor='watched' mb='0'>
-                Já assistiu?
-              </FormLabel>
-              <Switch
-                id='watched'
-                isChecked={data?.watched || false}
-                onChange={() => dispatch(editDetails({ ...data, watched: !data?.watched }))}
-              />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={handleUpdate}>
-              Salvar
-            </Button>
-            <Button variant='ghost' onClick={onClose}>
-              Cancelar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <EditModal 
+        isOpen={isOpen} 
+        onClose={onClose} 
+        data={data} 
+        tconst={tconst}
+      />
 
       {sections.map((section, index) => (
         <S.SectionContainer key={index}>
