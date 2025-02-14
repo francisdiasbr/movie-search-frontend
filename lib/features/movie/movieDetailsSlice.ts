@@ -120,6 +120,7 @@ const movieDetailsSlice = createSlice({
     resetDeleteStatus(state) {
       state.delStatus = 'idle';
     },
+    resetState: () => initialState,
   },
   extraReducers: builder => {
     builder
@@ -174,6 +175,10 @@ const movieDetailsSlice = createSlice({
   },
 });
 
-export const { resetAddStatus, resetEditStatus, resetDeleteStatus } =
-  movieDetailsSlice.actions;
+export const { 
+  resetAddStatus, 
+  resetEditStatus, 
+  resetDeleteStatus,
+  resetState 
+} = movieDetailsSlice.actions;
 export default movieDetailsSlice.reducer;

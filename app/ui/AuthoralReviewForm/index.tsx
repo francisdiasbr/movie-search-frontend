@@ -56,12 +56,18 @@ const AuthoralReviewForm = () => {
 
     const reviewData = {
       content: {
-        pt: { text: contentPt },
-        en: { text: contentEn },
+        pt: { 
+          text: contentPt,
+          title: primaryTitle
+        },
+        en: { 
+          text: contentEn,
+          title: originalTitle || primaryTitle
+        }
       },
       tconst,
       primaryTitle,
-      originalTitle,
+      originalTitle: originalTitle || primaryTitle,
       isAiGenerated: false,
     };
 

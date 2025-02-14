@@ -139,7 +139,6 @@ export default function Page() {
         page={page}
         pageSize={pageSize}
         totalDocuments={total_documents}
-        handleDelete={handleDelete}
       />
     </>
   );

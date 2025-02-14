@@ -1,13 +1,12 @@
 'use client';
 
-import { Tag } from '@chakra-ui/react';
+import { Tag, IconButton, Tooltip } from '@chakra-ui/react';
+import { FaSearch } from 'react-icons/fa';
 import starFilledIcon from '@iconify/icons-ic/baseline-star';
 import starOutlineIcon from '@iconify/icons-ic/outline-star';
-import editIcon from '@iconify/icons-lucide/edit-2';
 import eyeIcon from '@iconify/icons-lucide/eye';
-import trashIcon from '@iconify/icons-lucide/trash-2';
-import writeIcon from '@iconify/icons-lucide/edit-3';
 import React, { useState } from 'react';
+import { ViewIcon } from '@chakra-ui/icons';
 
 import Icon from '../../Icon';
 import TableRowsLoader from '../RowsLoader';
@@ -18,10 +17,7 @@ const TableBody = ({
   columns,
   entries,
   handleAdd,
-  handleDelete,
-  handleEdit,
   handleView,
-  handleWriteReview,
   isLoading,
 }: TableBodyProps) => {
   const [selectedTconst, setSelectedTconst] = useState<string | null>(null);
@@ -45,18 +41,19 @@ const TableBody = ({
               <S.Cell key={column.key}>
                 {column.isAction ? (
                   <S.ButtonGroup>
-                    <button onClick={() => handleView(item.tconst)}>
-                      <Icon fontSize={20} icon={eyeIcon} />
-                    </button>
-                    <button onClick={() => handleEdit(item.tconst)}>
-                      <Icon fontSize={20} icon={editIcon} />
-                    </button>
-                    <button onClick={() => handleDelete(item.tconst)}>
-                      <Icon fontSize={20} icon={trashIcon} />
-                    </button>
-                    <button onClick={() => handleWriteReview(item.tconst, item.primaryTitle, item.originalTitle)}>
-                      <Icon fontSize={20} icon={writeIcon} />
-                    </button>
+                    <IconButton
+                      aria-label="Visualizar"
+                      icon={<FaSearch />}
+                      onClick={() => handleView(item.tconst)}
+                      size="lg"
+                      colorScheme="blue"
+                      color="black"
+                      borderRadius="full"
+                      _hover={{
+                        transform: 'scale(1.1)',
+                      }}
+                      transition="all 0.2s"
+                    />
                   </S.ButtonGroup>
                 ) : column.isFavAction ? (
                   <S.ButtonGroup>

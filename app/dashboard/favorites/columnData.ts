@@ -1,8 +1,9 @@
 export const columnData = [
   {
-    isAction: true,
     key: 'actions',
     label: 'Ações',
+    isAction: true,
+    isSortable: false,
     style: {
       minWidth: '100px',
       width: '10%',

@@ -4,11 +4,10 @@ import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import {
-  fetchAllAuthoralReviews,
   clearAuthoralReviewStatus,
 } from '../../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { fetchAuthoralReview } from '../../../../lib/features/authoralReview/authoralReviewSlice';
-import { fetchAllImageUrls, selectImageUrls } from '../../../../lib/features/uploadImages/uploadImagesSlice';
+import { fetchAllImageUrls } from '../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import GoBack from '../../../ui/GoBack';
@@ -18,7 +17,7 @@ function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
-  const imageUrls = useAppSelector(selectImageUrls);
+  const imageUrls = useAppSelector((state: RootState) => state.uploadImages.imageUrls);
 
   useEffect(() => {
     if (typeof movieId === 'string') {

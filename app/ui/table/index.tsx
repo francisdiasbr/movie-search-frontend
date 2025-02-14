@@ -12,8 +12,6 @@ import { TableProps } from './types';
 const Table = ({
   columns,
   entries,
-  handleAdd,
-  handleDelete,
   isLoading,
   onPageChange,
   onPageSizeChange,
@@ -36,14 +34,6 @@ const Table = ({
     router.push(`${pathname}/${tconst}`);
   };
 
-  const handleEdit = (tconst: string) => {
-    router.push(`${pathname}/${tconst}/edit`);
-  };
-
-  const handleWriteReview = (tconst: string, primaryTitle: string, originalTitle: string) => {
-    router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}&originalTitle=${encodeURIComponent(originalTitle)}`);
-  };
-
   return (
     <S.TableContainer>
       <S.StyledTable>
@@ -56,11 +46,7 @@ const Table = ({
           columns={columns}
           entries={sortedEntries}
           isLoading={isLoading}
-          handleAdd={handleAdd}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
           handleView={handleView}
-          handleWriteReview={handleWriteReview}
         />
       </S.StyledTable>
       <S.Footer>
