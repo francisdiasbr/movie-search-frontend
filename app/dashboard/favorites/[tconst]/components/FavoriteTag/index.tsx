@@ -5,14 +5,12 @@ import { FaTimes, FaHeart } from 'react-icons/fa';
 interface FavoriteTagProps {
   keywords: string[];
   onKeywordClick: (keyword: string) => void;
-  onKeywordDelete: (keyword: string) => void;
   existingKeywords: string[];
 }
 
 const FavoriteTag: React.FC<FavoriteTagProps> = ({
   keywords,
   onKeywordClick,
-  onKeywordDelete,
   existingKeywords,
 }) => {
   const [clickedKeyword, setClickedKeyword] = useState<string | null>(null);
@@ -20,7 +18,6 @@ const FavoriteTag: React.FC<FavoriteTagProps> = ({
 
   const handleClick = (keyword: string) => {
     if (existingKeywords.includes(keyword)) {
-      onKeywordDelete(keyword);
       setClickedKeyword(null);
     } else {
       onKeywordClick(keyword);

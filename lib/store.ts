@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import allAuthoralReviewsSlice from './features/allAuthoralReviews/allAuthoralReviewsSlice';
-import allGenReviewsSlice from './features/allGenReviews/allGenReviewsSlice';
 import authoralReviewsSlice from './features/authoralReview/authoralReviewSlice';
 import blogPostsSlice from './features/blogPosts/blogPostsSlice';
 import blogPostsTriviaSlice from './features/blogPosts/blogPostsTriviaSlice';
@@ -11,14 +10,14 @@ import keywordsSlice from './features/keywords/keywordsSlice';
 import movieDetailsSlice from './features/movie/movieDetailsSlice';
 import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
 import opinionSlice from './features/opinion/opinionSlice';
-import reviewsSlice from './features/review/reviewsSlice';
 import movieSearchSlice from './features/search/searchSlice';
 import uploadImagesSlice from './features/uploadImages/uploadImagesSlice';
+
+
 export const makeStore = () => {
   return configureStore({
     reducer: {
       allAuthoralReviews: allAuthoralReviewsSlice,
-      allGenReviews: allGenReviewsSlice,
       authoralReviews: authoralReviewsSlice,
       blogPosts: blogPostsSlice,
       blogPostsTrivia: blogPostsTriviaSlice,
@@ -26,7 +25,6 @@ export const makeStore = () => {
       keywords: keywordsSlice,
       moviesDetails: movieDetailsSlice,
       moviesFavorites: movieFavoritesSlice,
-      moviesReviews: reviewsSlice,
       moviesSearch: movieSearchSlice,
       opinion: opinionSlice,
       searchBlogPost: searchBlogPostSlice,

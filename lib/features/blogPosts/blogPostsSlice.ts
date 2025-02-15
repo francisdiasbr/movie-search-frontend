@@ -156,13 +156,16 @@ const blogPostSlice = createSlice({
       .addCase(createBlogPost.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = 'loading';
       })
       .addCase(createBlogPost.fulfilled, (state, action) => {
         state.loading = false;
+        state.status = 'succeeded';
         state.data = action.payload;
       })
       .addCase(createBlogPost.rejected, (state) => {
         state.loading = false;
+        state.status = 'failed';
         state.error = 'Falha ao criar o post do blog. Por favor, tente novamente mais tarde.';
       })
       .addCase(updateBlogPost.pending, (state) => {

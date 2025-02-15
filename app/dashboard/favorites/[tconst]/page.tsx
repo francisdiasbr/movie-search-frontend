@@ -3,7 +3,7 @@
 import { useDisclosure, Text, useToast, IconButton, HStack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Switch, Input } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaTrash, FaEdit } from 'react-icons/fa';
+import { FaEdit, FaBook, FaPen, FaRobot } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
 import MediaCard from '../../../../app/ui/Cards/MediaCard';
@@ -15,11 +15,14 @@ import GoBack from '../../../ui/GoBack';
 import * as S from './styles';
 import { getSections } from './sections';
 import EditModal from './edit/editModal';
+import { fetchBlogPost, createBlogPost } from '../../../../lib/features/blogPosts/blogPostsSlice';
+import { fetchAuthoralReview } from '../../../../lib/features/authoralReview/authoralReviewSlice';
 
 export default function MovieDetailsPage() {
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isGeneratingBlogPost, setIsGeneratingBlogPost] = useState(false);
 
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
@@ -27,6 +30,7 @@ export default function MovieDetailsPage() {
 
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
   const toast = useToast();
+  const { status } = useAppSelector((state) => state.blogPosts);
 
   useEffect(() => {
     if (tconst) {
@@ -111,13 +115,6 @@ export default function MovieDetailsPage() {
     }
   };
 
-  const handleKeywordDelete = async (keyword: string) => {
-    const resultAction = await dispatch(deleteKeyword(keyword));
-    if (deleteKeyword.fulfilled.match(resultAction)) {
-      setExistingKeywords((prev) => prev.filter((kw) => kw !== keyword));
-    }
-  };
-
   const handleDirectorClick = async (director: string) => {
     const resultAction = await dispatch(postDirector(director));
 
@@ -141,33 +138,125 @@ export default function MovieDetailsPage() {
     }
   };
 
-  const handleDelete = async (tconst: string) => {
-    dispatch(deleteFavorite(tconst)).then((resultAction) => {
-      if (deleteFavorite.fulfilled.match(resultAction)) {
+  const checkReviewType = async (tconst: string) => {
+    try {
+      // Verifica se existe uma resenha autoral
+      const authoralAction = await dispatch(fetchAuthoralReview(tconst));
+      if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
+        router.push(`/dashboard/reviews/${tconst}`);
+        return;
+      }
+
+      const blogAction = await dispatch(fetchBlogPost(tconst));
+      if (fetchBlogPost.fulfilled.match(blogAction) && blogAction.payload) {
+        router.push(`/dashboard/blogposts/${tconst}`);
+        return;
+      }
+
+      toast({
+        title: 'Nenhuma resenha encontrada',
+        description: 'Não foi encontrada nenhuma resenha para este filme.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Erro ao buscar resenha.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleCreateBlogPost = async () => {
+    try {
+      // Verifica se existe uma resenha autoral
+      const authoralAction = await dispatch(fetchAuthoralReview(tconst));
+      if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
+        toast({
+          title: 'Resenha existente',
+          description: 'Já existe uma resenha autoral para este filme.',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      setIsGeneratingBlogPost(true);
+      const resultAction = await dispatch(createBlogPost(tconst));
+      
+      if (createBlogPost.fulfilled.match(resultAction)) {
         toast({
           title: 'Sucesso',
-          description: 'Filme removido dos favoritos.',
+          description: 'Resenha gerada com sucesso.',
           status: 'success',
           duration: 3000,
           isClosable: true,
         });
-        router.push('/dashboard/favorites');
+        router.push(`/dashboard/blogposts/${tconst}`);
       } else {
         toast({
           title: 'Erro',
-          description: 'Não foi possível remover o filme dos favoritos.',
-          status: 'error',
+          description: 'Já existe uma resenha com IA para este filme.',
+          status: 'warning',
           duration: 3000,
           isClosable: true,
         });
       }
-    });
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Já existe uma resenha com IA para este filme.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsGeneratingBlogPost(false);
+    }
+  };
+
+  const handleCreateAuthoralReview = async () => {
+    try {
+      // Verifica se existe uma resenha autoral
+      const authoralAction = await dispatch(fetchAuthoralReview(tconst));
+      if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
+        toast({
+          title: 'Resenha existente',
+          description: 'Já existe uma resenha autoral para este filme.',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      // Verifica se existe uma resenha com IA
+      const blogAction = await dispatch(fetchBlogPost(tconst));
+      if (fetchBlogPost.fulfilled.match(blogAction) && blogAction.payload) {
+        toast({
+          title: 'Resenha existente',
+          description: 'Já existe uma resenha com IA para este filme.',
+          status: 'warning',
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${data.primaryTitle}&originalTitle=${data.originalTitle}`);
+    } catch (error) {
+      router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${data.primaryTitle}&originalTitle=${data.originalTitle}`);
+    }
   };
 
   const handlers = {
     handleDirectorClick,
     handleKeywordClick,
-    handleKeywordDelete,
     sanitizeTrivia,
     formatQuote,
   };
@@ -183,16 +272,39 @@ export default function MovieDetailsPage() {
     <S.PageContainer>
       <GoBack centerText={data.originalTitle} />
       <HStack spacing={2} mb={4} justifyContent="flex-end">
+        {data.watched && (
+          <>
+            <Button
+              leftIcon={<FaBook />}
+              colorScheme="teal"
+              onClick={() => checkReviewType(tconst)}
+              size="sm"
+            >
+              Ver resenha
+            </Button>
+            <Button
+              leftIcon={<FaRobot />}
+              colorScheme="purple"
+              onClick={handleCreateBlogPost}
+              size="sm"
+              isLoading={isGeneratingBlogPost}
+            >
+              Resenha com IA
+            </Button>
+            <Button
+              leftIcon={<FaPen />}
+              colorScheme="blue"
+              onClick={handleCreateAuthoralReview}
+              size="sm"
+            >
+              Resenha autoral
+            </Button>
+          </>
+        )}
         <IconButton
           aria-label="Editar favorito"
           icon={<FaEdit />}
           onClick={onOpen}
-        />
-        <IconButton
-          aria-label="Remover dos favoritos"
-          icon={<FaTrash />}
-          onClick={() => handleDelete(tconst)}
-          colorScheme="red"
         />
       </HStack>
 
