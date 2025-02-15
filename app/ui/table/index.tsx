@@ -12,6 +12,7 @@ import { TableProps } from './types';
 const Table = ({
   columns,
   entries,
+  handleAdd,
   isLoading,
   onPageChange,
   onPageSizeChange,
@@ -47,6 +48,7 @@ const Table = ({
           entries={sortedEntries}
           isLoading={isLoading}
           handleView={handleView}
+          handleAdd={handleAdd}
         />
       </S.StyledTable>
       <S.Footer>

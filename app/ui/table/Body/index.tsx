@@ -25,7 +25,9 @@ const TableBody = ({
   const handleStarClick = (tconst: string) => {
     console.log('tconst selecionado', tconst);
     setSelectedTconst(tconst === selectedTconst ? null : tconst);
-    handleAdd(tconst);
+    if (handleAdd) {
+      handleAdd(tconst);
+    }
   };
 
   // console.log('entries', entries)

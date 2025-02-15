@@ -42,7 +42,7 @@ export default function BlogPostsPage() {
   return (
     <div style={{ minHeight: '100vh' }}>
       <h2>Blog Posts</h2>
-      <div>
+      {/* <div>
         <p>Gere ou edite um post feito com IA</p>
         <Input
           type='text'
@@ -57,7 +57,7 @@ export default function BlogPostsPage() {
         <Button onClick={handleEditPost} isLoading={creating} colorScheme='gray' isDisabled={loading}>
           Editar Post
         </Button>
-      </div>
+      </div> */}
 
       {!hasEntries ? (
         <div style={{ padding: '20px', textAlign: 'center' }}>

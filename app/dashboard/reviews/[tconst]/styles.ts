@@ -58,7 +58,8 @@ export const SectionTitle = styled.h2`
   margin-bottom: 0.5rem;
 `;
 
-export const SectionContent = styled.p`
+export const SectionContent = styled.div`
+  white-space: pre-wrap;
   color: #718096;
   line-height: 1.625;
 `;

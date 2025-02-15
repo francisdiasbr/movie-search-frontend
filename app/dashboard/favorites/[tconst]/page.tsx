@@ -248,9 +248,21 @@ export default function MovieDetailsPage() {
         return;
       }
 
+      // Se não encontrar nenhuma resenha, redireciona para criar uma nova
       router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${data.primaryTitle}&originalTitle=${data.originalTitle}`);
     } catch (error) {
-      router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${data.primaryTitle}&originalTitle=${data.originalTitle}`);
+      // Se der erro 404, significa que não existe resenha, então podemos prosseguir com a criação
+      if (error instanceof Error && error.message.includes('404')) {
+        router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${data.primaryTitle}&originalTitle=${data.originalTitle}`);
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Erro ao verificar resenhas existentes.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
 

@@ -13,7 +13,6 @@ const AuthoralReviewForm = () => {
   const toast = useToast();
   const searchParams = useSearchParams();
 
-  // Pegando os parâmetros da URL
   const urlTconst = searchParams.get('tconst') || '';
   const urlPrimaryTitle = searchParams.get('primaryTitle') || '';
   const urlOriginalTitle = searchParams.get('originalTitle') || '';
@@ -25,7 +24,6 @@ const AuthoralReviewForm = () => {
   const [contentEn, setContentEn] = useState('');
   const [tconst, setTconst] = useState(urlTconst);
 
-  // Atualiza os campos quando os parâmetros da URL mudarem
   useEffect(() => {
     setPrimaryTitle(urlPrimaryTitle);
     setOriginalTitle(urlOriginalTitle);
@@ -54,20 +52,17 @@ const AuthoralReviewForm = () => {
       return;
     }
 
+    const formattedContentPt = contentPt.replace(/\n/g, '\n\n').trim();
+    const formattedContentEn = contentEn.replace(/\n/g, '\n\n').trim();
+
     const reviewData = {
       content: {
-        pt: { 
-          text: contentPt,
-          title: primaryTitle
-        },
-        en: { 
-          text: contentEn,
-          title: originalTitle || primaryTitle
-        }
+        pt: { text: formattedContentPt },
+        en: { text: formattedContentEn },
       },
       tconst,
       primaryTitle,
-      originalTitle: originalTitle || primaryTitle,
+      originalTitle,
       isAiGenerated: false,
     };
 
@@ -92,15 +87,23 @@ const AuthoralReviewForm = () => {
     }
 
     if (status === 'failed') {
-      const errorMessage =
-        error === 'Movie not found in favorites'
-          ? 'Filme não encontrado nos favoritos'
-          : typeof error === 'string'
-            ? error
-            : 'tconst não informado';
+      console.log('Erro completo:', error);
+
+      const errorMessage = (() => {
+        if (error === 'Movie not found in favorites') {
+          return 'Filme não encontrado nos favoritos';
+        }
+        if (!tconst) {
+          return 'tconst não informado';
+        }
+        if (typeof error === 'string') {
+          return error;
+        }
+        return 'Erro ao salvar a resenha';
+      })();
 
       toast({
-        title: 'Error',
+        title: 'Erro',
         description: errorMessage,
         status: 'error',
         duration: 3000,
@@ -108,7 +111,7 @@ const AuthoralReviewForm = () => {
       });
       dispatch(clearState());
     }
-  }, [status, error, toast, dispatch]);
+  }, [status, error, toast, dispatch, tconst]);
 
   return (
     <Box as='form' p={4} borderWidth={1} borderRadius='md' onSubmit={handleSubmit}>
