@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
 
-const inter = Inter({ subsets: ["latin"] });
+import StyledComponentsRegistry from '../lib/registry';
+import './globals.css';
+import { ChakraProvider } from './providers';
+import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
-  title: "Movie Search Admin",
-  description: "Custom admin panel for Movie Search",
+  description: 'Custom admin panel for Movie Search',
+  title: 'The Movie Search',
+  icons: {
+    icon: '/favicon-32x32.png',
+  },
 };
 
 export default function RootLayout({
@@ -15,8 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialised`}>{children}</body>
+    <html lang='en'>
+      <body>
+        <StyledComponentsRegistry>
+          <ChakraProvider>
+            <StoreProvider>{children}</StoreProvider>
+          </ChakraProvider>
+        </StyledComponentsRegistry>
+      </body>
     </html>
   );
 }

@@ -1,8 +1,16 @@
-import { Inter, Figtree } from 'next/font/google';
- 
-export const inter = Inter({ subsets: ['latin'] });
+import { Figtree, Inter, Lustria } from 'next/font/google';
 
-export const figtree = Figtree({ 
+export const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '700']
+  weight: ['400', '600', '700'],
+});
+
+export const figtree = Figtree({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
+export const lustria = Lustria({
+  subsets: ['latin'],
+  weight: ['400'],
 });
