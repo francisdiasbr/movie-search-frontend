@@ -9,6 +9,10 @@ export const Card = styled.div`
   overflow: hidden;
 `;
 
+export const CardBody = styled.div`
+  padding: 20px;
+`;
+
 export const CardHeader = styled.div`
   background: #f7fafc;
   border-bottom: 1px solid #e2e8f0;
@@ -16,20 +20,10 @@ export const CardHeader = styled.div`
 `;
 
 export const CardTitle = styled.h3`
+  color: #2d3748;
   font-size: 16px;
   font-weight: 600;
-  color: #2d3748;
   margin: 0;
-`;
-
-export const CardBody = styled.div`
-  padding: 20px;
-`;
-
-export const LinksGrid = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 `;
 
 export const LinkItem = styled.div`
@@ -39,15 +33,21 @@ export const LinkItem = styled.div`
 `;
 
 export const LinkLabel = styled.span`
+  color: #718096;
   font-size: 12px;
   font-weight: 600;
-  color: #718096;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
 `;
 
 export const LinkValue = styled.div`
-  font-size: 14px;
   color: #2d3748;
+  font-size: 14px;
   word-break: break-word;
+`;
+
+export const LinksGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;

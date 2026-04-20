@@ -21,10 +21,15 @@ interface SearchProps {
   yearOptions?: { value: string; label: string }[];
 }
 
+const selectStyles = {
+  container: (provided: any) => ({ ...provided, height: '40px', minWidth: '200px' }),
+  control: (provided: any) => ({ ...provided, height: '40px', minHeight: '40px' }),
+  input: (provided: any) => ({ ...provided, boxShadow: 'none' }),
+};
+
 const Search = ({
   country,
   countryOptions,
-  isLoading,
   searchTerm,
   setCountry,
   setSearchTerm,
@@ -37,7 +42,7 @@ const Search = ({
 }: SearchProps) => {
   return (
     <S.SearchContainer>
-      <S.SearchInput
+      <input
         onChange={e => setSearchTerm(e.target.value)}
         placeholder='Pesquisar'
         type='search'
@@ -51,10 +56,7 @@ const Search = ({
             onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
             options={countryOptions}
             placeholder='País'
-            styles={{
-              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-            }}
+            styles={selectStyles}
             value={countryOptions?.find(option => option.value === country) || null}
           />
           <Select
@@ -62,10 +64,7 @@ const Search = ({
             onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
             options={yearOptions}
             placeholder='Ano'
-            styles={{
-              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-            }}
+            styles={selectStyles}
             value={year ? { value: year.toString(), label: year.toString() } : null}
           />
           <Select
@@ -80,10 +79,7 @@ const Search = ({
               { value: 'false', label: 'Não assistidos' },
             ]}
             placeholder='Status de assistido'
-            styles={{
-              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-            }}
+            styles={selectStyles}
             value={
               watched === undefined
                 ? null

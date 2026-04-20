@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Cell = styled.td`
-  padding: 10px;
   border-bottom: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
   &:first-child {
     text-align: center;

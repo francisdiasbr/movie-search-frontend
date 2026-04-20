@@ -8,10 +8,14 @@ export const Card = styled.div`
   margin-bottom: 24px;
   overflow: hidden;
   width: 100%;
-  
+
   @media (min-width: 1024px) {
     width: calc(50% - 12px);
   }
+`;
+
+export const CardBody = styled.div`
+  padding: 20px;
 `;
 
 export const CardHeader = styled.div`
@@ -21,18 +25,16 @@ export const CardHeader = styled.div`
 `;
 
 export const CardTitle = styled.h3`
+  color: #2d3748;
   font-size: 16px;
   font-weight: 600;
-  color: #2d3748;
   margin: 0;
 `;
 
-export const CardBody = styled.div`
-  padding: 20px;
-`;
-
-export const Content = styled.div`
+export const Content = styled.ul`
+  color: #2d3748;
   font-size: 14px;
   line-height: 1.5;
-  color: #2d3748;
+  margin: 0;
+  padding: 0;
 `;

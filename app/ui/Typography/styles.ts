@@ -66,8 +66,8 @@ const fontStyles = {
 };
 
 export const TextStyled = styled.p<TypographyProps>`
-  ${({ variant }) => fontStyles[variant as keyof typeof fontStyles]}
+  color: ${({ color }) => color};
   text-decoration-line: ${({ underline }) =>
     underline ? 'underline' : 'none'};
-  color: ${({ color }) => color};
+  ${({ variant }) => fontStyles[variant as keyof typeof fontStyles]}
 `;

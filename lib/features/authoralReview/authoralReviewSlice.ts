@@ -86,7 +86,7 @@ export const updateAuthoralReview = createAsyncThunk(
   async ({ tconst, data }: { tconst: string, data: { content: { pt?: { text: string }, en?: { text: string } } } }, { rejectWithValue }) => {
     const url = `write-review/${tconst}`;
     try {
-      const response = await BaseService.put(url, data);
+      const response = await BaseService.put(url, data as any);
       return response.data;
     } catch (error) {
       console.error('Erro ao atualizar a revisão autoral:', error);

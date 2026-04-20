@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 export const BackButton = styled.button`
-  display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  cursor: pointer;
+  background: none;
   border: none;
   border-radius: 20px;
-  background: none;
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 20px;
   padding: 8px;
 
   &:hover {

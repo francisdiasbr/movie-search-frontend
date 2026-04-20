@@ -40,7 +40,6 @@ export default function SearchPage() {
   return (
     <div>
       <h2>Adicionar Filme aos Favoritos</h2>
-      {/* <div style={{ display: 'flex', flexDirection: 'row', gap: '16px' }}> */}
         <input
           type="text"
           value={tconst}
@@ -50,16 +49,11 @@ export default function SearchPage() {
           disabled={isLoading}
         />
         <button
-          // colorScheme="neutral"
           onClick={() => handleAdd(tconst)}
           disabled={isLoading || !tconst}
-          // spinnerPlacement="end"
-          // isLoading={isLoading}
-          // loadingText="Adicionando..."
         >
           Adicionar na coleção
         </button>
-      {/* </div> */}
     </div>
   );
 }

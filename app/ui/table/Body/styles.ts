@@ -25,6 +25,13 @@ export const Cell = styled.td`
   }
 `;
 
+export const LoadingCell = styled.td`
+  padding: 80px 20px;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+`;
+
 export const Row = styled.tr`
   &:hover {
     background: #f9f9f9;
@@ -34,12 +41,5 @@ export const Row = styled.tr`
 
 export const TableBody = styled.tbody`
   min-height: 300px;
-  width: 100%;
-`;
-
-export const LoadingCell = styled.td`
-  padding: 80px 20px;
-  text-align: center;
-  vertical-align: middle;
   width: 100%;
 `;

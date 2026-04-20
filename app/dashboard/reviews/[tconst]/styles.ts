@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  max-width: 4xl;
+  align-items: flex-start;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  max-width: 4xl;
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -12,30 +12,45 @@ export const Container = styled.div`
 `;
 
 export const ContentColumn = styled.div`
-  width: 62%;
   padding-right: 1rem;
+  width: 62%;
 
   @media (max-width: 1024px) {
-    width: 100%;
     padding-right: 0;
+    width: 100%;
+  }
+`;
+
+export const EditButton = styled.button`
+  background: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  padding: 8px 16px;
+
+  &:hover {
+    background: #0056b3;
   }
 `;
 
 export const FlexContainer = styled.div`
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
 `;
 
-export const InnerContainer = styled.div`
+export const Header = styled.div`
+  align-items: center;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const ImageColumn = styled.div`
-  width: 36%;
   padding-left: 1rem;
+  width: 36%;
 
   img {
     margin-bottom: 30px;
@@ -43,9 +58,14 @@ export const ImageColumn = styled.div`
   }
 
   @media (max-width: 1024px) {
-    width: 100%;
     padding-left: 0;
+    width: 100%;
   }
+`;
+
+export const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const PageContainer = styled.div`
@@ -62,33 +82,13 @@ export const SectionContainer = styled.div`
   margin-bottom: 2rem;
 `;
 
-export const SectionTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-
 export const SectionContent = styled.p`
   color: #718096;
   line-height: 1.625;
 `;
 
-export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-export const EditButton = styled.button`
-  padding: 8px 16px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background: #0056b3;
-  }
+export const SectionTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 `;

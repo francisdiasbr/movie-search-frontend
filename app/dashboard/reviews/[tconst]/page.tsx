@@ -23,7 +23,7 @@ function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
-  const { imageUrls, uploadStatus, imageNames, imageSubtitles, subtitleStatus } =
+  const { imageUrls, uploadStatus, imageNames, imageSubtitles_pt, subtitleStatus } =
     useAppSelector((state: RootState) => state.uploadImages);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,11 +49,9 @@ function Reviews() {
         updateAuthoralReview({
           tconst: movieId as string,
           data: {
-            data: {
-              content: {
-                pt: { text: content.pt?.text || '' },
-                en: { text: content.en?.text || '' },
-              },
+            content: {
+              pt: { text: content.pt?.text || '' },
+              en: { text: content.en?.text || '' },
             },
           },
         })
@@ -93,7 +91,7 @@ function Reviews() {
   const handleSaveSubtitle = async (filename: string) => {
     if (typeof movieId === 'string') {
       try {
-        await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle }));
+        await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle_en: subtitle, subtitle_pt: subtitle }));
         setEditingImage(null);
         dispatch(fetchAllImageUrls({ tconst: movieId }));
       } catch (error) {}
@@ -151,9 +149,9 @@ function Reviews() {
                       width: '100%',
                     }}
                   />
-                  {imageSubtitles?.[index] && (
+                  {imageSubtitles_pt?.[index] && (
                     <p style={{ color: '#666', fontSize: '14px', textAlign: 'center' }}>
-                      {imageSubtitles[index]}
+                      {imageSubtitles_pt[index]}
                     </p>
                   )}
                   <div style={{ display: 'flex', gap: '8px', position: 'absolute', right: '8px', top: '8px' }}>

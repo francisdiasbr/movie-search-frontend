@@ -1,3 +1,7 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 a {
   color: blue;
   text-decoration: underline;
@@ -12,8 +16,17 @@ textarea,
 select {
   border: 1px solid #a3a3a3;
   border-radius: 4px;
-  padding: 4px 8px;
+  font-family: inherit;
   font-size: 1rem;
+  outline: none;
+  padding: 4px 8px;
+}
+
+input:not([aria-autocomplete="list"]):focus,
+textarea:focus,
+select:focus {
+  border-color: #3182ce;
+  box-shadow: 0 0 0 1px #3182ce;
 }
 
 button {

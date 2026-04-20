@@ -10,80 +10,30 @@ export const Card = styled.div`
   width: 100%;
 `;
 
-export const CardHeader = styled.div`
-  background: #f7fafc;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const CardTitle = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  color: #2d3748;
-  margin: 0;
-`;
-
 export const CardBody = styled.div`
   padding: 20px;
 `;
 
-export const ImagesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
-
-export const ImageContainer = styled.div`
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  aspect-ratio: 3/2;
-`;
-
-export const ImageOverlay = styled.div`
-  position: absolute;
-  top: 8px;
-  right: 8px;
+export const CardHeader = styled.div`
+  align-items: center;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
-  gap: 8px;
-  z-index: 10;
+  justify-content: space-between;
+  padding: 16px 20px;
 `;
 
-export const UploadButton = styled.button`
-  width: 100%;
-  padding: 12px 20px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background: #5a67d8;
-  }
-
-  &:disabled {
-    background: #a0aec0;
-    cursor: not-allowed;
-  }
+export const CardTitle = styled.h3`
+  color: #2d3748;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
 `;
 
 export const EmptyState = styled.div`
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 40px 20px;
   text-align: center;
 `;
@@ -94,4 +44,54 @@ export const EmptyText = styled.p`
   line-height: 1.5;
   margin: 0;
   max-width: 400px;
+`;
+
+export const ImageContainer = styled.div`
+  aspect-ratio: 3/2;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+`;
+
+export const ImageOverlay = styled.div`
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 10;
+`;
+
+export const ImagesGrid = styled.div`
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-bottom: 16px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+export const UploadButton = styled.button`
+  background: #667eea;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    background: #5a67d8;
+  }
+
+  &:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+  }
 `;

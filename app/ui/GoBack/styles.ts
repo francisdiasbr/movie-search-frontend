@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-`;
-
 export const CenterText = styled.div`
   flex: 1;
-  text-align: center;
   font-size: 32px;
   font-weight: bold;
+  text-align: center;
+`;
+
+export const Container = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
 `;

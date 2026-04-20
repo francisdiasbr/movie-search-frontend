@@ -9,8 +9,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 300px;
-  padding: 16px;
   overflow: auto;
+  padding: 16px;
   width: 100%;
   &: hover {
     background-color: #f5f5f5;
