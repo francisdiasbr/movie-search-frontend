@@ -1,6 +1,5 @@
 'use client';
 
-import { useDisclosure } from '@chakra-ui/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -30,11 +29,11 @@ import * as S from './styles';
 
 export default function MovieDetailsPage() {
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [isGeneratingBlogPost, setIsGeneratingBlogPost] = useState(false);
-  const { isOpen: isStickerModalOpen, onOpen: onStickerModalOpen, onClose: onStickerModalClose } = useDisclosure();
+  const [isStickerModalOpen, setIsStickerModalOpen] = useState(false);
   const [selectedSticker, setSelectedSticker] = useState<{url: string, filename: string} | null>(null);
-  const { isOpen: isMainImageModalOpen, onOpen: onMainImageModalOpen, onClose: onMainImageModalClose } = useDisclosure();
+  const [isMainImageModalOpen, setIsMainImageModalOpen] = useState(false);
   const [selectedMainImage, setSelectedMainImage] = useState<{url: string, filename: string} | null>(null);
 
   const dispatch = useAppDispatch();
@@ -284,12 +283,12 @@ export default function MovieDetailsPage() {
 
   const handleStickerClick = (sticker: {url: string, filename: string}) => {
     setSelectedSticker(sticker);
-    onStickerModalOpen();
+    setIsStickerModalOpen(true);
   };
 
   const handleMainImageClick = (image: {url: string, filename: string}) => {
     setSelectedMainImage(image);
-    onMainImageModalOpen();
+    setIsMainImageModalOpen(true);
   };
 
   return (
@@ -308,7 +307,7 @@ export default function MovieDetailsPage() {
         <EditModal
           data={data}
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={() => setIsOpen(false)}
           tconst={tconst}
         />
       )}
@@ -316,7 +315,7 @@ export default function MovieDetailsPage() {
         <MovieInfoCard
           data={data}
           existingKeywords={existingKeywords}
-          onEditClick={onOpen}
+          onEditClick={() => setIsOpen(true)}
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}
         />
@@ -363,7 +362,7 @@ export default function MovieDetailsPage() {
       {isStickerModalOpen && (
         <StickerModal
           isOpen={isStickerModalOpen}
-          onClose={onStickerModalClose}
+          onClose={() => setIsStickerModalOpen(false)}
           selectedSticker={selectedSticker}
         />
       )}
@@ -371,7 +370,7 @@ export default function MovieDetailsPage() {
       {isMainImageModalOpen && (
         <MainImageModal
           isOpen={isMainImageModalOpen}
-          onClose={onMainImageModalClose}
+          onClose={() => setIsMainImageModalOpen(false)}
           selectedMainImage={selectedMainImage}
         />
       )}

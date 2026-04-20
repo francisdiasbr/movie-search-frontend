@@ -1,5 +1,6 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 import Image from 'next/image';
+
+import Dialog from '../../../../ui/Dialog';
 
 interface StickerModalProps {
   isOpen: boolean;
@@ -9,28 +10,16 @@ interface StickerModalProps {
 
 export default function StickerModal({ isOpen, onClose, selectedSticker }: StickerModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Visualizar Sticker</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6} display="flex" justifyContent="center" alignItems="center">
-          {selectedSticker && (
-            <Image
-              src={selectedSticker.url}
-              alt={selectedSticker.filename}
-              width={600}
-              height={600}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '70vh',
-                borderRadius: '8px',
-                objectFit: 'contain'
-              }}
-            />
-          )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    <Dialog isOpen={isOpen} onClose={onClose} title='Visualizar Sticker'>
+      {selectedSticker && (
+        <Image
+          src={selectedSticker.url}
+          alt={selectedSticker.filename}
+          width={600}
+          height={600}
+          style={{ borderRadius: 8, maxHeight: '70vh', maxWidth: '100%', objectFit: 'contain' }}
+        />
+      )}
+    </Dialog>
   );
 }

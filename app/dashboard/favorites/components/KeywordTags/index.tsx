@@ -1,4 +1,3 @@
-import { Tag } from '@chakra-ui/react';
 import React from 'react';
 
 interface KeywordTagsProps {
@@ -7,14 +6,23 @@ interface KeywordTagsProps {
 }
 
 const KeywordTags: React.FC<KeywordTagsProps> = ({ keywords, maxTags = 5 }) => {
-  const truncatedKeywords = keywords.slice(0, maxTags);
-
   return (
     <>
-      {truncatedKeywords.map((keyword, index) => (
-        <Tag key={index} colorScheme='purple' m={1}>
+      {keywords.slice(0, maxTags).map((keyword, index) => (
+        <span
+          key={index}
+          style={{
+            background: '#e9d8fd',
+            borderRadius: '4px',
+            color: '#553c9a',
+            display: 'inline-block',
+            fontSize: '0.75rem',
+            margin: '2px',
+            padding: '2px 8px',
+          }}
+        >
           {keyword}
-        </Tag>
+        </span>
       ))}
     </>
   );

@@ -1,7 +1,5 @@
 'use client';
 
-import { Spinner, Box } from '@chakra-ui/react';
-
 import * as S from './styles';
 
 interface LoadingSpinnerProps {
@@ -13,22 +11,25 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color = '#2D2A26',
-  size = 'xl',
+  size = '40px',
   speed = '0.65s',
   thickness = '4px',
 }) => {
   return (
     <S.SpinnerContainer>
-      <Spinner
-        size={size}
-        color={color}
-        thickness={thickness}
-        speed={speed}
-        emptyColor="gray.200"
+      <div
+        style={{
+          animation: `spin ${speed} linear infinite`,
+          border: `${thickness} solid #e5e5e5`,
+          borderRadius: '50%',
+          borderTopColor: color,
+          height: size,
+          width: size,
+        }}
       />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </S.SpinnerContainer>
   );
 };
 
 export default LoadingSpinner;
-

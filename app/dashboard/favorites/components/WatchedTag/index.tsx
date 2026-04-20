@@ -1,6 +1,6 @@
 'use client';
 
-import { Tag, useToast } from '@chakra-ui/react';
+import { toast } from 'sonner';
 import { useState } from 'react';
 
 import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
@@ -14,7 +14,6 @@ interface WatchedTagProps {
 
 export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProps) {
   const dispatch = useAppDispatch();
-  const toast = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleClick = async () => {
@@ -42,59 +41,36 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
         const editAction = await dispatch(editDetails(updateData));
         
         if (editDetails.fulfilled.match(editAction)) {
-          toast({
-            title: 'Sucesso',
-            description: `Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`,
-            status: 'success',
-            duration: 2000,
-            isClosable: true,
-          });
-          
-          // Chama callback para atualizar a lista
+          toast.success(`Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, { duration: 2000 });
+
           if (onUpdate) {
             onUpdate();
           }
         } else {
-          toast({
-            title: 'Erro',
-            description: 'Não foi possível atualizar o status.',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          });
+          toast.error('Não foi possível atualizar o status.');
         }
       } else {
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível carregar os dados do filme.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+        toast.error('Não foi possível carregar os dados do filme.');
       }
     } catch (error) {
-      toast({
-        title: 'Erro',
-        description: 'Ocorreu um erro ao atualizar.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.error('Ocorreu um erro ao atualizar.');
     } finally {
       setIsUpdating(false);
     }
   };
 
   return (
-    <Tag
-      colorScheme={watched ? 'green' : 'red'}
-      cursor={isUpdating ? 'not-allowed' : 'pointer'}
-      opacity={isUpdating ? 0.6 : 1}
+    <span
+      style={{
+        cursor: isUpdating ? 'not-allowed' : 'pointer',
+        opacity: isUpdating ? 0.6 : 1,
+        color: watched ? 'green' : 'red',
+      }}
       onClick={handleClick}
       title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}
     >
       {watched ? 'Sim' : 'Não'}
-    </Tag>
+    </span>
   );
 }
 

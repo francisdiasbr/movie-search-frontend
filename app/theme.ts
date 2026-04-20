@@ -1,5 +1,3 @@
-import { extendTheme } from '@chakra-ui/react';
-
 const breakpoints = {
   xs: '320px',
   sm: '480px',
@@ -60,7 +58,7 @@ const colors = {
   },
   quaternary: {
     50: '#fff8e1',
-    100: '#deb522', // Amarelo do IMDb
+    100: '#deb522',
     200: '#c6a700',
     300: '#b59400',
     400: '#a68f00',
@@ -84,28 +82,6 @@ const colors = {
   },
 };
 
-const components = {
-  // Input: {
-  //   variants: {
-  //     outline: {
-  //       field: {
-  //         focusBorderColor: 'primary.50',
-  //         boxShadow: 'none',
-  //         borderWidth: '2px',
-  //         _focus: {
-  //           borderColor: 'primary.50',
-  //           boxShadow: 'none',
-  //         },
-  //         _focusVisible: {
-  //           boxShadow: 'none',
-  //           borderColor: 'primary.50',
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
-};
-
-const theme = extendTheme({ breakpoints, colors, components });
+const theme = { breakpoints, colors };
 
 export default theme;

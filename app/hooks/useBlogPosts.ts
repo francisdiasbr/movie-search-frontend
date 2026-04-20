@@ -1,5 +1,5 @@
-import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useCallback, useState, useEffect } from 'react';
 
 import {
@@ -14,8 +14,6 @@ import { RootState } from '../../lib/store';
 export function useBlogPosts() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const toast = useToast();
-
   const { data, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
   const { entries: allAuthoralReviews } = useAppSelector((state: RootState) => state.allAuthoralReviews);
   const { loading: creating } = useAppSelector((state: RootState) => state.blogPosts);
@@ -43,13 +41,7 @@ export function useBlogPosts() {
 
   const handleGeneratePost = async () => {
     if (!movieId) {
-      toast({
-        title: 'Campo vazio',
-        description: 'Por favor, insira o tconst do filme antes de gerar um post.',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.warning('Por favor, insira o tconst do filme antes de gerar um post.');
       return;
     }
 
@@ -64,13 +56,7 @@ export function useBlogPosts() {
 
   const handleEditPost = async () => {
     if (!movieId) {
-      toast({
-        title: 'Campo vazio',
-        description: 'Por favor, insira o tconst do filme antes de editar um post.',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.warning('Por favor, insira o tconst do filme antes de editar um post.');
       return;
     }
 

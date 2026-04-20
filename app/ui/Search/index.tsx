@@ -1,4 +1,3 @@
-import { Input } from '@chakra-ui/react';
 import React from 'react';
 import Select from 'react-select';
 
@@ -38,67 +37,63 @@ const Search = ({
 }: SearchProps) => {
   return (
     <S.SearchContainer>
-        <S.SearchInput
-          onChange={e => setSearchTerm(e.target.value)}
-          placeholder='Pesquisar'
-          type='search'
-          value={searchTerm}
-        />
-        {showAllFields && (
-          <>
-            <Select
-              isClearable
-              isSearchable
-              onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
-              options={countryOptions}
-              placeholder='País'
-              styles={{
-                container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-                control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-              }}
-              value={countryOptions?.find(option => option.value === country) || null}
-            />
-            <Select
-              isClearable
-              onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
-              options={yearOptions}
-              placeholder='Ano'
-              styles={{
-                container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-                control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-              }}
-              value={year ? { value: year.toString(), label: year.toString() } : null}
-            />
-            <Select
-              isClearable
-              onChange={selectedOption => {
-                if (setWatched) {
-                  if (!selectedOption) {
-                    setWatched(undefined);
-                  } else {
-                    setWatched(selectedOption.value === 'true');
-                  }
-                }
-              }}
-              options={[
-                { value: 'true', label: 'Assistidos' },
-                { value: 'false', label: 'Não assistidos' }
-              ]}
-              placeholder='Status de assistido'
-              styles={{
-                container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
-                control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
-              }}
-              value={
-                watched === undefined 
-                  ? null 
-                  : watched === true 
-                    ? { value: 'true', label: 'Assistidos' }
-                    : { value: 'false', label: 'Não assistidos' }
+      <S.SearchInput
+        onChange={e => setSearchTerm(e.target.value)}
+        placeholder='Pesquisar'
+        type='search'
+        value={searchTerm}
+      />
+      {showAllFields && (
+        <>
+          <Select
+            isClearable
+            isSearchable
+            onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
+            options={countryOptions}
+            placeholder='País'
+            styles={{
+              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
+              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
+            }}
+            value={countryOptions?.find(option => option.value === country) || null}
+          />
+          <Select
+            isClearable
+            onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
+            options={yearOptions}
+            placeholder='Ano'
+            styles={{
+              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
+              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
+            }}
+            value={year ? { value: year.toString(), label: year.toString() } : null}
+          />
+          <Select
+            isClearable
+            onChange={selectedOption => {
+              if (setWatched) {
+                setWatched(selectedOption ? selectedOption.value === 'true' : undefined);
               }
-            />
-          </>
-        )}
+            }}
+            options={[
+              { value: 'true', label: 'Assistidos' },
+              { value: 'false', label: 'Não assistidos' },
+            ]}
+            placeholder='Status de assistido'
+            styles={{
+              container: provided => ({ ...provided, minWidth: '200px', height: '40px' }),
+              control: provided => ({ ...provided, height: '40px', minHeight: '40px' }),
+            }}
+            value={
+              watched === undefined
+                ? null
+                : watched
+                ? { value: 'true', label: 'Assistidos' }
+                : { value: 'false', label: 'Não assistidos' }
+            }
+          />
+        </>
+      )}
     </S.SearchContainer>
   );
 };

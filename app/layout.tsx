@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 
 import StyledComponentsRegistry from '../lib/registry';
 import './globals.css';
@@ -26,6 +27,7 @@ export default function RootLayout({
             <StoreProvider>{children}</StoreProvider>
           </ChakraProvider>
         </StyledComponentsRegistry>
+        <Toaster position='bottom-center' />
       </body>
     </html>
   );

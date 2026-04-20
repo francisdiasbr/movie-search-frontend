@@ -1,19 +1,9 @@
 'use client';
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  FormControl,
-  FormLabel,
-  Textarea,
-} from '@chakra-ui/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import Dialog from '../../../../ui/Dialog';
 
 interface ReviewContent {
   pt?: { text: string };
@@ -29,7 +19,7 @@ interface ReviewEditModalProps {
 export default function ReviewEditModal({ initialContent, onCancel, onSave }: ReviewEditModalProps) {
   const [content, setContent] = useState<ReviewContent>({
     pt: { text: initialContent.pt?.text || '' },
-    en: { text: initialContent.en?.text || '' }
+    en: { text: initialContent.en?.text || '' },
   });
   const router = useRouter();
 
@@ -37,53 +27,37 @@ export default function ReviewEditModal({ initialContent, onCancel, onSave }: Re
     e.preventDefault();
     await onSave({
       pt: { text: content.pt?.text || '' },
-      en: { text: content.en?.text || '' }
+      en: { text: content.en?.text || '' },
     });
     router.back();
   };
 
   return (
-    <Modal isOpen={true} onClose={onCancel} size="xl">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Editar Resenha</ModalHeader>
-        <ModalBody>
-          <form onSubmit={handleSubmit}>
-            <FormControl mb={4}>
-              <FormLabel>Português:</FormLabel>
-              <Textarea
-                value={content.pt?.text || ''}
-                onChange={(e) => setContent({
-                  ...content,
-                  pt: { text: e.target.value }
-                })}
-                rows={6}
-              />
-            </FormControl>
+    <Dialog isOpen={true} onClose={onCancel} title='Editar Resenha'>
+      <form onSubmit={handleSubmit}>
+        <div className='dialog-field'>
+          <label>Português:</label>
+          <textarea
+            value={content.pt?.text || ''}
+            onChange={(e) => setContent({ ...content, pt: { text: e.target.value } })}
+            rows={6}
+          />
+        </div>
 
-            <FormControl mb={4}>
-              <FormLabel>English:</FormLabel>
-              <Textarea
-                value={content.en?.text || ''}
-                onChange={(e) => setContent({
-                  ...content,
-                  en: { text: e.target.value }
-                })}
-                rows={6}
-              />
-            </FormControl>
-          </form>
-        </ModalBody>
+        <div className='dialog-field'>
+          <label>English:</label>
+          <textarea
+            value={content.en?.text || ''}
+            onChange={(e) => setContent({ ...content, en: { text: e.target.value } })}
+            rows={6}
+          />
+        </div>
 
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
-            Salvar
-          </Button>
-          <Button variant="ghost" onClick={onCancel}>
-            Cancelar
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        <div className='dialog-footer'>
+          <button type='button' onClick={onCancel}>Cancelar</button>
+          <button type='submit'>Salvar</button>
+        </div>
+      </form>
+    </Dialog>
   );
 }

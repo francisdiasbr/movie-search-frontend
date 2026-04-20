@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
+import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
   const { status, error } = useAppSelector((state) => state.authoralReviews);
-  const toast = useToast();
   const searchParams = useSearchParams();
 
   const urlTconst = searchParams.get('tconst') || '';
@@ -42,13 +41,7 @@ const AuthoralReviewForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateTconst(tconst)) {
-      toast({
-        title: 'Erro',
-        description: "Formato de tconst inválido. Deve começar com 'tt' seguido por 7 dígitos.",
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.error("Formato de tconst inválido. Deve começar com 'tt' seguido por 7 dígitos.");
       return;
     }
 
@@ -73,13 +66,7 @@ const AuthoralReviewForm = () => {
     if (status === 'idle') return;
 
     if (status === 'succeeded') {
-      toast({
-        title: 'Sucesso',
-        description: 'Resenha adicionada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.success('Resenha adicionada com sucesso!');
       setPrimaryTitle('');
       setContentPt('');
       setContentEn('');
@@ -101,68 +88,71 @@ const AuthoralReviewForm = () => {
         return 'Erro ao salvar a resenha';
       })();
 
-      toast({
-        title: 'Erro',
-        description: errorMessage,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.error(errorMessage);
       dispatch(clearState());
     }
   }, [status, error, toast, dispatch, tconst]);
 
   return (
-    <Box as='form' p={4} borderWidth={1} borderRadius='md' onSubmit={handleSubmit}>
-      <FormControl id='primaryTitle' mb={4} isRequired>
-        <FormLabel>Título do Filme</FormLabel>
-        <Input
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor='primaryTitle'>Título do Filme</label>
+        <input
+          id='primaryTitle'
           value={primaryTitle}
           onChange={(e) => setPrimaryTitle(e.target.value)}
           placeholder='Insira o título do filme'
-          isDisabled={!!urlPrimaryTitle}
+          disabled={!!urlPrimaryTitle}
+          required
         />
-      </FormControl>
-      <FormControl id='originalTitle' mb={4}>
-        <FormLabel>Título Original</FormLabel>
-        <Input
+      </div>
+      <div>
+        <label htmlFor='originalTitle'>Título Original</label>
+        <input
+          id='originalTitle'
           value={originalTitle}
           onChange={(e) => setOriginalTitle(e.target.value)}
           placeholder='Título original do filme'
-          isDisabled={true}
+          disabled
         />
-      </FormControl>
-      <FormControl id='tconst' mb={4} isRequired>
-        <FormLabel>tconst (IMDb)</FormLabel>
-        <Input 
-          placeholder='Código tt do IMDB' 
-          value={tconst} 
+      </div>
+      <div>
+        <label htmlFor='tconst'>tconst (IMDb)</label>
+        <input
+          id='tconst'
+          placeholder='Código tt do IMDB'
+          value={tconst}
           onChange={(e) => setTconst(e.target.value)}
-          isDisabled={!!urlTconst}
+          disabled={!!urlTconst}
+          required
         />
-      </FormControl>
-      <FormControl id='contentPt' mb={4} isRequired>
-        <FormLabel>Resenha em Português</FormLabel>
-        <Textarea
+      </div>
+      <div>
+        <label htmlFor='contentPt'>Resenha em Português</label>
+        <textarea
+          id='contentPt'
           placeholder='Digite sua resenha em português'
           value={contentPt}
           onChange={(e) => setContentPt(e.target.value)}
           rows={10}
+          required
         />
-      </FormControl>
-      <FormControl id='contentEn' mb={4} isRequired>
-        <FormLabel>Resenha em Inglês</FormLabel>
-        <Textarea
+      </div>
+      <div>
+        <label htmlFor='contentEn'>Resenha em Inglês</label>
+        <textarea
+          id='contentEn'
           placeholder='Digite sua resenha em inglês'
           value={contentEn}
           onChange={(e) => setContentEn(e.target.value)}
           rows={10}
+          required
         />
-      </FormControl>
-      <Button isLoading={status === 'loading'} type='submit'>
-        Enviar
-      </Button>
-    </Box>
+      </div>
+      <button disabled={status === 'loading'} type='submit'>
+        {status === 'loading' ? 'Enviando...' : 'Enviar'}
+      </button>
+    </form>
   );
 };
 

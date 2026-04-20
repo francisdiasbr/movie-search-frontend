@@ -1,7 +1,5 @@
 'use client';
 
-import { Text } from '@chakra-ui/react';
-
 import AuthoralReviewForm from '../../ui/AuthoralReviewForm';
 import GoBack from '../../ui/GoBack';
 
@@ -9,9 +7,7 @@ const WriteReviewPage = () => {
   return (
     <>
       <GoBack />
-      <Text fontSize='2xl' as='b'>
-        Write Review
-      </Text>
+      <h2>Write Review</h2>
       <p>Write a review for the movie you watched</p>
       <br />
       <AuthoralReviewForm />

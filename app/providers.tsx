@@ -1,17 +1,9 @@
 'use client';
 
-import { ChakraProvider as ChakraUIProvider } from '@chakra-ui/react';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
 import theme from './theme';
 
 export function ChakraProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <ChakraUIProvider
-      theme={theme}
-      toastOptions={{ defaultOptions: { position: 'bottom' } }}
-    >
-      <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>
-    </ChakraUIProvider>
-  );
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }

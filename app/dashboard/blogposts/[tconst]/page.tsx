@@ -1,10 +1,9 @@
 'use client';
 
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Button, IconButton, Box, Input, useDisclosure } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 import { fetchBlogPost, clearBlogPost, updateBlogPost, BlogPostEntry } from '../../../../lib/features/blogPosts/blogPostsSlice';
 import { fetchAllImageUrls, uploadMovieImage, deleteImage, updateImageSubtitle } from '../../../../lib/features/uploadImages/uploadImagesSlice';
@@ -20,7 +19,7 @@ function BlogPost() {
   const dispatch = useAppDispatch();
   const { data } = useAppSelector((state: RootState) => state.blogPosts);
   const { imageUrls, status, uploadStatus, imageNames, imageSubtitles_en, imageSubtitles_pt, subtitleStatus } = useAppSelector((state: RootState) => state.uploadImages);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [subtitle_en, setSubtitle_en] = useState('');
   const [subtitle_pt, setSubtitle_pt] = useState('');
@@ -64,27 +63,19 @@ function BlogPost() {
   const handleSaveSubtitle = async (filename: string) => {
     if (typeof movieId === 'string') {
       try {
-        await dispatch(updateImageSubtitle({
-          tconst: movieId,
-          filename,
-          subtitle_en: subtitle_en,
-          subtitle_pt: subtitle_pt
-        }));
-        setEditingImage(null); // Fecha o input após salvar
-        dispatch(fetchAllImageUrls({ tconst: movieId })); // Atualiza a lista de imagens
-      } catch (error) {
-      }
+        await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle_en, subtitle_pt }));
+        setEditingImage(null);
+        dispatch(fetchAllImageUrls({ tconst: movieId }));
+      } catch (error) {}
     }
   };
 
   const handleEdit = async (updatedData: BlogPostEntry) => {
     if (!data || !updatedData) return;
-    
     setIsLoading(true);
     try {
       await dispatch(updateBlogPost(updatedData));
-      onClose();
-      // Recarrega os dados atualizados
+      setIsOpen(false);
       if (typeof movieId === 'string') {
         dispatch(fetchBlogPost(movieId));
       }
@@ -97,7 +88,6 @@ function BlogPost() {
   if (!data) return null;
 
   const isLoadingImages = status === 'loading';
-  const isUploadingImage = uploadStatus === 'loading';
   const hasImages = imageUrls && imageUrls.length > 0;
 
   return (
@@ -105,14 +95,9 @@ function BlogPost() {
       <GoBack />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1>{data.primaryTitle}</h1>
-        <Button
-          leftIcon={<EditIcon />}
-          onClick={onOpen}
-          isLoading={isLoading}
-          loadingText="Salvando..."
-        >
-          Editar Resenha
-        </Button>
+        <button onClick={() => setIsOpen(true)} disabled={isLoading}>
+          <FaEdit /> {isLoading ? 'Salvando...' : 'Editar Resenha'}
+        </button>
       </div>
       <S.Container>
         <S.ContentColumn>
@@ -136,95 +121,63 @@ function BlogPost() {
             {hasImages && (
               <div>
                 {imageUrls.map((url, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      position: 'relative',
-                      marginBottom: '20px'
-                    }}
-                  >
+                  <div key={index} style={{ position: 'relative', marginBottom: '20px' }}>
                     <Image
                       src={url}
                       alt={`Imagem ${index + 1} do filme`}
                       width={1500}
                       height={1000}
                       style={{
-                        width: '100%',
-                        height: 'auto',
+                        aspectRatio: '3/2',
                         borderRadius: '8px',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                        height: 'auto',
                         marginBottom: '0px',
                         marginTop: '10px',
                         objectFit: 'cover',
-                        aspectRatio: '3/2'
+                        width: '100%',
                       }}
                     />
-                    {imageSubtitles_pt && imageSubtitles_pt[index] && editingImage !== imageNames[index] && (
-                      <p style={{
-                        fontSize: '14px',
-                        color: '#666',
-                        textAlign: 'center'
-                      }}>
+                    {imageSubtitles_pt?.[index] && editingImage !== imageNames[index] && (
+                      <p style={{ color: '#666', fontSize: '14px', textAlign: 'center' }}>
                         {imageSubtitles_pt[index]}
                       </p>
                     )}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '8px',
-                        right: '8px',
-                        display: 'flex',
-                        gap: '8px'
-                      }}
-                    >
-                      <IconButton
-                        aria-label="Editar imagem"
-                        icon={<EditIcon />}
-                        size="sm"
-                        colorScheme="blue"
-                        onClick={() => handleEditImage(imageNames[index], imageSubtitles_en[index] || '')}
-                      />
-                      <IconButton
-                        aria-label="Deletar imagem"
-                        icon={<DeleteIcon />}
-                        size="sm"
-                        colorScheme="red"
-                        onClick={() => handleDeleteImage(imageNames[index])}
-                      />
+                    <div style={{ display: 'flex', gap: '8px', position: 'absolute', right: '8px', top: '8px' }}>
+                      <button
+                        onClick={() => handleEditImage(imageNames[index], imageSubtitles_en?.[index] || '')}
+                        title='Editar imagem'
+                      >
+                        <FaEdit />
+                      </button>
+                      <button onClick={() => handleDeleteImage(imageNames[index])} title='Deletar imagem'>
+                        <FaTrash />
+                      </button>
                     </div>
                     {editingImage === imageNames[index] && (
-                      <Box mt={2} display="flex" gap={2}>
-                        <Input
-                          placeholder="Digite a legenda da imagem"
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                        <input
+                          placeholder='Legenda EN'
                           value={subtitle_en}
                           onChange={(e) => setSubtitle_en(e.target.value)}
-                          size="sm"
-                          flex={1}
+                          style={{ flex: 1 }}
                         />
-                        <Input
-                          placeholder="Digite a legenda da imagem"
+                        <input
+                          placeholder='Legenda PT'
                           value={subtitle_pt}
                           onChange={(e) => setSubtitle_pt(e.target.value)}
-                          size="sm"
-                          flex={1}
+                          style={{ flex: 1 }}
                         />
-                        <Button
-                          size="sm"
-                          colorScheme="green"
+                        <button
                           onClick={() => handleSaveSubtitle(imageNames[index])}
-                          isLoading={subtitleStatus === 'loading'}
-                          loadingText="Salvando..."
-                        >
-                          Salvar
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => setEditingImage(null)}
                           disabled={subtitleStatus === 'loading'}
                         >
+                          {subtitleStatus === 'loading' ? 'Salvando...' : 'Salvar'}
+                        </button>
+                        <button onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>
                           Cancelar
-                        </Button>
-                      </Box>
+                        </button>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -232,28 +185,25 @@ function BlogPost() {
             )}
 
             {isLoadingImages && (
-              <div style={{ textAlign: 'center', margin: '20px 0' }}>
+              <div style={{ margin: '20px 0', textAlign: 'center' }}>
                 <p>Carregando imagens...</p>
               </div>
             )}
 
-            <Input
-              type="file"
+            <input
+              type='file'
               ref={fileInputRef}
               onChange={handleFileChange}
-              accept="image/*"
+              accept='image/*'
               style={{ display: 'none' }}
-              flex={1}
             />
-            <Button
+            <button
               onClick={handleUploadClick}
-              isLoading={uploadStatus === 'loading'}
-              loadingText="Enviando..."
-              width="100%"
               disabled={uploadStatus === 'loading'}
+              style={{ width: '100%' }}
             >
-              {hasImages ? 'Adicionar mais imagens' : 'Adicionar imagem'}
-            </Button>
+              {uploadStatus === 'loading' ? 'Enviando...' : hasImages ? 'Adicionar mais imagens' : 'Adicionar imagem'}
+            </button>
           </div>
         </S.ImageColumn>
       </S.Container>
@@ -261,7 +211,7 @@ function BlogPost() {
       {isOpen && data && (
         <BlogPostEditModal
           initialData={data}
-          onCancel={onClose}
+          onCancel={() => setIsOpen(false)}
           onSave={handleEdit}
         />
       )}
@@ -276,12 +226,7 @@ function renderReferences(references: string[] | null) {
     <>
       {references.map((reference, index) => (
         <div key={index} style={{ marginBottom: '1px' }}>
-          <a
-            href={reference}
-            target='_blank'
-            rel='noopener noreferrer'
-            style={{ color: 'blue', textDecoration: 'underline' }}
-          >
+          <a href={reference} target='_blank' rel='noopener noreferrer'>
             {reference}
           </a>
         </div>

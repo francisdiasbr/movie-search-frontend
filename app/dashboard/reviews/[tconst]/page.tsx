@@ -1,20 +1,17 @@
 'use client';
 
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import { Button, useDisclosure, IconButton, Box, Input, Checkbox } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
-import {
-  clearAuthoralReviewStatus,
-} from '../../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
+import { clearAuthoralReviewStatus } from '../../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { fetchAuthoralReview, updateAuthoralReview } from '../../../../lib/features/authoralReview/authoralReviewSlice';
 import {
   fetchAllImageUrls,
   uploadMovieImage,
   deleteImage,
-  updateImageSubtitle
+  updateImageSubtitle,
 } from '../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
@@ -26,9 +23,9 @@ function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
-  const { imageUrls, status: imageStatus, uploadStatus, imageNames, imageSubtitles, subtitleStatus } = 
+  const { imageUrls, uploadStatus, imageNames, imageSubtitles, subtitleStatus } =
     useAppSelector((state: RootState) => state.uploadImages);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingImage, setEditingImage] = useState<string | null>(null);
@@ -45,21 +42,23 @@ function Reviews() {
     };
   }, [dispatch, movieId]);
 
-  const handleEdit = async (content: { pt?: { text: string }, en?: { text: string } }) => {
+  const handleEdit = async (content: { pt?: { text: string }; en?: { text: string } }) => {
     setIsLoading(true);
     try {
-      await dispatch(updateAuthoralReview({ 
-        tconst: movieId as string, 
-        data: {
+      await dispatch(
+        updateAuthoralReview({
+          tconst: movieId as string,
           data: {
-            content: {
-              pt: { text: content.pt?.text || '' },
-              en: { text: content.en?.text || '' }
-            }
-          }
-        }
-      }));
-      onClose();
+            data: {
+              content: {
+                pt: { text: content.pt?.text || '' },
+                en: { text: content.en?.text || '' },
+              },
+            },
+          },
+        })
+      );
+      setIsOpen(false);
       dispatch(fetchAuthoralReview(movieId as string));
     } catch (error) {
     } finally {
@@ -94,15 +93,10 @@ function Reviews() {
   const handleSaveSubtitle = async (filename: string) => {
     if (typeof movieId === 'string') {
       try {
-        await dispatch(updateImageSubtitle({
-          tconst: movieId,
-          filename,
-          subtitle
-        }));
+        await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle }));
         setEditingImage(null);
         dispatch(fetchAllImageUrls({ tconst: movieId }));
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 
@@ -134,107 +128,73 @@ function Reviews() {
           {!data.content?.pt?.text && !data.content?.en?.text && <div>Nenhuma resenha encontrada!</div>}
         </div>
       </S.ContentColumn>
-      <Button
-            leftIcon={<EditIcon />}
-            onClick={onOpen}
-            isLoading={isLoading}
-            loadingText="Salvando..."
-          >
-            Editar Resenha
-          </Button>
+      <button onClick={() => setIsOpen(true)} disabled={isLoading}>
+        <FaEdit /> {isLoading ? 'Salvando...' : 'Editar Resenha'}
+      </button>
       <S.ImageColumn>
         <div>
           {imageUrls && imageUrls.length > 0 && (
             <div>
               {imageUrls.map((url, index) => (
-                <div
-                  key={index}
-                  style={{
-                    position: 'relative',
-                    marginBottom: '20px'
-                  }}
-                >
+                <div key={index} style={{ position: 'relative', marginBottom: '20px' }}>
                   <Image
                     src={url}
                     alt={`Imagem ${index + 1} do filme`}
                     width={800}
                     height={600}
                     style={{
-                      width: '100%',
-                      height: 'auto',
                       borderRadius: '8px',
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                      height: 'auto',
                       marginBottom: '0px',
-                      marginTop: '10px'
+                      marginTop: '10px',
+                      width: '100%',
                     }}
                   />
-                  {imageSubtitles && imageSubtitles[index] && (
-                    <p style={{
-                      fontSize: '14px',
-                      color: '#666',
-                      textAlign: 'center'
-                    }}>
+                  {imageSubtitles?.[index] && (
+                    <p style={{ color: '#666', fontSize: '14px', textAlign: 'center' }}>
                       {imageSubtitles[index]}
                     </p>
                   )}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '8px',
-                      right: '8px',
-                      display: 'flex',
-                      gap: '8px'
-                    }}
-                  >
-                    <IconButton
-                      aria-label="Editar imagem"
-                      icon={<EditIcon />}
-                      size="sm"
-                      colorScheme="blue"
-                      onClick={() => handleEditImage(imageNames[index])}
-                    />
-                    <IconButton
-                      aria-label="Deletar imagem"
-                      icon={<DeleteIcon />}
-                      size="sm"
-                      colorScheme="red"
-                      onClick={() => handleDeleteImage(imageNames[index])}
-                    />
+                  <div style={{ display: 'flex', gap: '8px', position: 'absolute', right: '8px', top: '8px' }}>
+                    <button onClick={() => handleEditImage(imageNames[index])} title='Editar imagem'>
+                      <FaEdit />
+                    </button>
+                    <button onClick={() => handleDeleteImage(imageNames[index])} title='Deletar imagem'>
+                      <FaTrash />
+                    </button>
                   </div>
                   {editingImage === imageNames[index] && (
-                    <Box mt={2}>
-                      <Checkbox
-                        mb={2}
-                        isChecked={isCoverImage}
-                        onChange={(e) => setIsCoverImage(e.target.checked)}
-                      >
-                        Imagem de capa
-                      </Checkbox>
-                      <Box display="flex" gap={2}>
-                        <Input
-                          placeholder="Digite a legenda da imagem"
+                    <div style={{ marginTop: '8px' }}>
+                      <div style={{ marginBottom: '8px' }}>
+                        <label>
+                          <input
+                            type='checkbox'
+                            checked={isCoverImage}
+                            onChange={(e) => setIsCoverImage(e.target.checked)}
+                            style={{ marginRight: '6px' }}
+                          />
+                          Imagem de capa
+                        </label>
+                      </div>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <input
+                          placeholder='Digite a legenda da imagem'
                           value={subtitle}
                           onChange={(e) => setSubtitle(e.target.value)}
-                          size="sm"
+                          style={{ flex: 1 }}
                         />
-                        <Button
-                          size="sm"
-                          colorScheme="green"
+                        <button
                           onClick={() => handleSaveSubtitle(imageNames[index])}
-                          isLoading={subtitleStatus === 'loading'}
-                          loadingText="Salvando..."
-                        >
-                          Salvar
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => setEditingImage(null)}
                           disabled={subtitleStatus === 'loading'}
                         >
+                          {subtitleStatus === 'loading' ? 'Salvando...' : 'Salvar'}
+                        </button>
+                        <button onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>
                           Cancelar
-                        </Button>
-                      </Box>
-                    </Box>
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               ))}
@@ -242,28 +202,30 @@ function Reviews() {
           )}
 
           <input
-            type="file"
+            type='file'
             ref={fileInputRef}
             onChange={handleFileChange}
-            accept="image/*"
+            accept='image/*'
             style={{ display: 'none' }}
           />
-          <Button
+          <button
             onClick={handleUploadClick}
-            isLoading={uploadStatus === 'loading'}
-            loadingText="Enviando..."
-            width="100%"
             disabled={uploadStatus === 'loading'}
+            style={{ width: '100%' }}
           >
-            {imageUrls && imageUrls.length > 0 ? 'Adicionar mais imagens' : 'Adicionar imagem'}
-          </Button>
+            {uploadStatus === 'loading'
+              ? 'Enviando...'
+              : imageUrls && imageUrls.length > 0
+              ? 'Adicionar mais imagens'
+              : 'Adicionar imagem'}
+          </button>
         </div>
       </S.ImageColumn>
 
       {isOpen && (
         <ReviewEditModal
           initialContent={data.content || { pt: { text: '' }, en: { text: '' } }}
-          onCancel={onClose}
+          onCancel={() => setIsOpen(false)}
           onSave={handleEdit}
         />
       )}

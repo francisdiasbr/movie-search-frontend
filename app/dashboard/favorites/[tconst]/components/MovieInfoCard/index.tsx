@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react';
 import React from 'react';
 
 import FavoriteTag from '../FavoriteTag';
@@ -23,16 +22,8 @@ export default function MovieInfoCard({
     <S.Card>
       <S.CardHeader>
         <S.MovieTitle>{data.primaryTitle}</S.MovieTitle>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {onEditClick && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={onEditClick}
-            >
-              Editar
-            </Button>
-          )}
+        <div style={{ alignItems: 'center', display: 'flex', gap: '12px' }}>
+          {onEditClick && <button onClick={onEditClick}>Editar</button>}
         </div>
       </S.CardHeader>
 
@@ -87,24 +78,14 @@ export default function MovieInfoCard({
 
         <S.ActionsSection>
           {data.magnet_link && (
-            <a
-              href={data.magnet_link}
-              rel="noopener noreferrer"
-              style={{ fontSize: '12px', wordBreak: 'break-all' }}
-            >
+            <a href={data.magnet_link} rel='noopener noreferrer' style={{ fontSize: '12px', wordBreak: 'break-all' }}>
               {data.magnet_link}
             </a>
           )}
           {data.subtitle_url && (
-            <Button
-              as="a"
-              href={encodeURI(data.subtitle_url)}
-              rel="noopener noreferrer"
-              size="sm"
-              target="_blank"
-            >
-              Baixar Legendas
-            </Button>
+            <a href={encodeURI(data.subtitle_url)} rel='noopener noreferrer' target='_blank'>
+              <button>Baixar Legendas</button>
+            </a>
           )}
         </S.ActionsSection>
       </S.CardBody>

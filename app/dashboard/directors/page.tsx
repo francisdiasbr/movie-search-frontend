@@ -1,6 +1,5 @@
 'use client';
 
-import { Tag } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { getDirectors } from '../../../lib/features/directors/directorsSlice';
@@ -23,9 +22,20 @@ export default function Page() {
         <>
           <div>
             {directors.map((director, index) => (
-              <Tag key={index} colorScheme='red' mr={2} mb={2}>
+              <span
+                key={index}
+                style={{
+                  background: '#fed7d7',
+                  borderRadius: '4px',
+                  color: '#822727',
+                  display: 'inline-block',
+                  fontSize: '0.875rem',
+                  margin: '0 8px 8px 0',
+                  padding: '2px 8px',
+                }}
+              >
                 {director.director}
-              </Tag>
+              </span>
             ))}
           </div>
           <div style={{ marginTop: '10px' }}>

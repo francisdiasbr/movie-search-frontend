@@ -1,7 +1,7 @@
 'use client';
 
-import { Button, Input, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { addFavorite, resetAddStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
@@ -9,8 +9,6 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 export default function SearchPage() {
   const dispatch = useAppDispatch();
   const { addStatus } = useAppSelector(state => state.moviesDetails);
-  const toast = useToast();
-
   const [isLoading, setIsLoading] = useState(false);
   const [tconst, setTconst] = useState('');
 
@@ -30,23 +28,11 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (addStatus === 'succeeded') {
-      toast({
-        title: 'Sucesso',
-        description: 'Filme adicionado aos favoritos.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.success('Filme adicionado aos favoritos.');
       setTconst('');
       dispatch(resetAddStatus());
     } else if (addStatus === 'failed') {
-      toast({
-        title: 'Erro ao adicionar',
-        description: 'Filme já está na lista de favoritos.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.error('Filme já está na lista de favoritos.');
       dispatch(resetAddStatus());
     }
   }, [addStatus, toast, dispatch]);
@@ -54,27 +40,26 @@ export default function SearchPage() {
   return (
     <div>
       <h2>Adicionar Filme aos Favoritos</h2>
-      <div style={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
-        <Input
+      {/* <div style={{ display: 'flex', flexDirection: 'row', gap: '16px' }}> */}
+        <input
           type="text"
           value={tconst}
           onChange={(e) => setTconst(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Informe o tconst do filme a ser adicionado (ex: tt0084805)"
           disabled={isLoading}
-          flex={1}
         />
-        <Button
-          colorScheme="neutral"
+        <button
+          // colorScheme="neutral"
           onClick={() => handleAdd(tconst)}
           disabled={isLoading || !tconst}
-          spinnerPlacement="end"
-          isLoading={isLoading}
-          loadingText="Adicionando..."
+          // spinnerPlacement="end"
+          // isLoading={isLoading}
+          // loadingText="Adicionando..."
         >
           Adicionar na coleção
-        </Button>
-      </div>
+        </button>
+      {/* </div> */}
     </div>
   );
 }

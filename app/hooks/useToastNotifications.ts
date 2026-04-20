@@ -1,5 +1,4 @@
-import { useToast } from '@chakra-ui/react';
-import { useCallback } from 'react';
+import { toast } from 'sonner';
 
 interface ToastNotificationOptions {
   title: string;
@@ -7,66 +6,21 @@ interface ToastNotificationOptions {
 }
 
 export function useToastNotifications() {
-  const toast = useToast();
-
-  const defaultOptions = {
-    duration: 3000,
-    isClosable: true,
+  const showSuccess = ({ title, duration }: ToastNotificationOptions) => {
+    toast.success(title, { duration: duration ?? 3000 });
   };
 
-  const showSuccess = useCallback(
-    (options: ToastNotificationOptions) => {
-      toast({
-        ...defaultOptions,
-        title: options.title,
-        status: 'success',
-        duration: options.duration,
-      });
-    },
-    [toast]
-  );
-
-  const showError = useCallback(
-    (options: ToastNotificationOptions) => {
-      toast({
-        ...defaultOptions,
-        title: options.title,
-        status: 'error',
-        duration: options.duration,
-      });
-    },
-    [toast]
-  );
-
-  const showWarning = useCallback(
-    (options: ToastNotificationOptions) => {
-      toast({
-        ...defaultOptions,
-        title: options.title,
-        status: 'warning',
-        duration: options.duration,
-      });
-    },
-    [toast]
-  );
-
-  const showInfo = useCallback(
-    (options: ToastNotificationOptions) => {
-      toast({
-        ...defaultOptions,
-        title: options.title,
-        status: 'info',
-        duration: options.duration,
-      });
-    },
-    [toast]
-  );
-
-  return {
-    showSuccess,
-    showError,
-    showWarning,
-    showInfo,
+  const showError = ({ title, duration }: ToastNotificationOptions) => {
+    toast.error(title, { duration: duration ?? 3000 });
   };
+
+  const showWarning = ({ title, duration }: ToastNotificationOptions) => {
+    toast.warning(title, { duration: duration ?? 3000 });
+  };
+
+  const showInfo = ({ title, duration }: ToastNotificationOptions) => {
+    toast.info(title, { duration: duration ?? 3000 });
+  };
+
+  return { showSuccess, showError, showWarning, showInfo };
 }
-

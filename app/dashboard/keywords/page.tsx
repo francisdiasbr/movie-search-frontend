@@ -1,22 +1,15 @@
 'use client';
 
-import { Button, Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import BaseService from '../../../lib/api/service';
-import {
-  getKeywords,
-} from '../../../lib/features/keywords/keywordsSlice';
+import { getKeywords } from '../../../lib/features/keywords/keywordsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const {
-    data: keywords = [],
-    loading,
-    error,
-  } = useAppSelector(state => state.keywords);
+  const { data: keywords = [], loading, error } = useAppSelector(state => state.keywords);
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [suggestedMovies, setSuggestedMovies] = useState<any[]>([]);
@@ -30,14 +23,10 @@ export default function Page() {
     });
   }, [dispatch]);
 
-  const handleKeywordClick = async (keyword: string) => {
-    let updatedSelected;
-    if (selectedKeywords.includes(keyword)) {
-      updatedSelected = selectedKeywords.filter(kw => kw !== keyword);
-    } else {
-      updatedSelected = [...selectedKeywords, keyword];
-    }
-    setSelectedKeywords(updatedSelected);
+  const handleKeywordClick = (keyword: string) => {
+    setSelectedKeywords(prev =>
+      prev.includes(keyword) ? prev.filter(kw => kw !== keyword) : [...prev, keyword]
+    );
   };
 
   const handleFetchMovies = async () => {
@@ -68,45 +57,30 @@ export default function Page() {
           onItemClick={handleKeywordClick}
         />
       )}
-      <Box mt={4} display="flex" gap={2}>
-        <Button
-          colorScheme="neutral"
-          onClick={handleFetchMovies}
-          isDisabled={loadingMovies}
-          isLoading={loadingMovies}
-          spinnerPlacement='end'
-          loadingText='Buscando filmes'
-        >
-          Buscar filmes
-        </Button>
-        <Button
-          colorScheme="gray"
-          onClick={() => setSelectedKeywords([])}
-          isDisabled={loadingMovies}
-          spinnerPlacement='end'
-          loadingText='Limpar seleção'
-        >
+      <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+        <button onClick={handleFetchMovies} disabled={loadingMovies}>
+          {loadingMovies ? 'Buscando filmes...' : 'Buscar filmes'}
+        </button>
+        <button onClick={() => setSelectedKeywords([])} disabled={loadingMovies}>
           Limpar seleção
-        </Button>
-      </Box>
-      <Box mt={6}>
-        {suggestedMovies.length > 0 && (
-          <div>
-            <h3>Filmes sugeridos:</h3>
-            <ul>
-              {suggestedMovies.map((movie, index) => (
-                <li key={index}>
-                  <strong>{movie.title}</strong> ({movie.year})<br />
-                  <em>{movie.description}</em>
-                  {movie.relevance && (
-                    <div style={{ fontSize: '0.9em', color: '#666' }}>{movie.relevance}</div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </Box>
+        </button>
+      </div>
+      {suggestedMovies.length > 0 && (
+        <div style={{ marginTop: '24px' }}>
+          <h3>Filmes sugeridos:</h3>
+          <ul>
+            {suggestedMovies.map((movie, index) => (
+              <li key={index}>
+                <strong>{movie.title}</strong> ({movie.year})<br />
+                <em>{movie.description}</em>
+                {movie.relevance && (
+                  <div style={{ color: '#666', fontSize: '0.9em' }}>{movie.relevance}</div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

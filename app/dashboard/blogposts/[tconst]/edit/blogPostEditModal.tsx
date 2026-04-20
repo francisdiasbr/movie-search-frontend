@@ -1,26 +1,9 @@
 'use client';
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  FormControl,
-  FormLabel,
-  Textarea,
-  VStack,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-} from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { BlogPostEntry } from '../../../../../lib/features/blogPosts/blogPostsSlice';
+import Dialog from '../../../../ui/Dialog';
 
 interface BlogPostEditModalProps {
   initialData: BlogPostEntry;
@@ -28,9 +11,20 @@ interface BlogPostEditModalProps {
   onSave: (data: BlogPostEntry) => Promise<void>;
 }
 
+const fields: { key: string; label: { pt: string; en: string }; rows: number }[] = [
+  { key: 'title', label: { pt: 'Título', en: 'Title' }, rows: 2 },
+  { key: 'introduction', label: { pt: 'Introdução', en: 'Introduction' }, rows: 4 },
+  { key: 'plot_summary', label: { pt: 'Resumo do Filme', en: 'Plot Summary' }, rows: 4 },
+  { key: 'acting_analysis', label: { pt: 'Análise de Atuação', en: 'Acting Analysis' }, rows: 4 },
+  { key: 'personal_impressions', label: { pt: 'Impressões Pessoais', en: 'Personal Impressions' }, rows: 4 },
+  { key: 'recommendation', label: { pt: 'Recomendação', en: 'Recommendation' }, rows: 4 },
+  { key: 'technical_analysis', label: { pt: 'Análise Técnica', en: 'Technical Analysis' }, rows: 4 },
+];
+
 export default function BlogPostEditModal({ initialData, onCancel, onSave }: BlogPostEditModalProps) {
   const [data, setData] = useState<BlogPostEntry>(initialData);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'pt' | 'en'>('pt');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,176 +41,49 @@ export default function BlogPostEditModal({ initialData, onCancel, onSave }: Blo
       ...data,
       content: {
         ...data.content,
-        [lang]: {
-          ...data.content[lang],
-          [field]: value,
-        },
+        [lang]: { ...data.content[lang], [field]: value },
       },
     });
   };
 
   return (
-    <Modal isOpen={true} onClose={onCancel} size="4xl" scrollBehavior="inside">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Editar Resenha Gerada com IA</ModalHeader>
-        <ModalBody>
-          <form onSubmit={handleSubmit}>
-            <Tabs>
-              <TabList>
-                <Tab>Português</Tab>
-                <Tab>English</Tab>
-              </TabList>
+    <Dialog isOpen={true} onClose={onCancel} title='Editar Resenha Gerada com IA'>
+      <form onSubmit={handleSubmit}>
+        <div className='dialog-tabs'>
+          <button
+            type='button'
+            className={`dialog-tab${activeTab === 'pt' ? ' active' : ''}`}
+            onClick={() => setActiveTab('pt')}
+          >
+            Português
+          </button>
+          <button
+            type='button'
+            className={`dialog-tab${activeTab === 'en' ? ' active' : ''}`}
+            onClick={() => setActiveTab('en')}
+          >
+            English
+          </button>
+        </div>
 
-              <TabPanels>
-                <TabPanel>
-                  <VStack spacing={4} align="stretch">
-                    <FormControl>
-                      <FormLabel>Título</FormLabel>
-                      <Textarea
-                        value={data.content.pt.title}
-                        onChange={(e) => updateContent('pt', 'title', e.target.value)}
-                        rows={2}
-                      />
-                    </FormControl>
+        {fields.map(({ key, label, rows }) => (
+          <div key={key} className='dialog-field'>
+            <label>{label[activeTab]}</label>
+            <textarea
+              value={(data.content[activeTab] as any)[key] || ''}
+              onChange={(e) => updateContent(activeTab, key, e.target.value)}
+              rows={rows}
+            />
+          </div>
+        ))}
 
-                    <FormControl>
-                      <FormLabel>Introdução</FormLabel>
-                      <Textarea
-                        value={data.content.pt.introduction}
-                        onChange={(e) => updateContent('pt', 'introduction', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Resumo do Filme</FormLabel>
-                      <Textarea
-                        value={data.content.pt.plot_summary}
-                        onChange={(e) => updateContent('pt', 'plot_summary', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Análise de Atuação</FormLabel>
-                      <Textarea
-                        value={data.content.pt.acting_analysis}
-                        onChange={(e) => updateContent('pt', 'acting_analysis', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Impressões Pessoais</FormLabel>
-                      <Textarea
-                        value={data.content.pt.personal_impressions}
-                        onChange={(e) => updateContent('pt', 'personal_impressions', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Recomendação</FormLabel>
-                      <Textarea
-                        value={data.content.pt.recommendation}
-                        onChange={(e) => updateContent('pt', 'recommendation', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Análise Técnica</FormLabel>
-                      <Textarea
-                        value={data.content.pt.technical_analysis}
-                        onChange={(e) => updateContent('pt', 'technical_analysis', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-                  </VStack>
-                </TabPanel>
-
-                <TabPanel>
-                  <VStack spacing={4} align="stretch">
-                    <FormControl>
-                      <FormLabel>Title</FormLabel>
-                      <Textarea
-                        value={data.content.en.title}
-                        onChange={(e) => updateContent('en', 'title', e.target.value)}
-                        rows={2}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Introduction</FormLabel>
-                      <Textarea
-                        value={data.content.en.introduction}
-                        onChange={(e) => updateContent('en', 'introduction', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Plot Summary</FormLabel>
-                      <Textarea
-                        value={data.content.en.plot_summary}
-                        onChange={(e) => updateContent('en', 'plot_summary', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Acting Analysis</FormLabel>
-                      <Textarea
-                        value={data.content.en.acting_analysis}
-                        onChange={(e) => updateContent('en', 'acting_analysis', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Personal Impressions</FormLabel>
-                      <Textarea
-                        value={data.content.en.personal_impressions}
-                        onChange={(e) => updateContent('en', 'personal_impressions', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Recommendation</FormLabel>
-                      <Textarea
-                        value={data.content.en.recommendation}
-                        onChange={(e) => updateContent('en', 'recommendation', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>Technical Analysis</FormLabel>
-                      <Textarea
-                        value={data.content.en.technical_analysis}
-                        onChange={(e) => updateContent('en', 'technical_analysis', e.target.value)}
-                        rows={4}
-                      />
-                    </FormControl>
-                  </VStack>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </form>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit} isLoading={isLoading}>
-            Salvar
-          </Button>
-          <Button variant="ghost" onClick={onCancel} disabled={isLoading}>
-            Cancelar
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        <div className='dialog-footer'>
+          <button type='button' onClick={onCancel} disabled={isLoading}>Cancelar</button>
+          <button type='submit' disabled={isLoading}>
+            {isLoading ? 'Salvando...' : 'Salvar'}
+          </button>
+        </div>
+      </form>
+    </Dialog>
   );
 }
-

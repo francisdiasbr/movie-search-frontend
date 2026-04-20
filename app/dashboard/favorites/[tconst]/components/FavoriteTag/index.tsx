@@ -1,4 +1,3 @@
-import { Tag, Wrap, WrapItem } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { FaTimes, FaHeart } from 'react-icons/fa';
 
@@ -14,53 +13,56 @@ interface FavoriteTagProps {
 export type { FavoriteTagProps };
 
 const FavoriteTag: React.FC<FavoriteTagProps> = ({
-  colorScheme = 'cyan',
   existingItems = [],
   isSelected = [],
   items = [],
   onItemClick,
   onItemDelete,
 }) => {
-  const [clickedItem, setClickedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const handleClick = (item: string) => {
     if (onItemDelete && existingItems.includes(item)) {
       onItemDelete(item);
-      setClickedItem(null);
     } else {
       onItemClick(item);
-      setClickedItem(item);
     }
   };
 
   return (
-    <Wrap spacing={2}>
-      {items.map((item: string, index: number) => (
-        <WrapItem key={index}>
-          <Tag
-            size='md'
-            colorScheme={existingItems.includes(item) ? 'red' : colorScheme}
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      {items.map((item, index) => {
+        const isExisting = existingItems.includes(item);
+        const isItemSelected = isSelected.includes(item);
+
+        return (
+          <span
+            key={index}
             onClick={() => handleClick(item)}
-            cursor='pointer'
-            display='flex'
-            alignItems='center'
             onMouseEnter={() => setHoveredItem(item)}
             onMouseLeave={() => setHoveredItem(null)}
-            variant={isSelected && isSelected.includes(item) ? 'solid' : 'subtle'}
-            border={isSelected && isSelected.includes(item) ? '2px solid #3182ce' : undefined}
+            style={{
+              alignItems: 'center',
+              background: isExisting ? '#fed7d7' : '#c4f1f9',
+              border: isItemSelected ? '2px solid #3182ce' : '2px solid transparent',
+              borderRadius: '4px',
+              color: isExisting ? '#822727' : '#065666',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              fontSize: '0.875rem',
+              fontWeight: isItemSelected ? 'bold' : 'normal',
+              gap: '4px',
+              padding: '2px 8px',
+            }}
           >
             {item}
-            {existingItems.includes(item) && onItemDelete &&
-              (hoveredItem === item ? (
-                <FaTimes style={{ marginLeft: '4px' }} />
-              ) : (
-                <FaHeart style={{ marginLeft: '4px' }} />
-              ))}
-          </Tag>
-        </WrapItem>
-      ))}
-    </Wrap>
+            {isExisting && onItemDelete && (
+              hoveredItem === item ? <FaTimes /> : <FaHeart />
+            )}
+          </span>
+        );
+      })}
+    </div>
   );
 };
 

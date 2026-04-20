@@ -1,4 +1,3 @@
-import { Skeleton } from '@chakra-ui/react';
 import React from 'react';
 
 import * as S from './styles';
@@ -15,11 +14,19 @@ const TableRowsLoader = ({ columns, rowsNum }: TableRowsLoader) => {
         <S.Row key={index}>
           {columns.map((_, columnIndex) => (
             <S.Cell key={columnIndex}>
-              <Skeleton height='10px' />
+              <div
+                style={{
+                  animation: 'skeleton-pulse 1.5s ease-in-out infinite',
+                  background: '#e5e5e5',
+                  borderRadius: '4px',
+                  height: '10px',
+                }}
+              />
             </S.Cell>
           ))}
         </S.Row>
       ))}
+      <style>{`@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }`}</style>
     </>
   );
 };

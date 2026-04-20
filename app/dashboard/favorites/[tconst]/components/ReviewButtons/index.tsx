@@ -1,5 +1,5 @@
-import { Button } from '@chakra-ui/react';
 import { FaBook, FaRobot, FaPen } from 'react-icons/fa';
+
 import * as S from './styles';
 
 interface ReviewButtonsProps {
@@ -19,40 +19,19 @@ export default function ReviewButtons({
   tconst,
   watched,
 }: ReviewButtonsProps) {
-  if (!watched) {
-    return null;
-  }
+  if (!watched) return null;
 
   return (
     <S.Container>
-      <Button
-        leftIcon={<FaBook />}
-        onClick={() => onCheckReviewType(tconst)}
-        size="md"
-        width={{ base: '100%', md: 'auto' }}
-      >
-        Ver a resenha
-      </Button>
-      <Button
-        leftIcon={<FaRobot />}
-        onClick={onCreateBlogPost}
-        size="md"
-        isLoading={isGeneratingBlogPost}
-        spinnerPlacement='end'
-        loadingText='Gerando resenha'
-        width={{ base: '100%', md: 'auto' }}
-      >
-        Gerar uma resenha com IA
-      </Button>
-      <Button
-        leftIcon={<FaPen />}
-        onClick={onCreateAuthoralReview}
-        size="md"
-        width={{ base: '100%', md: 'auto' }}
-      >
-        Escrever uma resenha
-      </Button>
+      <button onClick={() => onCheckReviewType(tconst)}>
+        <FaBook /> Ver a resenha
+      </button>
+      <button onClick={onCreateBlogPost} disabled={isGeneratingBlogPost}>
+        <FaRobot /> {isGeneratingBlogPost ? 'Gerando resenha...' : 'Gerar uma resenha com IA'}
+      </button>
+      <button onClick={onCreateAuthoralReview}>
+        <FaPen /> Escrever uma resenha
+      </button>
     </S.Container>
   );
 }
-

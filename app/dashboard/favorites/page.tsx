@@ -1,6 +1,6 @@
 'use client';
 
-import { useToast, IconButton } from '@chakra-ui/react';
+import { toast } from 'sonner';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
@@ -26,8 +26,6 @@ export default function Page() {
   const dispatch = useAppDispatch();
   const { countries, entries, total_documents, status: favoritesStatus, startYears } = useAppSelector((state) => state.moviesFavorites);
   const { editStatus, deleteStatus } = useAppSelector((state) => state.moviesDetails);
-  const toast = useToast();
-
   const [searchTerm, setSearchTerm] = useState('');
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(0);
@@ -109,25 +107,12 @@ export default function Page() {
 
   useEffect(() => {
     if (deleteStatus === 'succeeded') {
-      toast({
-        title: 'Success',
-        description: 'Filme removido dos favoritos com sucesso.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      toast.success('Filme removido dos favoritos com sucesso.');
       dispatch(resetDeleteStatus());
       handleSearch();
     }
     if (deleteStatus === 'failed') {
-      toast({
-        title: 'Erro',
-        description: 'Não foi possível remover o filme dos favoritos.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        variant: 'top-accent',
-      });
+      toast.error('Não foi possível remover o filme dos favoritos.');
       dispatch(resetDeleteStatus());
     }
   }, [dispatch, toast, deleteStatus]);
@@ -140,7 +125,7 @@ export default function Page() {
     try {
       const blogAction = await dispatch(deleteBlogPost(tconst));
       if (deleteBlogPost.fulfilled.match(blogAction)) {
-        toast({ title: 'Blogpost deletado com sucesso!', status: 'success' });
+        toast.success('Blogpost deletado com sucesso!');
         const currentPaths = { ...reviewPaths };
         delete currentPaths[tconst];
         setReviewPaths(currentPaths);
@@ -151,9 +136,9 @@ export default function Page() {
         return;
       }
 
-      toast({ title: 'Nenhuma review encontrada para deletar.', status: 'info' });
+      toast.info('Nenhuma review encontrada para deletar.');
     } catch (error) {
-      toast({ title: 'Erro ao deletar review.', status: 'error' });
+      toast.error('Erro ao deletar review.');
     }
   };
 
@@ -244,19 +229,13 @@ export default function Page() {
             </Link>
           ),
           deleteReview: reviewPaths[entry.tconst] ? (
-            <IconButton
-              aria-label="Deletar review"
-              icon={<FaTimes />}
+            <button
               onClick={() => handleDeleteReview(entry.tconst)}
-              size="sm"
-              colorScheme="red"
-              variant="ghost"
-              _hover={{
-                transform: 'scale(1.1)',
-                color: 'red.500',
-              }}
-              transition="all 0.2s"
-            />
+              title='Deletar review'
+              style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+            >
+              <FaTimes />
+            </button>
           ) : null,
           watched: <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={handleSearch} />,
         }))}

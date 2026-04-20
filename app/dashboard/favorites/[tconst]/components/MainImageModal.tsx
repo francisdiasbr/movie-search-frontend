@@ -1,5 +1,6 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 import Image from 'next/image';
+
+import Dialog from '../../../../ui/Dialog';
 
 interface MainImageModalProps {
   isOpen: boolean;
@@ -9,28 +10,16 @@ interface MainImageModalProps {
 
 export default function MainImageModal({ isOpen, onClose, selectedMainImage }: MainImageModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Visualizar Imagem Principal</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6} display="flex" justifyContent="center" alignItems="center">
-          {selectedMainImage && (
-            <Image
-              src={selectedMainImage.url}
-              alt={selectedMainImage.filename}
-              width={800}
-              height={600}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '70vh',
-                borderRadius: '8px',
-                objectFit: 'contain'
-              }}
-            />
-          )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+    <Dialog isOpen={isOpen} onClose={onClose} title='Visualizar Imagem Principal'>
+      {selectedMainImage && (
+        <Image
+          src={selectedMainImage.url}
+          alt={selectedMainImage.filename}
+          width={800}
+          height={600}
+          style={{ borderRadius: 8, maxHeight: '70vh', maxWidth: '100%', objectFit: 'contain' }}
+        />
+      )}
+    </Dialog>
   );
 }

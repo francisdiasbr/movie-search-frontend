@@ -6,16 +6,7 @@ export const LayoutContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 1024px) {
-    flex-direction: row;
     overflow: hidden;
-  }
-`;
-
-export const SideNavWrapper = styled.div`
-  flex-shrink: 0;
-  width: 100%;
-  @media (min-width: 1024px) {
-    width: 16rem;
   }
 `;
 
