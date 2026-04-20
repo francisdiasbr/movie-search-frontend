@@ -15,8 +15,8 @@ const Table = ({
   handleAdd,
   handleDelete,
   handleWatchedUpdate,
-  isLoading,
   isActionLoading,
+  isLoading,
   onPageChange,
   onPageSizeChange,
   page,
@@ -49,22 +49,22 @@ const Table = ({
         <TableBody
           columns={columns}
           entries={sortedEntries}
-          isLoading={isLoading}
-          isActionLoading={isActionLoading}
-          handleView={handleView}
           handleAdd={handleAdd}
           handleDelete={handleDelete}
+          handleView={handleView}
           handleWatchedUpdate={handleWatchedUpdate}
+          isActionLoading={isActionLoading}
+          isLoading={isLoading}
         />
       </S.StyledTable>
       <S.Footer>
         <Pagination
           onPageChange={onPageChange}
-          page={page}
-          totalPages={totalPages}
           onPageSizeChange={onPageSizeChange}
+          page={page}
           pageSize={pageSize}
           totalDocuments={totalDocuments}
+          totalPages={totalPages}
         />
       </S.Footer>
     </S.TableContainer>

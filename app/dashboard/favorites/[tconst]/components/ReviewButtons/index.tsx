@@ -3,21 +3,21 @@ import { FaBook, FaRobot, FaPen } from 'react-icons/fa';
 import * as S from './styles';
 
 interface ReviewButtonsProps {
-  watched: boolean;
   isGeneratingBlogPost: boolean;
   onCheckReviewType: (tconst: string) => void;
-  onCreateBlogPost: () => void;
   onCreateAuthoralReview: () => void;
+  onCreateBlogPost: () => void;
   tconst: string;
+  watched: boolean;
 }
 
 export default function ReviewButtons({
-  watched,
   isGeneratingBlogPost,
   onCheckReviewType,
-  onCreateBlogPost,
   onCreateAuthoralReview,
-  tconst
+  onCreateBlogPost,
+  tconst,
+  watched,
 }: ReviewButtonsProps) {
   if (!watched) {
     return null;

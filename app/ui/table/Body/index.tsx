@@ -13,11 +13,11 @@ import * as S from './styles';
 const TableBody = ({
   columns,
   entries,
-  handleView,
   handleDelete,
-  isLoading,
-  isActionLoading,
+  handleView,
   handleWatchedUpdate,
+  isActionLoading,
+  isLoading,
 }: TableBodyProps) => {
   
   return (

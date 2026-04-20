@@ -5,15 +5,15 @@ import Image from 'next/image';
 import * as S from './styles';
 
 interface StickerSectionProps {
-  stickers: Array<{ url: string; filename: string }> | null;
   onRemoveSticker: (filename: string) => void;
   onStickerClick: (sticker: { url: string; filename: string }) => void;
+  stickers: Array<{ url: string; filename: string }> | null;
 }
 
 export default function StickerSection({
-  stickers,
   onRemoveSticker,
-  onStickerClick
+  onStickerClick,
+  stickers,
 }: StickerSectionProps) {
   return (
     <S.Card>
@@ -22,9 +22,8 @@ export default function StickerSection({
       </S.CardHeader>
       <S.CardBody>
         {stickers && stickers.length > 0 ? (
-          <>
-            <S.StickersGrid>
-              {stickers.map((sticker, index) => (
+          <S.StickersGrid>
+            {stickers.map((sticker, index) => (
                 <S.StickerContainer key={sticker.filename || index}>
                   <Image
                     src={sticker.url}
@@ -47,8 +46,7 @@ export default function StickerSection({
                   </S.StickerOverlay>
                 </S.StickerContainer>
               ))}
-            </S.StickersGrid>
-          </>
+          </S.StickersGrid>
         ) : (
           <S.EmptyState>
             <S.EmptyText>

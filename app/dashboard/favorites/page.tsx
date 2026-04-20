@@ -153,7 +153,6 @@ export default function Page() {
 
       toast({ title: 'Nenhuma review encontrada para deletar.', status: 'info' });
     } catch (error) {
-      console.error('Erro ao deletar review:', error);
       toast({ title: 'Erro ao deletar review.', status: 'error' });
     }
   };
@@ -211,19 +210,19 @@ export default function Page() {
     <>
       <h2>Favoritos</h2>
       <Search
-        isLoading={isLoading}
-        isFavoritePage
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
         country={country ?? ''}
-        setCountry={setCountry}
-        showAllFields
-        setYear={setYear}
-        year={year}
         countryOptions={countryOptions}
-        yearOptions={yearOptions}
-        watched={watched}
+        isFavoritePage
+        isLoading={isLoading}
+        searchTerm={searchTerm}
+        setCountry={setCountry}
+        setSearchTerm={setSearchTerm}
         setWatched={setWatched}
+        setYear={setYear}
+        showAllFields
+        watched={watched}
+        year={year}
+        yearOptions={yearOptions}
       />
       <Table
         columns={columnData}
@@ -261,12 +260,12 @@ export default function Page() {
           ) : null,
           watched: <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={handleSearch} />,
         }))}
-        isLoading={isLoading}
-        isActionLoading={editStatus === 'loading' || deleteStatus === 'loading'}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
         handleDelete={handleDelete}
         handleWatchedUpdate={handleSearch}
+        isActionLoading={editStatus === 'loading' || deleteStatus === 'loading'}
+        isLoading={isLoading}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
         page={page}
         pageSize={pageSize}
         totalDocuments={total_documents}

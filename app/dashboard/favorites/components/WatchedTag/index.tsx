@@ -1,19 +1,18 @@
 'use client';
 
-import { Tag } from '@chakra-ui/react';
-import { useToast } from '@chakra-ui/react';
+import { Tag, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
 
 interface WatchedTagProps {
+  onUpdate?: () => void;
   tconst: string;
   watched: boolean;
-  onUpdate?: () => void;
 }
 
-export default function WatchedTag({ tconst, watched, onUpdate }: WatchedTagProps) {
+export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProps) {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -32,11 +31,12 @@ export default function WatchedTag({ tconst, watched, onUpdate }: WatchedTagProp
         
         // Atualiza apenas o watched, mantendo os outros campos
         const updateData = {
+          magnet_link: movieData.magnet_link || '',
+          references: movieData.references || [],
+          soundtrack: movieData.soundtrack || '',
           tconst: movieData.tconst,
           watched: !watched,
-          soundtrack: movieData.soundtrack || '',
           wiki: movieData.wiki || '',
-          references: movieData.references || [],
         };
 
         const editAction = await dispatch(editDetails(updateData));

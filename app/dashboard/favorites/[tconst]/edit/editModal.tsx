@@ -23,19 +23,19 @@ import { editDetails, fetchDetails } from '../../../../../lib/features/movie/mov
 import { useAppDispatch } from '../../../../../lib/hooks';
 
 interface EditModalProps {
+  data: any;
   isOpen: boolean;
   onClose: () => void;
-  data: any;
   tconst: string;
 }
 
 interface ReferenceInputProps {
-  value: string;
   onChange: (value: string) => void;
   onRemove: () => void;
+  value: string;
 }
 
-const ReferenceInput = ({ value, onChange, onRemove }: ReferenceInputProps) => {
+const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => {
   return (
     <HStack spacing={2} mb={2}>
       <Input
@@ -54,7 +54,7 @@ const ReferenceInput = ({ value, onChange, onRemove }: ReferenceInputProps) => {
   );
 };
 
-export default function EditModal({ isOpen, onClose, data, tconst }: EditModalProps) {
+export default function EditModal({ data, isOpen, onClose, tconst }: EditModalProps) {
   const [formData, setFormData] = useState(data);
   const dispatch = useAppDispatch();
   const toast = useToast();
@@ -67,13 +67,14 @@ export default function EditModal({ isOpen, onClose, data, tconst }: EditModalPr
     if (!formData) return;
 
     const updateData = {
-      tconst: data.tconst,
-      watched: data.watched,
-      soundtrack: formData.soundtrack || '',
-      wiki: formData.wiki || '',
+      magnet_link: formData.magnet_link || '',
       references: Array.isArray(formData.references)
         ? formData.references.filter((ref: string) => ref.trim() !== '')
         : [],
+      soundtrack: formData.soundtrack || '',
+      tconst: data.tconst,
+      watched: data.watched,
+      wiki: formData.wiki || '',
     };
 
     dispatch(editDetails(updateData)).then((resultAction) => {
@@ -146,6 +147,15 @@ export default function EditModal({ isOpen, onClose, data, tconst }: EditModalPr
               value={formData?.wiki || ''}
               onChange={(e) => setFormData({ ...formData, wiki: e.target.value })}
               placeholder="URL da página Wiki"
+            />
+          </FormControl>
+
+          <FormControl mb={4}>
+            <FormLabel>Magnet Link (Torrent)</FormLabel>
+            <Input
+              value={formData?.magnet_link || ''}
+              onChange={(e) => setFormData({ ...formData, magnet_link: e.target.value })}
+              placeholder="magnet:?xt=urn:btih:..."
             />
           </FormControl>
 

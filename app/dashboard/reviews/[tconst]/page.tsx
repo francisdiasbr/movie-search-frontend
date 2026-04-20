@@ -62,7 +62,6 @@ function Reviews() {
       onClose();
       dispatch(fetchAuthoralReview(movieId as string));
     } catch (error) {
-      console.error('Erro ao atualizar resenha:', error);
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +102,6 @@ function Reviews() {
         setEditingImage(null);
         dispatch(fetchAllImageUrls({ tconst: movieId }));
       } catch (error) {
-        console.error('Erro ao salvar legenda:', error);
       }
     }
   };
@@ -265,8 +263,8 @@ function Reviews() {
       {isOpen && (
         <ReviewEditModal
           initialContent={data.content || { pt: { text: '' }, en: { text: '' } }}
-          onSave={handleEdit}
           onCancel={onClose}
+          onSave={handleEdit}
         />
       )}
     </S.PageContainer>

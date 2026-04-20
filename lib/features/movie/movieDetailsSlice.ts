@@ -82,11 +82,12 @@ export const editDetails = createAsyncThunk(
     const url = `favorites/${data.tconst}`;
 
     const body: EditDetailsPayload = {
-      tconst: data.tconst,
+      magnet_link: data.magnet_link,
       references: data.references,
       soundtrack: data.soundtrack,
-      wiki: data.wiki,
+      tconst: data.tconst,
       watched: data.watched,
+      wiki: data.wiki,
     };
 
     try {

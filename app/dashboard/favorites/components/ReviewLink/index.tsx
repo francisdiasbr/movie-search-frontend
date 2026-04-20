@@ -8,11 +8,11 @@ import { fetchBlogPost } from '../../../../../lib/features/blogPosts/blogPostsSl
 import { useAppDispatch } from '../../../../../lib/hooks';
 
 interface ReviewLinkProps {
-  tconst: string;
   reviewPath?: string | null;
+  tconst: string;
 }
 
-export default function ReviewLink({ tconst, reviewPath: propReviewPath }: ReviewLinkProps) {
+export default function ReviewLink({ reviewPath: propReviewPath, tconst }: ReviewLinkProps) {
   const [reviewPath, setReviewPath] = useState<string | null>(propReviewPath || null);
   const [isChecking, setIsChecking] = useState(!propReviewPath);
   const dispatch = useAppDispatch();

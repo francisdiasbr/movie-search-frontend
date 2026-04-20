@@ -4,17 +4,17 @@ import FavoriteTag from '../FavoriteTag';
 import * as S from './styles';
 
 interface KeywordsCardProps {
-  plotKeywords: string[];
   existingKeywords: string[];
   onKeywordClick: (keyword: string) => void;
   onKeywordDelete: (keyword: string) => void;
+  plotKeywords: string[];
 }
 
-export default function KeywordsCard({ 
-  plotKeywords, 
-  existingKeywords, 
-  onKeywordClick, 
-  onKeywordDelete 
+export default function KeywordsCard({
+  existingKeywords,
+  onKeywordClick,
+  onKeywordDelete,
+  plotKeywords,
 }: KeywordsCardProps) {
   if (!plotKeywords || plotKeywords.length === 0) return null;
 
@@ -27,8 +27,8 @@ export default function KeywordsCard({
       <S.CardBody>
         <S.Content>
           <FavoriteTag
-            items={plotKeywords}
             existingItems={existingKeywords}
+            items={plotKeywords}
             onItemClick={onKeywordClick}
             onItemDelete={onKeywordDelete}
           />

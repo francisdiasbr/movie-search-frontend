@@ -5,17 +5,17 @@ import { Spinner, Box } from '@chakra-ui/react';
 import * as S from './styles';
 
 interface LoadingSpinnerProps {
-  size?: string;
   color?: string;
-  thickness?: string;
+  size?: string;
   speed?: string;
+  thickness?: string;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'xl',
   color = '#2D2A26',
-  thickness = '4px',
+  size = 'xl',
   speed = '0.65s',
+  thickness = '4px',
 }) => {
   return (
     <S.SpinnerContainer>

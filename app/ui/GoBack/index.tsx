@@ -5,11 +5,11 @@ import { Container, CenterText } from './styles';
 
 interface GoBackProps {
   centerText?: string;
-  rightSlot?: React.ReactNode;
   fallbackPath?: string;
+  rightSlot?: React.ReactNode;
 }
 
-const GoBack: React.FC<GoBackProps> = ({ centerText, rightSlot, fallbackPath = '/dashboard/favorites' }) => {
+const GoBack: React.FC<GoBackProps> = ({ centerText, fallbackPath = '/dashboard/favorites', rightSlot }) => {
   const router = useRouter();
 
   const handleGoBack = () => {

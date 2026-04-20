@@ -7,17 +7,17 @@ import * as S from './styles';
 interface MovieInfoCardProps {
   data: any;
   existingKeywords: string[];
+  onEditClick?: () => void;
   onKeywordClick: (keyword: string) => void;
   onKeywordDelete: (keyword: string) => void;
-  onEditClick?: () => void;
 }
 
-export default function MovieInfoCard({ 
-  data, 
-  existingKeywords, 
-  onKeywordClick, 
+export default function MovieInfoCard({
+  data,
+  existingKeywords,
+  onEditClick,
+  onKeywordClick,
   onKeywordDelete,
-  onEditClick 
 }: MovieInfoCardProps) {
   return (
     <S.Card>
@@ -43,8 +43,8 @@ export default function MovieInfoCard({
             <S.InfoValue>
               {data.director ? (
                 <FavoriteTag
-                  items={[data.director]}
                   existingItems={existingKeywords}
+                  items={[data.director]}
                   onItemClick={onKeywordClick}
                   onItemDelete={onKeywordDelete}
                 />
@@ -86,27 +86,24 @@ export default function MovieInfoCard({
         </S.SynopsisSection>
 
         <S.ActionsSection>
+          {data.magnet_link && (
+            <a
+              href={data.magnet_link}
+              rel="noopener noreferrer"
+              style={{ fontSize: '12px', wordBreak: 'break-all' }}
+            >
+              {data.magnet_link}
+            </a>
+          )}
           {data.subtitle_url && (
             <Button
               as="a"
               href={encodeURI(data.subtitle_url)}
-              target="_blank"
               rel="noopener noreferrer"
               size="sm"
+              target="_blank"
             >
               Baixar Legendas
-            </Button>
-          )}
-          
-          {data.magnet_link && (
-            <Button
-              as="a"
-              href={data.magnet_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              size="sm"
-            >
-              Baixar Torrent
             </Button>
           )}
         </S.ActionsSection>

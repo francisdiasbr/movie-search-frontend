@@ -29,6 +29,7 @@ export interface MovieDetailsState {
 }
 
 export interface EditDetailsPayload {
+  magnet_link?: string | null;
   references?: string[];
   soundtrack: string;
   tconst: string;

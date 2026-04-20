@@ -73,7 +73,6 @@ function BlogPost() {
         setEditingImage(null); // Fecha o input após salvar
         dispatch(fetchAllImageUrls({ tconst: movieId })); // Atualiza a lista de imagens
       } catch (error) {
-        console.error('Erro ao salvar legenda:', error);
       }
     }
   };
@@ -90,7 +89,6 @@ function BlogPost() {
         dispatch(fetchBlogPost(movieId));
       }
     } catch (error) {
-      console.error('Erro ao atualizar resenha:', error);
     } finally {
       setIsLoading(false);
     }
@@ -263,8 +261,8 @@ function BlogPost() {
       {isOpen && data && (
         <BlogPostEditModal
           initialData={data}
-          onSave={handleEdit}
           onCancel={onClose}
+          onSave={handleEdit}
         />
       )}
     </S.PageContainer>

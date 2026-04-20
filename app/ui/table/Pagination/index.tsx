@@ -5,26 +5,22 @@ import React from 'react';
 import * as S from './styles';
 
 interface PaginationProps {
-  page: number;
-  totalPages: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  page: number;
   pageSize: number;
   totalDocuments: number;
+  totalPages: number;
 }
 
 const Pagination = ({
-  onPageSizeChange,
   onPageChange,
-  pageSize,
+  onPageSizeChange,
   page,
+  pageSize,
   totalDocuments,
   totalPages,
 }: PaginationProps) => {
-  // console.log('PaginationProps: page', page);
-  // console.log('PaginationProps: pageSize', pageSize);
-  // console.log('PaginationProps: totalPages', totalPages);
-  // console.log('PaginationProps: totalDocuments', totalDocuments);
   const handlePageSizeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -33,7 +29,6 @@ const Pagination = ({
 
   const firstRecordInPage = page * pageSize + 1;
   const lastRecordInPage = (page + 1) * pageSize;
-  // const lastRecordInPage = Math.min((page + 1) * pageSize, totalDocuments);
 
   const handleNextPage = () => {
     if (page + 1 < totalPages) {
@@ -48,8 +43,7 @@ const Pagination = ({
   };
 
   return (
-    <>
-      <S.PaginationContainer>
+    <S.PaginationContainer>
         <S.PaginationButtons>
           <S.Button disabled={page === 0} onClick={handlePrevPage}>
             Anterior
@@ -72,8 +66,7 @@ const Pagination = ({
         <S.TotalDocs>
           {firstRecordInPage} a {lastRecordInPage} de {totalDocuments}
         </S.TotalDocs>
-      </S.PaginationContainer>
-    </>
+    </S.PaginationContainer>
   );
 };
 

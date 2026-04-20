@@ -7,38 +7,37 @@ import * as S from './styles';
 interface SearchProps {
   country?: string;
   countryOptions?: { value: string; label: string }[];
-  setCountry?: (value: string) => void;
-  setYear?: (value: number) => void;
-  setSearchTerm: (value: string) => void;
-  searchTerm: string;
-  showAllFields?: boolean;
-  isLoading: boolean;
   isFavoritePage?: boolean;
-  year?: number;
-  yearOptions?: { value: string; label: string }[];
+  isLoading: boolean;
+  searchTerm: string;
+  setCountry?: (value: string) => void;
+  setSearchTerm: (value: string) => void;
   setTconst?: (value: string) => void;
+  setWatched?: (value: boolean | undefined) => void;
+  setYear?: (value: number) => void;
+  showAllFields?: boolean;
   tconst?: string;
   watched?: boolean;
-  setWatched?: (value: boolean | undefined) => void;
+  year?: number;
+  yearOptions?: { value: string; label: string }[];
 }
 
 const Search = ({
   country,
   countryOptions,
+  isLoading,
+  searchTerm,
   setCountry,
   setSearchTerm,
-  searchTerm,
-  isLoading,
-  showAllFields = false,
-  year,
-  setYear,
-  yearOptions,
-  watched,
   setWatched,
+  setYear,
+  showAllFields = false,
+  watched,
+  year,
+  yearOptions,
 }: SearchProps) => {
   return (
-    <>
-      <S.SearchContainer>
+    <S.SearchContainer>
         <S.SearchInput
           onChange={e => setSearchTerm(e.target.value)}
           placeholder='Pesquisar'
@@ -100,8 +99,7 @@ const Search = ({
             />
           </>
         )}
-      </S.SearchContainer>
-    </>
+    </S.SearchContainer>
   );
 };
 

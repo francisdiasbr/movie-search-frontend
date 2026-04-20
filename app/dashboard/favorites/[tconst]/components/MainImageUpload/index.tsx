@@ -8,24 +8,24 @@ import * as S from './styles';
 
 interface MainImageUploadProps {
   images: Array<{ url: string; filename: string; sequential_id?: number }> | null;
-  uploadMainStatus: string;
-  stickerStatus: string;
-  tconst: string;
-  onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   onDeleteMain: (filename: string) => Promise<void>;
   onGenerateSticker: (sequentialId?: number) => void;
   onMainImageClick: (image: { url: string; filename: string }) => void;
+  onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  stickerStatus: string;
+  tconst: string;
+  uploadMainStatus: string;
 }
 
 export default function MainImageUpload({
   images,
-  uploadMainStatus,
-  stickerStatus,
-  tconst,
-  onUploadMainImage,
   onDeleteMain,
   onGenerateSticker,
-  onMainImageClick
+  onMainImageClick,
+  onUploadMainImage,
+  stickerStatus,
+  tconst,
+  uploadMainStatus,
 }: MainImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

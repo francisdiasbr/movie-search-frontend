@@ -3,14 +3,14 @@ import React from 'react';
 
 interface ReviewCardProps {
   originalTitle: string;
-  review: string;
   plot?: string;
+  review: string;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   originalTitle,
-  review,
   plot,
+  review,
 }) => {
   return (
     <Box

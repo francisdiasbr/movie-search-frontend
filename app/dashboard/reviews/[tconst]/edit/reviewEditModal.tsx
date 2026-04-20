@@ -22,11 +22,11 @@ interface ReviewContent {
 
 interface ReviewEditModalProps {
   initialContent: ReviewContent;
-  onSave: (content: ReviewContent) => Promise<void>;
   onCancel: () => void;
+  onSave: (content: ReviewContent) => Promise<void>;
 }
 
-export default function ReviewEditModal({ initialContent, onSave, onCancel }: ReviewEditModalProps) {
+export default function ReviewEditModal({ initialContent, onCancel, onSave }: ReviewEditModalProps) {
   const [content, setContent] = useState<ReviewContent>({
     pt: { text: initialContent.pt?.text || '' },
     en: { text: initialContent.en?.text || '' }

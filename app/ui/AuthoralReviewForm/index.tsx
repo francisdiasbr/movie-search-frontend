@@ -66,7 +66,6 @@ const AuthoralReviewForm = () => {
       isAiGenerated: false,
     };
 
-    console.log('Dados sendo enviados:', reviewData);
     dispatch(postAuthoralReview(reviewData));
   };
 
@@ -89,8 +88,6 @@ const AuthoralReviewForm = () => {
     }
 
     if (status === 'failed') {
-      console.log('Erro completo:', error);
-
       const errorMessage = (() => {
         if (error === 'Movie not found in favorites') {
           return 'Filme não encontrado nos favoritos';

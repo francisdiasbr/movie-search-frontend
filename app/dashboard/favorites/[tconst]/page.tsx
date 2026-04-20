@@ -44,7 +44,7 @@ export default function MovieDetailsPage() {
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
   const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
   const { images, status: uploadMainStatus } = useAppSelector((state) => state.uploadMainImages);
-  const { status: stickerStatus, stickers, error: stickerError } = useAppSelector((state) => state.generateSticker);
+  const { status: stickerStatus, stickers } = useAppSelector((state) => state.generateSticker);
 
   useEffect(() => {
     if (tconst) {
@@ -296,19 +296,19 @@ export default function MovieDetailsPage() {
     <S.PageContainer>
       <GoBack centerText={data.primaryTitle} />
       <ReviewButtons
-        watched={data.watched}
         isGeneratingBlogPost={isGeneratingBlogPost}
         onCheckReviewType={checkReviewType}
-        onCreateBlogPost={handleCreateBlogPost}
         onCreateAuthoralReview={handleCreateAuthoralReview}
+        onCreateBlogPost={handleCreateBlogPost}
         tconst={tconst}
+        watched={data.watched}
       />
 
       {isOpen && (
-        <EditModal 
-          isOpen={isOpen} 
-          onClose={onClose} 
-          data={data} 
+        <EditModal
+          data={data}
+          isOpen={isOpen}
+          onClose={onClose}
           tconst={tconst}
         />
       )}
@@ -316,9 +316,9 @@ export default function MovieDetailsPage() {
         <MovieInfoCard
           data={data}
           existingKeywords={existingKeywords}
+          onEditClick={onOpen}
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}
-          onEditClick={onOpen}
         />
 
       <S.CardsContainer>
@@ -330,34 +330,34 @@ export default function MovieDetailsPage() {
         </S.CardsRow>
         
         <KeywordsCard
-          plotKeywords={plotKeywords}
           existingKeywords={existingKeywords}
           onKeywordClick={handleKeywordClick}
           onKeywordDelete={handleKeywordDelete}
+          plotKeywords={plotKeywords}
         />
       </S.CardsContainer>
       <MediaCard spotifyUrl={data.soundtrack} />
 
       <MainImageUpload
         images={images}
-        uploadMainStatus={uploadMainStatus}
-        stickerStatus={stickerStatus}
-        tconst={tconst}
+        onDeleteMain={handleDeleteMain}
+        onGenerateSticker={handleGenerateSticker}
+        onMainImageClick={handleMainImageClick}
         onUploadMainImage={async (event) => {
           const file = event.target.files?.[0];
           if (!file) return;
           await dispatch(uploadMainImage({ tconst, file }));
           dispatch(fetchMainImage({ tconst }));
         }}
-        onDeleteMain={handleDeleteMain}
-        onGenerateSticker={handleGenerateSticker}
-        onMainImageClick={handleMainImageClick}
+        stickerStatus={stickerStatus}
+        tconst={tconst}
+        uploadMainStatus={uploadMainStatus}
       />
 
       <StickerSection
-        stickers={stickers}
         onRemoveSticker={handleRemoveSticker}
         onStickerClick={handleStickerClick}
+        stickers={stickers}
       />
 
       {isStickerModalOpen && (

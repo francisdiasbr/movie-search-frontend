@@ -3,23 +3,23 @@ import React, { useState } from 'react';
 import { FaTimes, FaHeart } from 'react-icons/fa';
 
 interface FavoriteTagProps {
+  colorScheme?: string;
+  existingItems: string[];
+  isSelected?: string[];
   items: string[];
   onItemClick: (item: string) => void;
   onItemDelete?: (item: string) => void;
-  existingItems: string[];
-  colorScheme?: string;
-  isSelected?: string[];
 }
 
 export type { FavoriteTagProps };
 
 const FavoriteTag: React.FC<FavoriteTagProps> = ({
+  colorScheme = 'cyan',
+  existingItems = [],
+  isSelected = [],
   items = [],
   onItemClick,
   onItemDelete,
-  existingItems = [],
-  colorScheme = 'cyan',
-  isSelected = [],
 }) => {
   const [clickedItem, setClickedItem] = useState<string | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);

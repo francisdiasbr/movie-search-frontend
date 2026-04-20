@@ -24,11 +24,11 @@ import { BlogPostEntry } from '../../../../../lib/features/blogPosts/blogPostsSl
 
 interface BlogPostEditModalProps {
   initialData: BlogPostEntry;
-  onSave: (data: BlogPostEntry) => Promise<void>;
   onCancel: () => void;
+  onSave: (data: BlogPostEntry) => Promise<void>;
 }
 
-export default function BlogPostEditModal({ initialData, onSave, onCancel }: BlogPostEditModalProps) {
+export default function BlogPostEditModal({ initialData, onCancel, onSave }: BlogPostEditModalProps) {
   const [data, setData] = useState<BlogPostEntry>(initialData);
   const [isLoading, setIsLoading] = useState(false);
 

@@ -4,8 +4,8 @@ export interface TableProps {
   handleAdd?: (tconst: string) => void;
   handleDelete?: any;
   handleWatchedUpdate?: () => void;
-  isLoading: boolean;
   isActionLoading?: boolean;
+  isLoading: boolean;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
   page: number;
@@ -21,8 +21,8 @@ export interface TableBodyProps {
   handleDelete?: (tconst: string) => void;
   handleView: (tconst: string) => void;
   handleWatchedUpdate?: () => void;
-  isLoading: boolean;
   isActionLoading?: boolean;
+  isLoading: boolean;
 }
 
 export type Column = {

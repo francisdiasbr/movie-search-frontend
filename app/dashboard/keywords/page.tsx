@@ -62,10 +62,10 @@ export default function Page() {
       {error && <div>Error: {error}</div>}
       {!loading && !error && (
         <FavoriteTag
+          existingItems={existingKeywords}
+          isSelected={selectedKeywords}
           items={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []}
           onItemClick={handleKeywordClick}
-          isSelected={selectedKeywords}
-          existingItems={existingKeywords}
         />
       )}
       <Box mt={4} display="flex" gap={2}>
