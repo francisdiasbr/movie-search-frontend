@@ -6,7 +6,7 @@ export const SearchContainer = styled.div`
   gap: 16px;
   margin-bottom: 16px;
 
-  @media (max-width: 1024px) {
+@media (max-width: 1024px) {
     flex-direction: column;
   }
 `;

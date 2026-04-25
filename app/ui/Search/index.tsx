@@ -1,5 +1,3 @@
-import Select from 'react-select';
-
 import * as S from './styles';
 
 interface SearchProps {
@@ -16,12 +14,6 @@ interface SearchProps {
   year?: number;
   yearOptions?: { value: string; label: string }[];
 }
-
-const selectStyles = {
-  container: (provided: any) => ({ ...provided, height: '40px', minWidth: '200px' }),
-  control: (provided: any) => ({ ...provided, height: '40px', minHeight: '40px' }),
-  input: (provided: any) => ({ ...provided, boxShadow: 'none' }),
-};
 
 const Search = ({
   country,
@@ -46,44 +38,37 @@ const Search = ({
       />
       {showAllFields && (
         <>
-          <Select
-            isClearable
-            isSearchable
-            onChange={selectedOption => setCountry && setCountry(selectedOption ? selectedOption.value : '')}
-            options={countryOptions}
-            placeholder='País'
-            styles={selectStyles}
-            value={countryOptions?.find(option => option.value === country) || null}
-          />
-          <Select
-            isClearable
-            onChange={e => setYear && setYear(e ? parseInt(e.value, 10) : 0)}
-            options={yearOptions}
-            placeholder='Ano'
-            styles={selectStyles}
-            value={year ? { value: year.toString(), label: year.toString() } : null}
-          />
-          <Select
-            isClearable
-            onChange={selectedOption => {
+          <select
+            onChange={e => setCountry && setCountry(e.target.value)}
+            value={country || ''}
+          >
+            <option value=''>País</option>
+            {countryOptions?.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <select
+            onChange={e => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : 0)}
+            value={year?.toString() || ''}
+          >
+            <option value=''>Ano</option>
+            {yearOptions?.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <select
+            onChange={e => {
               if (setWatched) {
-                setWatched(selectedOption ? selectedOption.value === 'true' : undefined);
+                const v = e.target.value;
+                setWatched(v === '' ? undefined : v === 'true');
               }
             }}
-            options={[
-              { value: 'true', label: 'Assistidos' },
-              { value: 'false', label: 'Não assistidos' },
-            ]}
-            placeholder='Status de assistido'
-            styles={selectStyles}
-            value={
-              watched === undefined
-                ? null
-                : watched
-                ? { value: 'true', label: 'Assistidos' }
-                : { value: 'false', label: 'Não assistidos' }
-            }
-          />
+            value={watched === undefined ? '' : watched ? 'true' : 'false'}
+          >
+            <option value=''>Status de assistido</option>
+            <option value='true'>Assistidos</option>
+            <option value='false'>Não assistidos</option>
+          </select>
         </>
       )}
     </S.SearchContainer>
