@@ -26,7 +26,6 @@ export const fetchFavorites = createAsyncThunk(
       const fetchBody = {
         filters: params.filters || {},
         page: params.page,
-        page_size: params.pageSize,
         search_term: params.searchTerm || '',
       };
       console.log('fetchBody', fetchBody);

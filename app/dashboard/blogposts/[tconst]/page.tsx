@@ -93,7 +93,7 @@ function BlogPost() {
   return (
     <S.PageContainer>
       <GoBack />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', marginBottom: '20px', width: '100%' }}>
         <h1>{data.primaryTitle}</h1>
         <button onClick={() => setIsOpen(true)} disabled={isLoading}>
           <FaEdit /> {isLoading ? 'Salvando...' : 'Editar Resenha'}
@@ -242,7 +242,7 @@ function Section({ title, content }: { title: string; content: string | JSX.Elem
     <S.SectionContainer>
       <div>
         <S.SectionTitle>{title}</S.SectionTitle>
-        <S.SectionContent>{content}</S.SectionContent>
+        <p>{content}</p>
       </div>
     </S.SectionContainer>
   );

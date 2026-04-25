@@ -19,6 +19,12 @@ export default function WritePage() {
     if (!tconst) return;
     setIsLoading(true);
     try {
+      const detailsAction = await dispatch(fetchDetails(tconst));
+      if (!fetchDetails.fulfilled.match(detailsAction) || !detailsAction.payload) {
+        toast.error('Filme não encontrado na base de dados.');
+        return;
+      }
+
       const authoralAction = await dispatch(fetchAuthoralReview(tconst));
       if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
         toast.warning('Já existe uma resenha para este filme.');
@@ -30,7 +36,8 @@ export default function WritePage() {
         toast.success('Resenha gerada com sucesso.');
         router.push(`/dashboard/blogposts/${tconst}`);
       } else {
-        toast.warning('Já existe uma resenha com IA para este filme.');
+        const errMsg = resultAction.payload as string;
+        toast.error(`Erro ao gerar resenha: ${errMsg}`);
       }
     } catch {
       toast.error('Erro ao gerar resenha.');
@@ -80,9 +87,6 @@ export default function WritePage() {
           placeholder='Ex: tt0084805'
           disabled={isLoading}
         />
-        <button onClick={handleGenerateAI} disabled={isLoading || !tconst}>
-          {isLoading ? 'Aguarde...' : 'Gerar com IA'}
-        </button>
         <button onClick={handleWriteAuthoral} disabled={isLoading || !tconst}>
           Escrever autoral
         </button>

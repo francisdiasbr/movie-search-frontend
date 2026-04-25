@@ -64,7 +64,6 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
       style={{
         cursor: isUpdating ? 'not-allowed' : 'pointer',
         opacity: isUpdating ? 0.6 : 1,
-        color: watched ? 'green' : 'red',
       }}
       onClick={handleClick}
       title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}

@@ -3,7 +3,6 @@ import { Toaster } from 'sonner';
 
 import StyledComponentsRegistry from '../lib/registry';
 import './globals.css';
-import { ChakraProvider } from './providers';
 import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
@@ -23,9 +22,7 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <StyledComponentsRegistry>
-          <ChakraProvider>
             <StoreProvider>{children}</StoreProvider>
-          </ChakraProvider>
         </StyledComponentsRegistry>
         <Toaster position='bottom-center' />
       </body>

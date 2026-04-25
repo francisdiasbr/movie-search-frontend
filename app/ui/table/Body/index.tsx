@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FaSearch, FaTimes } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 
 import LoadingSpinner from '../../LoadingSpinner';
 import TableRowsLoader from '../RowsLoader';
@@ -44,9 +44,9 @@ const TableBody = ({
                   <button
                     onClick={() => handleDelete && handleDelete(item.tconst)}
                     title='Deletar'
-                    style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+                    style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
                   >
-                    <FaTimes />
+                    x
                   </button>
                 ) : (
                   item[column.key]

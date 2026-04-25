@@ -39,7 +39,8 @@ export default function SearchPage() {
 
   return (
     <div>
-      <h2>Adicionar Filme aos Favoritos</h2>
+      <h2>Adicionar filme na coleção</h2>
+      <div style={{ display: 'flex', gap: '8px' }}>
         <input
           type="text"
           value={tconst}
@@ -47,6 +48,7 @@ export default function SearchPage() {
           onKeyDown={handleKeyDown}
           placeholder="Informe o tconst do filme a ser adicionado (ex: tt0084805)"
           disabled={isLoading}
+          style={{ width: '460px' }}
         />
         <button
           onClick={() => handleAdd(tconst)}
@@ -54,6 +56,7 @@ export default function SearchPage() {
         >
           Adicionar na coleção
         </button>
+      </div>
     </div>
   );
 }

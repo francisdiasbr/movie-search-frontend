@@ -10,17 +10,9 @@
     "lint-fix": "next lint --fix"
   },
   "dependencies": {
-    "@chakra-ui/next-js": "^2.2.0",
-    "@heroicons/react": "2.1.4",
-    "@iconify/icons-ic": "^1.2.13",
-    "@iconify/icons-lucide": "^1.2.135",
-    "@iconify/react": "^5.0.2",
     "@reduxjs/toolkit": "^2.2.7",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
-    "lucide-react": "^0.468.0",
     "next": "^14.2.20",
     "react": "^18",
     "react-dom": "^18",

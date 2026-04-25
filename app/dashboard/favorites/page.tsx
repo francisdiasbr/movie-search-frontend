@@ -3,7 +3,6 @@
 import { toast } from 'sonner';
 import Link from 'next/link';
 import React, { useEffect, useState, useRef } from 'react';
-import { FaTimes } from 'react-icons/fa';
 
 import Search from '../../../app/ui/Search';
 import { fetchBlogPost, deleteBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
@@ -67,9 +66,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    if (entries.length === 0 && favoritesStatus === 'idle') {
-      handleSearch(0, pageSize);
-    }
+    handleSearch(0, pageSize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -220,10 +217,6 @@ export default function Page() {
           primaryTitle: (
             <Link
               href={`/dashboard/favorites/${entry.tconst}`}
-              style={{
-                color: '#3182ce',
-                textDecoration: 'underline',
-              }}
             >
               {entry.primaryTitle}
             </Link>
@@ -232,9 +225,9 @@ export default function Page() {
             <button
               onClick={() => handleDeleteReview(entry.tconst)}
               title='Deletar review'
-              style={{ background: 'none', border: 'none', color: 'red', cursor: 'pointer' }}
+              style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
             >
-              <FaTimes />
+              x
             </button>
           ) : null,
           watched: <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={handleSearch} />,
@@ -246,7 +239,7 @@ export default function Page() {
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         page={page}
-        pageSize={pageSize}
+        pageSize={total_documents}
         totalDocuments={total_documents}
       />
     </>

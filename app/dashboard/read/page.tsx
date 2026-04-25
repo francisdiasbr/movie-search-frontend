@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { useBlogPosts } from '../../hooks/useBlogPosts';
@@ -8,6 +7,11 @@ import { useBlogPosts } from '../../hooks/useBlogPosts';
 export default function ReadPage() {
   const { allEntries, loading, handleSearch, handleCardClick } = useBlogPosts();
 
+  console.log('All entries:', allEntries);
+  console.log('Loading state:', loading);
+  console.log('Handle search function:', handleSearch);
+  console.log('Handle card click function:', handleCardClick);
+  
   useEffect(() => {
     handleSearch();
   }, []);

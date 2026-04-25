@@ -19,7 +19,7 @@ const TableRowsLoader = ({ columns, rowsNum }: TableRowsLoader) => {
                   animation: 'skeleton-pulse 1.5s ease-in-out infinite',
                   background: '#e5e5e5',
                   borderRadius: '4px',
-                  height: '10px',
+                  height: '6px',
                 }}
               />
             </S.Cell>

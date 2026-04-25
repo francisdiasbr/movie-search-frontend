@@ -14,7 +14,7 @@ const links = [
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
       <S.LayoutContainer>
-        <nav>
+        <S.Nav>
           <ul style={{ display: 'flex', gap: '24px', listStyle: 'none', margin: 0, padding: 0 }}>
             {links.map(link => (
               <li key={link.name}>
@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </li>
             ))}
           </ul>
-        </nav>
+        </S.Nav>
         <S.ContentWrapper>{children}</S.ContentWrapper>
       </S.LayoutContainer>
   );

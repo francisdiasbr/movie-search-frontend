@@ -21,17 +21,17 @@ const MediaCard = ({ spotifyUrl }: MediaCardProps) => {
 
   const embedUrl = getSpotifyEmbedUrl(spotifyUrl);
 
+  if (!embedUrl) return null;
+
   return (
     <div style={{ height: '500px', width: '100%', display: 'flex' }}>
-      {embedUrl && (
-        <iframe
-          allow='encrypted-media'
-          height='100%'
-          src={embedUrl}
-          style={{ flex: '1', border: 'none' }}
-          title='Spotify player'
-        />
-      )}
+      <iframe
+        allow='encrypted-media'
+        height='100%'
+        src={embedUrl}
+        style={{ flex: '1', border: 'none' }}
+        title='Spotify player'
+      />
     </div>
   );
 };

@@ -4,7 +4,6 @@ export const SearchContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
-  justify-content: center;
   margin-bottom: 16px;
 
   @media (max-width: 1024px) {

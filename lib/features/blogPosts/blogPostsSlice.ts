@@ -65,7 +65,15 @@ export const createBlogPost = createAsyncThunk<BlogPostEntry, string>(
       const response = await BaseService.post(`generate-blogpost/${movieId}`);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || 'An error occurred');
+      if (error.responseText) {
+        try {
+          const body = JSON.parse(error.responseText);
+          return rejectWithValue(body?.message || body?.error || error.responseText);
+        } catch {
+          return rejectWithValue(error.responseText);
+        }
+      }
+      return rejectWithValue(error.message || 'An error occurred');
     }
   }
 );

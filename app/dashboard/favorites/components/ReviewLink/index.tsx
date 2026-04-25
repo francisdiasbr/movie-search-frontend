@@ -73,7 +73,7 @@ export default function ReviewLink({ reviewPath: propReviewPath, tconst }: Revie
   return (
     <Link 
       href={reviewPath} 
-      style={{ color: '#3182ce', textDecoration: 'underline' }}
+      style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
     >
       ver
     </Link>

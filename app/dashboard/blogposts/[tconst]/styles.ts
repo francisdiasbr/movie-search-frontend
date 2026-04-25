@@ -62,11 +62,6 @@ export const SectionContainer = styled.div`
   margin-bottom: 2rem;
 `;
 
-export const SectionContent = styled.p`
-  color: #718096;
-  line-height: 1.625;
-`;
-
 export const SectionTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
