@@ -9,7 +9,7 @@ export default function ReadPage() {
   console.log('Loading state:', loading);
   console.log('Handle search function:', handleSearch);
   console.log('Handle card click function:', handleCardClick);
-  
+
   useEffect(() => {
     handleSearch();
   }, []);

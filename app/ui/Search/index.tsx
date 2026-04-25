@@ -1,4 +1,3 @@
-import React from 'react';
 import Select from 'react-select';
 
 import * as S from './styles';
@@ -6,16 +5,13 @@ import * as S from './styles';
 interface SearchProps {
   country?: string;
   countryOptions?: { value: string; label: string }[];
-  isFavoritePage?: boolean;
   isLoading: boolean;
   searchTerm: string;
   setCountry?: (value: string) => void;
   setSearchTerm: (value: string) => void;
-  setTconst?: (value: string) => void;
   setWatched?: (value: boolean | undefined) => void;
   setYear?: (value: number) => void;
   showAllFields?: boolean;
-  tconst?: string;
   watched?: boolean;
   year?: number;
   yearOptions?: { value: string; label: string }[];

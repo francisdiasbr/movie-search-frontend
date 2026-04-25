@@ -190,7 +190,6 @@ export default function Page() {
       <Search
         country={country ?? ''}
         countryOptions={countryOptions}
-        isFavoritePage
         isLoading={isLoading}
         searchTerm={searchTerm}
         setCountry={setCountry}

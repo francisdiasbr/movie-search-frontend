@@ -7,17 +7,9 @@ interface UploadImageState {
   uploadStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   objectName: string | null;
-  imageUrl: string | null;
   imageUrls: string[];
   imageNames: string[];
-  imageSubtitles_en: string[];
   imageSubtitles_pt: string[];
-  imageCache: {
-    [tconst: string]: {
-      urls: string[];
-      names: string[];
-    }
-  }
   subtitleStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
@@ -26,18 +18,15 @@ const initialState: UploadImageState = {
   uploadStatus: 'idle',
   error: null,
   objectName: null,
-  imageUrl: null,
   imageUrls: [],
   imageNames: [],
-  imageSubtitles_en: [],
   imageSubtitles_pt: [],
-  imageCache: {},
   subtitleStatus: 'idle',
 };
 
 
 export const fetchAllImageUrls = createAsyncThunk<
-  { urls: string[]; names: string[]; subtitles_en: string[]; subtitles_pt: string[] },
+  { urls: string[]; names: string[]; subtitles_pt: string[] },
   { tconst: string }
 >(
   'uploadImages/fetchAllImageUrls',
@@ -49,7 +38,6 @@ export const fetchAllImageUrls = createAsyncThunk<
         return {
           urls: response.images.map((image: { url: string }) => image.url),
           names: response.images.map((image: { filename: string }) => image.filename),
-          subtitles_en: response.images.map((image: { subtitle_en: string }) => image.subtitle_en),
           subtitles_pt: response.images.map((image: { subtitle_pt: string }) => image.subtitle_pt)
         };
       }
@@ -144,10 +132,7 @@ const uploadImagesSlice = createSlice({
       .addCase(uploadMovieImage.fulfilled, (state, action) => {
         state.uploadStatus = 'succeeded';
         state.objectName = action.payload.object_name;
-        console.log(
-          'Nome do objeto (imagem) no slice:',
-          action.payload.object_name
-        );
+        console.log('Nome do objeto (imagem) no slice:', action.payload.object_name);
       })
       .addCase(uploadMovieImage.rejected, (state) => {
         state.uploadStatus = 'failed';
@@ -161,7 +146,6 @@ const uploadImagesSlice = createSlice({
         state.status = 'succeeded';
         state.imageUrls = action.payload.urls;
         state.imageNames = action.payload.names;
-        state.imageSubtitles_en = action.payload.subtitles_en;
         state.imageSubtitles_pt = action.payload.subtitles_pt;
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
@@ -191,14 +175,5 @@ const uploadImagesSlice = createSlice({
       });
   },
 });
-
-// export const selectImageUrl = (state: { uploadImages: UploadImageState }) =>
-//   state.uploadImages.imageUrl;
-
-// export const selectImageUrls = (state: { uploadImages: UploadImageState }) =>
-//   state.uploadImages.imageUrls;
-
-// export const selectImageNames = (state: { uploadImages: UploadImageState }) =>
-//   state.uploadImages.imageNames;
 
 export default uploadImagesSlice.reducer;

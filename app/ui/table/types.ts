@@ -10,7 +10,6 @@ export interface TableProps {
   onPageSizeChange: (pageSize: number) => void;
   page: number;
   pageSize: number;
-  renderRow?: (entry: any) => JSX.Element;
   totalDocuments: number;
 }
 
