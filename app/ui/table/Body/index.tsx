@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 import LoadingSpinner from '../../LoadingSpinner';
@@ -11,7 +10,6 @@ const TableBody = ({
   entries,
   handleDelete,
   handleView,
-  handleWatchedUpdate,
   isActionLoading,
   isLoading,
 }: TableBodyProps) => {

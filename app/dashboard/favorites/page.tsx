@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
 import Search from '../../../app/ui/Search';
-import { fetchBlogPost, deleteBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
+import { deleteAuthoralReview, fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
 import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
@@ -118,9 +118,9 @@ export default function Page() {
 
   const handleDeleteReview = async (tconst: string) => {
     try {
-      const blogAction = await dispatch(deleteBlogPost(tconst));
-      if (deleteBlogPost.fulfilled.match(blogAction)) {
-        toast.success('Blogpost deletado com sucesso!');
+      const action = await dispatch(deleteAuthoralReview(tconst));
+      if (deleteAuthoralReview.fulfilled.match(action)) {
+        toast.success('Resenha deletada com sucesso!');
         const currentPaths = { ...reviewPaths };
         delete currentPaths[tconst];
         setReviewPaths(currentPaths);
@@ -130,10 +130,9 @@ export default function Page() {
         handleSearch();
         return;
       }
-
-      toast.info('Nenhuma review encontrada para deletar.');
+      toast.info('Nenhuma resenha encontrada para deletar.');
     } catch (error) {
-      toast.error('Erro ao deletar review.');
+      toast.error('Erro ao deletar resenha.');
     }
   };
 
@@ -162,14 +161,13 @@ export default function Page() {
 
       const reviewChecks = entries.map(async (entry: MovieEntryRow) => {
         try {
-          const blogAction = await dispatch(fetchBlogPost(entry.tconst));
-          if (fetchBlogPost.fulfilled.match(blogAction) && blogAction.payload) {
-            paths[entry.tconst] = `/dashboard/blogposts/${entry.tconst}`;
-            return;
+          const action = await dispatch(fetchAuthoralReview(entry.tconst));
+          if (fetchAuthoralReview.fulfilled.match(action) && action.payload) {
+            paths[entry.tconst] = `/dashboard/reviews/${entry.tconst}`;
+          } else {
+            paths[entry.tconst] = null;
           }
-
-          paths[entry.tconst] = null;
-        } catch (error) {
+        } catch {
           paths[entry.tconst] = null;
         }
       });

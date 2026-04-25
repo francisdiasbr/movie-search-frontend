@@ -2,10 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import allAuthoralReviewsSlice from './features/allAuthoralReviews/allAuthoralReviewsSlice';
 import authoralReviewsSlice from './features/authoralReview/authoralReviewSlice';
-import blogPostsSlice from './features/blogPosts/blogPostsSlice';
-import searchBlogPostSlice from './features/blogPosts/searchBlogPostsSlice';
 import directorsSlice from './features/directors/directorsSlice';
-import generateStickerSlice from './features/generateSticker/generateStickerSlice';
 import keywordsSlice from './features/keywords/keywordsSlice';
 import movieDetailsSlice from './features/movie/movieDetailsSlice';
 import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
@@ -18,15 +15,12 @@ export const makeStore = () => {
     reducer: {
       allAuthoralReviews: allAuthoralReviewsSlice,
       authoralReviews: authoralReviewsSlice,
-      blogPosts: blogPostsSlice,
       directors: directorsSlice,
       keywords: keywordsSlice,
       moviesDetails: movieDetailsSlice,
       moviesFavorites: movieFavoritesSlice,
-      searchBlogPost: searchBlogPostSlice,
       uploadImages: uploadImagesSlice,
       uploadMainImages: uploadMainImagesSlice,
-      generateSticker: generateStickerSlice,
     },
   });
 };

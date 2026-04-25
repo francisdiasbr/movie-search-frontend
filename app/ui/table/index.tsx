@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import TableBody from './Body';
 import Header from './Header';
@@ -10,9 +10,7 @@ import { TableProps } from './types';
 const Table = ({
   columns,
   entries,
-  handleAdd,
   handleDelete,
-  handleWatchedUpdate,
   isActionLoading,
   isLoading,
   onPageChange,
@@ -47,10 +45,8 @@ const Table = ({
         <TableBody
           columns={columns}
           entries={sortedEntries}
-          handleAdd={handleAdd}
           handleDelete={handleDelete}
           handleView={handleView}
-          handleWatchedUpdate={handleWatchedUpdate}
           isActionLoading={isActionLoading}
           isLoading={isLoading}
         />

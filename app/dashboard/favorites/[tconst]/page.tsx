@@ -1,8 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import MediaCard from '../../../../app/ui/Cards/MediaCard';
-import { generateSticker, fetchAllStickers, deleteSticker } from '../../../../lib/features/generateSticker/generateStickerSlice';
+import MediaCard from '../../../ui/Cards/MediaCard';
 import { postKeyword, getKeywords, deleteKeyword } from '../../../../lib/features/keywords/keywordsSlice';
 import { fetchDetails, resetState } from '../../../../lib/features/movie/movieDetailsSlice';
 import { fetchMainImage, uploadMainImage, deleteMainImage } from '../../../../lib/features/uploadImages/uploadMainImagesSlice';
@@ -16,8 +15,6 @@ import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
 import MovieInfoCard from './components/MovieInfoCard';
 import QuotesCard from './components/QuotesCard';
-import StickerModal from './components/StickerModal';
-import StickerSection from './components/StickerSection';
 import TriviaCard from './components/TriviaCard';
 import EditModal from './edit/editModal';
 import * as S from './styles';
@@ -25,8 +22,6 @@ import * as S from './styles';
 export default function MovieDetailsPage() {
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isStickerModalOpen, setIsStickerModalOpen] = useState(false);
-  const [selectedSticker, setSelectedSticker] = useState<{url: string, filename: string} | null>(null);
   const [isMainImageModalOpen, setIsMainImageModalOpen] = useState(false);
   const [selectedMainImage, setSelectedMainImage] = useState<{url: string, filename: string} | null>(null);
 
@@ -36,8 +31,6 @@ export default function MovieDetailsPage() {
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
   const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
   const { images, status: uploadMainStatus } = useAppSelector((state) => state.uploadMainImages);
-  const { status: stickerStatus, stickers } = useAppSelector((state) => state.generateSticker);
-
   useEffect(() => {
     if (tconst) {
       if (!data || data.tconst !== tconst) {
@@ -68,7 +61,6 @@ export default function MovieDetailsPage() {
   useEffect(() => {
     if (tconst) {
       dispatch(fetchMainImage({ tconst }));
-      dispatch(fetchAllStickers(tconst));
     }
   }, [dispatch, tconst]);
 
@@ -118,34 +110,6 @@ export default function MovieDetailsPage() {
     dispatch(fetchMainImage({ tconst }));
   };
 
-  const handleGenerateSticker = async (sequentialId?: number) => {
-    try {
-      const resultAction = await dispatch(generateSticker({ tconst, sequentialId }));
-      if (generateSticker.fulfilled.match(resultAction)) {
-        await dispatch(fetchAllStickers(tconst));
-        showSuccess({ title: 'Sticker gerado com sucesso!' });
-      } else {
-        showError({ title: 'Erro ao gerar sticker' });
-      }
-    } catch (error) {
-      showError({ title: 'Erro ao gerar sticker' });
-    }
-  };
-
-  const handleRemoveSticker = async (filename: string) => {
-    try {
-      const resultAction = await dispatch(deleteSticker({ tconst, filename }));
-      if (deleteSticker.fulfilled.match(resultAction)) {
-        showSuccess({ title: 'Sticker removido com sucesso!' });
-        await dispatch(fetchAllStickers(tconst));
-      } else {
-        showError({ title: 'Erro ao remover sticker' });
-      }
-    } catch (error) {
-      showError({ title: 'Erro ao remover sticker' });
-    }
-  };
-
   return (
     <S.PageContainer>
       <GoBack centerText={data.primaryTitle} />
@@ -180,7 +144,6 @@ export default function MovieDetailsPage() {
       <MainImageUpload
         images={images}
         onDeleteMain={handleDeleteMain}
-        onGenerateSticker={handleGenerateSticker}
         onMainImageClick={(image) => { setSelectedMainImage(image); setIsMainImageModalOpen(true); }}
         onUploadMainImage={async (event) => {
           const file = event.target.files?.[0];
@@ -188,24 +151,8 @@ export default function MovieDetailsPage() {
           await dispatch(uploadMainImage({ tconst, file }));
           dispatch(fetchMainImage({ tconst }));
         }}
-        stickerStatus={stickerStatus}
-        tconst={tconst}
         uploadMainStatus={uploadMainStatus}
       />
-
-      <StickerSection
-        onRemoveSticker={handleRemoveSticker}
-        onStickerClick={(sticker) => { setSelectedSticker(sticker); setIsStickerModalOpen(true); }}
-        stickers={stickers}
-      />
-
-      {isStickerModalOpen && (
-        <StickerModal
-          isOpen={isStickerModalOpen}
-          onClose={() => setIsStickerModalOpen(false)}
-          selectedSticker={selectedSticker}
-        />
-      )}
 
       {isMainImageModalOpen && (
         <MainImageModal

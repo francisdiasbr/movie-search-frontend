@@ -54,7 +54,6 @@ const AuthoralReviewForm = () => {
       tconst,
       primaryTitle,
       originalTitle,
-      isAiGenerated: false,
     };
 
     dispatch(postAuthoralReview(reviewData));

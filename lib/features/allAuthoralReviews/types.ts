@@ -3,7 +3,6 @@ export interface MovieReviewResponse {
   title: string;
   tconst: string;
   primaryTitle: string;
-  isAiGenerated: boolean;
   created_at: string;
 }
 

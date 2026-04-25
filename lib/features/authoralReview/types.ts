@@ -1,6 +1,5 @@
 export interface MovieReviewResponse {
   content: any;
-  isAiGenerated: boolean;
   primaryTitle: string;
   tconst: string;
 }

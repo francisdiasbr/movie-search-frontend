@@ -1,26 +1,21 @@
 import { useRef } from 'react';
-import { FaImage, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 
 import * as S from './styles';
 
 interface MainImageUploadProps {
   images: Array<{ url: string; filename: string; sequential_id?: number }> | null;
   onDeleteMain: (filename: string) => Promise<void>;
-  onGenerateSticker: (sequentialId?: number) => void;
   onMainImageClick: (image: { url: string; filename: string }) => void;
   onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-  stickerStatus: string;
-  tconst: string;
   uploadMainStatus: string;
 }
 
 export default function MainImageUpload({
   images,
   onDeleteMain,
-  onGenerateSticker,
   onMainImageClick,
   onUploadMainImage,
-  stickerStatus,
   uploadMainStatus,
 }: MainImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,13 +44,6 @@ export default function MainImageUpload({
                   onClick={() => onMainImageClick(img)}
                 />
                 <S.ImageOverlay>
-                  <button
-                    onClick={() => onGenerateSticker(img.sequential_id)}
-                    disabled={stickerStatus === 'loading'}
-                    title='Gerar sticker desta imagem'
-                  >
-                    <FaImage />
-                  </button>
                   <button onClick={() => onDeleteMain(img.filename)} title='Deletar imagem principal'>
                     <FaTrash />
                   </button>

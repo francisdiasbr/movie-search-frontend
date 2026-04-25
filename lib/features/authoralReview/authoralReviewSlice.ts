@@ -20,7 +20,6 @@ interface Content {
 
 interface AuthoralReviewProps {
   content: Content;
-  isAiGenerated?: boolean;
   originalTitle: string;
   primaryTitle: string;
   references?: string[];
@@ -32,7 +31,6 @@ interface AuthoralReviewResponse {
   content: Content;
   created_at: string;
   images: string[];
-  isAiGenerated: boolean;
   primaryTitle: string;
   references?: string[];
   tconst: string;
@@ -57,7 +55,6 @@ export const postAuthoralReview = createAsyncThunk(
         pt: { text: review.content.pt.text },
         en: { text: review.content.en.text },
       },
-      isAiGenerated: review.isAiGenerated,
       originalTitle: review.originalTitle,
       primaryTitle: review.primaryTitle,
       references: review.references,
