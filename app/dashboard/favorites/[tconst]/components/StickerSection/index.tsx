@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { FaTrash } from 'react-icons/fa';
 
 import * as S from './styles';
@@ -20,11 +19,10 @@ export default function StickerSection({ onRemoveSticker, onStickerClick, sticke
           <S.StickersGrid>
             {stickers.map((sticker, index) => (
               <S.StickerContainer key={sticker.filename || index}>
-                <Image
+                <img
                   src={sticker.url}
                   alt={`Sticker ${index + 1}`}
-                  fill
-                  style={{ cursor: 'pointer', objectFit: 'contain' }}
+                  style={{ cursor: 'pointer', height: '100%', inset: 0, objectFit: 'contain', position: 'absolute', width: '100%' }}
                   onClick={() => onStickerClick(sticker)}
                 />
                 <S.StickerOverlay>

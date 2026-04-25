@@ -1,5 +1,3 @@
-'use client';
-
 import { toast } from 'sonner';
 import { useState } from 'react';
 
@@ -72,4 +70,3 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
     </span>
   );
 }
-

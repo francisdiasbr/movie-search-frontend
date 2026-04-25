@@ -1,6 +1,4 @@
-'use client';
-
-import { usePathname, useRouter } from 'next/navigation';
+import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 import TableBody from './Body';
@@ -23,8 +21,8 @@ const Table = ({
   pageSize,
   totalDocuments,
 }: TableProps) => {
-  const pathname = usePathname();
-  const router = useRouter();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const [sortedEntries, setSortedEntries] = useState(entries);
 
@@ -35,7 +33,7 @@ const Table = ({
   const totalPages = Math.ceil(totalDocuments / pageSize);
 
   const handleView = (tconst: string) => {
-    router.push(`${pathname}/${tconst}`);
+    navigate(`${pathname}/${tconst}`);
   };
 
   return (

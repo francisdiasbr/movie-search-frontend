@@ -1,7 +1,5 @@
-'use client';
-
 import { toast } from 'sonner';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 import { clearState, postAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
@@ -10,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
   const { status, error } = useAppSelector((state) => state.authoralReviews);
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const urlTconst = searchParams.get('tconst') || '';
   const urlPrimaryTitle = searchParams.get('primaryTitle') || '';

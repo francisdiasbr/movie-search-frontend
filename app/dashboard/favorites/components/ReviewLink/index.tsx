@@ -1,6 +1,4 @@
-'use client';
-
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { fetchAuthoralReview } from '../../../../../lib/features/authoralReview/authoralReviewSlice';
@@ -71,8 +69,8 @@ export default function ReviewLink({ reviewPath: propReviewPath, tconst }: Revie
   }
 
   return (
-    <Link 
-      href={reviewPath} 
+    <Link
+      to={reviewPath}
       style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
     >
       ver

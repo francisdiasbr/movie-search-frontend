@@ -1,7 +1,4 @@
-'use client';
-
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
@@ -122,11 +119,9 @@ function BlogPost() {
               <div>
                 {imageUrls.map((url, index) => (
                   <div key={index} style={{ position: 'relative', marginBottom: '20px' }}>
-                    <Image
+                    <img
                       src={url}
                       alt={`Imagem ${index + 1} do filme`}
-                      width={1500}
-                      height={1000}
                       style={{
                         aspectRatio: '3/2',
                         borderRadius: '8px',

@@ -1,6 +1,5 @@
-'use client';
-
-import * as S from './styles';
+import { Link, Outlet } from 'react-router-dom'
+import * as S from './styles'
 
 const links = [
   { href: '/dashboard/search', name: 'Adicionar na coleção' },
@@ -8,22 +7,23 @@ const links = [
   { href: '/dashboard/keywords', name: 'Palavras-chave favoritadas' },
   { href: '/dashboard/write', name: 'Escrever' },
   { href: '/dashboard/read', name: 'Ler' },
-];
+]
 
-
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   return (
-      <S.LayoutContainer>
-        <S.Nav>
-          <ul style={{ display: 'flex', gap: '24px', listStyle: 'none', margin: 0, padding: 0 }}>
-            {links.map(link => (
-              <li key={link.name}>
-                <a href={link.href}>{link.name}</a>
-              </li>
-            ))}
-          </ul>
-        </S.Nav>
-        <S.ContentWrapper>{children}</S.ContentWrapper>
-      </S.LayoutContainer>
-  );
+    <S.LayoutContainer>
+      <S.Nav>
+        <ul style={{ display: 'flex', gap: '24px', listStyle: 'none', margin: 0, padding: 0 }}>
+          {links.map(link => (
+            <li key={link.name}>
+              <Link to={link.href}>{link.name}</Link>
+            </li>
+          ))}
+        </ul>
+      </S.Nav>
+      <S.ContentWrapper>
+        <Outlet />
+      </S.ContentWrapper>
+    </S.LayoutContainer>
+  )
 }

@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect } from 'react';
 
 import { useBlogPosts } from '../../hooks/useBlogPosts';
@@ -34,9 +32,6 @@ export default function ReadPage() {
           }}
         >
           <strong>{entry.primaryTitle || entry.tconst}</strong>
-          <span style={{ color: '#737373', fontSize: '0.875rem', marginLeft: '12px' }}>
-            {entry.isAiGenerated ? 'IA' : 'Autoral'}
-          </span>
         </div>
       ))}
     </div>

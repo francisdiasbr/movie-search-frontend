@@ -1,7 +1,5 @@
-'use client';
-
 import { toast } from 'sonner';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
 import Search from '../../../app/ui/Search';
@@ -216,7 +214,7 @@ export default function Page() {
           ) : null,
           primaryTitle: (
             <Link
-              href={`/dashboard/favorites/${entry.tconst}`}
+              to={`/dashboard/favorites/${entry.tconst}`}
             >
               {entry.primaryTitle}
             </Link>

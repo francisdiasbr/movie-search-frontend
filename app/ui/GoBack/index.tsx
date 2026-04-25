@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, CenterText } from './styles';
 
@@ -9,11 +9,11 @@ interface GoBackProps {
 }
 
 const GoBack: React.FC<GoBackProps> = ({ centerText, fallbackPath = '/dashboard/favorites', rightSlot }) => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <Container>
-      <button onClick={() => router.push(fallbackPath)} role='button' tabIndex={0}>
+      <button onClick={() => navigate(fallbackPath)} role='button' tabIndex={0}>
         Voltar
       </button>
       <CenterText>{centerText}</CenterText>

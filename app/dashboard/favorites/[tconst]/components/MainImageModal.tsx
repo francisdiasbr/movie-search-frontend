@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import Dialog from '../../../../ui/Dialog';
 
 interface MainImageModalProps {
@@ -12,11 +10,9 @@ export default function MainImageModal({ isOpen, onClose, selectedMainImage }: M
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title='Visualizar Imagem Principal'>
       {selectedMainImage && (
-        <Image
+        <img
           src={selectedMainImage.url}
           alt={selectedMainImage.filename}
-          width={800}
-          height={600}
           style={{ borderRadius: 8, maxHeight: '70vh', maxWidth: '100%', objectFit: 'contain' }}
         />
       )}

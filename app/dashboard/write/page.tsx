@@ -1,50 +1,16 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
-import { fetchBlogPost, createBlogPost } from '../../../lib/features/blogPosts/blogPostsSlice';
 import { fetchDetails } from '../../../lib/features/movie/movieDetailsSlice';
-import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { useAppDispatch } from '../../../lib/hooks';
 
 export default function WritePage() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [tconst, setTconst] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleGenerateAI = async () => {
-    if (!tconst) return;
-    setIsLoading(true);
-    try {
-      const detailsAction = await dispatch(fetchDetails(tconst));
-      if (!fetchDetails.fulfilled.match(detailsAction) || !detailsAction.payload) {
-        toast.error('Filme não encontrado na base de dados.');
-        return;
-      }
-
-      const authoralAction = await dispatch(fetchAuthoralReview(tconst));
-      if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
-        toast.warning('Já existe uma resenha para este filme.');
-        return;
-      }
-
-      const resultAction = await dispatch(createBlogPost(tconst));
-      if (createBlogPost.fulfilled.match(resultAction)) {
-        toast.success('Resenha gerada com sucesso.');
-        router.push(`/dashboard/blogposts/${tconst}`);
-      } else {
-        const errMsg = resultAction.payload as string;
-        toast.error(`Erro ao gerar resenha: ${errMsg}`);
-      }
-    } catch {
-      toast.error('Erro ao gerar resenha.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleWriteAuthoral = async () => {
     if (!tconst) return;
@@ -56,18 +22,12 @@ export default function WritePage() {
         return;
       }
 
-      const blogAction = await dispatch(fetchBlogPost(tconst));
-      if (fetchBlogPost.fulfilled.match(blogAction) && blogAction.payload) {
-        toast.warning('Já existe uma resenha para este filme.');
-        return;
-      }
-
       const detailsAction = await dispatch(fetchDetails(tconst));
       const primaryTitle = fetchDetails.fulfilled.match(detailsAction)
         ? detailsAction.payload?.primaryTitle || ''
         : '';
 
-      router.push(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}`);
+      navigate(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}`);
     } catch {
       toast.error('Erro ao verificar resenhas.');
     } finally {

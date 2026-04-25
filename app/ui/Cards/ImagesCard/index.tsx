@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 
 import GenericCard from '../GenericCard';
@@ -13,7 +12,7 @@ const ImagesCard = ({ poster, tconst }: ImagesCardProps) => {
 
   return (
     <GenericCard>
-      <Image
+      <img
         src={posterUrl}
         alt='Descrição da imagem'
         width={500}

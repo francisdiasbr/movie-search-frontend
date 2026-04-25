@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useRef } from 'react';
 import { FaImage, FaTrash } from 'react-icons/fa';
 
@@ -43,11 +42,10 @@ export default function MainImageUpload({
           <S.ImagesGrid>
             {images.map((img, index) => (
               <S.ImageContainer key={img.filename || index}>
-                <Image
+                <img
                   src={img.url}
                   alt={img.filename || `Imagem ${index + 1}`}
-                  fill
-                  style={{ cursor: 'pointer', objectFit: 'cover' }}
+                  style={{ cursor: 'pointer', height: '100%', inset: 0, objectFit: 'cover', position: 'absolute', width: '100%' }}
                   onClick={() => onMainImageClick(img)}
                 />
                 <S.ImageOverlay>

@@ -1,92 +1,42 @@
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { useCallback, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
 
 import {
   clearAuthoralReviewStatus,
   fetchAllAuthoralReviews,
 } from '../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
-import { createBlogPost } from '../../lib/features/blogPosts/blogPostsSlice';
-import { clearSearchState, searchBlogPosts } from '../../lib/features/blogPosts/searchBlogPostsSlice';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { RootState } from '../../lib/store';
 
 export function useBlogPosts() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
-  const { entries: allAuthoralReviews } = useAppSelector((state: RootState) => state.allAuthoralReviews);
-  const { loading: creating } = useAppSelector((state: RootState) => state.blogPosts);
-  const [query, setQuery] = useState('');
-  const [movieId, setMovieId] = useState('');
+  const { entries, status } = useAppSelector((state: RootState) => state.allAuthoralReviews);
 
   useEffect(() => {
-    dispatch(clearSearchState());
     dispatch(clearAuthoralReviewStatus());
     return () => {
-      dispatch(clearSearchState());
       dispatch(clearAuthoralReviewStatus());
     };
   }, [dispatch]);
 
   const handleSearch = useCallback(async () => {
     try {
-      dispatch(clearSearchState());
-      await dispatch(searchBlogPosts({}));
       await dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
     } catch (error) {
-      console.error('Erro ao buscar posts:', error);
+      console.error('Erro ao buscar resenhas:', error);
     }
   }, [dispatch]);
 
-  const handleGeneratePost = async () => {
-    if (!movieId) {
-      toast.warning('Por favor, insira o tconst do filme antes de gerar um post.');
-      return;
-    }
-
-    try {
-      await dispatch(createBlogPost(movieId));
-      setMovieId('');
-      await handleSearch();
-    } catch (error) {
-      console.error('Erro ao gerar o post:', error);
-    }
-  };
-
-  const handleEditPost = async () => {
-    if (!movieId) {
-      toast.warning('Por favor, insira o tconst do filme antes de editar um post.');
-      return;
-    }
-
-    router.push(`/dashboard/blogposts/${movieId}/edit`);
-  };
-
   const handleCardClick = (tconst: string) => {
-    const post = allEntries.find((entry) => entry.tconst === tconst);
-    if (post && post.isAiGenerated === false) {
-      router.push(`/dashboard/reviews/${tconst}`);
-    } else {
-      router.push(`/dashboard/blogposts/${tconst}`);
-    }
+    navigate(`/dashboard/reviews/${tconst}`);
   };
-
-  const blogPostEntries = data?.entries || [];
-  const authoralReviewEntries = allAuthoralReviews || [];
-  const allEntries = [...blogPostEntries, ...authoralReviewEntries];
-  const hasEntries = allEntries.length > 0;
 
   return {
-    loading,
-    creating,
-    movieId,
-    setMovieId,
-    hasEntries,
-    allEntries,
+    loading: status === 'loading',
+    allEntries: entries || [],
+    hasEntries: (entries?.length ?? 0) > 0,
     handleSearch,
-    handleGeneratePost,
-    handleEditPost,
     handleCardClick,
   };
 }

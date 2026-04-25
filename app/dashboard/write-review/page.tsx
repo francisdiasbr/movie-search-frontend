@@ -1,5 +1,3 @@
-'use client';
-
 import AuthoralReviewForm from '../../ui/AuthoralReviewForm';
 import GoBack from '../../ui/GoBack';
 
