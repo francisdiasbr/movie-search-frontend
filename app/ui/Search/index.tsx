@@ -65,7 +65,7 @@ const Search = ({
             }}
             value={watched === undefined ? '' : watched ? 'true' : 'false'}
           >
-            <option value=''>Status de assistido</option>
+            <option value=''>Status</option>
             <option value='true'>Assistidos</option>
             <option value='false'>Não assistidos</option>
           </select>

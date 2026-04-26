@@ -29,19 +29,7 @@ export default function Page() {
   const [watched, setWatched] = useState<boolean | undefined>(undefined);
   const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
   const [yearOptions, setYearOptions] = useState<{ value: string; label: string }[]>([]);
-  const [reviewPaths, setReviewPaths] = useState<Record<string, string | null>>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = sessionStorage.getItem('favorites-reviewPaths');
-      if (stored) {
-        try {
-          return JSON.parse(stored);
-        } catch (e) {
-          return {};
-        }
-      }
-    }
-    return {};
-  });
+  const [reviewPaths, setReviewPaths] = useState<Record<string, string | null>>({});
   const [isCheckingReviews, setIsCheckingReviews] = useState(false);
   const lastEntriesKeyRef = useRef<string>('');
 
@@ -119,12 +107,7 @@ export default function Page() {
       const action = await dispatch(deleteAuthoralReview(tconst));
       if (deleteAuthoralReview.fulfilled.match(action)) {
         toast.success('Resenha deletada com sucesso!');
-        const currentPaths = { ...reviewPaths };
-        delete currentPaths[tconst];
-        setReviewPaths(currentPaths);
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem('favorites-reviewPaths', JSON.stringify(currentPaths));
-        }
+        lastEntriesKeyRef.current = '';
         handleSearch();
         return;
       }
@@ -146,35 +129,22 @@ export default function Page() {
         return;
       }
 
-      const allEntriesHavePaths = entries.every((entry: MovieEntryRow) => entry.tconst in reviewPaths);
-      if (allEntriesHavePaths && Object.keys(reviewPaths).length > 0) {
-        lastEntriesKeyRef.current = currentEntriesKey;
-        return;
-      }
-
       lastEntriesKeyRef.current = currentEntriesKey;
-
       setIsCheckingReviews(true);
       const paths: Record<string, string | null> = {};
 
-      const reviewChecks = entries.map(async (entry: MovieEntryRow) => {
+      await Promise.all(entries.map(async (entry: MovieEntryRow) => {
         try {
           const action = await dispatch(fetchAuthoralReview(entry.tconst));
-          if (fetchAuthoralReview.fulfilled.match(action) && action.payload) {
-            paths[entry.tconst] = `/dashboard/reviews/${entry.tconst}`;
-          } else {
-            paths[entry.tconst] = null;
-          }
+          paths[entry.tconst] = fetchAuthoralReview.fulfilled.match(action) && action.payload
+            ? `/dashboard/reviews/${entry.tconst}`
+            : null;
         } catch {
           paths[entry.tconst] = null;
         }
-      });
+      }));
 
-      await Promise.all(reviewChecks);
       setReviewPaths(paths);
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('favorites-reviewPaths', JSON.stringify(paths));
-      }
       setIsCheckingReviews(false);
     };
 

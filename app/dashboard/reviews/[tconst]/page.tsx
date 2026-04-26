@@ -149,7 +149,7 @@ function Reviews() {
           )}
           {data.content?.en?.text && (
             <div>
-              <h2>English</h2>
+              <h2>Inglês</h2>
               <p>{data.content.en.text}</p>
             </div>
           )}
@@ -172,7 +172,7 @@ function Reviews() {
             {editingImage === imageNames[index] && (
               <div>
                 <input
-                  placeholder='Digite a legenda da imagem'
+                  placeholder='Escreva a legenda para a imagem'
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
                 />
