@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
-import Search from '../../../app/ui/Search';
+import Search from './components/Search';
 import { deleteAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
 import { fetchAllAuthoralReviews } from '../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/movieDetailsSlice';
