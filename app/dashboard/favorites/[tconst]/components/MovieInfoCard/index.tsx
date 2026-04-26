@@ -4,6 +4,7 @@ import * as S from '../../styles';
 interface MovieInfoCardProps {
   data: any;
   existingKeywords: string[];
+  onDownloadClick?: () => void;
   onEditClick?: () => void;
   onKeywordClick: (keyword: string) => void;
   onKeywordDelete: (keyword: string) => void;
@@ -12,6 +13,7 @@ interface MovieInfoCardProps {
 export default function MovieInfoCard({
   data,
   existingKeywords,
+  onDownloadClick,
   onEditClick,
   onKeywordClick,
   onKeywordDelete,
@@ -84,6 +86,9 @@ export default function MovieInfoCard({
             <a href={encodeURI(data.subtitle_url)} rel='noopener noreferrer' target='_blank'>
               <button>Baixar Legendas</button>
             </a>
+          )}
+          {onDownloadClick && (
+            <button onClick={onDownloadClick} type='button'>Baixar Filme</button>
           )}
         </S.ActionsSection>
       </S.CardBody>

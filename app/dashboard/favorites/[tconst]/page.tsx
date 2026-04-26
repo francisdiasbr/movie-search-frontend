@@ -15,11 +15,13 @@ import MovieInfoCard from './components/MovieInfoCard';
 import FavoriteTag from './components/FavoriteTag';
 import { sanitizeTrivia, formatQuote } from './utils';
 import EditInfoModal from './components/EditInfoModal';
+import TorrentSearchModal from './components/TorrentSearchModal';
 import * as S from './styles';
 
 export default function MovieDetailsPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMainImageModalOpen, setIsMainImageModalOpen] = useState(false);
+  const [isTorrentModalOpen, setIsTorrentModalOpen] = useState(false);
   const [selectedMainImage, setSelectedMainImage] = useState<{ url: string, filename: string } | null>(null);
 
   const dispatch = useAppDispatch();
@@ -71,9 +73,14 @@ export default function MovieDetailsPage() {
         <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} tconst={tconst} />
       )}
 
+      {isTorrentModalOpen && (
+        <TorrentSearchModal isOpen={isTorrentModalOpen} onClose={() => setIsTorrentModalOpen(false)} primaryTitle={data.primaryTitle} />
+      )}
+
       <MovieInfoCard
         data={data}
         existingKeywords={existingKeywords}
+        onDownloadClick={() => setIsTorrentModalOpen(true)}
         onEditClick={() => setIsOpen(true)}
         onKeywordClick={handleKeywordClick}
         onKeywordDelete={handleKeywordDelete}
