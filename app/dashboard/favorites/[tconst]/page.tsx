@@ -84,6 +84,19 @@ export default function MovieDetailsPage() {
           <S.CardHeader><S.CardTitle>Links</S.CardTitle></S.CardHeader>
           <S.CardBody>
             <S.LinksGrid>
+              <S.LinkItem>
+                <S.LinkLabel>IMDB</S.LinkLabel>
+                <S.LinkValue>
+                  <a
+                    href={data.imdb_url ?? `https://www.imdb.com/title/${data.tconst}/`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    style={{ textDecoration: 'underline', color: 'blue' }}
+                  >
+                    {data.imdb_url ?? `https://www.imdb.com/title/${data.tconst}/`}
+                  </a>
+                </S.LinkValue>
+              </S.LinkItem>
               {data.wiki && (
                 <S.LinkItem>
                   <S.LinkLabel>Wiki</S.LinkLabel>
