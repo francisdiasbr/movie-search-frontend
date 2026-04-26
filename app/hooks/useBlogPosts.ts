@@ -22,7 +22,7 @@ export function useBlogPosts() {
 
   const handleSearch = useCallback(async () => {
     try {
-      await dispatch(fetchAllAuthoralReviews({ page: 1, pageSize: 50 }));
+      await dispatch(fetchAllAuthoralReviews({}));
     } catch (error) {
       console.error('Erro ao buscar resenhas:', error);
     }

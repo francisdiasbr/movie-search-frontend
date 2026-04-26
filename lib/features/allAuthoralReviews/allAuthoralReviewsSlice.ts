@@ -12,8 +12,6 @@ const initialState: MovieReviewState = {
 
 interface FetchAllAuthoralReviewsParams {
   filters?: any;
-  page: number;
-  pageSize?: number;
 }
 
 export const fetchAllAuthoralReviews = createAsyncThunk(
@@ -23,8 +21,6 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
     try {
       const fetchBody = {
         filters: params.filters || {},
-        page: params.page,
-        page_size: params.pageSize,
       };
       const response = await BaseService.post(url, fetchBody);
       if (response) {

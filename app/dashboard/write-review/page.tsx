@@ -1,4 +1,4 @@
-import AuthoralReviewForm from '../../ui/AuthoralReviewForm';
+import AuthoralReviewForm from './Form';
 import GoBack from '../../ui/GoBack';
 
 const WriteReviewPage = () => {

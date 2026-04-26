@@ -14,8 +14,6 @@ const initialState: MovieFavoritesState = {
 
 interface FetchFavoritesParams {
   filters?: any;
-  page: number;
-  pageSize?: number;
   searchTerm?: string;
 }
 
@@ -25,7 +23,6 @@ export const fetchFavorites = createAsyncThunk(
     try {
       const fetchBody = {
         filters: params.filters || {},
-        page: params.page,
         search_term: params.searchTerm || '',
       };
       console.log('fetchBody', fetchBody);

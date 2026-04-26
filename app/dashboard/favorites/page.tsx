@@ -25,8 +25,6 @@ export default function Page() {
   const { showSuccess, showError, showInfo } = useToastNotifications();
   const [searchTerm, setSearchTerm] = useState('');
   const [country, setCountry] = useState<string | undefined>(undefined);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [watched, setWatched] = useState<boolean | undefined>(undefined);
   const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
@@ -37,22 +35,19 @@ export default function Page() {
 
   const isLoading = favoritesStatus === 'loading';
 
-  const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
-    const params = {
+  const handleSearch = () => {
+    dispatch(fetchFavorites({
       filters: {
         country: country && country.trim() !== '' ? country : undefined,
         startYear: year,
         watched: watched,
       },
-      page: currentPage + 1,
-      pageSize: currentPageSize,
       searchTerm: searchTerm,
-    };
-    dispatch(fetchFavorites(params));
+    }));
   };
 
   useEffect(() => {
-    handleSearch(0, pageSize);
+    handleSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,8 +58,7 @@ export default function Page() {
     }
     if (favoritesStatus !== 'loading') {
       const timeoutId = setTimeout(() => {
-        setPage(0);
-        handleSearch(0, pageSize);
+        handleSearch();
       }, 500);
 
       return () => clearTimeout(timeoutId);
@@ -127,7 +121,7 @@ export default function Page() {
       lastEntriesKeyRef.current = currentEntriesKey;
 
       const tconsts = entries.map((e: MovieEntryRow) => e.tconst);
-      const action = await dispatch(fetchAllAuthoralReviews({ filters: { tconst: { $in: tconsts } }, page: 1, pageSize: tconsts.length }));
+      const action = await dispatch(fetchAllAuthoralReviews({ filters: { tconst: { $in: tconsts } } }));
 
       const paths: Record<string, string | null> = {};
       if (fetchAllAuthoralReviews.fulfilled.match(action) && Array.isArray(action.payload)) {

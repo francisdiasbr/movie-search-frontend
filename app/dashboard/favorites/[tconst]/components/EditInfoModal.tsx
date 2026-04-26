@@ -8,7 +8,7 @@ import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Dialog from '../../../../ui/Dialog';
 
-interface EditModalProps {
+interface EditInfoModalProps {
   data: any;
   isOpen: boolean;
   onClose: () => void;
@@ -34,7 +34,7 @@ const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => (
   </div>
 );
 
-export default function EditModal({ data, isOpen, onClose, tconst }: EditModalProps) {
+export default function EditInfoModal({ data, isOpen, onClose, tconst }: EditInfoModalProps) {
   const [formData, setFormData] = useState(data);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToastNotifications();
