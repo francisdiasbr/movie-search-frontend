@@ -9,7 +9,7 @@ export const columnData = [
   },
   {
     key: 'watched',
-    label: 'Watched',
+    label: 'Assistido',
     style: {
       minWidth: '100px',
       width: '10%',

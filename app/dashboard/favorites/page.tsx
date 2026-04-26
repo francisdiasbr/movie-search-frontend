@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
 import Search from '../../../app/ui/Search';
-import { deleteAuthoralReview, fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
+import { deleteAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
+import { fetchAllAuthoralReviews } from '../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
 import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
@@ -20,7 +21,7 @@ interface MovieEntryRow {
 export default function Page() {
   const dispatch = useAppDispatch();
   const { countries, entries, total_documents, status: favoritesStatus, startYears } = useAppSelector((state) => state.moviesFavorites);
-  const { editStatus, deleteStatus } = useAppSelector((state) => state.moviesDetails);
+  const { deleteStatus } = useAppSelector((state) => state.moviesDetails);
   const { showSuccess, showError, showInfo } = useToastNotifications();
   const [searchTerm, setSearchTerm] = useState('');
   const [country, setCountry] = useState<string | undefined>(undefined);
@@ -31,8 +32,8 @@ export default function Page() {
   const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
   const [yearOptions, setYearOptions] = useState<{ value: string; label: string }[]>([]);
   const [reviewPaths, setReviewPaths] = useState<Record<string, string | null>>({});
-  const [isCheckingReviews, setIsCheckingReviews] = useState(false);
   const lastEntriesKeyRef = useRef<string>('');
+  const hasMountedRef = useRef(false);
 
   const isLoading = favoritesStatus === 'loading';
 
@@ -56,6 +57,10 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
     if (favoritesStatus !== 'loading') {
       const timeoutId = setTimeout(() => {
         setPage(0);
@@ -114,28 +119,27 @@ export default function Page() {
       }
 
       const currentEntriesKey = entries.map((e: MovieEntryRow) => e.tconst).sort().join(',');
-      
+
       if (lastEntriesKeyRef.current === currentEntriesKey) {
         return;
       }
 
       lastEntriesKeyRef.current = currentEntriesKey;
-      setIsCheckingReviews(true);
-      const paths: Record<string, string | null> = {};
 
-      await Promise.all(entries.map(async (entry: MovieEntryRow) => {
-        try {
-          const action = await dispatch(fetchAuthoralReview(entry.tconst));
-          paths[entry.tconst] = fetchAuthoralReview.fulfilled.match(action) && action.payload
-            ? `/dashboard/reviews/${entry.tconst}`
-            : null;
-        } catch {
-          paths[entry.tconst] = null;
-        }
-      }));
+      const tconsts = entries.map((e: MovieEntryRow) => e.tconst);
+      const action = await dispatch(fetchAllAuthoralReviews({ filters: { tconst: { $in: tconsts } }, page: 1, pageSize: tconsts.length }));
+
+      const paths: Record<string, string | null> = {};
+      if (fetchAllAuthoralReviews.fulfilled.match(action) && Array.isArray(action.payload)) {
+        const reviewedTconsts = new Set(action.payload.map((r: any) => r.tconst));
+        entries.forEach((entry: MovieEntryRow) => {
+          paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? `/dashboard/reviews/${entry.tconst}` : null;
+        });
+      } else {
+        entries.forEach((entry: MovieEntryRow) => { paths[entry.tconst] = null; });
+      }
 
       setReviewPaths(paths);
-      setIsCheckingReviews(false);
     };
 
     checkAllReviews();
