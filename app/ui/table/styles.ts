@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-export const Footer = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
+export const RecordCount = styled.p`
+  font-size: 0.875rem;
+  margin-bottom: 8px;
 `;
 
 export const StyledTable = styled.table`

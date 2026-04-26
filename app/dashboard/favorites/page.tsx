@@ -227,10 +227,6 @@ export default function Page() {
         handleDelete={handleDelete}
         isActionLoading={editStatus === 'loading' || deleteStatus === 'loading'}
         isLoading={isLoading}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
-        page={page}
-        pageSize={total_documents}
         totalDocuments={total_documents}
       />
     </>

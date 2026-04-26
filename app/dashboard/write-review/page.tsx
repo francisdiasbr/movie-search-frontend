@@ -6,7 +6,7 @@ const WriteReviewPage = () => {
     <>
       <GoBack />
       <h2>Write Review</h2>
-      <p>Write a review for the movie you watched</p>
+      <p>Escreva a review para o filme</p>
       <br />
       <AuthoralReviewForm />
     </>

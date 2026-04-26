@@ -4,10 +4,6 @@ export interface TableProps {
   handleDelete?: any;
   isActionLoading?: boolean;
   isLoading: boolean;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-  page: number;
-  pageSize: number;
   totalDocuments: number;
 }
 

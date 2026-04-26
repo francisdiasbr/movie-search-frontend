@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { clearState, postAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import * as S from './styles';
 
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
@@ -12,20 +13,16 @@ const AuthoralReviewForm = () => {
 
   const urlTconst = searchParams.get('tconst') || '';
   const urlPrimaryTitle = searchParams.get('primaryTitle') || '';
-  const urlOriginalTitle = searchParams.get('originalTitle') || '';
 
-  
   const [primaryTitle, setPrimaryTitle] = useState(urlPrimaryTitle);
-  const [originalTitle, setOriginalTitle] = useState(urlOriginalTitle);
   const [contentPt, setContentPt] = useState('');
   const [contentEn, setContentEn] = useState('');
   const [tconst, setTconst] = useState(urlTconst);
 
   useEffect(() => {
     setPrimaryTitle(urlPrimaryTitle);
-    setOriginalTitle(urlOriginalTitle);
     setTconst(urlTconst);
-  }, [urlPrimaryTitle, urlOriginalTitle, urlTconst]);
+  }, [urlPrimaryTitle, urlTconst]);
 
   useEffect(() => {
     dispatch(clearState());
@@ -34,12 +31,12 @@ const AuthoralReviewForm = () => {
     };
   }, [dispatch]);
 
-  const validateTconst = (tconst: any) => /^tt\d{7}$/.test(tconst);
+  const validateTconst = (tconst: any) => /^tt\d{7,8}$/.test(tconst);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateTconst(tconst)) {
-      toast.error("Formato de tconst inválido. Deve começar com 'tt' seguido por 7 dígitos.");
+      toast.error("Formato de tconst inválido. Deve começar com 'tt' seguido por 7 ou 8 dígitos.");
       return;
     }
 
@@ -53,7 +50,6 @@ const AuthoralReviewForm = () => {
       },
       tconst,
       primaryTitle,
-      originalTitle,
     };
 
     dispatch(postAuthoralReview(reviewData));
@@ -91,8 +87,8 @@ const AuthoralReviewForm = () => {
   }, [status, error, toast, dispatch, tconst]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap:'16px'}}>
+      <S.InputGroup>
         <label htmlFor='primaryTitle'>Título do Filme</label>
         <input
           id='primaryTitle'
@@ -102,18 +98,8 @@ const AuthoralReviewForm = () => {
           disabled={!!urlPrimaryTitle}
           required
         />
-      </div>
-      <div>
-        <label htmlFor='originalTitle'>Título Original</label>
-        <input
-          id='originalTitle'
-          value={originalTitle}
-          onChange={(e) => setOriginalTitle(e.target.value)}
-          placeholder='Título original do filme'
-          disabled
-        />
-      </div>
-      <div>
+      </S.InputGroup>
+      <S.InputGroup>
         <label htmlFor='tconst'>tconst (IMDb)</label>
         <input
           id='tconst'
@@ -123,8 +109,8 @@ const AuthoralReviewForm = () => {
           disabled={!!urlTconst}
           required
         />
-      </div>
-      <div>
+      </S.InputGroup>
+      <S.InputGroup>
         <label htmlFor='contentPt'>Resenha em Português</label>
         <textarea
           id='contentPt'
@@ -134,8 +120,8 @@ const AuthoralReviewForm = () => {
           rows={10}
           required
         />
-      </div>
-      <div>
+      </S.InputGroup>
+      <S.InputGroup>
         <label htmlFor='contentEn'>Resenha em Inglês</label>
         <textarea
           id='contentEn'
@@ -145,7 +131,7 @@ const AuthoralReviewForm = () => {
           rows={10}
           required
         />
-      </div>
+      </S.InputGroup>
       <button disabled={status === 'loading'} type='submit'>
         {status === 'loading' ? 'Enviando...' : 'Enviar'}
       </button>

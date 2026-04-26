@@ -20,7 +20,6 @@ interface Content {
 
 interface AuthoralReviewProps {
   content: Content;
-  originalTitle: string;
   primaryTitle: string;
   references?: string[];
   tconst: string;
@@ -55,7 +54,6 @@ export const postAuthoralReview = createAsyncThunk(
         pt: { text: review.content.pt.text },
         en: { text: review.content.en.text },
       },
-      originalTitle: review.originalTitle,
       primaryTitle: review.primaryTitle,
       references: review.references,
       tconst: review.tconst,

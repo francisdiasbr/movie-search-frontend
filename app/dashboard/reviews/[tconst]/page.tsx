@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
@@ -12,18 +12,19 @@ import {
 } from '../../../../lib/features/uploadImages/uploadImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
-import GoBack from '../../../ui/GoBack';
-import ReviewEditModal from './edit/reviewEditModal';
 import * as S from './styles';
 
 function Reviews() {
   const { tconst: movieId } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
   const { imageUrls, uploadStatus, imageNames, imageSubtitles_pt, subtitleStatus } =
     useAppSelector((state: RootState) => state.uploadImages);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [editPt, setEditPt] = useState('');
+  const [editEn, setEditEn] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState('');
@@ -38,7 +39,14 @@ function Reviews() {
     };
   }, [dispatch, movieId]);
 
-  const handleEdit = async (content: { pt?: { text: string }; en?: { text: string } }) => {
+  const handleEditOpen = () => {
+    setEditPt(data?.content?.pt?.text || '');
+    setEditEn(data?.content?.en?.text || '');
+    setIsEditing(true);
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     try {
       await dispatch(
@@ -46,13 +54,13 @@ function Reviews() {
           tconst: movieId as string,
           data: {
             content: {
-              pt: { text: content.pt?.text || '' },
-              en: { text: content.en?.text || '' },
+              pt: { text: editPt },
+              en: { text: editEn },
             },
           },
         })
       );
-      setIsOpen(false);
+      setIsEditing(false);
       dispatch(fetchAuthoralReview(movieId as string));
     } catch (error) {
     } finally {
@@ -90,127 +98,104 @@ function Reviews() {
         await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle_en: subtitle, subtitle_pt: subtitle }));
         setEditingImage(null);
         dispatch(fetchAllImageUrls({ tconst: movieId }));
-      } catch (error) {}
+      } catch (error) { }
     }
   };
 
   if (status === 'loading') return <div>Carregando...</div>;
   if (!data) return null;
+  if (!data.content?.pt?.text && !data.content?.en?.text) return <p>Nenhuma resenha encontrada!</p>;
 
   return (
-    <S.PageContainer>
-      <S.ContentColumn>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <GoBack />
-        </div>
-        <h1>{data.primaryTitle}</h1>
-        <div>
-          {data.content?.pt?.text ? (
-            <S.SectionContainer>
-              <S.SectionTitle>Português</S.SectionTitle>
-              <S.SectionContent>{data.content.pt.text}</S.SectionContent>
-            </S.SectionContainer>
-          ) : null}
+    <div>
+      <button onClick={() => navigate(-1)}>Voltar</button>
+      <h1>{data.primaryTitle}</h1>
 
-          {data.content?.en?.text ? (
-            <S.SectionContainer>
-              <S.SectionTitle>English</S.SectionTitle>
-              <S.SectionContent>{data.content.en.text}</S.SectionContent>
-            </S.SectionContainer>
-          ) : null}
-
-          {!data.content?.pt?.text && !data.content?.en?.text && <div>Nenhuma resenha encontrada!</div>}
-        </div>
-      </S.ContentColumn>
-      <button onClick={() => setIsOpen(true)} disabled={isLoading}>
-        <FaEdit /> {isLoading ? 'Salvando...' : 'Editar Resenha'}
-      </button>
-      <S.ImageColumn>
+      {isEditing ? (
+        <form onSubmit={handleEditSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label>Português</label>
+            <textarea
+              value={editPt}
+              onChange={(e) => setEditPt(e.target.value)}
+              rows={10}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <label>English</label>
+            <textarea
+              value={editEn}
+              onChange={(e) => setEditEn(e.target.value)}
+              rows={10}
+            />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
+            <button type='button' onClick={() => setIsEditing(false)} disabled={isLoading}>
+              Cancelar
+            </button>
+            <button type='submit' disabled={isLoading}>
+              {isLoading ? 'Salvando...' : 'Salvar'}
+            </button>
+          </div>
+        </form>
+      ) : (
         <div>
-          {imageUrls && imageUrls.length > 0 && (
+          <button onClick={handleEditOpen}>Editar</button>
+          {data.content?.pt?.text && (
             <div>
-              {imageUrls.map((url, index) => (
-                <div key={index} style={{ position: 'relative', marginBottom: '20px' }}>
-                  <img
-                    src={url}
-                    alt={`Imagem ${index + 1} do filme`}
-                    style={{
-                      borderRadius: '8px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                      height: 'auto',
-                      marginBottom: '0px',
-                      marginTop: '10px',
-                      width: '100%',
-                    }}
-                  />
-                  {imageSubtitles_pt?.[index] && (
-                    <p style={{ color: '#666', fontSize: '14px', textAlign: 'center' }}>
-                      {imageSubtitles_pt[index]}
-                    </p>
-                  )}
-                  <div style={{ display: 'flex', gap: '8px', position: 'absolute', right: '8px', top: '8px' }}>
-                    <button onClick={() => handleEditImage(imageNames[index])} title='Editar imagem'>
-                      <FaEdit />
-                    </button>
-                    <button onClick={() => handleDeleteImage(imageNames[index])} title='Deletar imagem'>
-                      <FaTrash />
-                    </button>
-                  </div>
-                  {editingImage === imageNames[index] && (
-                    <div style={{ marginTop: '8px' }}>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <input
-                          placeholder='Digite a legenda da imagem'
-                          value={subtitle}
-                          onChange={(e) => setSubtitle(e.target.value)}
-                          style={{ flex: 1 }}
-                        />
-                        <button
-                          onClick={() => handleSaveSubtitle(imageNames[index])}
-                          disabled={subtitleStatus === 'loading'}
-                        >
-                          {subtitleStatus === 'loading' ? 'Salvando...' : 'Salvar'}
-                        </button>
-                        <button onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>
-                          Cancelar
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+              <h2>Português</h2>
+              <p>{data.content.pt.text}</p>
             </div>
           )}
+          {data.content?.en?.text && (
+            <div>
+              <h2>English</h2>
+              <p>{data.content.en.text}</p>
+            </div>
+          )}
+        </div>
+      )}
 
-          <input
-            type='file'
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept='image/*'
-            style={{ display: 'none' }}
-          />
-          <button
-            onClick={handleUploadClick}
-            disabled={uploadStatus === 'loading'}
-            style={{ width: '100%' }}
-          >
-            {uploadStatus === 'loading'
-              ? 'Enviando...'
-              : imageUrls && imageUrls.length > 0
+      <div>
+        {imageUrls?.map((url, index) => (
+          <S.ImageWrapper key={index}>
+            <S.ReviewImage src={url} alt={`Imagem ${index + 1} do filme`} />
+            {imageSubtitles_pt?.[index] && <p>{imageSubtitles_pt[index]}</p>}
+            <S.ImageActions>
+              <button onClick={() => handleEditImage(imageNames[index])} title='Editar imagem'>
+                <FaEdit />
+              </button>
+              <button onClick={() => handleDeleteImage(imageNames[index])} title='Deletar imagem'>
+                <FaTrash />
+              </button>
+            </S.ImageActions>
+            {editingImage === imageNames[index] && (
+              <div>
+                <input
+                  placeholder='Digite a legenda da imagem'
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                />
+                <button onClick={() => handleSaveSubtitle(imageNames[index])} disabled={subtitleStatus === 'loading'}>
+                  {subtitleStatus === 'loading' ? 'Salvando...' : 'Salvar'}
+                </button>
+                <button onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>
+                  Cancelar
+                </button>
+              </div>
+            )}
+          </S.ImageWrapper>
+        ))}
+        <S.HiddenFileInput type='file' ref={fileInputRef} onChange={handleFileChange} accept='image/*' />
+        <button onClick={handleUploadClick} disabled={uploadStatus === 'loading'}>
+          {uploadStatus === 'loading'
+            ? 'Enviando...'
+            : imageUrls && imageUrls.length > 0
               ? 'Adicionar mais imagens'
               : 'Adicionar imagem'}
-          </button>
-        </div>
-      </S.ImageColumn>
-
-      {isOpen && (
-        <ReviewEditModal
-          initialContent={data.content || { pt: { text: '' }, en: { text: '' } }}
-          onCancel={() => setIsOpen(false)}
-          onSave={handleEdit}
-        />
-      )}
-    </S.PageContainer>
+        </button>
+      </div>
+    </div>
   );
 }
 
