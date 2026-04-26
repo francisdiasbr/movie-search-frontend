@@ -8,7 +8,7 @@ import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/m
 import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
-import Table from '../../ui/table';
+import Table from '../../ui/Table';
 import { columnData } from './columnData';
 import WatchedTag from './components/WatchedTag';
 

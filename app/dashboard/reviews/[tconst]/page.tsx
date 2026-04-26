@@ -134,7 +134,7 @@ function Reviews() {
               Cancelar
             </button>
             <button type='submit' disabled={isLoading}>
-              {isLoading ? 'Salvando...' : 'Salvar'}
+              {isLoading ? 'Adicionando' : 'Salvar'}
             </button>
           </div>
         </form>
@@ -177,7 +177,7 @@ function Reviews() {
                   onChange={(e) => setSubtitle(e.target.value)}
                 />
                 <button onClick={() => handleSaveSubtitle(imageNames[index])} disabled={subtitleStatus === 'loading'}>
-                  {subtitleStatus === 'loading' ? 'Salvando...' : 'Salvar'}
+                  {subtitleStatus === 'loading' ? 'Adicionando' : 'Salvar'}
                 </button>
                 <button onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>
                   Cancelar
@@ -189,7 +189,7 @@ function Reviews() {
         <S.HiddenFileInput type='file' ref={fileInputRef} onChange={handleFileChange} accept='image/*' />
         <button onClick={handleUploadClick} disabled={uploadStatus === 'loading'}>
           {uploadStatus === 'loading'
-            ? 'Enviando...'
+            ? 'Adicionando'
             : imageUrls && imageUrls.length > 0
               ? 'Adicionar mais imagens'
               : 'Adicionar imagem'}

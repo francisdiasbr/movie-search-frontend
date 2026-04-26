@@ -8,7 +8,7 @@ interface MainImageUploadProps {
   onDeleteMain: (filename: string) => Promise<void>;
   onMainImageClick: (image: { url: string; filename: string }) => void;
   onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-  uploadMainStatus: string;
+  updateImageStatus: string;
 }
 
 export default function MainImageUpload({
@@ -16,7 +16,7 @@ export default function MainImageUpload({
   onDeleteMain,
   onMainImageClick,
   onUploadMainImage,
-  uploadMainStatus,
+  updateImageStatus,
 }: MainImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,12 +24,8 @@ export default function MainImageUpload({
     <S.Card>
       <S.CardHeader>
         <S.CardTitle>Imagens</S.CardTitle>
-        <button onClick={() => fileInputRef.current?.click()} disabled={uploadMainStatus === 'loading'}>
-          {uploadMainStatus === 'loading'
-            ? 'Enviando...'
-            : images && images.length > 0
-            ? 'Adicionar mais'
-            : 'Adicionar imagem'}
+        <button onClick={() => fileInputRef.current?.click()} disabled={updateImageStatus === 'loading'}>
+          {updateImageStatus === 'loading' ? 'Adicionando' : images && images.length > 0 ? 'Adicionar mais' : 'Adicionar imagem'}
         </button>
       </S.CardHeader>
       <S.CardBody>

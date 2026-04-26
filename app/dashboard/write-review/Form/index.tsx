@@ -134,7 +134,7 @@ const AuthoralReviewForm = () => {
         />
       </S.InputGroup>
       <button disabled={status === 'loading'} type='submit'>
-        {status === 'loading' ? 'Enviando...' : 'Enviar'}
+        {status === 'loading' ? 'Adicionando' : 'Enviar'}
       </button>
     </form>
   );

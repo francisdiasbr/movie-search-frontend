@@ -1,13 +1,12 @@
 import AuthoralReviewForm from './Form';
-import GoBack from '../../ui/GoBack';
+import GoBack from '../components/GoBack';
 
 const WriteReviewPage = () => {
   return (
     <>
       <GoBack />
-      <h2>Write Review</h2>
-      <p>Escreva a review para o filme</p>
-      <br />
+      <h2>Escrever</h2>
+      <p>Escreva a resenha do filme.</p>
       <AuthoralReviewForm />
     </>
   );

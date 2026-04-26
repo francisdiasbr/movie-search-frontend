@@ -7,7 +7,7 @@ import { fetchMainImage, uploadMainImage, deleteMainImage } from '../../../../li
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { useKeywords } from '../../../hooks/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
-import GoBack from '../../../ui/GoBack';
+import GoBack from '../../components/GoBack';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
@@ -26,7 +26,7 @@ export default function MovieDetailsPage() {
   const { tconst } = useParams() as { tconst: string };
 
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
-  const { images, status: uploadMainStatus } = useAppSelector((state) => state.uploadMainImages);
+  const { images, status: updateImageStatus } = useAppSelector((state) => state.uploadMainImages);
   const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
   const { keywords: existingKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 
@@ -163,7 +163,7 @@ export default function MovieDetailsPage() {
           await dispatch(uploadMainImage({ tconst, file }));
           dispatch(fetchMainImage({ tconst }));
         }}
-        uploadMainStatus={uploadMainStatus}
+        updateImageStatus={updateImageStatus}
       />
 
       {isMainImageModalOpen && (

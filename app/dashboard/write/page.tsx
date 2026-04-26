@@ -50,7 +50,7 @@ export default function WritePage() {
           disabled={isLoading}
         />
         <button onClick={handleWriteAuthoral} disabled={isLoading || !tconst}>
-          Escrever autoral
+          {isLoading ? 'Adicionando' : 'Escrever'}
         </button>
       </div>
     </div>

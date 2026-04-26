@@ -84,7 +84,7 @@ export const updateAuthoralReview = createAsyncThunk(
       const response = await BaseService.put(url, data as any);
       return response.data;
     } catch (error) {
-      console.error('Erro ao atualizar a revisão autoral:', error);
+      console.error('Erro ao atualizar o artigo:', error);
       if ((error as any).response && (error as any).response.message) {
         return rejectWithValue((error as any).response.message);
       } else if (error instanceof Error) {
@@ -104,7 +104,7 @@ export const deleteAuthoralReview = createAsyncThunk(
       const response = await BaseService.delete(url);
       return response.data;
     } catch (error) {
-      console.error('Erro ao deletar a revisão autoral:', error);
+      console.error('Erro ao deletar o artigo:', error);
       if ((error as any).response && (error as any).response.message) {
         return rejectWithValue((error as any).response.message);
       } else if (error instanceof Error) {

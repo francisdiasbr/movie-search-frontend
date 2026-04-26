@@ -57,7 +57,7 @@ export default function Page() {
       )}
       <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
         <button onClick={handleFetchMovies} disabled={loadingMovies}>
-          {loadingMovies ? 'Buscando filmes...' : 'Buscar filmes'}
+          {loadingMovies ? 'Adicionando' : 'Buscar filmes'}
         </button>
         <button onClick={() => setSelectedKeywords([])} disabled={loadingMovies}>
           Limpar seleção

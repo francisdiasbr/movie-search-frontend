@@ -53,7 +53,7 @@ export default function SearchPage() {
           onClick={() => handleAdd(tconst)}
           disabled={isLoading || !tconst}
         >
-          Adicionar na coleção
+          {isLoading ? 'Adicionando' : 'Adicionar na coleção'}
         </button>
       </div>
     </div>
