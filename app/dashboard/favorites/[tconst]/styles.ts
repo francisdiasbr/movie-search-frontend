@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 
-// ── MovieInfoCard ────────────────────────────────────────────────────────────
-
-export const ActionsSection = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-`;
-
 // ── Card shell — shared by all cards ─────────────────────────────────────────
 
 export const Card = styled.div`
@@ -37,22 +29,6 @@ export const CardTitle = styled.h3`
   font-size: 16px;
   font-weight: 600;
   margin: 0;
-`;
-
-// ── Layout ────────────────────────────────────────────────────────────────────
-
-export const CardsContainer = styled.div`
-  width: 100%;
-`;
-
-export const CardsRow = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  @media (min-width: 1024px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
 `;
 
 // ── Generic content wrapper — shared ─────────────────────────────────────────
@@ -109,7 +85,41 @@ export const ImagesGrid = styled.div`
   }
 `;
 
+// ── LinksCard ─────────────────────────────────────────────────────────────────
+
+export const LinkItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const LinkLabel = styled.span`
+  color: #718096;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+`;
+
+export const LinkValue = styled.div`
+  color: #2d3748;
+  font-size: 14px;
+  word-break: break-word;
+`;
+
+export const LinksGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
 // ── MovieInfoCard ─────────────────────────────────────────────────────────────
+
+export const ActionsSection = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
 
 export const InfoGrid = styled.div`
   display: grid;
@@ -146,36 +156,6 @@ export const InfoValue = styled.div`
   word-break: break-word;
 `;
 
-// ── LinksCard ─────────────────────────────────────────────────────────────────
-
-export const LinkItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-export const LinkLabel = styled.span`
-  color: #718096;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-`;
-
-export const LinkValue = styled.div`
-  color: #2d3748;
-  font-size: 14px;
-  word-break: break-word;
-`;
-
-export const LinksGrid = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-// ── MovieInfoCard ─────────────────────────────────────────────────────────────
-
 export const MovieTitle = styled.h2`
   color: #2d3748;
   font-size: 20px;
@@ -183,7 +163,22 @@ export const MovieTitle = styled.h2`
   margin: 0;
 `;
 
+export const SynopsisSection = styled.div`
+  margin-bottom: 20px;
+`;
+
+export const SynopsisText = styled.div`
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 8px;
+`;
+
 // ── Page layout ───────────────────────────────────────────────────────────────
+
+export const CardsContainer = styled.div`
+  width: 100%;
+`;
 
 export const PageContainer = styled.div`
   align-items: start;
@@ -229,17 +224,4 @@ export const SectionsGrid = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-`;
-
-// ── MovieInfoCard ─────────────────────────────────────────────────────────────
-
-export const SynopsisSection = styled.div`
-  margin-bottom: 20px;
-`;
-
-export const SynopsisText = styled.div`
-  color: #4a5568;
-  font-size: 14px;
-  line-height: 1.5;
-  margin-top: 8px;
 `;
