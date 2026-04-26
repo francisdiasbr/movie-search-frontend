@@ -1,5 +1,13 @@
 export const columnData = [
   {
+    key: 'poster',
+    label: 'Image',
+    style: {
+      minWidth: '75px',
+      width: '10%',
+    },
+  },
+  {
     key: 'primaryTitle',
     label: 'Title',
     style: {

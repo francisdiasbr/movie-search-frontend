@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
+
 import AuthoralReviewForm from './Form';
-import GoBack from '../components/GoBack';
 
 const WriteReviewPage = () => {
   return (
     <>
-      <GoBack />
+      <Link to='/dashboard/favorites' style={{ color: 'blue', textDecoration: 'underline' }}>Voltar</Link>
       <h2>Escrever</h2>
       <p>Escreva a resenha do filme.</p>
       <AuthoralReviewForm />

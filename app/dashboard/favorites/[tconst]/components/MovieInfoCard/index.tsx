@@ -4,7 +4,6 @@ import * as S from '../../styles';
 interface MovieInfoCardProps {
   data: any;
   existingKeywords: string[];
-  onDownloadClick?: () => void;
   onEditClick?: () => void;
   onKeywordClick: (keyword: string) => void;
   onKeywordDelete: (keyword: string) => void;
@@ -13,7 +12,6 @@ interface MovieInfoCardProps {
 export default function MovieInfoCard({
   data,
   existingKeywords,
-  onDownloadClick,
   onEditClick,
   onKeywordClick,
   onKeywordDelete,
@@ -87,9 +85,13 @@ export default function MovieInfoCard({
               <button>Baixar Legendas</button>
             </a>
           )}
-          {onDownloadClick && (
-            <button onClick={onDownloadClick} type='button'>Baixar Filme</button>
-          )}
+          <a
+            href={`https://thepiratebay.party/search/${encodeURIComponent(data.primaryTitle)}/0/99/0`}
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            <button>Baixar Filme</button>
+          </a>
         </S.ActionsSection>
       </S.CardBody>
     </S.Card>

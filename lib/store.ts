@@ -5,7 +5,6 @@ import authoralReviewsSlice from './features/authoralReview/authoralReviewSlice'
 import keywordsSlice from './features/keywords/keywordsSlice';
 import movieDetailsSlice from './features/movie/movieDetailsSlice';
 import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
-import torrentSearchSlice from './features/torrentSearch/torrentSearchSlice';
 import uploadImagesSlice from './features/uploadImages/uploadImagesSlice';
 import uploadMainImagesSlice from './features/uploadImages/uploadMainImagesSlice';
 
@@ -18,7 +17,6 @@ export const makeStore = () => {
       keywords: keywordsSlice,
       moviesDetails: movieDetailsSlice,
       moviesFavorites: movieFavoritesSlice,
-      torrentSearch: torrentSearchSlice,
       uploadImages: uploadImagesSlice,
       uploadMainImages: uploadMainImagesSlice,
     },

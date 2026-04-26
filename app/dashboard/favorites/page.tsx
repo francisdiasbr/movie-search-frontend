@@ -164,6 +164,9 @@ export default function Page() {
           review: reviewPaths[entry.tconst] ? (
             <Link to={reviewPaths[entry.tconst]!} style={{ color: 'blue', textDecoration: 'underline' }}>ver</Link>
           ) : null,
+          poster: entry.poster_url ? (
+            <img src={entry.poster_url} alt={entry.primaryTitle} style={{ height: '80px', display: 'block', margin: '0 auto' }} />
+          ) : null,
           primaryTitle: (
             <Link
               to={`/dashboard/favorites/${entry.tconst}`}
