@@ -27,7 +27,6 @@ function Reviews() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState('');
-  const [isCoverImage, setIsCoverImage] = useState(false);
 
   useEffect(() => {
     if (typeof movieId === 'string') {
@@ -159,17 +158,6 @@ function Reviews() {
                   </div>
                   {editingImage === imageNames[index] && (
                     <div style={{ marginTop: '8px' }}>
-                      <div style={{ marginBottom: '8px' }}>
-                        <label>
-                          <input
-                            type='checkbox'
-                            checked={isCoverImage}
-                            onChange={(e) => setIsCoverImage(e.target.checked)}
-                            style={{ marginRight: '6px' }}
-                          />
-                          Imagem de capa
-                        </label>
-                      </div>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <input
                           placeholder='Digite a legenda da imagem'

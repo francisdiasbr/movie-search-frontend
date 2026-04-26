@@ -16,11 +16,9 @@ export const CardsRow = styled.div`
 
 export const PageContainer = styled.div`
   align-items: start;
-  border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 16px;
   width: 100%;
 `;
 

@@ -9,8 +9,6 @@ import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import Table from '../../ui/table';
 import { columnData } from './columnData';
-import KeywordTags from './components/KeywordTags';
-import ReviewLink from './components/ReviewLink';
 import WatchedTag from './components/WatchedTag';
 
 interface MovieEntryRow {
@@ -205,9 +203,8 @@ export default function Page() {
         columns={columnData}
         entries={entries.map((entry: MovieEntryRow) => ({
           ...entry,
-          plot_keywords: <KeywordTags keywords={entry.plot_keywords} />,
           review: reviewPaths[entry.tconst] ? (
-            <ReviewLink tconst={entry.tconst} reviewPath={reviewPaths[entry.tconst]} />
+            <Link to={reviewPaths[entry.tconst]!} style={{ color: 'blue', textDecoration: 'underline' }}>ver</Link>
           ) : null,
           primaryTitle: (
             <Link
@@ -228,7 +225,6 @@ export default function Page() {
           watched: <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={handleSearch} />,
         }))}
         handleDelete={handleDelete}
-        handleWatchedUpdate={handleSearch}
         isActionLoading={editStatus === 'loading' || deleteStatus === 'loading'}
         isLoading={isLoading}
         onPageChange={handlePageChange}

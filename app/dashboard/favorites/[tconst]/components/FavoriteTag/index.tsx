@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FaTimes, FaHeart } from 'react-icons/fa';
 
 interface FavoriteTagProps {
-  colorScheme?: string;
   existingItems: string[];
   isSelected?: string[];
   items: string[];
