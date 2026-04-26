@@ -1,8 +1,8 @@
-import { toast } from 'sonner';
 import { useState } from 'react';
 
 import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
+import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 
 interface WatchedTagProps {
   onUpdate?: () => void;
@@ -13,6 +13,7 @@ interface WatchedTagProps {
 export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProps) {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState(false);
+  const { showSuccess, showError } = useToastNotifications();
 
   const handleClick = async () => {
     if (isUpdating) return;
@@ -39,19 +40,19 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
         const editAction = await dispatch(editDetails(updateData));
         
         if (editDetails.fulfilled.match(editAction)) {
-          toast.success(`Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, { duration: 2000 });
+          showSuccess({ title: `Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, duration: 2000 });
 
           if (onUpdate) {
             onUpdate();
           }
         } else {
-          toast.error('Não foi possível atualizar o status.');
+          showError({ title: 'Não foi possível atualizar o status.' });
         }
       } else {
-        toast.error('Não foi possível carregar os dados do filme.');
+        showError({ title: 'Não foi possível carregar os dados do filme.' });
       }
     } catch (error) {
-      toast.error('Ocorreu um erro ao atualizar.');
+      showError({ title: 'Ocorreu um erro ao atualizar.' });
     } finally {
       setIsUpdating(false);
     }

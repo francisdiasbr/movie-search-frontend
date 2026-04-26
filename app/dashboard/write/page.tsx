@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
-import { fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
+import { clearState, fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
 import { fetchDetails } from '../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch } from '../../../lib/hooks';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 
 export default function WritePage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { showWarning, showError } = useToastNotifications();
   const [tconst, setTconst] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,7 +19,7 @@ export default function WritePage() {
     try {
       const authoralAction = await dispatch(fetchAuthoralReview(tconst));
       if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
-        toast.warning('Já existe uma resenha para este filme.');
+        showWarning({ title: 'Já existe uma resenha para este filme.' });
         return;
       }
 
@@ -27,9 +28,10 @@ export default function WritePage() {
         ? detailsAction.payload?.primaryTitle || ''
         : '';
 
+      dispatch(clearState());
       navigate(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}`);
     } catch {
-      toast.error('Erro ao verificar resenhas.');
+      showError({ title: 'Erro ao verificar resenhas.' });
     } finally {
       setIsLoading(false);
     }

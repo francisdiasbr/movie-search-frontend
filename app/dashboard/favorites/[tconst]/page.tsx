@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import MediaCard from '../../../ui/Cards/MediaCard';
+import MediaCard from '../../../ui/MediaCard';
 import { fetchDetails, resetState } from '../../../../lib/features/movie/movieDetailsSlice';
 import { fetchMainImage, uploadMainImage, deleteMainImage } from '../../../../lib/features/uploadImages/uploadMainImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';

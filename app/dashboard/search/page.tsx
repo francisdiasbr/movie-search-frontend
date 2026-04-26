@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 import { addFavorite, resetAddStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
   const { addStatus } = useAppSelector(state => state.moviesDetails);
+  const { showSuccess, showError } = useToastNotifications();
   const [isLoading, setIsLoading] = useState(false);
   const [tconst, setTconst] = useState('');
 
@@ -26,14 +27,14 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (addStatus === 'succeeded') {
-      toast.success('Filme adicionado aos favoritos.');
+      showSuccess({ title: 'Filme adicionado aos favoritos.' });
       setTconst('');
       dispatch(resetAddStatus());
     } else if (addStatus === 'failed') {
-      toast.error('Filme já está na lista de favoritos.');
+      showError({ title: 'Filme já está na lista de favoritos.' });
       dispatch(resetAddStatus());
     }
-  }, [addStatus, toast, dispatch]);
+  }, [addStatus, dispatch]);
 
   return (
     <div>

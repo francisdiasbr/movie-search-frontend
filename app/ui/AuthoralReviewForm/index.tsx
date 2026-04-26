@@ -1,14 +1,15 @@
-import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 import { clearState, postAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 import * as S from './styles';
 
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
   const { status, error } = useAppSelector((state) => state.authoralReviews);
+  const { showSuccess, showError } = useToastNotifications();
   const [searchParams] = useSearchParams();
 
   const urlTconst = searchParams.get('tconst') || '';
@@ -36,7 +37,7 @@ const AuthoralReviewForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateTconst(tconst)) {
-      toast.error("Formato de tconst inválido. Deve começar com 'tt' seguido por 7 ou 8 dígitos.");
+      showError({ title: "Formato de tconst inválido. Deve começar com 'tt' seguido por 7 ou 8 dígitos." });
       return;
     }
 
@@ -59,7 +60,7 @@ const AuthoralReviewForm = () => {
     if (status === 'idle') return;
 
     if (status === 'succeeded') {
-      toast.success('Resenha adicionada com sucesso!');
+      showSuccess({ title: 'Resenha adicionada com sucesso!' });
       setPrimaryTitle('');
       setContentPt('');
       setContentEn('');
@@ -81,10 +82,10 @@ const AuthoralReviewForm = () => {
         return 'Erro ao salvar a resenha';
       })();
 
-      toast.error(errorMessage);
+      showError({ title: errorMessage });
       dispatch(clearState());
     }
-  }, [status, error, toast, dispatch, tconst]);
+  }, [status, error, dispatch, tconst]);
 
   return (
     <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap:'16px'}}>

@@ -9,7 +9,6 @@ const Table = ({
   columns,
   entries,
   handleDelete,
-  isActionLoading,
   isLoading,
   totalDocuments,
 }: TableProps) => {
@@ -30,7 +29,6 @@ const Table = ({
           entries={entries}
           handleDelete={handleDelete}
           handleView={handleView}
-          isActionLoading={isActionLoading}
           isLoading={isLoading}
         />
       </S.StyledTable>

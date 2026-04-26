@@ -1,4 +1,3 @@
-import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
@@ -7,6 +6,7 @@ import { deleteAuthoralReview, fetchAuthoralReview } from '../../../lib/features
 import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 import Table from '../../ui/table';
 import { columnData } from './columnData';
 import WatchedTag from './components/WatchedTag';
@@ -21,6 +21,7 @@ export default function Page() {
   const dispatch = useAppDispatch();
   const { countries, entries, total_documents, status: favoritesStatus, startYears } = useAppSelector((state) => state.moviesFavorites);
   const { editStatus, deleteStatus } = useAppSelector((state) => state.moviesDetails);
+  const { showSuccess, showError, showInfo } = useToastNotifications();
   const [searchTerm, setSearchTerm] = useState('');
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(0);
@@ -33,7 +34,7 @@ export default function Page() {
   const [isCheckingReviews, setIsCheckingReviews] = useState(false);
   const lastEntriesKeyRef = useRef<string>('');
 
-  const isLoading = favoritesStatus === 'loading' || editStatus === 'loading' || deleteStatus === 'loading' || isCheckingReviews;
+  const isLoading = favoritesStatus === 'loading';
 
   const handleSearch = (currentPage = page, currentPageSize = pageSize) => {
     const params = {
@@ -75,28 +76,17 @@ export default function Page() {
     );
   }, [countries, startYears]);
 
-  const handlePageSizeChange = (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setPage(0);
-    handleSearch(0, newPageSize);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage);
-    handleSearch(newPage, pageSize);
-  };
-
   useEffect(() => {
     if (deleteStatus === 'succeeded') {
-      toast.success('Filme removido dos favoritos com sucesso.');
+      showSuccess({ title: 'Filme removido dos favoritos com sucesso.' });
       dispatch(resetDeleteStatus());
       handleSearch();
     }
     if (deleteStatus === 'failed') {
-      toast.error('Não foi possível remover o filme dos favoritos.');
+      showError({ title: 'Não foi possível remover o filme dos favoritos.' });
       dispatch(resetDeleteStatus());
     }
-  }, [dispatch, toast, deleteStatus]);
+  }, [dispatch, deleteStatus]);
 
   const handleDelete = async (tconst: string) => {
     await dispatch(deleteFavorite(tconst));
@@ -106,14 +96,14 @@ export default function Page() {
     try {
       const action = await dispatch(deleteAuthoralReview(tconst));
       if (deleteAuthoralReview.fulfilled.match(action)) {
-        toast.success('Resenha deletada com sucesso!');
+        showSuccess({ title: 'Resenha deletada com sucesso!' });
         lastEntriesKeyRef.current = '';
         handleSearch();
         return;
       }
-      toast.info('Nenhuma resenha encontrada para deletar.');
+      showInfo({ title: 'Nenhuma resenha encontrada para deletar.' });
     } catch (error) {
-      toast.error('Erro ao deletar resenha.');
+      showError({ title: 'Erro ao deletar resenha.' });
     }
   };
 
@@ -195,7 +185,6 @@ export default function Page() {
           watched: <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={handleSearch} />,
         }))}
         handleDelete={handleDelete}
-        isActionLoading={editStatus === 'loading' || deleteStatus === 'loading'}
         isLoading={isLoading}
         totalDocuments={total_documents}
       />

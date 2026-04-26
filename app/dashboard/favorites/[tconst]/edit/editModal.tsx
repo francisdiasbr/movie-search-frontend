@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { toast } from 'sonner';
 
 import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
+import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Dialog from '../../../../ui/Dialog';
 
 interface EditModalProps {
@@ -37,6 +37,7 @@ const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => (
 export default function EditModal({ data, isOpen, onClose, tconst }: EditModalProps) {
   const [formData, setFormData] = useState(data);
   const dispatch = useAppDispatch();
+  const { showSuccess, showError } = useToastNotifications();
 
   useEffect(() => {
     setFormData(data);
@@ -58,11 +59,11 @@ export default function EditModal({ data, isOpen, onClose, tconst }: EditModalPr
 
     dispatch(editDetails(updateData)).then((resultAction) => {
       if (editDetails.fulfilled.match(resultAction)) {
-        toast.success('Filme atualizado com sucesso.');
+        showSuccess({ title: 'Filme atualizado com sucesso.' });
         onClose();
         dispatch(fetchDetails(tconst));
       } else {
-        toast.error('Não foi possível atualizar o filme.');
+        showError({ title: 'Não foi possível atualizar o filme.' });
       }
     });
   };
