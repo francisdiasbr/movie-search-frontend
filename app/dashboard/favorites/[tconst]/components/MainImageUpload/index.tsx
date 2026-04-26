@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-import * as S from './styles';
+import * as S from '../../styles';
 
 interface MainImageUploadProps {
   images: Array<{ url: string; filename: string; sequential_id?: number }> | null;

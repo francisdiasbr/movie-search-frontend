@@ -23,7 +23,7 @@ export default function MovieDetailsPage() {
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isMainImageModalOpen, setIsMainImageModalOpen] = useState(false);
-  const [selectedMainImage, setSelectedMainImage] = useState<{url: string, filename: string} | null>(null);
+  const [selectedMainImage, setSelectedMainImage] = useState<{ url: string, filename: string } | null>(null);
 
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
@@ -128,10 +128,8 @@ export default function MovieDetailsPage() {
 
       <S.CardsContainer>
         <LinksCard data={data} />
-        <S.CardsRow>
-          <TriviaCard trivia={data.trivia} />
-          <QuotesCard quote={data.quote} />
-        </S.CardsRow>
+        <TriviaCard trivia={data.trivia} />
+        <QuotesCard quote={data.quote} />
         <KeywordsCard
           existingKeywords={existingKeywords}
           onKeywordClick={handleKeywordClick}

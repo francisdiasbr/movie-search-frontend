@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FavoriteTag from '../FavoriteTag';
-import * as S from './styles';
+import * as S from '../../styles';
 
 interface KeywordsCardProps {
   existingKeywords: string[];

@@ -1,6 +1,4 @@
-import React from 'react';
-
-import * as S from './styles';
+import * as S from '../../styles';
 
 interface TriviaCardProps {
   trivia: string;
@@ -26,7 +24,9 @@ export default function TriviaCard({ trivia }: TriviaCardProps) {
       </S.CardHeader>
       
       <S.CardBody>
-        <S.Content>{sanitizeTrivia(trivia)}</S.Content>
+        <S.Content>
+          <ul style={{ margin: 0, padding: 0 }}>{sanitizeTrivia(trivia)}</ul>
+        </S.Content>
       </S.CardBody>
     </S.Card>
   );
