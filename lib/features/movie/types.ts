@@ -28,11 +28,13 @@ export interface MovieDetailsState {
   fetchStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
 }
 
+// Só o tconst é obrigatório: o backend grava apenas os campos enviados, então
+// quem edita um campo não precisa reenviar os outros.
 export interface EditDetailsPayload {
   magnet_link?: string | null;
   references?: string[];
-  soundtrack: string;
+  soundtrack?: string;
   tconst: string;
-  watched: boolean;
-  wiki: string;
+  watched?: boolean;
+  wiki?: string;
 }

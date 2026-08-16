@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
+import { editDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 
@@ -21,35 +21,15 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
     try {
       setIsUpdating(true);
 
-      // Busca os detalhes completos do filme primeiro
-      const fetchAction = await dispatch(fetchDetails(tconst));
-      
-      if (fetchDetails.fulfilled.match(fetchAction) && fetchAction.payload) {
-        const movieData = fetchAction.payload;
-        
-        // Atualiza apenas o watched, mantendo os outros campos
-        const updateData = {
-          magnet_link: movieData.magnet_link || '',
-          references: movieData.references || [],
-          soundtrack: movieData.soundtrack || '',
-          tconst: movieData.tconst,
-          watched: !watched,
-          wiki: movieData.wiki || '',
-        };
+      // O backend só grava os campos enviados, então não é preciso reenviar o
+      // resto do documento para preservá-lo.
+      const editAction = await dispatch(editDetails({ tconst, watched: !watched }));
 
-        const editAction = await dispatch(editDetails(updateData));
-        
-        if (editDetails.fulfilled.match(editAction)) {
-          showSuccess({ title: `Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, duration: 2000 });
-
-          if (onUpdate) {
-            onUpdate();
-          }
-        } else {
-          showError({ title: 'Não foi possível atualizar o status.' });
-        }
+      if (editDetails.fulfilled.match(editAction)) {
+        showSuccess({ title: `Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, duration: 2000 });
+        onUpdate?.();
       } else {
-        showError({ title: 'Não foi possível carregar os dados do filme.' });
+        showError({ title: 'Não foi possível atualizar o status.' });
       }
     } catch (error) {
       showError({ title: 'Ocorreu um erro ao atualizar.' });

@@ -64,7 +64,6 @@ export const uploadMovieImage = createAsyncThunk<
         formData
       );
       if (response.object_name) {
-        console.log('response uploadMovieImage full', response);
         return response;
       } else {
         throw new Error('Invalid response structure');
@@ -90,7 +89,6 @@ export const deleteImage = createAsyncThunk<
       await baseService.delete(
         `images/${tconst}/${filename}`
       );
-      console.log(`Imagem ${filename} deletada com sucesso.`);
     } catch (error) {
       console.error('Erro ao deletar imagem:', error);
       if (error instanceof Error) {
@@ -132,7 +130,6 @@ const uploadImagesSlice = createSlice({
       .addCase(uploadMovieImage.fulfilled, (state, action) => {
         state.uploadStatus = 'succeeded';
         state.objectName = action.payload.object_name;
-        console.log('Nome do objeto (imagem) no slice:', action.payload.object_name);
       })
       .addCase(uploadMovieImage.rejected, (state) => {
         state.uploadStatus = 'failed';

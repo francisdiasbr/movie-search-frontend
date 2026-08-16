@@ -25,7 +25,6 @@ export const fetchFavorites = createAsyncThunk(
         filters: params.filters || {},
         search_term: params.searchTerm || '',
       };
-      console.log('fetchBody', fetchBody);
       const response = await BaseService.post('favorites/search', fetchBody);
 
       if (response && response.entries && Array.isArray(response.entries)) {
