@@ -21,7 +21,7 @@ export default function Layout() {
           ))}
         </ul>
       </S.Nav>
-      <S.ContentWrapper>
+      <S.ContentWrapper as='main'>
         <Outlet />
       </S.ContentWrapper>
     </S.LayoutContainer>

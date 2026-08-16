@@ -165,7 +165,7 @@ export default function Page() {
             <Link to={reviewPaths[entry.tconst]!} style={{ color: 'blue', textDecoration: 'underline' }}>ver</Link>
           ) : null,
           poster: entry.poster_url ? (
-            <img src={entry.poster_url} alt={entry.primaryTitle} style={{ height: '80px', display: 'block', margin: '0 auto' }} />
+            <img src={entry.poster_url} alt={entry.primaryTitle} width={54} height={80} loading='lazy' style={{ height: '80px', display: 'block', margin: '0 auto' }} />
           ) : null,
           primaryTitle: (
             <Link

@@ -39,6 +39,7 @@ const Search = ({
       {showAllFields && (
         <>
           <select
+            aria-label='País'
             onChange={e => setCountry && setCountry(e.target.value)}
             value={country || ''}
           >
@@ -48,6 +49,7 @@ const Search = ({
             ))}
           </select>
           <select
+            aria-label='Ano'
             onChange={e => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : 0)}
             value={year?.toString() || ''}
           >
@@ -57,6 +59,7 @@ const Search = ({
             ))}
           </select>
           <select
+            aria-label='Status'
             onChange={e => {
               if (setWatched) {
                 const v = e.target.value;
