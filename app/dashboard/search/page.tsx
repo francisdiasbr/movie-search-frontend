@@ -9,7 +9,7 @@ import LoadingModal from '../../ui/LoadingModal';
 export default function SearchPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { addStatus } = useAppSelector(state => state.moviesDetails);
+  const { addStatus, error } = useAppSelector(state => state.moviesDetails);
   const { showSuccess, showError } = useToastNotifications();
   const [isLoading, setIsLoading] = useState(false);
   const [tconst, setTconst] = useState('');
@@ -34,10 +34,10 @@ export default function SearchPage() {
       dispatch(resetAddStatus());
       navigate('/dashboard/favorites');
     } else if (addStatus === 'failed') {
-      showError({ title: 'Filme já está na lista de favoritos.' });
+      showError({ title: typeof error === 'string' ? error : 'Não foi possível adicionar o filme na coleção.' });
       dispatch(resetAddStatus());
     }
-  }, [addStatus, dispatch]);
+  }, [addStatus, dispatch, error]);
 
   return (
     <div>

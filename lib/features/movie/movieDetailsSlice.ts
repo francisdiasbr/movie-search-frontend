@@ -16,6 +16,22 @@ const initialState: MovieDetailsState = {
   fetchStatus: 'idle',
 };
 
+// O BaseService lança um Error com o status e o corpo cru da resposta. O
+// backend responde { data: '<mensagem>' } na maioria dos erros e { message }
+// quando o Mongo está indisponível, então é de lá que sai o texto exibido.
+const parseApiError = (error: unknown): { message?: string; status?: number } => {
+  const { response, responseText } = (error ?? {}) as {
+    response?: { status?: number };
+    responseText?: string;
+  };
+  try {
+    const body = responseText ? JSON.parse(responseText) : {};
+    return { message: body.data || body.message, status: response?.status };
+  } catch {
+    return { status: response?.status };
+  }
+};
+
 export const addFavorite = createAsyncThunk(
   'movie/addFavorite',
   async (tconst: string, { rejectWithValue }) => {
@@ -29,11 +45,7 @@ export const addFavorite = createAsyncThunk(
       }
     } catch (error) {
       console.error('Error adding favorite:', error);
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
+      return rejectWithValue(parseApiError(error));
     }
   }
 );
@@ -116,6 +128,7 @@ const movieDetailsSlice = createSlice({
     },
     resetAddStatus(state) {
       state.addStatus = 'idle';
+      state.error = null;
     },
     resetState: () => initialState,
   },
@@ -128,12 +141,12 @@ const movieDetailsSlice = createSlice({
         state.addStatus = 'succeeded';
       })
       .addCase(addFavorite.rejected, (state, action) => {
+        const { message, status } = (action.payload ?? {}) as { message?: string; status?: number };
         state.addStatus = 'failed';
-        if (action.payload === 'Movie already listed') {
-          state.error = 'Este filme já está na lista de favoritos.';
-        } else {
-          state.error = action.error.message || 'Failed to add favorite';
-        }
+        state.error =
+          status === 409
+            ? 'Este filme já está na lista de favoritos.'
+            : message || 'Não foi possível adicionar o filme na coleção.';
       })
       .addCase(deleteFavorite.pending, state => {
         state.deleteStatus = 'loading';
