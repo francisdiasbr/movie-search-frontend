@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { addFavorite, resetAddStatus } from '../../../lib/features/movie/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
+import LoadingModal from '../../ui/LoadingModal';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
@@ -58,6 +59,8 @@ export default function SearchPage() {
           {isLoading ? 'Adicionando' : 'Adicionar na coleção'}
         </button>
       </div>
+
+      <LoadingModal isOpen={isLoading} message='Adicionando filme na coleção...' />
     </div>
   );
 }
