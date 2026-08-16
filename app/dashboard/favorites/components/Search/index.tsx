@@ -8,7 +8,7 @@ interface SearchProps {
   setCountry?: (value: string) => void;
   setSearchTerm: (value: string) => void;
   setWatched?: (value: boolean | undefined) => void;
-  setYear?: (value: number) => void;
+  setYear?: (value: number | undefined) => void;
   showAllFields?: boolean;
   watched?: boolean;
   year?: number;
@@ -50,7 +50,7 @@ const Search = ({
           </select>
           <select
             aria-label='Ano'
-            onChange={e => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : 0)}
+            onChange={e => setYear && setYear(e.target.value ? parseInt(e.target.value, 10) : undefined)}
             value={year?.toString() || ''}
           >
             <option value=''>Ano</option>
