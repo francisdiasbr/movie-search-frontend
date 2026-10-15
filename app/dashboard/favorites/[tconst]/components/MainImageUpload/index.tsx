@@ -10,9 +10,9 @@ import * as S from '../../styles';
 
 interface MainImageUploadProps {
   images: ImageItem[];
-  onDeleteMain: (filename: string) => Promise<void>;
+  onDeleteMain: (filename: string) => Promise<unknown>;
   onMainImageClick: (image: ImageItem) => void;
-  onUploadMainImage: (file: File) => Promise<void>;
+  onUploadMainImage: (file: File) => Promise<unknown>;
   updateImageStatus: AsyncStatus;
 }
 

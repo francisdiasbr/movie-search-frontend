@@ -66,8 +66,6 @@ export default function MovieDetailsPage() {
     else showError({ title: 'Erro ao remover palavra-chave.' });
   };
 
-  const refreshMainImages = () => dispatch(fetchMainImage({ tconst }));
-
   return (
     <S.PageContainer>
       <PageHeader title={data.primaryTitle}>
@@ -150,15 +148,9 @@ export default function MovieDetailsPage() {
 
       <MainImageUpload
         images={images}
-        onDeleteMain={async filename => {
-          await dispatch(deleteMainImage({ tconst, filename }));
-          refreshMainImages();
-        }}
+        onDeleteMain={filename => dispatch(deleteMainImage({ tconst, filename }))}
         onMainImageClick={setSelectedMainImage}
-        onUploadMainImage={async file => {
-          await dispatch(uploadMainImage({ tconst, file }));
-          refreshMainImages();
-        }}
+        onUploadMainImage={file => dispatch(uploadMainImage({ tconst, file }))}
         updateImageStatus={updateImageStatus}
       />
 

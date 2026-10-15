@@ -11,42 +11,46 @@ const initialState: MainImagesState = {
   status: 'idle',
 };
 
+const listImages = (tconst: string) =>
+  mainImagesService.list(tconst).then(response => (Array.isArray(response?.images) ? response.images : []));
+
 export const fetchMainImage = createApiThunk<ImageItem[], { tconst: string }>(
   'mainImages/fetch',
-  async ({ tconst }) => {
-    const response = await mainImagesService.list(tconst);
-    return Array.isArray(response?.images) ? response.images : [];
-  },
+  ({ tconst }) => listImages(tconst),
   'Não foi possível carregar a imagem principal.'
 );
 
-export const uploadMainImage = createApiThunk<void, { file: File; tconst: string }>(
+// Every write re-reads the list, so the slice always holds the server state.
+export const uploadMainImage = createApiThunk<ImageItem[], { file: File; tconst: string }>(
   'mainImages/upload',
   async ({ file, tconst }) => {
-    const response = await mainImagesService.upload(tconst, file);
-    if (!response?.object_name) {
-      throw new Error('Formato de resposta inválido');
-    }
+    await mainImagesService.upload(tconst, file);
+    return listImages(tconst);
   },
   'Não foi possível enviar a imagem principal.'
 );
 
-export const deleteMainImage = createApiThunk<void, { filename: string; tconst: string }>(
+export const deleteMainImage = createApiThunk<ImageItem[], { filename: string; tconst: string }>(
   'mainImages/delete',
-  ({ filename, tconst }) => mainImagesService.removeImage(tconst, filename).then(() => undefined),
+  async ({ filename, tconst }) => {
+    await mainImagesService.removeImage(tconst, filename);
+    return listImages(tconst);
+  },
   'Não foi possível deletar a imagem principal.'
 );
+
+const setImages = (state: MainImagesState, action: { payload: ImageItem[] }) => {
+  state.images = action.payload;
+};
 
 const mainImagesSlice = createSlice({
   name: 'mainImages',
   initialState,
   reducers: {},
   extraReducers: builder => {
-    addStatusCases(builder, fetchMainImage, 'status', (state, action) => {
-      state.images = action.payload;
-    });
-    addStatusCases(builder, uploadMainImage, 'status');
-    addStatusCases(builder, deleteMainImage, 'status');
+    addStatusCases(builder, fetchMainImage, 'status', setImages);
+    addStatusCases(builder, uploadMainImage, 'status', setImages);
+    addStatusCases(builder, deleteMainImage, 'status', setImages);
   },
 });
 

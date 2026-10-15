@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { addStatusCases, createApiThunk } from '../../../../lib/api/thunk';
-import { ImageItem, UpdateSubtitlePayload } from '../../../../lib/service/ImagesBaseService';
+import { ImageItem } from '../../../../lib/service/ImagesBaseService';
 import imagesService from '../service/ImagesService';
 import { ReviewImagesState } from '../types';
 
@@ -13,47 +13,56 @@ const initialState: ReviewImagesState = {
   uploadStatus: 'idle',
 };
 
+const listImages = (tconst: string) => imagesService.list(tconst).then(response => response.images ?? []);
+
 export const fetchImages = createApiThunk<ImageItem[], { tconst: string }>(
   'reviewImages/fetch',
-  ({ tconst }) => imagesService.list(tconst).then(response => response.images ?? []),
+  ({ tconst }) => listImages(tconst),
   'Não foi possível carregar as imagens.'
 );
 
-export const uploadMovieImage = createApiThunk<void, { file: File; tconst: string }>(
+// Every write re-reads the gallery, so the slice always holds the server state.
+export const uploadMovieImage = createApiThunk<ImageItem[], { file: File; tconst: string }>(
   'reviewImages/upload',
   async ({ file, tconst }) => {
-    const response = await imagesService.upload(tconst, file);
-    if (!response?.object_name) {
-      throw new Error('Formato de resposta inválido');
-    }
+    await imagesService.upload(tconst, file);
+    return listImages(tconst);
   },
   'Não foi possível enviar a imagem.'
 );
 
-export const deleteImage = createApiThunk<void, { filename: string; tconst: string }>(
+export const deleteImage = createApiThunk<ImageItem[], { filename: string; tconst: string }>(
   'reviewImages/delete',
-  ({ filename, tconst }) => imagesService.removeImage(tconst, filename).then(() => undefined),
+  async ({ filename, tconst }) => {
+    await imagesService.removeImage(tconst, filename);
+    return listImages(tconst);
+  },
   'Não foi possível deletar a imagem.'
 );
 
-export const updateImageSubtitle = createApiThunk<void, UpdateSubtitlePayload & { filename: string; tconst: string }>(
+export const updateImageSubtitle = createApiThunk<ImageItem[], { filename: string; subtitle: string; tconst: string }>(
   'reviewImages/updateSubtitle',
-  ({ filename, subtitle_en, subtitle_pt, tconst }) =>
-    imagesService.updateSubtitle(tconst, filename, { subtitle_en, subtitle_pt }).then(() => undefined),
+  async ({ filename, subtitle, tconst }) => {
+    // The form has one caption field; the backend stores it for both languages.
+    await imagesService.updateSubtitle(tconst, filename, { subtitle_en: subtitle, subtitle_pt: subtitle });
+    return listImages(tconst);
+  },
   'Não foi possível atualizar a legenda.'
 );
+
+const setImages = (state: ReviewImagesState, action: { payload: ImageItem[] }) => {
+  state.images = action.payload;
+};
 
 const reviewImagesSlice = createSlice({
   name: 'reviewImages',
   initialState,
   reducers: {},
   extraReducers: builder => {
-    addStatusCases(builder, fetchImages, 'status', (state, action) => {
-      state.images = action.payload;
-    });
-    addStatusCases(builder, deleteImage, 'status');
-    addStatusCases(builder, uploadMovieImage, 'uploadStatus');
-    addStatusCases(builder, updateImageSubtitle, 'subtitleStatus');
+    addStatusCases(builder, fetchImages, 'status', setImages);
+    addStatusCases(builder, deleteImage, 'status', setImages);
+    addStatusCases(builder, uploadMovieImage, 'uploadStatus', setImages);
+    addStatusCases(builder, updateImageSubtitle, 'subtitleStatus', setImages);
   },
 });
 
