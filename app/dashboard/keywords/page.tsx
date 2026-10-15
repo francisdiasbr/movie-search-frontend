@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { useAsyncAction } from '../../hooks/useAsyncAction';
 import Button from '../../ui/Button';
+import ExternalLink from '../../ui/ExternalLink';
 import { Row } from '../../ui/Layout';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
 import TagList from '../../ui/TagList';
+import { imdbTitleUrl } from '../../util/url';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
@@ -61,8 +63,11 @@ export default function Page() {
           <h3>Filmes sugeridos:</h3>
           <ul>
             {suggestedMovies.map((movie, index) => (
-              <li key={index}>
-                <strong>{movie.title}</strong> ({movie.year})<br />
+              <li key={movie.tconst || index}>
+                <strong>
+                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.title}</ExternalLink>
+                </strong>{' '}
+                ({movie.year})<br />
                 <em>{movie.description}</em>
                 {movie.relevance && <S.Relevance>{movie.relevance}</S.Relevance>}
               </li>
