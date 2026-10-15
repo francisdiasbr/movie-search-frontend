@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import * as S from './styles';
+
 interface DialogProps {
   children: React.ReactNode;
   isOpen: boolean;
@@ -24,11 +26,16 @@ export default function Dialog({ children, isOpen, onClose, title }: DialogProps
 
   return (
     <dialog ref={ref} onClose={onClose} onClick={handleBackdropClick}>
-      <div className='dialog-header'>
+      <S.Header>
         <h3>{title}</h3>
-        <button className='dialog-close' onClick={onClose} type='button'>✕</button>
-      </div>
-      <div className='dialog-body'>{children}</div>
+        <S.CloseButton onClick={onClose} type='button'>✕</S.CloseButton>
+      </S.Header>
+      <S.Body>{children}</S.Body>
     </dialog>
   );
 }
+
+// Building blocks for dialog bodies, so forms inside dialogs share one look.
+export const DialogField = S.Field;
+export const DialogFooter = S.Footer;
+export const DialogRow = S.Row;

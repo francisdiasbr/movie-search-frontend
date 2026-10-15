@@ -1,14 +1,11 @@
+import { Column } from '../types';
 import * as S from './styles';
 
-interface TableHeaderProps {
-  columns: Array<{
-    key: string;
-    label: string;
-    style?: React.CSSProperties;
-  }>;
+interface TableHeaderProps<Row> {
+  columns: Column<Row>[];
 }
 
-const TableHeader = ({ columns }: TableHeaderProps) => (
+const TableHeader = <Row,>({ columns }: TableHeaderProps<Row>) => (
   <thead>
     <tr>
       {columns.map(column => (

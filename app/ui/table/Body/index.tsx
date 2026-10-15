@@ -1,13 +1,10 @@
+import { ReactNode } from 'react';
+
 import LoadingSpinner from '../../LoadingSpinner';
 import { TableBodyProps } from '../types';
 import * as S from './styles';
 
-const TableBody = ({
-  columns,
-  entries,
-  handleDelete,
-  isLoading,
-}: TableBodyProps) => {
+const TableBody = <Row,>({ columns, entries, isLoading, rowKey }: TableBodyProps<Row>) => {
   if (isLoading) {
     return (
       <S.TableBody>
@@ -22,23 +19,11 @@ const TableBody = ({
 
   return (
     <S.TableBody>
-      {entries.map(item => (
-        <S.Row key={item.tconst}>
+      {entries.map(row => (
+        <S.Row key={rowKey(row)}>
           {columns.map(column => (
             <S.Cell key={column.key}>
-              {column.isDelete && column.key === 'deleteReview' ? (
-                item.deleteReview
-              ) : column.isDelete ? (
-                <button
-                  onClick={() => handleDelete && handleDelete(item.tconst)}
-                  title='Deletar'
-                  style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
-                >
-                  x
-                </button>
-              ) : (
-                item[column.key]
-              )}
+              {column.render ? column.render(row) : ((row as Record<string, unknown>)[column.key] as ReactNode)}
             </S.Cell>
           ))}
         </S.Row>
