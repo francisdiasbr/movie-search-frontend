@@ -9,28 +9,11 @@ export interface ReviewContent {
   pt: ReviewContentLanguage;
 }
 
-export interface CreateAuthoralReviewPayload {
-  content: ReviewContent;
-  primaryTitle: string;
-  references?: string[];
-  tconst: string;
-}
-
 export interface UpdateAuthoralReviewPayload {
   content: {
     en?: ReviewContentLanguage;
     pt?: ReviewContentLanguage;
   };
-}
-
-export interface AuthoralReviewResponse {
-  _id: string;
-  content: ReviewContent;
-  created_at: string;
-  images: string[];
-  primaryTitle: string;
-  references?: string[];
-  tconst: string;
 }
 
 export interface MovieReviewResponse {
@@ -41,21 +24,6 @@ export interface MovieReviewResponse {
 
 export interface AuthoralReviewState {
   data: MovieReviewResponse | null;
-  error: string | null;
-  status: AsyncStatus;
-}
-
-export interface ReviewSummary {
-  review: string;
-  title: string;
-  tconst: string;
-  primaryTitle: string;
-  created_at: string;
-}
-
-export interface AllAuthoralReviewsState {
-  entries: ReviewSummary[];
-  data: ReviewSummary | null;
   error: string | null;
   status: AsyncStatus;
 }

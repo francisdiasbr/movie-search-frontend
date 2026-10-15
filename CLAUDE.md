@@ -31,20 +31,22 @@ Redux store is in `lib/store.ts`; typed hooks (`useAppDispatch`, `useAppSelector
 
 ### Feature folders (mirrors `gav/siga-front`)
 
-Everything a feature needs is colocated under its page folder:
+Every route folder under `app/dashboard/` is a feature and owns its own `service/`, plus `reducer/` and `types.ts` when the screen keeps state in redux. Two features may hit the same backend resource (`search` and `favorites` both call `favorites`; `write`, `write-review`, `read` and `reviews` all call `write-review`): each one still gets its own small service, exactly like `holidayRegister` and `holidayActivityReport` in siga-front. Never import another feature's service; a feature that needs another resource calls it from its own service by passing the prefix explicitly (see `FavoritesService.findReviewedTconsts`).
 
 ```
-app/dashboard/favorites/
-  page.tsx, [tconst]/page.tsx, components/   # UI
-  service/FavoritesService.ts                # API calls (one class per resource)
-  service/MainImagesService.ts
-  reducer/favoritesSlice.ts                  # redux slices
-  reducer/movieDetailsSlice.ts
-  reducer/mainImagesSlice.ts
-  types.ts                                   # payloads, responses, state
+app/dashboard/
+  favorites/      page, [tconst]/, components/, service/{FavoritesService,MainImagesService}.ts,
+                  reducer/{favoritesSlice,movieDetailsSlice,mainImagesSlice}.ts, types.ts
+  search/         page, service/SearchService.ts, reducer/searchSlice.ts, types.ts
+  reviews/        [tconst]/, service/{ReviewsService,ImagesService}.ts,
+                  reducer/{authoralReviewSlice,imagesSlice}.ts, types.ts
+  read/           page, useBlogPosts.ts, service/ReadService.ts, reducer/readSlice.ts, types.ts
+  write/          page, service/WriteService.ts          # no redux: the page calls the service directly
+  write-review/   page, Form/, service/WriteReviewService.ts, reducer/writeReviewSlice.ts, types.ts
+  keywords/       page, useKeywords.ts, service/KeywordsService.ts, reducer/keywordsSlice.ts, types.ts
 ```
 
-Same shape for `app/dashboard/reviews/` (`ReviewsService`, `ImagesService`, review and gallery slices) and `app/dashboard/keywords/`. A page that belongs to another feature imports from that feature's folder (e.g. `search/page.tsx` imports `../favorites/reducer/movieDetailsSlice`).
+Folder names do not define URLs; `app/router.tsx` does. Importing another feature's **slice** or **types** is fine (e.g. `search/service` types its response with `favorites/types`). A screen whose result is only used locally (like `write`) calls its service straight from the page, as siga's `actions.js` files do, instead of adding a slice.
 
 ### API layer
 
@@ -76,8 +78,9 @@ Cross-cutting code lives directly under `app/`, never inside a feature:
 
 ### Custom hooks
 
-`app/hooks/` contains hooks used across multiple pages:
+`app/hooks/` contains only hooks used across multiple features:
 
 - `useStatusToast({ status, error, successMessage, errorMessage, onSuccess, onFailure, reset })` — reacts once when a thunk status becomes `succeeded` or `failed`: shows the toast, runs the callback and resets the slice. Use it instead of writing a `useEffect` on a status field.
 - `useToastNotifications` — thin wrapper over sonner (`showSuccess/showError/showWarning/showInfo`).
-- `useKeywords`, `useBlogPosts` — feature helpers shared by more than one page.
+
+Hooks tied to one feature live in that feature's folder (`keywords/useKeywords.ts`, `read/useBlogPosts.ts`), not in `app/hooks/`.

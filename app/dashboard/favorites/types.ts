@@ -55,7 +55,6 @@ export interface MovieDetailsItem {
 export interface MovieDetailsState {
   data: any;
   error: string | null;
-  addStatus: AsyncStatus;
   editStatus: AsyncStatus;
   deleteStatus: AsyncStatus;
   fetchStatus: AsyncStatus;

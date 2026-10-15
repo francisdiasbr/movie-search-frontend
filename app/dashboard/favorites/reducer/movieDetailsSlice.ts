@@ -11,24 +11,10 @@ import {
 const initialState: MovieDetailsState = {
   data: null,
   error: null,
-  addStatus: 'idle',
   editStatus: 'idle',
   deleteStatus: 'idle',
   fetchStatus: 'idle',
 };
-
-export const addFavorite = createAsyncThunk<
-  MovieDetailsItem,
-  string,
-  { rejectValue: ApiErrorPayload }
->('movie/addFavorite', async (tconst, { rejectWithValue }) => {
-  try {
-    const response = await favoritesService.add(tconst);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível adicionar o filme na coleção.'));
-  }
-});
 
 export const deleteFavorite = createAsyncThunk<
   unknown,
@@ -79,27 +65,10 @@ const movieDetailsSlice = createSlice({
     resetDeleteStatus(state) {
       state.deleteStatus = 'idle';
     },
-    resetAddStatus(state) {
-      state.addStatus = 'idle';
-      state.error = null;
-    },
     resetState: () => initialState,
   },
   extraReducers: builder => {
     builder
-      .addCase(addFavorite.pending, state => {
-        state.addStatus = 'loading';
-      })
-      .addCase(addFavorite.fulfilled, state => {
-        state.addStatus = 'succeeded';
-      })
-      .addCase(addFavorite.rejected, (state, action) => {
-        state.addStatus = 'failed';
-        state.error =
-          action.payload?.status === 409
-            ? 'Este filme já está na lista de favoritos.'
-            : action.payload?.message ?? 'Não foi possível adicionar o filme na coleção.';
-      })
       .addCase(deleteFavorite.pending, state => {
         state.deleteStatus = 'loading';
       })
@@ -136,7 +105,6 @@ const movieDetailsSlice = createSlice({
 });
 
 export const {
-  resetAddStatus,
   resetEditStatus,
   resetDeleteStatus,
   resetState

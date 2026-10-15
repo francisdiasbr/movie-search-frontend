@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { ROUTES } from '../../../const';
+import { ROUTES } from '../../const';
 import AuthoralReviewForm from './Form';
 
 const WriteReviewPage = () => {

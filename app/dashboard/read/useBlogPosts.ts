@@ -1,0 +1,33 @@
+import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
+
+import { ROUTES } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { clearReviews, fetchReviews } from './reducer/readSlice';
+
+export function useBlogPosts() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { entries, status } = useAppSelector(state => state.read);
+
+  useEffect(() => {
+    dispatch(clearReviews());
+    return () => {
+      dispatch(clearReviews());
+    };
+  }, [dispatch]);
+
+  const handleSearch = useCallback(() => dispatch(fetchReviews()), [dispatch]);
+
+  const handleCardClick = (tconst: string) => {
+    navigate(ROUTES.review(tconst));
+  };
+
+  return {
+    allEntries: entries,
+    handleCardClick,
+    handleSearch,
+    hasEntries: entries.length > 0,
+    loading: status === 'loading',
+  };
+}

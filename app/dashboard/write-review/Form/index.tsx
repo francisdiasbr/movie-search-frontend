@@ -1,17 +1,17 @@
 import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-import { clearState, postAuthoralReview } from '../../reducer/authoralReviewSlice';
-import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
-import { PARAGRAPHS } from '../../../../formatter';
-import { useStatusToast } from '../../../../hooks/useStatusToast';
-import { useToastNotifications } from '../../../../hooks/useToastNotifications';
-import { isValidTconst } from '../../../../util/tconst';
+import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { PARAGRAPHS } from '../../../formatter';
+import { useStatusToast } from '../../../hooks/useStatusToast';
+import { useToastNotifications } from '../../../hooks/useToastNotifications';
+import { isValidTconst } from '../../../util/tconst';
+import { createReview, resetWriteReview } from '../reducer/writeReviewSlice';
 import * as S from './styles';
 
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
-  const { status, error } = useAppSelector((state) => state.authoralReviews);
+  const { status, error } = useAppSelector((state) => state.writeReview);
   const { showError } = useToastNotifications();
   const [searchParams] = useSearchParams();
 
@@ -29,9 +29,9 @@ const AuthoralReviewForm = () => {
   }, [urlPrimaryTitle, urlTconst]);
 
   useEffect(() => {
-    dispatch(clearState());
+    dispatch(resetWriteReview());
     return () => {
-      dispatch(clearState());
+      dispatch(resetWriteReview());
     };
   }, [dispatch]);
 
@@ -51,7 +51,7 @@ const AuthoralReviewForm = () => {
       primaryTitle,
     };
 
-    dispatch(postAuthoralReview(reviewData));
+    dispatch(createReview(reviewData));
   };
 
   useStatusToast({
@@ -67,7 +67,7 @@ const AuthoralReviewForm = () => {
       setContentEn('');
       setTconst('');
     },
-    reset: () => dispatch(clearState()),
+    reset: () => dispatch(resetWriteReview()),
     status,
     successMessage: 'Resenha adicionada com sucesso!',
   });

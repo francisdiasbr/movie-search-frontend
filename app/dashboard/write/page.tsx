@@ -1,14 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import { clearState, fetchAuthoralReview } from '../reducer/authoralReviewSlice';
-import { fetchDetails } from '../../favorites/reducer/movieDetailsSlice';
-import { useAppDispatch } from '../../../../lib/hooks';
-import { ROUTES } from '../../../const';
-import { useToastNotifications } from '../../../hooks/useToastNotifications';
+import { ROUTES } from '../../const';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
+import writeService from './service/WriteService';
 
 export default function WritePage() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { showWarning, showError } = useToastNotifications();
   const [tconst, setTconst] = useState('');
@@ -18,18 +15,13 @@ export default function WritePage() {
     if (!tconst) return;
     setIsLoading(true);
     try {
-      const authoralAction = await dispatch(fetchAuthoralReview(tconst));
-      if (fetchAuthoralReview.fulfilled.match(authoralAction) && authoralAction.payload) {
+      const existingReview = await writeService.findReview(tconst);
+      if (existingReview) {
         showWarning({ title: 'Já existe uma resenha para este filme.' });
         return;
       }
 
-      const detailsAction = await dispatch(fetchDetails(tconst));
-      const primaryTitle = fetchDetails.fulfilled.match(detailsAction)
-        ? detailsAction.payload?.primaryTitle || ''
-        : '';
-
-      dispatch(clearState());
+      const primaryTitle = await writeService.getMovieTitle(tconst).catch(() => '');
       navigate(ROUTES.writeReview({ primaryTitle, tconst }));
     } catch {
       showError({ title: 'Erro ao verificar resenhas.' });

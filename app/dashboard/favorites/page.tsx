@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Search from './components/Search';
-import { deleteAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
-import { fetchAllAuthoralReviews } from '../reviews/reducer/allAuthoralReviewsSlice';
 import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
 import { fetchFavorites } from './reducer/favoritesSlice';
+import favoritesService from './service/FavoritesService';
+import { isApiError } from '../../../lib/api/errors';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { ROUTES } from '../../const';
 import { useStatusToast } from '../../hooks/useStatusToast';
@@ -83,15 +83,15 @@ export default function Page() {
 
   const handleDeleteReview = async (tconst: string) => {
     try {
-      const action = await dispatch(deleteAuthoralReview(tconst));
-      if (deleteAuthoralReview.fulfilled.match(action)) {
-        showSuccess({ title: 'Resenha deletada com sucesso!' });
-        lastEntriesKeyRef.current = '';
-        handleSearch();
+      await favoritesService.removeReview(tconst);
+      showSuccess({ title: 'Resenha deletada com sucesso!' });
+      lastEntriesKeyRef.current = '';
+      handleSearch();
+    } catch (error) {
+      if (isApiError(error) && error.status === 404) {
+        showInfo({ title: 'Nenhuma resenha encontrada para deletar.' });
         return;
       }
-      showInfo({ title: 'Nenhuma resenha encontrada para deletar.' });
-    } catch (error) {
       showError({ title: 'Erro ao deletar resenha.' });
     }
   };
@@ -111,17 +111,12 @@ export default function Page() {
       lastEntriesKeyRef.current = currentEntriesKey;
 
       const tconsts = entries.map((e: MovieEntryRow) => e.tconst);
-      const action = await dispatch(fetchAllAuthoralReviews({ filters: { tconst: { $in: tconsts } } }));
+      const reviewedTconsts = await favoritesService.findReviewedTconsts(tconsts).catch(() => new Set<string>());
 
       const paths: Record<string, string | null> = {};
-      if (fetchAllAuthoralReviews.fulfilled.match(action) && Array.isArray(action.payload)) {
-        const reviewedTconsts = new Set(action.payload.map((r: any) => r.tconst));
-        entries.forEach((entry: MovieEntryRow) => {
-          paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? ROUTES.review(entry.tconst) : null;
-        });
-      } else {
-        entries.forEach((entry: MovieEntryRow) => { paths[entry.tconst] = null; });
-      }
+      entries.forEach((entry: MovieEntryRow) => {
+        paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? ROUTES.review(entry.tconst) : null;
+      });
 
       setReviewPaths(paths);
     };

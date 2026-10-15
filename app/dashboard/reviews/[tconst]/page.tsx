@@ -2,8 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-import { clearAuthoralReviewStatus } from '../reducer/allAuthoralReviewsSlice';
-import { fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
+import { clearState, fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
 import {
   fetchAllImageUrls,
   uploadMovieImage,
@@ -35,7 +34,7 @@ function Reviews() {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
     }
     return () => {
-      dispatch(clearAuthoralReviewStatus());
+      dispatch(clearState());
     };
   }, [dispatch, movieId]);
 
