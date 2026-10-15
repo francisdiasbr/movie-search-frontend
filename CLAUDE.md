@@ -31,7 +31,15 @@ Redux store is in `lib/store.ts`. All slices live under `lib/features/<feature>/
 
 ### API layer
 
-`lib/api/service.js` exports a singleton `BaseService` that wraps `fetch`. Use `BaseService.get/post/put/delete(endpoint, body?)`. The base URL comes from `VITE_BASE_URL`. FormData bodies are sent as multipart; everything else is JSON.
+Three layers, mirroring `gav/siga-front`. No URL is ever built outside a service.
+
+1. `lib/api/BaseApi.ts` — typed singleton over `fetch` (`get/getBlob/post/put/patch/remove`). Prepends `VITE_BASE_URL`, sends FormData as multipart and everything else as JSON, and throws `ApiError` (from `lib/api/errors.ts`) with `status`, `body` and the readable backend message. The option `cancelPrevious: true` aborts an in-flight request to the same method + URL. Features never import it directly.
+2. `lib/service/BaseService.ts` — abstract class. Subclasses set `protected prefix = '<resource>'` and inherit `get(id?)`, `search(params)`, `post(body, path?)`, `put(id, body)`, `remove(id)`, `delete(body)`, `getBlob(params)`, plus the helper `this.path(...segments)` to build sub-routes.
+3. `lib/features/<feature>/service.ts` — one service per feature, exported as a singleton, with methods named after the business operation and typed with the feature's `types.ts` (e.g. `favoritesService.searchFavorites(params)`, `keywordsService.suggestMovies(keywords)`).
+
+Response envelopes `ApiResponse<T>` (`{ data }`) and `EntriesResponse<T>` (`{ entries }`) live in `lib/api/types.ts`.
+
+Thunks follow one shape: call the service, return the payload, and on error `return rejectWithValue(toApiErrorPayload(error, '<fallback message in pt-BR>'))` with `{ rejectValue: ApiErrorPayload }` in the thunk generics. Reducers store only `action.payload?.message` in `state.error`.
 
 ### Component conventions
 
