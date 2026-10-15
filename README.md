@@ -61,6 +61,22 @@ O usuário pode visualizar as informações de um filme favorito:
 - Trilha sonora do filme (integração com o Spotify)
 - Magnet Link para download do filme
 
+## Estrutura do projeto
+
+Cada pasta de rota em `app/dashboard/` é uma feature e tem seu próprio `service/` (chamadas à API), além de `reducer/` e `types.ts` quando a tela guarda estado no Redux. Duas features podem usar o mesmo recurso do backend e ainda assim cada uma tem o seu service.
+
+| Feature | service | reducer | Recurso no backend |
+|---|---|---|---|
+| `favorites/` | `FavoritesService`, `MainImagesService` | `favoritesSlice`, `movieDetailsSlice`, `mainImagesSlice` | `favorites`, `main-images` |
+| `search/` | `SearchService` | `searchSlice` | `favorites` |
+| `reviews/` | `ReviewsService`, `ImagesService` | `authoralReviewSlice`, `imagesSlice` | `write-review`, `images` |
+| `read/` | `ReadService` | `readSlice` | `write-review` |
+| `write/` | `WriteService` | nenhum | `write-review`, `favorites` |
+| `write-review/` | `WriteReviewService` | `writeReviewSlice` | `write-review` |
+| `keywords/` | `KeywordsService` | `keywordsSlice` | `keywords` |
+
+A infraestrutura fica em `lib/`: `api/BaseApi.ts` (axios + `ApiError`), `service/BaseService.ts` (classe base dos services, por `prefix`), `store.ts` e `hooks.ts`. Utilitários transversais ficam em `app/const.ts`, `app/formatter/`, `app/util/` e `app/hooks/`. Mais detalhes em [CLAUDE.md](CLAUDE.md).
+
 ## Rodando a aplicação
 
 Antes de iniciar a aplicação, é imprescindível que o backend esteja em execução. Você pode encontrar as instruções para configurar e rodar o backend neste repositório: [movie-search-backend](https://github.com/francisdiasbr/movie-search-backend).
