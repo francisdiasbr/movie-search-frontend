@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { isApiError } from '../../../../lib/api/errors';
 import { addStatusCases, createApiThunk } from '../../../../lib/api/thunk';
 import { MovieDetailsItem } from '../../favorites/types';
 import searchService from '../service/SearchService';
@@ -12,7 +13,17 @@ const initialState: SearchState = {
 
 export const addFavorite = createApiThunk<MovieDetailsItem, string>(
   'search/addFavorite',
-  tconst => searchService.add(tconst).then(response => response.data),
+  async tconst => {
+    try {
+      const response = await searchService.add(tconst);
+      return response.data;
+    } catch (error) {
+      if (isApiError(error) && error.status === 409) {
+        throw new Error('Este filme já está na lista de favoritos.');
+      }
+      throw error;
+    }
+  },
   'Não foi possível adicionar o filme na coleção.'
 );
 
@@ -23,9 +34,7 @@ const searchSlice = createSlice({
     resetAddStatus: () => initialState,
   },
   extraReducers: builder => {
-    addStatusCases(builder, addFavorite, 'addStatus').addCase(addFavorite.rejected, (state, action) => {
-      if (action.payload?.status === 409) state.error = 'Este filme já está na lista de favoritos.';
-    });
+    addStatusCases(builder, addFavorite, 'addStatus');
   },
 });
 
