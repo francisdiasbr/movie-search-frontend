@@ -1,3 +1,5 @@
+import { JOIN_LIST, NOT_AVAILABLE, NOT_AVAILABLE_LABEL } from '../../../../../formatter';
+import { pirateBaySearchUrl } from '../../../../../util/url';
 import FavoriteTag from '../FavoriteTag';
 import * as S from '../../styles';
 
@@ -37,41 +39,41 @@ export default function MovieInfoCard({
                   onItemClick={onKeywordClick}
                   onItemDelete={onKeywordDelete}
                 />
-              ) : 'N/A'}
+              ) : NOT_AVAILABLE_LABEL}
             </S.InfoValue>
           </S.InfoItem>
 
           <S.InfoItem>
             <S.InfoLabel>Roteiristas</S.InfoLabel>
             <S.InfoValue>
-              {data.writers && data.writers.length > 0 ? data.writers.join(', ') : 'N/A'}
+              {JOIN_LIST(data.writers)}
             </S.InfoValue>
           </S.InfoItem>
 
           <S.InfoItem>
             <S.InfoLabel>Stars</S.InfoLabel>
-            <S.InfoValue>{data.stars?.join(', ') || 'N/A'}</S.InfoValue>
+            <S.InfoValue>{JOIN_LIST(data.stars)}</S.InfoValue>
           </S.InfoItem>
 
           <S.InfoItem>
             <S.InfoLabel>Ano</S.InfoLabel>
-            <S.InfoValue>{data.startYear?.toString() || 'N/A'}</S.InfoValue>
+            <S.InfoValue>{NOT_AVAILABLE(data.startYear)}</S.InfoValue>
           </S.InfoItem>
 
           <S.InfoItem>
             <S.InfoLabel>País</S.InfoLabel>
-            <S.InfoValue>{data.country || 'N/A'}</S.InfoValue>
+            <S.InfoValue>{NOT_AVAILABLE(data.country)}</S.InfoValue>
           </S.InfoItem>
 
           <S.InfoItem>
             <S.InfoLabel>Gêneros</S.InfoLabel>
-            <S.InfoValue>{data.genres?.join(', ') || 'N/A'}</S.InfoValue>
+            <S.InfoValue>{JOIN_LIST(data.genres)}</S.InfoValue>
           </S.InfoItem>
         </S.InfoGrid>
 
         <S.SynopsisSection>
           <S.InfoLabel>Sinopse</S.InfoLabel>
-          <S.SynopsisText>{data.plot || 'N/A'}</S.SynopsisText>
+          <S.SynopsisText>{NOT_AVAILABLE(data.plot)}</S.SynopsisText>
         </S.SynopsisSection>
 
         <S.ActionsSection>
@@ -86,7 +88,7 @@ export default function MovieInfoCard({
             </a>
           )}
           <a
-            href={`https://thepiratebay.party/search/${encodeURIComponent(data.primaryTitle)}/0/99/0`}
+            href={pirateBaySearchUrl(data.primaryTitle)}
             rel='noopener noreferrer'
             target='_blank'
           >

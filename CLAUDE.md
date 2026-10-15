@@ -65,11 +65,19 @@ Thunks follow one shape: call the service, return the payload, and on error `ret
 - Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.
 
+### Shared utilities (mirrors `src/app/*` in siga-front)
+
+Cross-cutting code lives directly under `app/`, never inside a feature:
+
+- `app/const.ts` — `ROUTES` (every dashboard path, with builders such as `ROUTES.favorite(tconst)` and `ROUTES.writeReview({ tconst, primaryTitle })`) and `TCONST_REGEX`. Never hardcode a `/dashboard/...` string.
+- `app/formatter/` — display formatters exported in upper case from the barrel, like siga's `formatter/index.js`: `JOIN_LIST(values)`, `NOT_AVAILABLE(value)`, `PARAGRAPHS(text)`, `YES_NO(bool)`. Add one file per formatter and re-export it from `index.ts`.
+- `app/util/` — pure helpers: `url.ts` (`imdbTitleUrl`, `spotifyEmbedUrl`, `pirateBaySearchUrl`), `tconst.ts` (`isValidTconst`), `select.ts` (`toSelectOptions`).
+- `lib/api/types.ts` — `AsyncStatus`; use it instead of spelling out the `'idle' | 'loading' | ...` union.
+
 ### Custom hooks
 
-`app/hooks/` contains hooks used across multiple pages: `useKeywords`, `useToastNotifications`, `useBlogPosts`.
+`app/hooks/` contains hooks used across multiple pages:
 
-## Import rules
-
-- **No `@` alias imports** — ESLint enforces relative paths only.
-- Import order: external modules → parent paths → sibling paths, all alphabetical (enforced by `eslint-plugin-import-helpers`).
+- `useStatusToast({ status, error, successMessage, errorMessage, onSuccess, onFailure, reset })` — reacts once when a thunk status becomes `succeeded` or `failed`: shows the toast, runs the callback and resets the slice. Use it instead of writing a `useEffect` on a status field.
+- `useToastNotifications` — thin wrapper over sonner (`showSuccess/showError/showWarning/showInfo`).
+- `useKeywords`, `useBlogPosts` — feature helpers shared by more than one page.

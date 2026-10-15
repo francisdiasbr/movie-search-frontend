@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { clearState, fetchAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
 import { fetchDetails } from '../favorites/reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../lib/hooks';
+import { ROUTES } from '../../const';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 
 export default function WritePage() {
@@ -29,7 +30,7 @@ export default function WritePage() {
         : '';
 
       dispatch(clearState());
-      navigate(`/dashboard/write-review?tconst=${tconst}&primaryTitle=${encodeURIComponent(primaryTitle)}`);
+      navigate(ROUTES.writeReview({ primaryTitle, tconst }));
     } catch {
       showError({ title: 'Erro ao verificar resenhas.' });
     } finally {

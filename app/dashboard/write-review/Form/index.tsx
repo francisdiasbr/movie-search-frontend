@@ -3,13 +3,16 @@ import React, { useState, useEffect } from 'react';
 
 import { clearState, postAuthoralReview } from '../../reviews/reducer/authoralReviewSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { PARAGRAPHS } from '../../../formatter';
+import { useStatusToast } from '../../../hooks/useStatusToast';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
+import { isValidTconst } from '../../../util/tconst';
 import * as S from './styles';
 
 const AuthoralReviewForm = () => {
   const dispatch = useAppDispatch();
   const { status, error } = useAppSelector((state) => state.authoralReviews);
-  const { showSuccess, showError } = useToastNotifications();
+  const { showError } = useToastNotifications();
   const [searchParams] = useSearchParams();
 
   const urlTconst = searchParams.get('tconst') || '';
@@ -32,22 +35,17 @@ const AuthoralReviewForm = () => {
     };
   }, [dispatch]);
 
-  const validateTconst = (tconst: any) => /^tt\d{7,8}$/.test(tconst);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateTconst(tconst)) {
+    if (!isValidTconst(tconst)) {
       showError({ title: "Formato de tconst inválido. Deve começar com 'tt' seguido por 7 ou 8 dígitos." });
       return;
     }
 
-    const formattedContentPt = contentPt.replace(/\n/g, '\n\n').trim();
-    const formattedContentEn = contentEn.replace(/\n/g, '\n\n').trim();
-
     const reviewData = {
       content: {
-        pt: { text: formattedContentPt },
-        en: { text: formattedContentEn },
+        pt: { text: PARAGRAPHS(contentPt) },
+        en: { text: PARAGRAPHS(contentEn) },
       },
       tconst,
       primaryTitle,
@@ -56,36 +54,23 @@ const AuthoralReviewForm = () => {
     dispatch(postAuthoralReview(reviewData));
   };
 
-  useEffect(() => {
-    if (status === 'idle') return;
-
-    if (status === 'succeeded') {
-      showSuccess({ title: 'Resenha adicionada com sucesso!' });
+  useStatusToast({
+    error,
+    errorMessage: (message) => {
+      if (message === 'Movie not found in favorites') return 'Filme não encontrado nos favoritos';
+      if (!tconst) return 'tconst não informado';
+      return message || 'Erro ao salvar a resenha';
+    },
+    onSuccess: () => {
       setPrimaryTitle('');
       setContentPt('');
       setContentEn('');
       setTconst('');
-      dispatch(clearState());
-    }
-
-    if (status === 'failed') {
-      const errorMessage = (() => {
-        if (error === 'Movie not found in favorites') {
-          return 'Filme não encontrado nos favoritos';
-        }
-        if (!tconst) {
-          return 'tconst não informado';
-        }
-        if (typeof error === 'string') {
-          return error;
-        }
-        return 'Erro ao salvar a resenha';
-      })();
-
-      showError({ title: errorMessage });
-      dispatch(clearState());
-    }
-  }, [status, error, dispatch, tconst]);
+    },
+    reset: () => dispatch(clearState()),
+    status,
+    successMessage: 'Resenha adicionada com sucesso!',
+  });
 
   return (
     <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap:'16px'}}>

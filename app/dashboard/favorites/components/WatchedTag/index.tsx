@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { editDetails } from '../../reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
+import { YES_NO } from '../../../../formatter';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 
 interface WatchedTagProps {
@@ -47,7 +48,7 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
       onClick={handleClick}
       title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}
     >
-      {watched ? 'Sim' : 'Não'}
+      {YES_NO(watched)}
     </span>
   );
 }

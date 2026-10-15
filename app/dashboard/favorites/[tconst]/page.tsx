@@ -5,6 +5,7 @@ import MediaCard from '../../../ui/MediaCard';
 import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
 import { fetchMainImage, uploadMainImage, deleteMainImage } from '../reducer/mainImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { ROUTES } from '../../../const';
 import { useKeywords } from '../../../hooks/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
@@ -14,6 +15,7 @@ import MovieInfoCard from './components/MovieInfoCard';
 import FavoriteTag from './components/FavoriteTag';
 import { sanitizeTrivia, formatQuote } from './utils';
 import EditInfoModal from './components/EditInfoModal';
+import { imdbTitleUrl } from '../../../util/url';
 import * as S from './styles';
 
 export default function MovieDetailsPage() {
@@ -64,7 +66,7 @@ export default function MovieDetailsPage() {
 
   return (
     <S.PageContainer>
-      <Link to='/dashboard/favorites' style={{ color: 'blue', textDecoration: 'underline' }}>Voltar</Link>
+      <Link to={ROUTES.favorites} style={{ color: 'blue', textDecoration: 'underline' }}>Voltar</Link>
       <h2>{data.primaryTitle}</h2>
 
       {isOpen && (
@@ -88,12 +90,12 @@ export default function MovieDetailsPage() {
                 <S.LinkLabel>IMDB</S.LinkLabel>
                 <S.LinkValue>
                   <a
-                    href={data.imdb_url ?? `https://www.imdb.com/title/${data.tconst}/`}
+                    href={data.imdb_url ?? imdbTitleUrl(data.tconst)}
                     target='_blank'
                     rel='noopener noreferrer'
                     style={{ textDecoration: 'underline', color: 'blue' }}
                   >
-                    {data.imdb_url ?? `https://www.imdb.com/title/${data.tconst}/`}
+                    {data.imdb_url ?? imdbTitleUrl(data.tconst)}
                   </a>
                 </S.LinkValue>
               </S.LinkItem>

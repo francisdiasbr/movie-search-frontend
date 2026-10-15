@@ -42,7 +42,7 @@ export interface MovieReviewResponse {
 export interface AuthoralReviewState {
   data: MovieReviewResponse | null;
   error: string | null;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  status: AsyncStatus;
 }
 
 export interface ReviewSummary {
@@ -57,7 +57,7 @@ export interface AllAuthoralReviewsState {
   entries: ReviewSummary[];
   data: ReviewSummary | null;
   error: string | null;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  status: AsyncStatus;
 }
 
 export interface UploadImageState {

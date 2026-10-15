@@ -1,23 +1,11 @@
+import { spotifyEmbedUrl } from '../../util/url';
+
 interface MediaCardProps {
   spotifyUrl: string;
 }
 
 const MediaCard = ({ spotifyUrl }: MediaCardProps) => {
-  const getSpotifyEmbedUrl = (url: string) => {
-    if (!url) return null;
-    
-    // Remove trailing slash if exists
-    const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
-    
-    // Extract type and id from URL
-    const parts = cleanUrl.split('/');
-    const type = parts[parts.length - 2]; // album, playlist, artist, etc
-    const id = parts[parts.length - 1];
-    
-    return `https://open.spotify.com/embed/${type}/${id}`;
-  };
-
-  const embedUrl = getSpotifyEmbedUrl(spotifyUrl);
+  const embedUrl = spotifyEmbedUrl(spotifyUrl);
 
   if (!embedUrl) return null;
 

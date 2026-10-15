@@ -14,7 +14,7 @@ export interface MovieFavoritesState {
   countries: string[];
   entries: any;
   error: null | string;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  status: AsyncStatus;
   startYears: number[];
   total_documents: number;
 }
@@ -55,10 +55,10 @@ export interface MovieDetailsItem {
 export interface MovieDetailsState {
   data: any;
   error: string | null;
-  addStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
-  editStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
-  deleteStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
-  fetchStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
+  addStatus: AsyncStatus;
+  editStatus: AsyncStatus;
+  deleteStatus: AsyncStatus;
+  fetchStatus: AsyncStatus;
 }
 
 // Só o tconst é obrigatório: o backend grava apenas os campos enviados, então

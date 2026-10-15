@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
+import { AsyncStatus } from '../../../../../../lib/api/types';
 import * as S from '../../styles';
 
 interface MainImageUploadProps {
@@ -8,7 +9,7 @@ interface MainImageUploadProps {
   onDeleteMain: (filename: string) => Promise<void>;
   onMainImageClick: (image: { url: string; filename: string }) => void;
   onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-  updateImageStatus: string;
+  updateImageStatus: AsyncStatus;
 }
 
 export default function MainImageUpload({

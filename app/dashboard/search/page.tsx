@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { addFavorite, resetAddStatus } from '../favorites/reducer/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
-import { useToastNotifications } from '../../hooks/useToastNotifications';
+import { ROUTES } from '../../const';
+import { useStatusToast } from '../../hooks/useStatusToast';
 import LoadingModal from '../../ui/LoadingModal';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { addStatus, error } = useAppSelector(state => state.moviesDetails);
-  const { showSuccess, showError } = useToastNotifications();
   const [isLoading, setIsLoading] = useState(false);
   const [tconst, setTconst] = useState('');
 
@@ -28,16 +28,14 @@ export default function SearchPage() {
     }
   };
 
-  useEffect(() => {
-    if (addStatus === 'succeeded') {
-      showSuccess({ title: 'Filme adicionado aos favoritos.' });
-      dispatch(resetAddStatus());
-      navigate('/dashboard/favorites');
-    } else if (addStatus === 'failed') {
-      showError({ title: typeof error === 'string' ? error : 'Não foi possível adicionar o filme na coleção.' });
-      dispatch(resetAddStatus());
-    }
-  }, [addStatus, dispatch, error]);
+  useStatusToast({
+    error,
+    errorMessage: 'Não foi possível adicionar o filme na coleção.',
+    onSuccess: () => navigate(ROUTES.favorites),
+    reset: () => dispatch(resetAddStatus()),
+    status: addStatus,
+    successMessage: 'Filme adicionado aos favoritos.',
+  });
 
   return (
     <div>

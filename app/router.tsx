@@ -8,11 +8,12 @@ import KeywordsPage from './dashboard/keywords/page'
 import ReadPage from './dashboard/read/page'
 import WritePage from './dashboard/write/page'
 import WriteReviewPage from './dashboard/write-review/page'
+import { ROUTES } from './const'
 
 export default createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to='/dashboard/favorites' replace />,
+    element: <Navigate to={ROUTES.favorites} replace />,
   },
   {
     path: '/dashboard',

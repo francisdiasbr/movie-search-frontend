@@ -1,12 +1,13 @@
 import { Link, Outlet } from 'react-router-dom'
+import { ROUTES } from '../const'
 import * as S from './styles'
 
 const links = [
-  { href: '/dashboard/search', name: 'Adicionar na coleção' },
-  { href: '/dashboard/favorites', name: 'Minha coleção' },
-  { href: '/dashboard/keywords', name: 'Palavras-chave favoritadas' },
-  { href: '/dashboard/write', name: 'Escrever' },
-  { href: '/dashboard/read', name: 'Ler' },
+  { href: ROUTES.search, name: 'Adicionar na coleção' },
+  { href: ROUTES.favorites, name: 'Minha coleção' },
+  { href: ROUTES.keywords, name: 'Palavras-chave favoritadas' },
+  { href: ROUTES.write, name: 'Escrever' },
+  { href: ROUTES.read, name: 'Ler' },
 ]
 
 export default function Layout() {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Search from './components/Search';
 import { deleteAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
@@ -7,8 +7,11 @@ import { fetchAllAuthoralReviews } from '../reviews/reducer/allAuthoralReviewsSl
 import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
 import { fetchFavorites } from './reducer/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { ROUTES } from '../../const';
+import { useStatusToast } from '../../hooks/useStatusToast';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 import Table from '../../ui/Table';
+import { toSelectOptions } from '../../util/select';
 import { columnData } from './columnData';
 import WatchedTag from './components/WatchedTag';
 
@@ -27,8 +30,6 @@ export default function Page() {
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [watched, setWatched] = useState<boolean | undefined>(undefined);
-  const [countryOptions, setCountryOptions] = useState<{ value: string; label: string }[]>([]);
-  const [yearOptions, setYearOptions] = useState<{ value: string; label: string }[]>([]);
   const [reviewPaths, setReviewPaths] = useState<Record<string, string | null>>({});
   const lastEntriesKeyRef = useRef<string>('');
   const hasMountedRef = useRef(false);
@@ -65,27 +66,16 @@ export default function Page() {
     }
   }, [searchTerm, country, year, watched]);
 
-  useEffect(() => {
-    setCountryOptions(countries.map((country) => ({ value: country, label: country })));
-    setYearOptions(
-      startYears.map((year) => ({
-        value: year.toString(),
-        label: year.toString(),
-      }))
-    );
-  }, [countries, startYears]);
+  const countryOptions = useMemo(() => toSelectOptions(countries), [countries]);
+  const yearOptions = useMemo(() => toSelectOptions(startYears), [startYears]);
 
-  useEffect(() => {
-    if (deleteStatus === 'succeeded') {
-      showSuccess({ title: 'Filme removido dos favoritos com sucesso.' });
-      dispatch(resetDeleteStatus());
-      handleSearch();
-    }
-    if (deleteStatus === 'failed') {
-      showError({ title: 'Não foi possível remover o filme dos favoritos.' });
-      dispatch(resetDeleteStatus());
-    }
-  }, [dispatch, deleteStatus]);
+  useStatusToast({
+    errorMessage: 'Não foi possível remover o filme dos favoritos.',
+    onSuccess: handleSearch,
+    reset: () => dispatch(resetDeleteStatus()),
+    status: deleteStatus,
+    successMessage: 'Filme removido dos favoritos com sucesso.',
+  });
 
   const handleDelete = async (tconst: string) => {
     await dispatch(deleteFavorite(tconst));
@@ -127,7 +117,7 @@ export default function Page() {
       if (fetchAllAuthoralReviews.fulfilled.match(action) && Array.isArray(action.payload)) {
         const reviewedTconsts = new Set(action.payload.map((r: any) => r.tconst));
         entries.forEach((entry: MovieEntryRow) => {
-          paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? `/dashboard/reviews/${entry.tconst}` : null;
+          paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? ROUTES.review(entry.tconst) : null;
         });
       } else {
         entries.forEach((entry: MovieEntryRow) => { paths[entry.tconst] = null; });
@@ -168,9 +158,7 @@ export default function Page() {
             <img src={entry.poster_url} alt={entry.primaryTitle} width={54} height={80} loading='lazy' style={{ height: '80px', display: 'block', margin: '0 auto' }} />
           ) : null,
           primaryTitle: (
-            <Link
-              to={`/dashboard/favorites/${entry.tconst}`}
-            >
+            <Link to={ROUTES.favorite(entry.tconst)}>
               {entry.primaryTitle}
             </Link>
           ),
