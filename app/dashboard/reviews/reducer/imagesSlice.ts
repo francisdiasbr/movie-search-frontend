@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import { imagesService } from './service';
-import { UpdateSubtitlePayload, UploadImageResponse, UploadImageState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import { UpdateSubtitlePayload, UploadImageResponse } from '../../../../lib/service/ImagesBaseService';
+import imagesService from '../service/ImagesService';
+import { UploadImageState } from '../types';
 
 const initialState: UploadImageState = {
   error: null,

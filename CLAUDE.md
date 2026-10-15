@@ -27,17 +27,34 @@ Copy `.env.example` to `.env` and set `VITE_BASE_URL` (default: `http://127.0.0.
 
 ### State management
 
-Redux store is in `lib/store.ts`. All slices live under `lib/features/<feature>/`. Each slice uses `createAsyncThunk` for async operations and tracks `status: 'idle' | 'loading' | 'succeeded' | 'failed'` in its state. Typed hooks (`useAppDispatch`, `useAppSelector`) are in `lib/hooks.ts`.
+Redux store is in `lib/store.ts`; typed hooks (`useAppDispatch`, `useAppSelector`) are in `lib/hooks.ts`. Slices do **not** live in `lib`: each feature folder under `app/dashboard/<feature>/` holds its own `reducer/<name>Slice.ts`, and `lib/store.ts` imports them from there. Each slice uses `createAsyncThunk` and tracks `status: 'idle' | 'loading' | 'succeeded' | 'failed'`.
+
+### Feature folders (mirrors `gav/siga-front`)
+
+Everything a feature needs is colocated under its page folder:
+
+```
+app/dashboard/favorites/
+  page.tsx, [tconst]/page.tsx, components/   # UI
+  service/FavoritesService.ts                # API calls (one class per resource)
+  service/MainImagesService.ts
+  reducer/favoritesSlice.ts                  # redux slices
+  reducer/movieDetailsSlice.ts
+  reducer/mainImagesSlice.ts
+  types.ts                                   # payloads, responses, state
+```
+
+Same shape for `app/dashboard/reviews/` (`ReviewsService`, `ImagesService`, review and gallery slices) and `app/dashboard/keywords/`. A page that belongs to another feature imports from that feature's folder (e.g. `search/page.tsx` imports `../favorites/reducer/movieDetailsSlice`).
 
 ### API layer
 
-Three layers, mirroring `gav/siga-front`. No URL is ever built outside a service.
+Three layers. No URL is ever built outside a service, and features never import `BaseApi` directly.
 
-1. `lib/api/BaseApi.ts` — typed singleton over an axios instance (`get/getBlob/post/put/patch/remove`). Uses `VITE_BASE_URL` as `baseURL`, sends FormData as multipart and everything else as JSON, and a response interceptor converts every failure into `ApiError` (from `lib/api/errors.ts`) with `status`, `body` and the readable backend message. The option `cancelPrevious: true` aborts an in-flight request to the same method + URL. Features never import it directly.
-2. `lib/service/BaseService.ts` — abstract class. Subclasses set `protected prefix = '<resource>'` and inherit `get(id?)`, `search(params)`, `post(body, path?)`, `put(id, body)`, `remove(id)`, `delete(body)`, `getBlob(params)`, plus the helper `this.path(...segments)` to build sub-routes.
-3. `lib/features/<feature>/service.ts` — one service per feature, exported as a singleton, with methods named after the business operation and typed with the feature's `types.ts` (e.g. `favoritesService.searchFavorites(params)`, `keywordsService.suggestMovies(keywords)`).
+1. `lib/api/BaseApi.ts` — typed singleton over an axios instance (`get/getBlob/post/put/patch/remove`). Uses `VITE_BASE_URL` as `baseURL`, sends FormData as multipart and everything else as JSON, and a response interceptor converts every failure into `ApiError` (from `lib/api/errors.ts`) with `status`, `body` and the readable backend message. The option `cancelPrevious: true` aborts an in-flight request to the same method + URL.
+2. `lib/service/BaseService.ts` — abstract class. Subclasses set `protected prefix = '<resource>'` and inherit `get(id?)`, `search(params)`, `post(body, path?)`, `put(id, body)`, `remove(id)`, `delete(body)`, `getBlob(params)`, plus `this.path(...segments)` to build sub-routes. `lib/service/ImagesBaseService.ts` extends it with the shared contract of `images` and `main-images` (the role `ReportsBaseService` plays in siga-front).
+3. `app/dashboard/<feature>/service/<Name>Service.ts` — one class per resource, exported as a singleton, with methods named after the business operation and typed with the feature's `types.ts` (e.g. `favoritesService.searchFavorites(params)`, `keywordsService.suggestMovies(keywords)`).
 
-Response envelopes `ApiResponse<T>` (`{ data }`) and `EntriesResponse<T>` (`{ entries }`) live in `lib/api/types.ts`.
+Response envelopes `ApiResponse<T>` (`{ data }`), `EntriesResponse<T>` (`{ entries }`) and `AsyncStatus` live in `lib/api/types.ts`.
 
 Thunks follow one shape: call the service, return the payload, and on error `return rejectWithValue(toApiErrorPayload(error, '<fallback message in pt-BR>'))` with `{ rejectValue: ApiErrorPayload }` in the thunk generics. Reducers store only `action.payload?.message` in `state.error`.
 
@@ -45,7 +62,7 @@ Thunks follow one shape: call the service, return the payload, and on error `ret
 
 - `app/ui/` — components shared across the whole app (Table, Dialog, MediaCard, LoadingSpinner).
 - `app/dashboard/components/` — components shared within the dashboard but not globally (GoBack).
-- Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`).
+- Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.
 
 ### Custom hooks

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import { clearState, fetchAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
-import { fetchDetails } from '../../../lib/features/movie/movieDetailsSlice';
+import { clearState, fetchAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
+import { fetchDetails } from '../favorites/reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../lib/hooks';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 

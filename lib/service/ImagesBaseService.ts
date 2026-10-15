@@ -1,8 +1,29 @@
-import BaseService from '../../service/BaseService';
-import { ImagesListResponse, UpdateSubtitlePayload, UploadImageResponse } from './types';
+import BaseService from './BaseService';
+
+export interface ImageItem {
+  filename: string;
+  sequential_id?: number;
+  subtitle_en?: string;
+  subtitle_pt?: string;
+  url: string;
+}
+
+export interface ImagesListResponse {
+  images: ImageItem[];
+}
+
+export interface UploadImageResponse {
+  object_name: string;
+  url?: string;
+}
+
+export interface UpdateSubtitlePayload {
+  subtitle_en: string;
+  subtitle_pt: string;
+}
 
 // `images` (gallery) and `main-images` (cover) share the same contract, so
-// both services inherit the same methods and only differ by prefix.
+// both feature services inherit these methods and only differ by prefix.
 abstract class ImagesBaseService extends BaseService {
   list(tconst: string): Promise<ImagesListResponse> {
     return this.get(tconst);
@@ -23,13 +44,4 @@ abstract class ImagesBaseService extends BaseService {
   }
 }
 
-class ImagesService extends ImagesBaseService {
-  protected prefix = 'images';
-}
-
-class MainImagesService extends ImagesBaseService {
-  protected prefix = 'main-images';
-}
-
-export const imagesService = new ImagesService();
-export const mainImagesService = new MainImagesService();
+export default ImagesBaseService;

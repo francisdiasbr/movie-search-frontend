@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { getKeywords } from '../../../lib/features/keywords/keywordsSlice';
-import keywordsService from '../../../lib/features/keywords/service';
-import { SuggestedMovie } from '../../../lib/features/keywords/types';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
+import { getKeywords } from './reducer/keywordsSlice';
+import keywordsService from './service/KeywordsService';
+import { SuggestedMovie } from './types';
 
 export default function Page() {
   const dispatch = useAppDispatch();

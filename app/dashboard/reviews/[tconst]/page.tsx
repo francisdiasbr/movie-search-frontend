@@ -2,14 +2,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-import { clearAuthoralReviewStatus } from '../../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
-import { fetchAuthoralReview, updateAuthoralReview } from '../../../../lib/features/authoralReview/authoralReviewSlice';
+import { clearAuthoralReviewStatus } from '../reducer/allAuthoralReviewsSlice';
+import { fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
 import {
   fetchAllImageUrls,
   uploadMovieImage,
   deleteImage,
   updateImageSubtitle,
-} from '../../../../lib/features/uploadImages/uploadImagesSlice';
+} from '../reducer/imagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import * as S from './styles';

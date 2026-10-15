@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react';
 import {
   clearAuthoralReviewStatus,
   fetchAllAuthoralReviews,
-} from '../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
+} from '../dashboard/reviews/reducer/allAuthoralReviewsSlice';
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { RootState } from '../../lib/store';
 

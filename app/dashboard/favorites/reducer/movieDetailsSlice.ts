@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import favoritesService from '../movies/service';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import favoritesService from '../service/FavoritesService';
 import {
   EditDetailsPayload,
   MovieDetailsItem,
   MovieDetailsState,
-} from './types';
+} from '../types';
 
 const initialState: MovieDetailsState = {
   data: null,

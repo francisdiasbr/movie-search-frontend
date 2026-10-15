@@ -1,12 +1,12 @@
-import { ApiResponse, EntriesResponse } from '../../api/types';
-import BaseService from '../../service/BaseService';
-import { MovieReviewResponse as ReviewSummary } from '../allAuthoralReviews/types';
+import { ApiResponse, EntriesResponse } from '../../../../lib/api/types';
+import BaseService from '../../../../lib/service/BaseService';
 import {
   AuthoralReviewResponse,
   CreateAuthoralReviewPayload,
   MovieReviewResponse,
+  ReviewSummary,
   UpdateAuthoralReviewPayload,
-} from './types';
+} from '../types';
 
 class ReviewsService extends BaseService {
   protected prefix = 'write-review';

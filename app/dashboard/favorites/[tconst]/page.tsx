@@ -2,8 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import MediaCard from '../../../ui/MediaCard';
-import { fetchDetails, resetState } from '../../../../lib/features/movie/movieDetailsSlice';
-import { fetchMainImage, uploadMainImage, deleteMainImage } from '../../../../lib/features/uploadImages/uploadMainImagesSlice';
+import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
+import { fetchMainImage, uploadMainImage, deleteMainImage } from '../reducer/mainImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { useKeywords } from '../../../hooks/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';

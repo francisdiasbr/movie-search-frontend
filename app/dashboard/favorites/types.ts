@@ -1,3 +1,36 @@
+import { AsyncStatus } from '../../../lib/api/types';
+import { ImageItem } from '../../../lib/service/ImagesBaseService';
+
+export interface MovieItem {
+  _id: string;
+  averageRating: number;
+  numVotes: number;
+  originalTitle: string;
+  startYear: number;
+  tconst: string;
+}
+
+export interface MovieFavoritesState {
+  countries: string[];
+  entries: any;
+  error: null | string;
+  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  startYears: number[];
+  total_documents: number;
+}
+
+export interface FavoritesSearchParams {
+  filters?: Record<string, unknown>;
+  searchTerm?: string;
+}
+
+export interface FavoritesSearchResponse {
+  countries?: string[];
+  entries: MovieItem[];
+  total_documents: number;
+  years?: number[];
+}
+
 export interface MovieDetailsItem {
   director: string;
   _id: string;
@@ -37,4 +70,11 @@ export interface EditDetailsPayload {
   tconst: string;
   watched?: boolean;
   wiki?: string;
+}
+
+export interface UploadMainImageState {
+  error: string | null;
+  images: ImageItem[];
+  objectName: string | null;
+  status: AsyncStatus;
 }

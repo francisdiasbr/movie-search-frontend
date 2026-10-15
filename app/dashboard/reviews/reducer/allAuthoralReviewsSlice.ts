@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import reviewsService from '../authoralReview/service';
-import { MovieReviewResponse, MovieReviewState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import reviewsService from '../service/ReviewsService';
+import { AllAuthoralReviewsState, ReviewSummary } from '../types';
 
-const initialState: MovieReviewState = {
+const initialState: AllAuthoralReviewsState = {
   data: null,
   entries: [],
   error: null,
@@ -16,7 +16,7 @@ interface FetchAllAuthoralReviewsParams {
 }
 
 export const fetchAllAuthoralReviews = createAsyncThunk<
-  MovieReviewResponse[],
+  ReviewSummary[],
   FetchAllAuthoralReviewsParams,
   { rejectValue: ApiErrorPayload }
 >('review/fetchAllAuthoral', async (params, { rejectWithValue }) => {

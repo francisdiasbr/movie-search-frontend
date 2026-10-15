@@ -1,6 +1,6 @@
-import { ApiResponse } from '../../api/types';
-import BaseService from '../../service/BaseService';
-import { Keyword, SuggestMoviesResponse } from './types';
+import { ApiResponse } from '../../../../lib/api/types';
+import BaseService from '../../../../lib/service/BaseService';
+import { Keyword, SuggestMoviesResponse } from '../types';
 
 class KeywordsService extends BaseService {
   protected prefix = 'keywords';

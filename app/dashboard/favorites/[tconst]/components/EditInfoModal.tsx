@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-import { editDetails, fetchDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
+import { editDetails, fetchDetails } from '../../reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Dialog from '../../../../ui/Dialog';

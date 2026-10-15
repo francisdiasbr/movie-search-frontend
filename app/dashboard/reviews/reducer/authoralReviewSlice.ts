@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import reviewsService from './service';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import reviewsService from '../service/ReviewsService';
 import {
   AuthoralReviewResponse,
   AuthoralReviewState,
   CreateAuthoralReviewPayload,
   MovieReviewResponse,
   UpdateAuthoralReviewPayload,
-} from './types';
+} from '../types';
 
 const initialState: AuthoralReviewState = {
   data: null,

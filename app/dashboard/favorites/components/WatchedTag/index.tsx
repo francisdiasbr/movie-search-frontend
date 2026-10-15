@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { editDetails } from '../../../../../lib/features/movie/movieDetailsSlice';
+import { editDetails } from '../../reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 

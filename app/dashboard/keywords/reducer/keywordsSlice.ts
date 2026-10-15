@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import keywordsService from './service';
-import { Keyword, KeywordsState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import keywordsService from '../service/KeywordsService';
+import { Keyword, KeywordsState } from '../types';
 
 const initialState: KeywordsState = {
   data: [],

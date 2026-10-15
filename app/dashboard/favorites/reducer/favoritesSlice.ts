@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
-import favoritesService from './service';
-import { FavoritesSearchParams, FavoritesSearchResponse, MovieFavoritesState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import favoritesService from '../service/FavoritesService';
+import { FavoritesSearchParams, FavoritesSearchResponse, MovieFavoritesState } from '../types';
 
 const initialState: MovieFavoritesState = {
   countries: [],

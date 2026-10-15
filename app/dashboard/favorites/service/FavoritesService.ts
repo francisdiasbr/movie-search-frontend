@@ -1,7 +1,11 @@
-import { ApiResponse } from '../../api/types';
-import BaseService from '../../service/BaseService';
-import { EditDetailsPayload, MovieDetailsItem } from '../movie/types';
-import { FavoritesSearchParams, FavoritesSearchResponse } from './types';
+import { ApiResponse } from '../../../../lib/api/types';
+import BaseService from '../../../../lib/service/BaseService';
+import {
+  EditDetailsPayload,
+  FavoritesSearchParams,
+  FavoritesSearchResponse,
+  MovieDetailsItem,
+} from '../types';
 
 class FavoritesService extends BaseService {
   protected prefix = 'favorites';

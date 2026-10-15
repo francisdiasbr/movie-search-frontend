@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { addFavorite, resetAddStatus } from '../../../lib/features/movie/movieDetailsSlice';
+import { addFavorite, resetAddStatus } from '../favorites/reducer/movieDetailsSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 import LoadingModal from '../../ui/LoadingModal';

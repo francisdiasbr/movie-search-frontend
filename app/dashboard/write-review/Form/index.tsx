@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-import { clearState, postAuthoralReview } from '../../../../lib/features/authoralReview/authoralReviewSlice';
+import { clearState, postAuthoralReview } from '../../reviews/reducer/authoralReviewSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import * as S from './styles';

@@ -8,3 +8,5 @@ export interface EntriesResponse<T> {
   entries: T[];
   total_documents?: number;
 }
+
+export type AsyncStatus = 'failed' | 'idle' | 'loading' | 'succeeded';

@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import allAuthoralReviewsSlice from './features/allAuthoralReviews/allAuthoralReviewsSlice';
-import authoralReviewsSlice from './features/authoralReview/authoralReviewSlice';
-import keywordsSlice from './features/keywords/keywordsSlice';
-import movieDetailsSlice from './features/movie/movieDetailsSlice';
-import movieFavoritesSlice from './features/movies/movieFavoritesSlice';
-import uploadImagesSlice from './features/uploadImages/uploadImagesSlice';
-import uploadMainImagesSlice from './features/uploadImages/uploadMainImagesSlice';
+import allAuthoralReviewsSlice from '../app/dashboard/reviews/reducer/allAuthoralReviewsSlice';
+import authoralReviewsSlice from '../app/dashboard/reviews/reducer/authoralReviewSlice';
+import keywordsSlice from '../app/dashboard/keywords/reducer/keywordsSlice';
+import movieDetailsSlice from '../app/dashboard/favorites/reducer/movieDetailsSlice';
+import movieFavoritesSlice from '../app/dashboard/favorites/reducer/favoritesSlice';
+import uploadImagesSlice from '../app/dashboard/reviews/reducer/imagesSlice';
+import uploadMainImagesSlice from '../app/dashboard/favorites/reducer/mainImagesSlice';
 
 
 export const makeStore = () => {

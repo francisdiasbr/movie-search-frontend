@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 
 import Search from './components/Search';
-import { deleteAuthoralReview } from '../../../lib/features/authoralReview/authoralReviewSlice';
-import { fetchAllAuthoralReviews } from '../../../lib/features/allAuthoralReviews/allAuthoralReviewsSlice';
-import { deleteFavorite, resetDeleteStatus } from '../../../lib/features/movie/movieDetailsSlice';
-import { fetchFavorites } from '../../../lib/features/movies/movieFavoritesSlice';
+import { deleteAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
+import { fetchAllAuthoralReviews } from '../reviews/reducer/allAuthoralReviewsSlice';
+import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
+import { fetchFavorites } from './reducer/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 import Table from '../../ui/Table';
