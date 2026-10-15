@@ -173,9 +173,7 @@ export default function MovieDetailsPage() {
         images={images}
         onDeleteMain={handleDeleteMain}
         onMainImageClick={(image) => { setSelectedMainImage(image); setIsMainImageModalOpen(true); }}
-        onUploadMainImage={async (event) => {
-          const file = event.target.files?.[0];
-          if (!file) return;
+        onUploadMainImage={async file => {
           await dispatch(uploadMainImage({ tconst, file }));
           dispatch(fetchMainImage({ tconst }));
         }}

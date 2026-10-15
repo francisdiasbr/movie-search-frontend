@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Search from './components/Search';
 import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
@@ -8,6 +8,7 @@ import favoritesService from './service/FavoritesService';
 import { isApiError } from '../../../lib/api/errors';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { ROUTES } from '../../const';
+import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { useStatusToast } from '../../hooks/useStatusToast';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 import Table from '../../ui/Table';
@@ -24,7 +25,6 @@ export default function Page() {
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [watched, setWatched] = useState<boolean | undefined>(undefined);
-  const hasMountedRef = useRef(false);
 
   const isLoading = favoritesStatus === 'loading';
 
@@ -44,19 +44,7 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true;
-      return;
-    }
-    if (favoritesStatus !== 'loading') {
-      const timeoutId = setTimeout(() => {
-        handleSearch();
-      }, 500);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [searchTerm, country, year, watched]);
+  useDebouncedEffect(handleSearch, [searchTerm, country, year, watched]);
 
   const countryOptions = useMemo(() => toSelectOptions(countries), [countries]);
   const yearOptions = useMemo(() => toSelectOptions(startYears), [startYears]);

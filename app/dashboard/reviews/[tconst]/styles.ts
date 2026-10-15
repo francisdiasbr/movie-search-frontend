@@ -68,10 +68,6 @@ export const EmptyText = styled.p`
 
 // ── Images ────────────────────────────────────────────────────────────────────
 
-export const HiddenFileInput = styled.input`
-  display: none;
-`;
-
 export const ImagesGrid = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.md};

@@ -1,10 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 import { clearState, fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
 import { deleteImage, fetchImages, updateImageSubtitle, uploadMovieImage } from '../reducer/imagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { useAsyncAction } from '../../../hooks/useAsyncAction';
+import { useFilePicker } from '../../../hooks/useFilePicker';
 import { RootState } from '../../../../lib/store';
 import Button from '../../../ui/Button';
 import Card from '../../../ui/Card';
@@ -17,10 +19,8 @@ function Reviews() {
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
   const { images, uploadStatus, subtitleStatus } = useAppSelector((state: RootState) => state.reviewImages);
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [editPt, setEditPt] = useState('');
   const [editEn, setEditEn] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [subtitle, setSubtitle] = useState('');
 
@@ -40,38 +40,27 @@ function Reviews() {
     setIsEditing(true);
   };
 
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      await dispatch(
-        updateAuthoralReview({
-          tconst: movieId as string,
-          data: {
-            content: {
-              pt: { text: editPt },
-              en: { text: editEn },
-            },
+  const { loading: isLoading, run: handleEditSubmit } = useAsyncAction(async (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
+    await dispatch(
+      updateAuthoralReview({
+        tconst: movieId as string,
+        data: {
+          content: {
+            pt: { text: editPt },
+            en: { text: editEn },
           },
-        })
-      );
-      setIsEditing(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        },
+      })
+    );
+    setIsEditing(false);
+  });
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && typeof movieId === 'string') {
-      await dispatch(uploadMovieImage({ tconst: movieId, file }));
-      dispatch(fetchImages({ tconst: movieId }));
-    }
-  };
+  const filePicker = useFilePicker(async file => {
+    if (typeof movieId !== 'string') return;
+    await dispatch(uploadMovieImage({ tconst: movieId, file }));
+    dispatch(fetchImages({ tconst: movieId }));
+  });
 
   const handleDeleteImage = async (filename: string) => {
     if (typeof movieId === 'string') {
@@ -150,12 +139,12 @@ function Reviews() {
       <Card
         title='Imagens'
         actions={
-          <Button variant='secondary' size='small' onClick={handleUploadClick} loading={uploadStatus === 'loading'}>
+          <Button variant='secondary' size='small' onClick={filePicker.open} loading={uploadStatus === 'loading'}>
             {hasImages ? 'Adicionar mais imagens' : 'Adicionar imagem'}
           </Button>
         }
       >
-        <S.HiddenFileInput type='file' ref={fileInputRef} onChange={handleFileChange} accept='image/*' />
+        {filePicker.input}
         {hasImages ? (
           <S.ImagesGrid>
             {images.map((image, index) => (

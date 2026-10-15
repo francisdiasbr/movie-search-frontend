@@ -1,14 +1,14 @@
-import { useRef } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
 import { AsyncStatus } from '../../../../../../lib/api/types';
+import { useFilePicker } from '../../../../../hooks/useFilePicker';
 import * as S from '../../styles';
 
 interface MainImageUploadProps {
   images: Array<{ url: string; filename: string; sequential_id?: number }> | null;
   onDeleteMain: (filename: string) => Promise<void>;
   onMainImageClick: (image: { url: string; filename: string }) => void;
-  onUploadMainImage: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  onUploadMainImage: (file: File) => Promise<void>;
   updateImageStatus: AsyncStatus;
 }
 
@@ -19,13 +19,13 @@ export default function MainImageUpload({
   onUploadMainImage,
   updateImageStatus,
 }: MainImageUploadProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const filePicker = useFilePicker(onUploadMainImage);
 
   return (
     <S.Card>
       <S.CardHeader>
         <S.CardTitle>Imagens</S.CardTitle>
-        <button onClick={() => fileInputRef.current?.click()} disabled={updateImageStatus === 'loading'}>
+        <button onClick={filePicker.open} disabled={updateImageStatus === 'loading'}>
           {updateImageStatus === 'loading' ? 'Adicionando' : images && images.length > 0 ? 'Adicionar mais' : 'Adicionar imagem'}
         </button>
       </S.CardHeader>
@@ -53,13 +53,7 @@ export default function MainImageUpload({
             <S.EmptyText>Nenhuma imagem adicionada.</S.EmptyText>
           </S.EmptyState>
         )}
-        <input
-          type='file'
-          ref={fileInputRef}
-          onChange={onUploadMainImage}
-          accept='image/*'
-          style={{ display: 'none' }}
-        />
+        {filePicker.input}
       </S.CardBody>
     </S.Card>
   );

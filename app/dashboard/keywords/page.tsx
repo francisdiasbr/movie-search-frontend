@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { useAsyncAction } from '../../hooks/useAsyncAction';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
 import { getKeywords } from './reducer/keywordsSlice';
 import keywordsService from './service/KeywordsService';
@@ -14,7 +15,6 @@ export default function Page() {
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[]>([]);
-  const [loadingMovies, setLoadingMovies] = useState(false);
 
   useEffect(() => {
     dispatch(getKeywords()).then(action => {
@@ -30,19 +30,16 @@ export default function Page() {
     );
   };
 
-  const handleFetchMovies = async () => {
+  const { loading: loadingMovies, run: handleFetchMovies } = useAsyncAction(async () => {
     if (selectedKeywords.length === 0) return;
-    setLoadingMovies(true);
     setSuggestedMovies([]);
     try {
       const response = await keywordsService.suggestMovies(selectedKeywords);
       setSuggestedMovies(response?.data?.movies ?? []);
     } catch {
       setSuggestedMovies([]);
-    } finally {
-      setLoadingMovies(false);
     }
-  };
+  });
 
   return (
     <div>

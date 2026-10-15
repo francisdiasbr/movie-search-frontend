@@ -11,15 +11,13 @@ export default function SearchPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { addStatus, error } = useAppSelector(state => state.search);
-  const [isLoading, setIsLoading] = useState(false);
   const [tconst, setTconst] = useState('');
+
+  const isLoading = addStatus === 'loading';
 
   const handleAdd = (tconst: string) => {
     if (!tconst || isLoading) return;
-    setIsLoading(true);
-    dispatch(addFavorite(tconst))
-      .then(() => setIsLoading(false))
-      .catch(() => setIsLoading(false));
+    dispatch(addFavorite(tconst));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

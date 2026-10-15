@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import { ROUTES } from '../../const';
+import { useAsyncAction } from '../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
 import writeService from './service/WriteService';
 
@@ -9,11 +10,9 @@ export default function WritePage() {
   const navigate = useNavigate();
   const { showWarning, showError } = useToastNotifications();
   const [tconst, setTconst] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleWriteAuthoral = async () => {
+  const { loading: isLoading, run: handleWriteAuthoral } = useAsyncAction(async () => {
     if (!tconst) return;
-    setIsLoading(true);
     try {
       const existingReview = await writeService.findReview(tconst);
       if (existingReview) {
@@ -25,10 +24,8 @@ export default function WritePage() {
       navigate(ROUTES.writeReview({ primaryTitle, tconst }));
     } catch {
       showError({ title: 'Erro ao verificar resenhas.' });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  });
 
   return (
     <div>

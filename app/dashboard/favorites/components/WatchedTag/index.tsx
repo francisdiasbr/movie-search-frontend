@@ -1,8 +1,7 @@
-import { useState } from 'react';
-
 import { editDetails } from '../../reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
-import { YES_NO } from '../../../../formatter';
+import { WATCHED_LABEL, YES_NO } from '../../../../formatter';
+import { useAsyncAction } from '../../../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 
 interface WatchedTagProps {
@@ -13,31 +12,20 @@ interface WatchedTagProps {
 
 export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProps) {
   const dispatch = useAppDispatch();
-  const [isUpdating, setIsUpdating] = useState(false);
   const { showSuccess, showError } = useToastNotifications();
 
-  const handleClick = async () => {
-    if (isUpdating) return;
+  // The backend only writes the fields it receives, so the rest of the
+  // document does not need to be resent.
+  const { loading: isUpdating, run: handleClick } = useAsyncAction(async () => {
+    const editAction = await dispatch(editDetails({ tconst, watched: !watched }));
 
-    try {
-      setIsUpdating(true);
-
-      // O backend só grava os campos enviados, então não é preciso reenviar o
-      // resto do documento para preservá-lo.
-      const editAction = await dispatch(editDetails({ tconst, watched: !watched }));
-
-      if (editDetails.fulfilled.match(editAction)) {
-        showSuccess({ title: `Status atualizado para ${!watched ? 'assistido' : 'não assistido'}.`, duration: 2000 });
-        onUpdate?.();
-      } else {
-        showError({ title: 'Não foi possível atualizar o status.' });
-      }
-    } catch (error) {
-      showError({ title: 'Ocorreu um erro ao atualizar.' });
-    } finally {
-      setIsUpdating(false);
+    if (editDetails.fulfilled.match(editAction)) {
+      showSuccess({ title: `Status atualizado para ${WATCHED_LABEL(!watched)}.`, duration: 2000 });
+      onUpdate?.();
+    } else {
+      showError({ title: 'Não foi possível atualizar o status.' });
     }
-  };
+  });
 
   return (
     <span
