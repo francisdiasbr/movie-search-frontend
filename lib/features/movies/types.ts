@@ -15,3 +15,15 @@ export interface MovieFavoritesState {
   startYears: number[];
   total_documents: number;
 }
+
+export interface FavoritesSearchParams {
+  filters?: Record<string, unknown>;
+  searchTerm?: string;
+}
+
+export interface FavoritesSearchResponse {
+  countries?: string[];
+  entries: MovieItem[];
+  total_documents: number;
+  years?: number[];
+}
