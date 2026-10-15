@@ -1,5 +1,3 @@
-import { FaSearch } from 'react-icons/fa';
-
 import LoadingSpinner from '../../LoadingSpinner';
 import { TableBodyProps } from '../types';
 import * as S from './styles';
@@ -8,7 +6,6 @@ const TableBody = ({
   columns,
   entries,
   handleDelete,
-  handleView,
   isLoading,
 }: TableBodyProps) => {
   if (isLoading) {
@@ -29,13 +26,7 @@ const TableBody = ({
         <S.Row key={item.tconst}>
           {columns.map(column => (
             <S.Cell key={column.key}>
-              {column.isAction ? (
-                <S.ButtonGroup>
-                  <button onClick={() => handleView(item.tconst)} title='Visualizar'>
-                    <FaSearch />
-                  </button>
-                </S.ButtonGroup>
-              ) : column.isDelete && column.key === 'deleteReview' ? (
+              {column.isDelete && column.key === 'deleteReview' ? (
                 item.deleteReview
               ) : column.isDelete ? (
                 <button

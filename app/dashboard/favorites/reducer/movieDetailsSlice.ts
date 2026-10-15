@@ -1,12 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { ApiErrorPayload, toApiErrorPayload } from '../../../../lib/api/errors';
+import { addStatusCases, createApiThunk } from '../../../../lib/api/thunk';
 import favoritesService from '../service/FavoritesService';
-import {
-  EditDetailsPayload,
-  MovieDetailsItem,
-  MovieDetailsState,
-} from '../types';
+import { EditDetailsPayload, MovieDetailsItem, MovieDetailsState } from '../types';
 
 const initialState: MovieDetailsState = {
   data: null,
@@ -16,97 +12,43 @@ const initialState: MovieDetailsState = {
   fetchStatus: 'idle',
 };
 
-export const deleteFavorite = createAsyncThunk<
-  unknown,
-  string,
-  { rejectValue: ApiErrorPayload }
->('movie/deleteFavorite', async (tconst, { rejectWithValue }) => {
-  try {
-    const response = await favoritesService.removeFavorite(tconst);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível remover o filme da coleção.'));
-  }
-});
+export const deleteFavorite = createApiThunk<void, string>(
+  'movie/deleteFavorite',
+  tconst => favoritesService.removeFavorite(tconst).then(() => undefined),
+  'Não foi possível remover o filme da coleção.'
+);
 
-export const fetchDetails = createAsyncThunk<
-  MovieDetailsItem,
-  string,
-  { rejectValue: ApiErrorPayload }
->('movie/details', async (tconst, { rejectWithValue }) => {
-  try {
-    const response = await favoritesService.getDetails(tconst);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar os detalhes do filme.'));
-  }
-});
+export const fetchDetails = createApiThunk<MovieDetailsItem, string>(
+  'movie/details',
+  tconst => favoritesService.getDetails(tconst).then(response => response.data),
+  'Não foi possível carregar os detalhes do filme.'
+);
 
-export const editDetails = createAsyncThunk<
-  MovieDetailsItem,
-  EditDetailsPayload,
-  { rejectValue: ApiErrorPayload }
->('movies/edit', async (data, { rejectWithValue }) => {
-  try {
-    const response = await favoritesService.edit(data.tconst, data);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível salvar as alterações.'));
-  }
-});
+export const editDetails = createApiThunk<MovieDetailsItem, EditDetailsPayload>(
+  'movies/edit',
+  data => favoritesService.edit(data.tconst, data).then(response => response.data),
+  'Não foi possível salvar as alterações.'
+);
 
 const movieDetailsSlice = createSlice({
   initialState,
   name: 'movieDetails',
   reducers: {
-    resetEditStatus(state) {
-      state.editStatus = 'idle';
-    },
     resetDeleteStatus(state) {
       state.deleteStatus = 'idle';
     },
     resetState: () => initialState,
   },
   extraReducers: builder => {
-    builder
-      .addCase(deleteFavorite.pending, state => {
-        state.deleteStatus = 'loading';
-      })
-      .addCase(deleteFavorite.fulfilled, state => {
-        state.deleteStatus = 'succeeded';
-      })
-      .addCase(deleteFavorite.rejected, (state, action) => {
-        state.deleteStatus = 'failed';
-        state.error = action.payload?.message ?? 'Não foi possível remover o filme da coleção.';
-      })
-      .addCase(fetchDetails.pending, state => {
-        state.fetchStatus = 'loading';
-      })
-      .addCase(fetchDetails.fulfilled, (state, action) => {
-        state.fetchStatus = 'succeeded';
-        state.data = action.payload;
-      })
-      .addCase(fetchDetails.rejected, (state, action) => {
-        state.fetchStatus = 'failed';
-        state.error = action.payload?.message ?? 'Não foi possível carregar os detalhes do filme.';
-      })
-      .addCase(editDetails.pending, state => {
-        state.editStatus = 'loading';
-      })
-      .addCase(editDetails.fulfilled, (state, action) => {
-        state.editStatus = 'succeeded';
-        state.data = action.payload;
-      })
-      .addCase(editDetails.rejected, (state, action) => {
-        state.editStatus = 'failed';
-        state.error = action.payload?.message ?? 'Não foi possível salvar as alterações.';
-      });
+    addStatusCases(builder, deleteFavorite, 'deleteStatus');
+    addStatusCases(builder, fetchDetails, 'fetchStatus', (state, action) => {
+      state.data = action.payload;
+    });
+    addStatusCases(builder, editDetails, 'editStatus', (state, action) => {
+      state.data = action.payload;
+    });
   },
 });
 
-export const {
-  resetEditStatus,
-  resetDeleteStatus,
-  resetState
-} = movieDetailsSlice.actions;
+export const { resetDeleteStatus, resetState } = movieDetailsSlice.actions;
 export default movieDetailsSlice.reducer;

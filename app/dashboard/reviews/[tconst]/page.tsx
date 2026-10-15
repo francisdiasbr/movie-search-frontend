@@ -3,12 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 import { clearState, fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
-import {
-  fetchAllImageUrls,
-  uploadMovieImage,
-  deleteImage,
-  updateImageSubtitle,
-} from '../reducer/imagesSlice';
+import { deleteImage, fetchImages, updateImageSubtitle, uploadMovieImage } from '../reducer/imagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { RootState } from '../../../../lib/store';
 import Button from '../../../ui/Button';
@@ -20,8 +15,7 @@ function Reviews() {
   const { tconst: movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, status } = useAppSelector((state: RootState) => state.authoralReviews);
-  const { imageUrls, uploadStatus, imageNames, imageSubtitles_pt, subtitleStatus } =
-    useAppSelector((state: RootState) => state.uploadImages);
+  const { images, uploadStatus, subtitleStatus } = useAppSelector((state: RootState) => state.reviewImages);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [editPt, setEditPt] = useState('');
@@ -33,7 +27,7 @@ function Reviews() {
   useEffect(() => {
     if (typeof movieId === 'string') {
       dispatch(fetchAuthoralReview(movieId));
-      dispatch(fetchAllImageUrls({ tconst: movieId }));
+      dispatch(fetchImages({ tconst: movieId }));
     }
     return () => {
       dispatch(clearState());
@@ -62,8 +56,6 @@ function Reviews() {
         })
       );
       setIsEditing(false);
-      dispatch(fetchAuthoralReview(movieId as string));
-    } catch (error) {
     } finally {
       setIsLoading(false);
     }
@@ -77,14 +69,14 @@ function Reviews() {
     const file = event.target.files?.[0];
     if (file && typeof movieId === 'string') {
       await dispatch(uploadMovieImage({ tconst: movieId, file }));
-      dispatch(fetchAllImageUrls({ tconst: movieId }));
+      dispatch(fetchImages({ tconst: movieId }));
     }
   };
 
   const handleDeleteImage = async (filename: string) => {
     if (typeof movieId === 'string') {
       await dispatch(deleteImage({ tconst: movieId, filename }));
-      dispatch(fetchAllImageUrls({ tconst: movieId }));
+      dispatch(fetchImages({ tconst: movieId }));
     }
   };
 
@@ -95,11 +87,9 @@ function Reviews() {
 
   const handleSaveSubtitle = async (filename: string) => {
     if (typeof movieId === 'string') {
-      try {
-        await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle_en: subtitle, subtitle_pt: subtitle }));
-        setEditingImage(null);
-        dispatch(fetchAllImageUrls({ tconst: movieId }));
-      } catch (error) { }
+      await dispatch(updateImageSubtitle({ tconst: movieId, filename, subtitle_en: subtitle, subtitle_pt: subtitle }));
+      setEditingImage(null);
+      dispatch(fetchImages({ tconst: movieId }));
     }
   };
 
@@ -107,7 +97,7 @@ function Reviews() {
   if (!data) return null;
   if (!data.content?.pt?.text && !data.content?.en?.text) return <p>Nenhuma resenha encontrada!</p>;
 
-  const hasImages = Boolean(imageUrls && imageUrls.length > 0);
+  const hasImages = images.length > 0;
 
   const renderLanguageCard = (
     badge: string,
@@ -168,26 +158,26 @@ function Reviews() {
         <S.HiddenFileInput type='file' ref={fileInputRef} onChange={handleFileChange} accept='image/*' />
         {hasImages ? (
           <S.ImagesGrid>
-            {imageUrls.map((url, index) => (
-              <S.ImageWrapper key={index}>
-                <S.ReviewImage src={url} alt={`Imagem ${index + 1} do filme`} />
-                {imageSubtitles_pt?.[index] && <S.ImageCaption>{imageSubtitles_pt[index]}</S.ImageCaption>}
+            {images.map((image, index) => (
+              <S.ImageWrapper key={image.filename}>
+                <S.ReviewImage src={image.url} alt={image.subtitle_pt || `Imagem ${index + 1} do filme`} />
+                {image.subtitle_pt && <S.ImageCaption>{image.subtitle_pt}</S.ImageCaption>}
                 <S.ImageActions>
-                  <button type='button' onClick={() => handleEditImage(imageNames[index])} title='Editar legenda'>
+                  <button type='button' onClick={() => handleEditImage(image.filename)} title='Editar legenda'>
                     <FaEdit />
                   </button>
-                  <button type='button' onClick={() => handleDeleteImage(imageNames[index])} title='Deletar imagem'>
+                  <button type='button' onClick={() => handleDeleteImage(image.filename)} title='Deletar imagem'>
                     <FaTrash />
                   </button>
                 </S.ImageActions>
-                {editingImage === imageNames[index] && (
+                {editingImage === image.filename && (
                   <S.CaptionForm>
                     <input
                       placeholder='Escreva a legenda para a imagem'
                       value={subtitle}
                       onChange={(e) => setSubtitle(e.target.value)}
                     />
-                    <Button size='small' onClick={() => handleSaveSubtitle(imageNames[index])} loading={subtitleStatus === 'loading'}>
+                    <Button size='small' onClick={() => handleSaveSubtitle(image.filename)} loading={subtitleStatus === 'loading'}>
                       Salvar
                     </Button>
                     <Button size='small' variant='outline' onClick={() => setEditingImage(null)} disabled={subtitleStatus === 'loading'}>

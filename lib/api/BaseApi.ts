@@ -4,7 +4,7 @@ import { ApiError } from './errors';
 
 export type HttpMethod = 'DELETE' | 'GET' | 'PATCH' | 'POST' | 'PUT';
 
-export type RequestBody = FormData | Record<string, unknown> | unknown[] | null | undefined;
+export type RequestBody = FormData | object | null | undefined;
 
 export type QueryParams = Record<string, boolean | number | string | null | undefined>;
 

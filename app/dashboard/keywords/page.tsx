@@ -9,7 +9,8 @@ import { SuggestedMovie } from './types';
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { data: keywords = [], loading, error } = useAppSelector(state => state.keywords);
+  const { data: keywords = [], status, error } = useAppSelector(state => state.keywords);
+  const loading = status === 'loading';
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[]>([]);

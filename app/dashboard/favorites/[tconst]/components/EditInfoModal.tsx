@@ -3,16 +3,16 @@
 import { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-import { editDetails, fetchDetails } from '../../reducer/movieDetailsSlice';
+import { editDetails } from '../../reducer/movieDetailsSlice';
+import { MovieDetailsItem } from '../../types';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Dialog from '../../../../ui/Dialog';
 
 interface EditInfoModalProps {
-  data: any;
+  data: MovieDetailsItem;
   isOpen: boolean;
   onClose: () => void;
-  tconst: string;
 }
 
 interface ReferenceInputProps {
@@ -34,7 +34,7 @@ const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => (
   </div>
 );
 
-export default function EditInfoModal({ data, isOpen, onClose, tconst }: EditInfoModalProps) {
+export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalProps) {
   const [formData, setFormData] = useState(data);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToastNotifications();
@@ -61,7 +61,6 @@ export default function EditInfoModal({ data, isOpen, onClose, tconst }: EditInf
       if (editDetails.fulfilled.match(resultAction)) {
         showSuccess({ title: 'Filme atualizado com sucesso.' });
         onClose();
-        dispatch(fetchDetails(tconst));
       } else {
         showError({ title: 'Não foi possível atualizar o filme.' });
       }

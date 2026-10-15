@@ -1,10 +1,11 @@
 import { JOIN_LIST, NOT_AVAILABLE, NOT_AVAILABLE_LABEL } from '../../../../../formatter';
 import { pirateBaySearchUrl } from '../../../../../util/url';
+import { MovieDetailsItem } from '../../../types';
 import FavoriteTag from '../FavoriteTag';
 import * as S from '../../styles';
 
 interface MovieInfoCardProps {
-  data: any;
+  data: MovieDetailsItem;
   existingKeywords: string[];
   onEditClick?: () => void;
   onKeywordClick: (keyword: string) => void;

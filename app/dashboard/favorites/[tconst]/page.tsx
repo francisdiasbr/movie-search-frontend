@@ -28,7 +28,7 @@ export default function MovieDetailsPage() {
   const { tconst } = useParams() as { tconst: string };
 
   const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
-  const { images, status: updateImageStatus } = useAppSelector((state) => state.uploadMainImages);
+  const { images, status: updateImageStatus } = useAppSelector((state) => state.mainImages);
   const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
   const { keywords: existingKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 
@@ -71,7 +71,7 @@ export default function MovieDetailsPage() {
       <h2>{data.primaryTitle}</h2>
 
       {isOpen && (
-        <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} tconst={tconst} />
+        <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} />
       )}
 
       <MovieInfoCard

@@ -1,3 +1,5 @@
+import { AsyncStatus } from '../../../lib/api/types';
+
 export interface Keyword {
   _id: string;
   keyword: string;
@@ -17,5 +19,5 @@ export interface SuggestMoviesResponse {
 export interface KeywordsState {
   data: Keyword[];
   error: string | null;
-  loading: boolean;
+  status: AsyncStatus;
 }

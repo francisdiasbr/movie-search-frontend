@@ -1,32 +1,43 @@
 import { AsyncStatus } from '../../../lib/api/types';
 import { ImageItem } from '../../../lib/service/ImagesBaseService';
 
-export interface MovieItem {
+// One row of the favorites list. The backend sends the whole document, these
+// are the fields the table reads.
+export interface FavoriteEntry {
   _id: string;
-  averageRating: number;
-  numVotes: number;
-  originalTitle: string;
+  country?: string;
+  hasReview?: boolean;
+  plot_keywords?: string[];
+  poster_url?: string;
+  primaryTitle: string;
   startYear: number;
   tconst: string;
+  watched: boolean;
 }
 
 export interface MovieFavoritesState {
   countries: string[];
-  entries: any;
+  entries: FavoriteEntry[];
   error: null | string;
   status: AsyncStatus;
   startYears: number[];
   total_documents: number;
 }
 
+export interface FavoritesFilters {
+  country?: string;
+  startYear?: number;
+  watched?: boolean;
+}
+
 export interface FavoritesSearchParams {
-  filters?: Record<string, unknown>;
+  filters?: FavoritesFilters;
   searchTerm?: string;
 }
 
 export interface FavoritesSearchResponse {
   countries?: string[];
-  entries: MovieItem[];
+  entries: FavoriteEntry[];
   total_documents: number;
   years?: number[];
 }
@@ -36,6 +47,7 @@ export interface MovieDetailsItem {
   _id: string;
   country: string;
   genres: string[];
+  imdb_url?: string;
   magnet_link: string | null;
   plot: string;
   plot_keywords: string[];
@@ -45,6 +57,7 @@ export interface MovieDetailsItem {
   soundtrack: string;
   stars: string[];
   startYear: number;
+  subtitle_url?: string;
   tconst: string;
   trivia: string;
   watched: boolean;
@@ -53,7 +66,7 @@ export interface MovieDetailsItem {
 }
 
 export interface MovieDetailsState {
-  data: any;
+  data: MovieDetailsItem | null;
   error: string | null;
   editStatus: AsyncStatus;
   deleteStatus: AsyncStatus;
@@ -71,9 +84,8 @@ export interface EditDetailsPayload {
   wiki?: string;
 }
 
-export interface UploadMainImageState {
+export interface MainImagesState {
   error: string | null;
   images: ImageItem[];
-  objectName: string | null;
   status: AsyncStatus;
 }

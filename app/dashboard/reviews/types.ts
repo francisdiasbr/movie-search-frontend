@@ -1,4 +1,5 @@
 import { AsyncStatus } from '../../../lib/api/types';
+import { ImageItem } from '../../../lib/service/ImagesBaseService';
 
 export interface ReviewContentLanguage {
   text: string;
@@ -10,14 +11,11 @@ export interface ReviewContent {
 }
 
 export interface UpdateAuthoralReviewPayload {
-  content: {
-    en?: ReviewContentLanguage;
-    pt?: ReviewContentLanguage;
-  };
+  content: Partial<ReviewContent>;
 }
 
 export interface MovieReviewResponse {
-  content: any;
+  content?: Partial<ReviewContent>;
   primaryTitle: string;
   tconst: string;
 }
@@ -28,12 +26,9 @@ export interface AuthoralReviewState {
   status: AsyncStatus;
 }
 
-export interface UploadImageState {
+export interface ReviewImagesState {
   error: string | null;
-  imageNames: string[];
-  imageSubtitles_pt: string[];
-  imageUrls: string[];
-  objectName: string | null;
+  images: ImageItem[];
   status: AsyncStatus;
   subtitleStatus: AsyncStatus;
   uploadStatus: AsyncStatus;

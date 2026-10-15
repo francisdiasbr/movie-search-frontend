@@ -10,12 +10,8 @@ import {
 class FavoritesService extends BaseService {
   protected prefix = 'favorites';
 
-  add(tconst: string): Promise<ApiResponse<MovieDetailsItem>> {
-    return this.post(undefined, this.path(tconst));
-  }
-
   edit(tconst: string, body: EditDetailsPayload): Promise<ApiResponse<MovieDetailsItem>> {
-    return this.put(tconst, { ...body });
+    return this.put(tconst, body);
   }
 
   // Which of the listed movies already have a review (write-review resource).

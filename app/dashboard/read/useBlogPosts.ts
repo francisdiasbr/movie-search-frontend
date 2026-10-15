@@ -27,7 +27,6 @@ export function useBlogPosts() {
     allEntries: entries,
     handleCardClick,
     handleSearch,
-    hasEntries: entries.length > 0,
     loading: status === 'loading',
   };
 }

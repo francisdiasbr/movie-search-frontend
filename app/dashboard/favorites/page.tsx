@@ -15,12 +15,6 @@ import { toSelectOptions } from '../../util/select';
 import { columnData } from './columnData';
 import WatchedTag from './components/WatchedTag';
 
-interface MovieEntryRow {
-  plot_keywords: string[];
-  watched: boolean;
-  [key: string]: any;
-}
-
 export default function Page() {
   const dispatch = useAppDispatch();
   const { countries, entries, total_documents, status: favoritesStatus, startYears } = useAppSelector((state) => state.moviesFavorites);
@@ -30,8 +24,6 @@ export default function Page() {
   const [country, setCountry] = useState<string | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [watched, setWatched] = useState<boolean | undefined>(undefined);
-  const [reviewPaths, setReviewPaths] = useState<Record<string, string | null>>({});
-  const lastEntriesKeyRef = useRef<string>('');
   const hasMountedRef = useRef(false);
 
   const isLoading = favoritesStatus === 'loading';
@@ -39,11 +31,11 @@ export default function Page() {
   const handleSearch = () => {
     dispatch(fetchFavorites({
       filters: {
-        country: country && country.trim() !== '' ? country : undefined,
+        country: country || undefined,
         startYear: year,
-        watched: watched,
+        watched,
       },
-      searchTerm: searchTerm,
+      searchTerm,
     }));
   };
 
@@ -85,7 +77,6 @@ export default function Page() {
     try {
       await favoritesService.removeReview(tconst);
       showSuccess({ title: 'Resenha deletada com sucesso!' });
-      lastEntriesKeyRef.current = '';
       handleSearch();
     } catch (error) {
       if (isApiError(error) && error.status === 404) {
@@ -95,35 +86,6 @@ export default function Page() {
       showError({ title: 'Erro ao deletar resenha.' });
     }
   };
-
-  useEffect(() => {
-    const checkAllReviews = async () => {
-      if (entries.length === 0 || favoritesStatus === 'loading') {
-        return;
-      }
-
-      const currentEntriesKey = entries.map((e: MovieEntryRow) => e.tconst).sort().join(',');
-
-      if (lastEntriesKeyRef.current === currentEntriesKey) {
-        return;
-      }
-
-      lastEntriesKeyRef.current = currentEntriesKey;
-
-      const tconsts = entries.map((e: MovieEntryRow) => e.tconst);
-      const reviewedTconsts = await favoritesService.findReviewedTconsts(tconsts).catch(() => new Set<string>());
-
-      const paths: Record<string, string | null> = {};
-      entries.forEach((entry: MovieEntryRow) => {
-        paths[entry.tconst] = reviewedTconsts.has(entry.tconst) ? ROUTES.review(entry.tconst) : null;
-      });
-
-      setReviewPaths(paths);
-    };
-
-    checkAllReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entries, favoritesStatus, dispatch]);
 
   return (
     <>
@@ -144,11 +106,9 @@ export default function Page() {
       />
       <Table
         columns={columnData}
-        entries={entries.map((entry: MovieEntryRow) => ({
+        entries={entries.map(entry => ({
           ...entry,
-          review: reviewPaths[entry.tconst] ? (
-            <Link to={reviewPaths[entry.tconst]!} style={{ color: 'blue', textDecoration: 'underline' }}>ver</Link>
-          ) : null,
+          review: entry.hasReview ? <Link to={ROUTES.review(entry.tconst)}>ver</Link> : null,
           poster: entry.poster_url ? (
             <img src={entry.poster_url} alt={entry.primaryTitle} width={54} height={80} loading='lazy' style={{ height: '80px', display: 'block', margin: '0 auto' }} />
           ) : null,
@@ -157,7 +117,7 @@ export default function Page() {
               {entry.primaryTitle}
             </Link>
           ),
-          deleteReview: reviewPaths[entry.tconst] ? (
+          deleteReview: entry.hasReview ? (
             <button
               onClick={() => handleDeleteReview(entry.tconst)}
               title='Deletar review'

@@ -1,26 +1,5 @@
 import styled from 'styled-components';
 
-export const ButtonGroup = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing(1.25)};
-  justify-content: center;
-
-  button {
-    background: none;
-    border: none;
-    color: ${({ theme }) => theme.colors.primary.main};
-    cursor: pointer;
-
-    &:hover {
-      background: none;
-    }
-
-    &:hover svg {
-      color: ${({ theme }) => theme.colors.primary.dark};
-    }
-  }
-`;
-
 export const Cell = styled.td`
   border-bottom: 1px solid ${({ theme }) => theme.colors.neutral.level9};
   text-align: center;

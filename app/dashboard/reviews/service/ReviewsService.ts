@@ -10,7 +10,7 @@ class ReviewsService extends BaseService {
   }
 
   update(tconst: string, data: UpdateAuthoralReviewPayload): Promise<ApiResponse<MovieReviewResponse>> {
-    return this.put(tconst, { ...data });
+    return this.put(tconst, data);
   }
 }
 
