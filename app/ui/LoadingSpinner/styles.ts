@@ -4,12 +4,12 @@ const spin = keyframes`
   to { transform: rotate(360deg); }
 `;
 
-export const SpinnerContainer = styled.div`
+export const SpinnerContainer = styled.div<{ $inline?: boolean }>`
   align-items: center;
   display: flex;
   justify-content: center;
-  min-height: 200px;
-  width: 100%;
+  min-height: ${({ $inline }) => ($inline ? '0' : '200px')};
+  width: ${({ $inline }) => ($inline ? 'auto' : '100%')};
 `;
 
 export const Spinner = styled.div<{ $color?: string; $size: string; $speed: string; $thickness: string }>`

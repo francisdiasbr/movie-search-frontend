@@ -73,8 +73,8 @@ No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: e
 
 ### Component conventions
 
-- `app/ui/` — components shared across the whole app (Table, Dialog, MediaCard, LoadingSpinner).
-- `app/dashboard/components/` — components shared within the dashboard but not globally (GoBack).
+- `app/ui/` — components shared across the whole app (Button, Card, Table, Dialog, MediaCard, LoadingSpinner). `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
+- `app/dashboard/components/` — components shared within the dashboard but not globally. `GoBack` is the single back button of the app (`<GoBack to={ROUTES.favorites} />`, or `<GoBack />` for history back): an outline `Button` with a left arrow, as in siga-front.
 - Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.
 

@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import MediaCard from '../../../ui/MediaCard';
@@ -9,6 +9,7 @@ import { ROUTES } from '../../../const';
 import { useKeywords } from '../../keywords/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
+import GoBack from '../../components/GoBack';
 import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
 import MovieInfoCard from './components/MovieInfoCard';
@@ -66,7 +67,7 @@ export default function MovieDetailsPage() {
 
   return (
     <S.PageContainer>
-      <Link to={ROUTES.favorites} style={{ color: 'blue', textDecoration: 'underline' }}>Voltar</Link>
+      <GoBack to={ROUTES.favorites} />
       <h2>{data.primaryTitle}</h2>
 
       {isOpen && (
