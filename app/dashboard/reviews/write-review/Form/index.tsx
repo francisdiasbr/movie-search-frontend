@@ -1,12 +1,12 @@
 import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-import { clearState, postAuthoralReview } from '../../reviews/reducer/authoralReviewSlice';
-import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
-import { PARAGRAPHS } from '../../../formatter';
-import { useStatusToast } from '../../../hooks/useStatusToast';
-import { useToastNotifications } from '../../../hooks/useToastNotifications';
-import { isValidTconst } from '../../../util/tconst';
+import { clearState, postAuthoralReview } from '../../reducer/authoralReviewSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../lib/hooks';
+import { PARAGRAPHS } from '../../../../formatter';
+import { useStatusToast } from '../../../../hooks/useStatusToast';
+import { useToastNotifications } from '../../../../hooks/useToastNotifications';
+import { isValidTconst } from '../../../../util/tconst';
 import * as S from './styles';
 
 const AuthoralReviewForm = () => {

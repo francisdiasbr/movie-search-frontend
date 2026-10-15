@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-import { clearState, fetchAuthoralReview } from '../reviews/reducer/authoralReviewSlice';
-import { fetchDetails } from '../favorites/reducer/movieDetailsSlice';
-import { useAppDispatch } from '../../../lib/hooks';
-import { ROUTES } from '../../const';
-import { useToastNotifications } from '../../hooks/useToastNotifications';
+import { clearState, fetchAuthoralReview } from '../reducer/authoralReviewSlice';
+import { fetchDetails } from '../../favorites/reducer/movieDetailsSlice';
+import { useAppDispatch } from '../../../../lib/hooks';
+import { ROUTES } from '../../../const';
+import { useToastNotifications } from '../../../hooks/useToastNotifications';
 
 export default function WritePage() {
   const dispatch = useAppDispatch();

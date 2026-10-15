@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useBlogPosts } from '../../hooks/useBlogPosts';
+import { useBlogPosts } from '../useBlogPosts';
 
 export default function ReadPage() {
   const { allEntries, loading, handleSearch, handleCardClick } = useBlogPosts();

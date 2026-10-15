@@ -4,9 +4,9 @@ import { useCallback, useEffect } from 'react';
 import {
   clearAuthoralReviewStatus,
   fetchAllAuthoralReviews,
-} from '../dashboard/reviews/reducer/allAuthoralReviewsSlice';
-import { useAppDispatch, useAppSelector } from '../../lib/hooks';
-import { RootState } from '../../lib/store';
+} from './reducer/allAuthoralReviewsSlice';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { RootState } from '../../../lib/store';
 
 export function useBlogPosts() {
   const navigate = useNavigate();

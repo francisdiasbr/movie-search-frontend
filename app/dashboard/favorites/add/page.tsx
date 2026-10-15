@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { addFavorite, resetAddStatus } from '../favorites/reducer/movieDetailsSlice';
-import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
-import { ROUTES } from '../../const';
-import { useStatusToast } from '../../hooks/useStatusToast';
-import LoadingModal from '../../ui/LoadingModal';
+import { addFavorite, resetAddStatus } from '../reducer/movieDetailsSlice';
+import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { ROUTES } from '../../../const';
+import { useStatusToast } from '../../../hooks/useStatusToast';
+import LoadingModal from '../../../ui/LoadingModal';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();

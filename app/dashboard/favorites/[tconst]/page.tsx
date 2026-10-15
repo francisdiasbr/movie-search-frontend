@@ -6,7 +6,7 @@ import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
 import { fetchMainImage, uploadMainImage, deleteMainImage } from '../reducer/mainImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { ROUTES } from '../../../const';
-import { useKeywords } from '../../../hooks/useKeywords';
+import { useKeywords } from '../../keywords/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 import MainImageModal from './components/MainImageModal';

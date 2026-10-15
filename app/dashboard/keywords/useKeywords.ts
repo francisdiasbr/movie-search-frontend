@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { isApiError } from '../../lib/api/errors';
-import keywordsService from '../dashboard/keywords/service/KeywordsService';
+import { isApiError } from '../../../lib/api/errors';
+import keywordsService from './service/KeywordsService';
 
 export type AddKeywordResult = 'added' | 'conflict' | 'duplicate' | 'error';
 
