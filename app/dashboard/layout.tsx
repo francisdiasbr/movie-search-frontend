@@ -14,13 +14,13 @@ export default function Layout() {
   return (
     <S.LayoutContainer>
       <S.Nav>
-        <ul style={{ display: 'flex', gap: '24px', listStyle: 'none', margin: 0, padding: 0 }}>
+        <S.NavList>
           {links.map(link => (
             <li key={link.name}>
               <Link to={link.href}>{link.name}</Link>
             </li>
           ))}
-        </ul>
+        </S.NavList>
       </S.Nav>
       <S.ContentWrapper as='main'>
         <Outlet />

@@ -3,38 +3,38 @@ import styled from 'styled-components';
 // ── Card shell — shared by all cards ─────────────────────────────────────────
 
 export const Card = styled.div`
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: ${({ theme }) => theme.colors.background.surface};
+  border: 1px solid ${({ theme }) => theme.colors.neutral.level9};
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   overflow: hidden;
   width: 100%;
 `;
 
 export const CardBody = styled.div`
-  padding: 20px;
+  padding: ${({ theme }) => theme.spacing(2.5)};
 `;
 
 export const CardHeader = styled.div`
   align-items: center;
-  background: #f7fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background: ${({ theme }) => theme.colors.primary.light};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.neutral.level9};
   display: flex;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing(2.5)};
 `;
 
 export const CardTitle = styled.h3`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   font-size: 16px;
-  font-weight: 600;
+  font-weight: ${({ theme }) => theme.fonts.medium};
   margin: 0;
 `;
 
 // ── Generic content wrapper — shared ─────────────────────────────────────────
 
 export const Content = styled.div`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   font-size: 14px;
   line-height: 1.5;
 `;
@@ -45,12 +45,12 @@ export const EmptyState = styled.div`
   align-items: center;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  padding: ${({ theme }) => theme.spacing(5)} ${({ theme }) => theme.spacing(2.5)};
   text-align: center;
 `;
 
 export const EmptyText = styled.p`
-  color: #718096;
+  color: ${({ theme }) => theme.colors.neutral.level5};
   font-size: 14px;
   line-height: 1.5;
   margin: 0;
@@ -59,28 +59,28 @@ export const EmptyText = styled.p`
 
 export const ImageContainer = styled.div`
   aspect-ratio: 3/2;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.md};
   overflow: hidden;
   position: relative;
 `;
 
 export const ImageOverlay = styled.div`
   display: flex;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: ${({ theme }) => theme.spacing.sm};
+  top: ${({ theme }) => theme.spacing.sm};
   z-index: 10;
 `;
 
 export const ImagesGrid = styled.div`
   display: grid;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing(1.5)};
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  margin-bottom: 16px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: repeat(3, 1fr);
   }
 `;
@@ -90,19 +90,19 @@ export const ImagesGrid = styled.div`
 export const LinkItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const LinkLabel = styled.span`
-  color: #718096;
+  color: ${({ theme }) => theme.colors.neutral.level5};
   font-size: 12px;
-  font-weight: 600;
+  font-weight: ${({ theme }) => theme.fonts.medium};
   letter-spacing: 0.5px;
   text-transform: uppercase;
 `;
 
 export const LinkValue = styled.div`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   font-size: 14px;
   word-break: break-word;
 `;
@@ -110,7 +110,7 @@ export const LinkValue = styled.div`
 export const LinksGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 // ── MovieInfoCard ─────────────────────────────────────────────────────────────
@@ -118,20 +118,20 @@ export const LinksGrid = styled.div`
 export const ActionsSection = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing(1.5)};
 `;
 
 export const InfoGrid = styled.div`
   display: grid;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
   grid-template-columns: 1fr;
-  margin-bottom: 16px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template-columns: 1fr 1fr 1fr;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
@@ -139,39 +139,39 @@ export const InfoGrid = styled.div`
 export const InfoItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${({ theme }) => theme.spacing.xxs};
 `;
 
 export const InfoLabel = styled.span`
-  color: #718096;
+  color: ${({ theme }) => theme.colors.neutral.level5};
   font-size: 12px;
-  font-weight: 600;
+  font-weight: ${({ theme }) => theme.fonts.medium};
   letter-spacing: 0.5px;
   text-transform: uppercase;
 `;
 
 export const InfoValue = styled.div`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   font-size: 14px;
   word-break: break-word;
 `;
 
 export const MovieTitle = styled.h2`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   font-size: 20px;
-  font-weight: 600;
+  font-weight: ${({ theme }) => theme.fonts.medium};
   margin: 0;
 `;
 
 export const SynopsisSection = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: ${({ theme }) => theme.spacing(2.5)};
 `;
 
 export const SynopsisText = styled.div`
-  color: #4a5568;
+  color: ${({ theme }) => theme.colors.neutral.level3};
   font-size: 14px;
   line-height: 1.5;
-  margin-top: 8px;
+  margin-top: ${({ theme }) => theme.spacing.sm};
 `;
 
 // ── Page layout ───────────────────────────────────────────────────────────────
@@ -179,7 +179,7 @@ export const SynopsisText = styled.div`
 export const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
   width: 100%;
 `;
 
@@ -187,7 +187,7 @@ export const PageContainer = styled.div`
   align-items: start;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
   width: 100%;
 `;
 
@@ -195,23 +195,23 @@ export const SectionContainer = styled.div<{ isHorizontal?: boolean }>`
   align-items: ${props => (props.isHorizontal ? 'center' : 'flex-start')};
   display: flex;
   flex-direction: ${props => (props.isHorizontal ? 'row' : 'column')};
-  gap: ${props => (props.isHorizontal ? '8px' : '0')};
+  gap: ${({ isHorizontal, theme }) => (isHorizontal ? theme.spacing.sm : '0')};
   width: 100%;
 `;
 
 export const SectionContent = styled.div`
-  color: #2d3748;
+  color: ${({ theme }) => theme.colors.neutral.level2};
   flex: 1;
   font-size: 14px;
   word-break: break-word;
 `;
 
 export const SectionTitle = styled.h3`
-  color: #718096;
+  color: ${({ theme }) => theme.colors.neutral.level5};
   font-size: 12px;
-  font-weight: 600;
+  font-weight: ${({ theme }) => theme.fonts.medium};
   letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
   min-width: fit-content;
   text-transform: uppercase;
   white-space: nowrap;
@@ -222,9 +222,34 @@ export const SectionsGrid = styled.div`
   flex-direction: column;
   width: 100%;
 
-  @media (min-width: 1024px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     align-items: start;
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+`;
+
+// ── Quotes (formatQuote in utils.tsx) ─────────────────────────────────────────
+
+export const QuoteLine = styled.div`
+  align-items: flex-start;
+  display: flex;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const QuoteCharacter = styled.span`
+  color: ${({ theme }) => theme.colors.primary.main};
+  flex-shrink: 0;
+  font-weight: ${({ theme }) => theme.fonts.medium};
+  margin-right: ${({ theme }) => theme.spacing(0.75)};
+`;
+
+export const QuoteSpeech = styled.span`
+  color: ${({ theme }) => theme.colors.neutral.level1};
+  font-style: italic;
+`;
+
+export const QuotePlain = styled.div`
+  color: ${({ theme }) => theme.colors.neutral.level3};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;

@@ -1,21 +1,41 @@
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
-  background: #fff;
+  background: ${({ theme }) => theme.colors.primary.main};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   left: 0;
-  padding: 12px 16px;
+  padding: ${({ theme }) => theme.spacing(1.5)} ${({ theme }) => theme.spacing.md};
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: ${({ theme }) => theme.zIndex.nav};
+`;
+
+export const NavList = styled.ul`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.lg};
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  a {
+    color: ${({ theme }) => theme.colors.primary.contrastText};
+    font-family: ${({ theme }) => theme.fonts.fontPrimary};
+    font-weight: ${({ theme }) => theme.fonts.medium};
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: ${({ theme }) => theme.colors.secondary.light};
+  }
 `;
 
 export const ContentWrapper = styled.div`
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 16px;
-  padding-top: 60px;
+  padding: ${({ theme }) => theme.spacing.md};
+  padding-top: ${({ theme }) => theme.spacing(7.5)};
 `;
 
 export const LayoutContainer = styled.div`

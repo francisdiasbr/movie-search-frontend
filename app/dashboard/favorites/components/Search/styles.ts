@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const SearchContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
 
-@media (max-width: 1024px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     flex-direction: column;
   }
 `;

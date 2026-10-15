@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaTimes, FaHeart } from 'react-icons/fa';
 
+import * as S from './styles';
+
 interface FavoriteTagProps {
   existingItems: string[];
   isSelected?: string[];
@@ -29,39 +31,28 @@ const FavoriteTag: React.FC<FavoriteTagProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+    <S.TagList>
       {items.map((item, index) => {
         const isExisting = existingItems.includes(item);
         const isItemSelected = isSelected.includes(item);
 
         return (
-          <span
+          <S.Tag
+            $isExisting={isExisting}
+            $isSelected={isItemSelected}
             key={index}
             onClick={() => handleClick(item)}
             onMouseEnter={() => setHoveredItem(item)}
             onMouseLeave={() => setHoveredItem(null)}
-            style={{
-              alignItems: 'center',
-              background: isExisting ? '#fed7d7' : '#c4f1f9',
-              border: isItemSelected ? '2px solid #3182ce' : '2px solid transparent',
-              borderRadius: '4px',
-              color: isExisting ? '#822727' : '#065666',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              fontSize: '0.875rem',
-              fontWeight: isItemSelected ? 'bold' : 'normal',
-              gap: '4px',
-              padding: '2px 8px',
-            }}
           >
             {item}
             {isExisting && onItemDelete && (
               hoveredItem === item ? <FaTimes /> : <FaHeart />
             )}
-          </span>
+          </S.Tag>
         );
       })}
-    </div>
+    </S.TagList>
   );
 };
 

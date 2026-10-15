@@ -2,22 +2,27 @@ import styled from 'styled-components';
 
 export const ButtonGroup = styled.div`
   display: flex;
+  gap: ${({ theme }) => theme.spacing(1.25)};
   justify-content: center;
-  gap: 10px;
 
   button {
     background: none;
     border: none;
+    color: ${({ theme }) => theme.colors.primary.main};
     cursor: pointer;
 
+    &:hover {
+      background: none;
+    }
+
     &:hover svg {
-      color: #d7d7d7;
+      color: ${({ theme }) => theme.colors.primary.dark};
     }
   }
 `;
 
 export const Cell = styled.td`
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.neutral.level9};
   text-align: center;
 
   &:first-child {
@@ -25,18 +30,17 @@ export const Cell = styled.td`
   }
 `;
 
-
 export const Row = styled.tr`
   height: 30px;
 
   &:hover {
-    background: #f9f9f9;
-    font-weight: bold;
+    background: ${({ theme }) => theme.colors.primary.light};
+    font-weight: ${({ theme }) => theme.fonts.bold};
   }
 `;
 
 export const SpinnerCell = styled.td`
-  padding: 60px;
+  padding: ${({ theme }) => theme.spacing(7.5)};
   text-align: center;
   vertical-align: middle;
 `;

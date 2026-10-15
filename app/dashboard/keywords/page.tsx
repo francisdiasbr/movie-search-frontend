@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
 import { getKeywords } from './reducer/keywordsSlice';
 import keywordsService from './service/KeywordsService';
+import * as S from './styles';
 import { SuggestedMovie } from './types';
 
 export default function Page() {
@@ -73,7 +74,7 @@ export default function Page() {
                 <strong>{movie.title}</strong> ({movie.year})<br />
                 <em>{movie.description}</em>
                 {movie.relevance && (
-                  <div style={{ color: '#666', fontSize: '0.9em' }}>{movie.relevance}</div>
+                  <S.Relevance>{movie.relevance}</S.Relevance>
                 )}
               </li>
             ))}

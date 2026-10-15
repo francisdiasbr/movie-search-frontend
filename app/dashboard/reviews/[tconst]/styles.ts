@@ -6,14 +6,14 @@ export const HiddenFileInput = styled.input`
 
 export const ImageActions = styled.div`
   display: flex;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: ${({ theme }) => theme.spacing.sm};
+  top: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const ImageWrapper = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: ${({ theme }) => theme.spacing(2.5)};
   position: relative;
 `;
 

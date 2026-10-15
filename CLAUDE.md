@@ -60,6 +60,17 @@ Response envelopes `ApiResponse<T>` (`{ data }`), `EntriesResponse<T>` (`{ entri
 
 Thunks follow one shape: call the service, return the payload, and on error `return rejectWithValue(toApiErrorPayload(error, '<fallback message in pt-BR>'))` with `{ rejectValue: ApiErrorPayload }` in the thunk generics. Reducers store only `action.payload?.message` in `state.error`.
 
+### Theme (mirrors `@gav/theme` used by siga-front)
+
+`app/theme/` holds every design token. `base/` has only the contracts (`Colors`, `Fonts`, `Layout`), `movieSearch/` the values, and `index.ts` exports `theme`, `ThemeProvider` and `GlobalStyle`. `App.tsx` wraps the tree in `ThemeProvider` + `GlobalStyle` (which also loads Montserrat/Roboto from `@fontsource`). `styled.d.ts` extends styled-components' `DefaultTheme`, so `${({ theme }) => theme.colors.primary.main}` is typed everywhere.
+
+- `theme.colors`: `primary` (`#A34F88`), `secondary` (`#F49BD1`), `error`, `info`, `success` with `main/light/dark/contrastText`; `neutral.level1..level11` for greys (dark to light); `background.page` and `background.surface`.
+- `theme.fonts`: `fontPrimary` (Montserrat, headings/nav) and `fontSecondary` (Roboto, body), plus weights `thin..bold`.
+- `theme.spacing`: `spacing(n)` returns `n * 8px`; named steps `xxs(2) xs(4) sm(8) md(16) lg(24) xl(32) xxl(48)`.
+- `theme.radius` (`sm/md/lg/pill`), `theme.shadows` (`sm/md/lg`), `theme.breakpoints` (`sm/md/lg`), `theme.zIndex` (`nav/dialog/toast`).
+
+No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: every `styles.ts` reads from `theme`, and colours never go in inline `style={{}}` props. Global element styles (`a`, `button`, `input`, `dialog`, headings) live in `GlobalStyle.ts`, there is no `globals.css`.
+
 ### Component conventions
 
 - `app/ui/` — components shared across the whole app (Table, Dialog, MediaCard, LoadingSpinner).

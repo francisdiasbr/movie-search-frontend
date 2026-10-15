@@ -1,3 +1,5 @@
+import * as S from './styles';
+
 export function sanitizeTrivia(trivia: string) {
   return trivia.split('\n\n').map((item, index) => ({
     key: index,
@@ -16,15 +18,15 @@ export function formatQuote(quote: string): JSX.Element[] {
     const speech = match[2].trim();
 
     elements.push(
-      <div key={idx++} style={{ marginBottom: 8, display: 'flex', alignItems: 'flex-start' }}>
-        <span style={{ fontWeight: 600, marginRight: 6, color: '#6B46C1', flexShrink: 0 }}>{character}:</span>
-        <span style={{ fontStyle: 'italic', color: '#222' }}>{speech}</span>
-      </div>
+      <S.QuoteLine key={idx++}>
+        <S.QuoteCharacter>{character}:</S.QuoteCharacter>
+        <S.QuoteSpeech>{speech}</S.QuoteSpeech>
+      </S.QuoteLine>
     );
   }
 
   if (elements.length === 0) {
-    return [<div key={0} style={{ marginBottom: 8, color: '#444' }}>{quote}</div>];
+    return [<S.QuotePlain key={0}>{quote}</S.QuotePlain>];
   }
 
   return elements;

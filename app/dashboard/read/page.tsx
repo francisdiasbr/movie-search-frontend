@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import * as S from './styles';
 import { useBlogPosts } from './useBlogPosts';
 
 export default function ReadPage() {
@@ -16,19 +17,9 @@ export default function ReadPage() {
       {loading && <div>Carregando...</div>}
       {!loading && allEntries.length === 0 && <p>Nenhuma resenha encontrada.</p>}
       {allEntries.map((entry) => (
-        <div
-          key={entry.tconst}
-          onClick={() => handleCardClick(entry.tconst)}
-          style={{
-            border: '1px solid #e5e5e5',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            marginBottom: '12px',
-            padding: '16px',
-          }}
-        >
+        <S.EntryCard key={entry.tconst} onClick={() => handleCardClick(entry.tconst)}>
           <strong>{entry.primaryTitle || entry.tconst}</strong>
-        </div>
+        </S.EntryCard>
       ))}
     </div>
   );
