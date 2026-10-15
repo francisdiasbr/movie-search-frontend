@@ -25,6 +25,8 @@ export default function Dialog({ children, isOpen, onClose, title }: DialogProps
   };
 
   return (
+    // Escape already closes a native <dialog>; the click is the mouse shortcut for the backdrop.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <dialog ref={ref} onClose={onClose} onClick={handleBackdropClick}>
       <S.Header>
         <h3>{title}</h3>

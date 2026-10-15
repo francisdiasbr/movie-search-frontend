@@ -2,15 +2,11 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { ApiError } from './errors';
 
-export type HttpMethod = 'DELETE' | 'GET' | 'PATCH' | 'POST' | 'PUT';
+export type HttpMethod = 'DELETE' | 'GET' | 'POST' | 'PUT';
 
 export type RequestBody = FormData | object | null | undefined;
 
-export type QueryParams = Record<string, boolean | number | string | null | undefined>;
-
 export interface RequestOptions {
-  // Download the response as a Blob instead of parsing JSON.
-  blob?: boolean;
   body?: RequestBody;
   // Abort a previous in-flight request to the same method + url before firing
   // this one. Useful for searches triggered while the user types.
@@ -18,16 +14,6 @@ export interface RequestOptions {
   headers?: Record<string, string>;
   method?: HttpMethod;
 }
-
-export const toQueryString = (params: QueryParams | string = {}): string => {
-  if (typeof params === 'string') return params;
-  const query = new URLSearchParams();
-  Object.entries(params).forEach(([key, value]) => {
-    if (value === null || value === undefined || value === '') return;
-    query.set(key, String(value));
-  });
-  return query.toString();
-};
 
 class BaseApi {
   private client: AxiosInstance;
@@ -51,14 +37,13 @@ class BaseApi {
   }
 
   async fetch<T>(url: string, options: RequestOptions = {}): Promise<T> {
-    const { blob = false, body, cancelPrevious = false, headers = {}, method = 'GET' } = options;
+    const { body, cancelPrevious = false, headers = {}, method = 'GET' } = options;
     const requestId = `${method} ${url}`;
 
     const config: AxiosRequestConfig = {
       data: body,
       headers,
       method,
-      responseType: blob ? 'blob' : 'json',
       url,
     };
 
@@ -103,14 +88,6 @@ class BaseApi {
 
   get<T>(url: string, options: RequestOptions = {}): Promise<T> {
     return this.fetch<T>(url, { ...options, method: 'GET' });
-  }
-
-  getBlob(url: string, options: RequestOptions = {}): Promise<Blob> {
-    return this.fetch<Blob>(url, { ...options, blob: true, method: 'GET' });
-  }
-
-  patch<T>(url: string, body?: RequestBody, options: RequestOptions = {}): Promise<T> {
-    return this.fetch<T>(url, { ...options, body, method: 'PATCH' });
   }
 
   post<T>(url: string, body?: RequestBody, options: RequestOptions = {}): Promise<T> {

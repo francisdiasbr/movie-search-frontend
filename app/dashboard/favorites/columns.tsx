@@ -5,8 +5,8 @@ import { ROUTES } from '../../const';
 import IconButton from '../../ui/IconButton';
 import { Column } from '../../ui/Table';
 import WatchedTag from './components/WatchedTag';
-import { FavoriteEntry } from './types';
 import * as S from './styles';
+import { FavoriteEntry } from './types';
 
 interface ColumnHandlers {
   onDelete: (tconst: string) => void;

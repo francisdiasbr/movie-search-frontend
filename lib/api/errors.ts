@@ -45,9 +45,6 @@ export interface ApiErrorPayload {
 
 export const isApiError = (error: unknown): error is ApiError => error instanceof ApiError;
 
-export const isCancelled = (error: unknown): boolean =>
-  (isApiError(error) && error.cancelled) || (error as ApiErrorPayload | undefined)?.cancelled === true;
-
 export const toApiErrorPayload = (error: unknown, fallback: string): ApiErrorPayload => {
   if (isApiError(error)) {
     return {

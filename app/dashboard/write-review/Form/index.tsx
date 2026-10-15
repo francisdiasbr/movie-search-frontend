@@ -1,5 +1,5 @@
-import { useSearchParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { PARAGRAPHS } from '../../../formatter';

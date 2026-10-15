@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { ImageItem } from '../../../../lib/service/ImagesBaseService';

@@ -1,8 +1,8 @@
-import { editDetails } from '../../reducer/movieDetailsSlice';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { WATCHED_LABEL, YES_NO } from '../../../../formatter';
 import { useAsyncAction } from '../../../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
+import { editDetails } from '../../reducer/movieDetailsSlice';
 import * as S from './styles';
 
 interface WatchedTagProps {

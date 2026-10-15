@@ -1,18 +1,18 @@
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 
-import { clearState, fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
-import { deleteImage, fetchImages, updateImageSubtitle, uploadMovieImage } from '../reducer/imagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { RootState } from '../../../../lib/store';
 import { useAsyncAction } from '../../../hooks/useAsyncAction';
 import { useFilePicker } from '../../../hooks/useFilePicker';
-import { RootState } from '../../../../lib/store';
 import Button from '../../../ui/Button';
 import Card from '../../../ui/Card';
 import IconButton from '../../../ui/IconButton';
 import PageHeader from '../../../ui/PageHeader';
 import GoBack from '../../components/GoBack';
+import { clearState, fetchAuthoralReview, updateAuthoralReview } from '../reducer/authoralReviewSlice';
+import { deleteImage, fetchImages, updateImageSubtitle, uploadMovieImage } from '../reducer/imagesSlice';
 import * as S from './styles';
 
 function Reviews() {

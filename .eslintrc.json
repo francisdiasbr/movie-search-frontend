@@ -1,10 +1,10 @@
 {
   "extends": [
     "eslint:recommended",
-    "next/core-web-vitals",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "env": {
     "browser": true,
@@ -23,8 +23,9 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "eslint-plugin-import-helpers",
-    "jsx-a11y"
+    "import-helpers",
+    "jsx-a11y",
+    "react-hooks"
   ],
   "settings": {
     "react": {
@@ -33,14 +34,33 @@
   },
   "rules": {
     "no-unused-vars": "off",
-    "object-curly-spacing": ["error", "always"],
-    "quotes": ["error", "single", { "avoidEscape": true }],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
     "import-helpers/order-imports": [
       "warn",
       {
         "newlinesBetween": "always",
-        "groups": ["module", ["parent", "sibling", "index"]],
-        "alphabetize": { "order": "asc", "ignoreCase": true }
+        "groups": [
+          "module",
+          [
+            "parent",
+            "sibling",
+            "index"
+          ]
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
       }
     ],
     "no-restricted-imports": [
@@ -48,7 +68,9 @@
       {
         "patterns": [
           {
-            "group": ["@/*"],
+            "group": [
+              "@/*"
+            ],
             "message": "Use relative imports instead of @ alias for project files"
           }
         ]
@@ -63,7 +85,10 @@
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": "off",
-    "import/no-anonymous-default-export": "off",
-    "react-hooks/exhaustive-deps": "off"
-  }
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "ignorePatterns": [
+    "dist",
+    "node_modules"
+  ]
 }

@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-import { editDetails } from '../../reducer/movieDetailsSlice';
-import { MovieDetailsItem } from '../../types';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Button from '../../../../ui/Button';
 import Dialog, { DialogField, DialogFooter, DialogRow } from '../../../../ui/Dialog';
 import IconButton from '../../../../ui/IconButton';
+import { editDetails } from '../../reducer/movieDetailsSlice';
+import { MovieDetailsItem } from '../../types';
 
 interface EditInfoModalProps {
   data: MovieDetailsItem;
@@ -86,8 +86,9 @@ export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalPr
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title='Editar Favorito'>
       <DialogField>
-        <label>Trilha Sonora (Spotify URL)</label>
+        <label htmlFor='soundtrack'>Trilha Sonora (Spotify URL)</label>
         <input
+          id='soundtrack'
           value={formData?.soundtrack || ''}
           onChange={(e) => setFormData({ ...formData, soundtrack: e.target.value })}
           placeholder='URL da trilha sonora no Spotify'
@@ -95,8 +96,9 @@ export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalPr
       </DialogField>
 
       <DialogField>
-        <label>Wiki</label>
+        <label htmlFor='wiki'>Wiki</label>
         <input
+          id='wiki'
           value={formData?.wiki || ''}
           onChange={(e) => setFormData({ ...formData, wiki: e.target.value })}
           placeholder='URL da página Wiki'
@@ -104,8 +106,9 @@ export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalPr
       </DialogField>
 
       <DialogField>
-        <label>Magnet Link (Torrent)</label>
+        <label htmlFor='magnet_link'>Magnet Link (Torrent)</label>
         <input
+          id='magnet_link'
           value={formData?.magnet_link || ''}
           onChange={(e) => setFormData({ ...formData, magnet_link: e.target.value })}
           placeholder='magnet:?xt=urn:btih:...'
@@ -113,7 +116,7 @@ export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalPr
       </DialogField>
 
       <DialogField>
-        <label>Referências</label>
+        <span id='references-label'>Referências</span>
         {(formData?.references || []).map((reference: string, index: number) => (
           <ReferenceInput
             key={index}

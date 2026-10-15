@@ -5,8 +5,8 @@ import Button from '../../../../../ui/Button';
 import Card from '../../../../../ui/Card';
 import { pirateBaySearchUrl } from '../../../../../util/url';
 import { MovieDetailsItem } from '../../../types';
-import FavoriteTag from '../FavoriteTag';
 import * as S from '../../styles';
+import FavoriteTag from '../FavoriteTag';
 
 interface MovieInfoCardProps {
   data: MovieDetailsItem;

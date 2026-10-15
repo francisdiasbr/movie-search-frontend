@@ -1,7 +1,8 @@
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import StoreProvider from './StoreProvider'
+
 import router from './router'
+import StoreProvider from './StoreProvider'
 import { GlobalStyle, ThemeProvider, theme } from './theme'
 
 export default function App() {

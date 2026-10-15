@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { ROUTES } from '../../const';
 import { clearReviews, fetchReviews } from './reducer/readSlice';
 
 export function useBlogPosts() {

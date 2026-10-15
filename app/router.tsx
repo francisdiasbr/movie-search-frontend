@@ -1,14 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import DashboardLayout from './dashboard/layout'
-import FavoritesPage from './dashboard/favorites/page'
+
+import { ROUTES } from './const'
 import FavoriteDetailPage from './dashboard/favorites/[tconst]/page'
+import FavoritesPage from './dashboard/favorites/page'
+import KeywordsPage from './dashboard/keywords/page'
+import DashboardLayout from './dashboard/layout'
+import ReadPage from './dashboard/read/page'
 import ReviewPage from './dashboard/reviews/[tconst]/page'
 import SearchPage from './dashboard/search/page'
-import KeywordsPage from './dashboard/keywords/page'
-import ReadPage from './dashboard/read/page'
-import WritePage from './dashboard/write/page'
 import WriteReviewPage from './dashboard/write-review/page'
-import { ROUTES } from './const'
+import WritePage from './dashboard/write/page'
 
 export default createBrowserRouter([
   {
