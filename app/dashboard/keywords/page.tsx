@@ -7,7 +7,7 @@ import { Row } from '../../ui/Layout';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
 import TagList from '../../ui/TagList';
-import { imdbTitleUrl } from '../../util/url';
+import { imdbSearchUrl } from '../../util/url';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
@@ -65,7 +65,7 @@ export default function Page() {
             {suggestedMovies.map((movie, index) => (
               <li key={movie.tconst || index}>
                 <strong>
-                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.title}</ExternalLink>
+                  <ExternalLink href={imdbSearchUrl(movie.title, movie.year)}>{movie.title}</ExternalLink>
                 </strong>{' '}
                 ({movie.year})<br />
                 <em>{movie.description}</em>

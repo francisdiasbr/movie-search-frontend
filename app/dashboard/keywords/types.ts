@@ -6,7 +6,8 @@ export interface Keyword {
 export interface SuggestedMovie {
   description?: string;
   relevance?: string;
-  tconst: string;
+  // Guessed by the language model; not reliable enough to link to.
+  tconst?: string;
   title: string;
   year?: number | string;
 }
