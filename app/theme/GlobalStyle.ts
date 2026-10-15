@@ -63,21 +63,6 @@ export const GlobalStyle = createGlobalStyle`
     box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.primary.main};
   }
 
-  button {
-    background-color: ${({ theme }) => theme.colors.secondary.main};
-    border: 1px solid ${({ theme }) => theme.colors.secondary.dark};
-    border-radius: ${({ theme }) => theme.radius.sm};
-    color: ${({ theme }) => theme.colors.secondary.contrastText};
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 1rem;
-    padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing(1.5)};
-  }
-
-  button:hover {
-    background-color: ${({ theme }) => theme.colors.secondary.dark};
-  }
-
   button:disabled,
   input:disabled,
   select:disabled,

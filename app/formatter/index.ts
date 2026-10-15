@@ -1,3 +1,4 @@
+export { default as API_MESSAGE } from './apiMessage';
 export { default as JOIN_LIST } from './joinList';
 export { default as NOT_AVAILABLE, NOT_AVAILABLE as NOT_AVAILABLE_LABEL } from './notAvailable';
 export { default as PARAGRAPHS } from './paragraphs';

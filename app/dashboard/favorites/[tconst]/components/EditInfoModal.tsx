@@ -1,9 +1,8 @@
-
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
 import { useAppDispatch } from '../../../../../lib/hooks';
+import { useAsyncAction } from '../../../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import Button from '../../../../ui/Button';
 import Dialog, { DialogField, DialogFooter, DialogRow } from '../../../../ui/Dialog';
@@ -17,122 +16,85 @@ interface EditInfoModalProps {
   onClose: () => void;
 }
 
-interface ReferenceInputProps {
-  onChange: (value: string) => void;
-  onRemove: () => void;
-  value: string;
+interface FormValues {
+  magnet_link: string;
+  references: string[];
+  soundtrack: string;
+  wiki: string;
 }
 
-const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => (
-  <DialogRow>
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder='Digite a URL da referência'
-    />
-    <IconButton icon={FaTrash} onClick={onRemove} title='Remover referência' />
-  </DialogRow>
-);
+const FIELDS: Array<{ key: 'magnet_link' | 'soundtrack' | 'wiki'; label: string; placeholder: string }> = [
+  { key: 'soundtrack', label: 'Trilha Sonora (Spotify URL)', placeholder: 'URL da trilha sonora no Spotify' },
+  { key: 'wiki', label: 'Wiki', placeholder: 'URL da página Wiki' },
+  { key: 'magnet_link', label: 'Magnet Link (Torrent)', placeholder: 'magnet:?xt=urn:btih:...' },
+];
 
 export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalProps) {
-  const [formData, setFormData] = useState(data);
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToastNotifications();
+  // Only the editable fields; the modal is mounted fresh each time it opens.
+  const [values, setValues] = useState<FormValues>({
+    magnet_link: data.magnet_link ?? '',
+    references: data.references ?? [],
+    soundtrack: data.soundtrack ?? '',
+    wiki: data.wiki ?? '',
+  });
 
-  useEffect(() => {
-    setFormData(data);
-  }, [data]);
+  const update = (patch: Partial<FormValues>) => setValues(prev => ({ ...prev, ...patch }));
 
-  const handleUpdate = async () => {
-    if (!formData) return;
-
-    const updateData = {
-      magnet_link: formData.magnet_link || '',
-      references: Array.isArray(formData.references)
-        ? formData.references.filter((ref: string) => ref.trim() !== '')
-        : [],
-      soundtrack: formData.soundtrack || '',
-      tconst: data.tconst,
-      watched: data.watched,
-      wiki: formData.wiki || '',
-    };
-
-    dispatch(editDetails(updateData)).then((resultAction) => {
-      if (editDetails.fulfilled.match(resultAction)) {
-        showSuccess({ title: 'Filme atualizado com sucesso.' });
-        onClose();
-      } else {
-        showError({ title: 'Não foi possível atualizar o filme.' });
-      }
+  const updateReference = (index: number, value: string | null) =>
+    update({
+      references: value === null
+        ? values.references.filter((_, i) => i !== index)
+        : values.references.map((ref, i) => (i === index ? value : ref)),
     });
-  };
 
-  const handleAddReference = () => {
-    setFormData({ ...formData, references: [...(formData.references || []), ''] });
-  };
-
-  const handleReferenceChange = (index: number, value: string) => {
-    const refs = [...(formData.references || [])];
-    refs[index] = value;
-    setFormData({ ...formData, references: refs });
-  };
-
-  const handleReferenceRemove = (index: number) => {
-    const refs = [...(formData.references || [])];
-    refs.splice(index, 1);
-    setFormData({ ...formData, references: refs });
-  };
+  const { loading: saving, run: handleUpdate } = useAsyncAction(async () => {
+    const result = await dispatch(
+      editDetails({
+        ...values,
+        references: values.references.filter(ref => ref.trim() !== ''),
+        tconst: data.tconst,
+      })
+    );
+    if (editDetails.fulfilled.match(result)) {
+      showSuccess({ title: 'Filme atualizado com sucesso.' });
+      onClose();
+    } else {
+      showError({ title: 'Não foi possível atualizar o filme.' });
+    }
+  });
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title='Editar Favorito'>
-      <DialogField>
-        <label htmlFor='soundtrack'>Trilha Sonora (Spotify URL)</label>
-        <input
-          id='soundtrack'
-          value={formData?.soundtrack || ''}
-          onChange={(e) => setFormData({ ...formData, soundtrack: e.target.value })}
-          placeholder='URL da trilha sonora no Spotify'
-        />
-      </DialogField>
+      {FIELDS.map(({ key, label, placeholder }) => (
+        <DialogField key={key}>
+          <label htmlFor={key}>{label}</label>
+          <input id={key} value={values[key]} onChange={e => update({ [key]: e.target.value })} placeholder={placeholder} />
+        </DialogField>
+      ))}
 
       <DialogField>
-        <label htmlFor='wiki'>Wiki</label>
-        <input
-          id='wiki'
-          value={formData?.wiki || ''}
-          onChange={(e) => setFormData({ ...formData, wiki: e.target.value })}
-          placeholder='URL da página Wiki'
-        />
-      </DialogField>
-
-      <DialogField>
-        <label htmlFor='magnet_link'>Magnet Link (Torrent)</label>
-        <input
-          id='magnet_link'
-          value={formData?.magnet_link || ''}
-          onChange={(e) => setFormData({ ...formData, magnet_link: e.target.value })}
-          placeholder='magnet:?xt=urn:btih:...'
-        />
-      </DialogField>
-
-      <DialogField>
-        <span id='references-label'>Referências</span>
-        {(formData?.references || []).map((reference: string, index: number) => (
-          <ReferenceInput
-            key={index}
-            value={reference}
-            onChange={(value) => handleReferenceChange(index, value)}
-            onRemove={() => handleReferenceRemove(index)}
-          />
+        <span>Referências</span>
+        {values.references.map((reference, index) => (
+          <DialogRow key={index}>
+            <input
+              aria-label={`Referência ${index + 1}`}
+              value={reference}
+              onChange={e => updateReference(index, e.target.value)}
+              placeholder='Digite a URL da referência'
+            />
+            <IconButton icon={FaTrash} onClick={() => updateReference(index, null)} title='Remover referência' />
+          </DialogRow>
         ))}
-        <Button variant='outline' size='small' onClick={handleAddReference}>
+        <Button variant='outline' size='small' onClick={() => update({ references: [...values.references, ''] })}>
           Adicionar Referência
         </Button>
       </DialogField>
 
       <DialogFooter>
-        <Button variant='outline' onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleUpdate}>Salvar</Button>
+        <Button variant='outline' onClick={onClose} disabled={saving}>Cancelar</Button>
+        <Button onClick={() => handleUpdate()} loading={saving}>Salvar</Button>
       </DialogFooter>
     </Dialog>
   );

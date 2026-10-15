@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
-import { PARAGRAPHS } from '../../../formatter';
+import { API_MESSAGE, PARAGRAPHS } from '../../../formatter';
 import { useStatusToast } from '../../../hooks/useStatusToast';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import Button from '../../../ui/Button';
@@ -16,8 +16,9 @@ const AuthoralReviewForm = () => {
   const { showError } = useToastNotifications();
   const [searchParams] = useSearchParams();
 
-  const urlTconst = searchParams.get('tconst') || '';
-  const urlPrimaryTitle = searchParams.get('primaryTitle') || '';
+  // Both come filled from the "write" screen; typed by hand otherwise.
+  const urlTconst = searchParams.get('tconst') ?? '';
+  const urlPrimaryTitle = searchParams.get('primaryTitle') ?? '';
 
   const [primaryTitle, setPrimaryTitle] = useState(urlPrimaryTitle);
   const [contentPt, setContentPt] = useState('');
@@ -49,11 +50,7 @@ const AuthoralReviewForm = () => {
 
   useStatusToast({
     error,
-    errorMessage: (message) => {
-      if (message === 'Movie not found in favorites') return 'Filme não encontrado nos favoritos';
-      if (!tconst) return 'tconst não informado';
-      return message || 'Erro ao salvar a resenha';
-    },
+    errorMessage: message => API_MESSAGE(message, 'Erro ao salvar a resenha'),
     onSuccess: () => {
       setPrimaryTitle('');
       setContentPt('');
