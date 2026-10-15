@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import BaseService from '../../../lib/api/service';
 import { getKeywords } from '../../../lib/features/keywords/keywordsSlice';
+import keywordsService from '../../../lib/features/keywords/service';
+import { SuggestedMovie } from '../../../lib/features/keywords/types';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
 
@@ -10,13 +11,13 @@ export default function Page() {
   const { data: keywords = [], loading, error } = useAppSelector(state => state.keywords);
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
-  const [suggestedMovies, setSuggestedMovies] = useState<any[]>([]);
+  const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[]>([]);
   const [loadingMovies, setLoadingMovies] = useState(false);
 
   useEffect(() => {
     dispatch(getKeywords()).then(action => {
       if (getKeywords.fulfilled.match(action)) {
-        setExistingKeywords(action.payload.map((kw: any) => kw.keyword));
+        setExistingKeywords(action.payload.map(kw => kw.keyword));
       }
     });
   }, [dispatch]);
@@ -32,9 +33,9 @@ export default function Page() {
     setLoadingMovies(true);
     setSuggestedMovies([]);
     try {
-      const data = await BaseService.post('keywords/suggest-movies', { keywords: selectedKeywords });
-      setSuggestedMovies(data?.data?.movies || []);
-    } catch (error) {
+      const response = await keywordsService.suggestMovies(selectedKeywords);
+      setSuggestedMovies(response?.data?.movies ?? []);
+    } catch {
       setSuggestedMovies([]);
     } finally {
       setLoadingMovies(false);

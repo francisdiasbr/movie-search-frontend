@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
-import { MovieFavoritesState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
+import favoritesService from './service';
+import { FavoritesSearchParams, FavoritesSearchResponse, MovieFavoritesState } from './types';
 
 const initialState: MovieFavoritesState = {
   countries: [],
@@ -12,32 +13,21 @@ const initialState: MovieFavoritesState = {
   total_documents: 0,
 };
 
-interface FetchFavoritesParams {
-  filters?: any;
-  searchTerm?: string;
-}
-
-export const fetchFavorites = createAsyncThunk(
-  'movies/favorites',
-  async (params: FetchFavoritesParams) => {
-    try {
-      const fetchBody = {
-        filters: params.filters || {},
-        search_term: params.searchTerm || '',
-      };
-      const response = await BaseService.post('favorites/search', fetchBody);
-
-      if (response && response.entries && Array.isArray(response.entries)) {
-        return response;
-      } else {
-        throw new Error('Invalid response format');
-      }
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-      throw error;
+export const fetchFavorites = createAsyncThunk<
+  FavoritesSearchResponse,
+  FavoritesSearchParams,
+  { rejectValue: ApiErrorPayload }
+>('movies/favorites', async (params, { rejectWithValue }) => {
+  try {
+    const response = await favoritesService.searchFavorites(params);
+    if (!Array.isArray(response?.entries)) {
+      throw new Error('Formato de resposta inválido');
     }
+    return response;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar os favoritos.'));
   }
-);
+});
 
 const movieFavoritesSlice = createSlice({
   initialState,
@@ -58,17 +48,18 @@ const movieFavoritesSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
-        state.countries = action.payload.countries || [];
-        state.entries = Array.isArray(action.payload.entries)
-          ? action.payload.entries
-          : [];
+        state.countries = action.payload.countries ?? [];
+        state.entries = action.payload.entries;
         state.status = 'succeeded';
-        state.startYears = action.payload.years || [];
+        state.startYears = action.payload.years ?? [];
         state.total_documents = action.payload.total_documents;
       })
-      .addCase(fetchFavorites.rejected, state => {
+      .addCase(fetchFavorites.rejected, (state, action) => {
+        // A cancelled search was superseded by a newer one that is still
+        // loading, so the state must not flip to failed.
+        if (action.payload?.cancelled) return;
         state.status = 'failed';
-        state.error = 'error';
+        state.error = action.payload?.message ?? 'Não foi possível carregar os favoritos.';
       });
   },
 });

@@ -1,91 +1,56 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import baseService from '../../api/service';
-
-interface MainImageItem {
-  url: string;
-  filename: string;
-  subtitle_en: string;
-  subtitle_pt: string;
-  sequential_id: number;
-}
-
-interface UploadMainImageState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-  objectName: string | null;
-  images: MainImageItem[];
-}
+import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
+import { mainImagesService } from './service';
+import { ImageItem, UploadImageResponse, UploadMainImageState } from './types';
 
 const initialState: UploadMainImageState = {
-  status: 'idle',
   error: null,
-  objectName: null,
   images: [],
+  objectName: null,
+  status: 'idle',
 };
 
 export const uploadMainImage = createAsyncThunk<
-  { object_name: string; url?: string },
-  { tconst: string; file: File }
->(
-  'uploadMainImages/uploadMainImage',
-  async ({ tconst, file }, { rejectWithValue }) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await baseService.post(
-        `main-images/${tconst}`,
-        formData
-      );
-      if (response.object_name) {
-        return response;
-      } else {
-        throw new Error('Invalid response structure');
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('An unexpected error occurred');
+  UploadImageResponse,
+  { file: File; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadMainImages/uploadMainImage', async ({ file, tconst }, { rejectWithValue }) => {
+  try {
+    const response = await mainImagesService.upload(tconst, file);
+    if (!response?.object_name) {
+      throw new Error('Formato de resposta inválido');
     }
+    return response;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível enviar a imagem principal.'));
   }
-);
+});
 
 export const fetchMainImage = createAsyncThunk<
-  MainImageItem[],
-  { tconst: string }
->(
-  'uploadMainImages/fetchMainImage',
-  async ({ tconst }, { rejectWithValue }) => {
-    try {
-      const response = await baseService.get(`main-images/${tconst}`);
-      if (response && Array.isArray(response.images)) {
-        return response.images as MainImageItem[];
-      }
-      return [];
-    } catch (error) {
-      return rejectWithValue('Erro ao buscar imagem principal');
-    }
+  ImageItem[],
+  { tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadMainImages/fetchMainImage', async ({ tconst }, { rejectWithValue }) => {
+  try {
+    const response = await mainImagesService.list(tconst);
+    return Array.isArray(response?.images) ? response.images : [];
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar a imagem principal.'));
   }
-);
+});
 
 export const deleteMainImage = createAsyncThunk<
   void,
-  { tconst: string; filename: string }
->(
-  'uploadMainImages/deleteMainImage',
-  async ({ tconst, filename }, { rejectWithValue }) => {
-    try {
-      await baseService.delete(`main-images/${tconst}/${filename}`);
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message as unknown as any);
-      }
-      return rejectWithValue('Erro ao deletar imagem principal' as unknown as any);
-    }
+  { filename: string; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadMainImages/deleteMainImage', async ({ filename, tconst }, { rejectWithValue }) => {
+  try {
+    await mainImagesService.removeImage(tconst, filename);
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível deletar a imagem principal.'));
   }
-);
+});
 
 const uploadMainImagesSlice = createSlice({
   name: 'uploadMainImages',
@@ -100,11 +65,11 @@ const uploadMainImagesSlice = createSlice({
       .addCase(uploadMainImage.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.objectName = action.payload.object_name;
-        // Mantemos as imagens atuais até o fetch subsequente atualizar a lista
+        // The current list is kept until the next fetch refreshes it.
       })
       .addCase(uploadMainImage.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = (action.payload as string) || 'An unexpected error occurred';
+        state.error = action.payload?.message ?? 'Não foi possível enviar a imagem principal.';
       })
       .addCase(fetchMainImage.pending, (state) => {
         state.status = 'loading';
@@ -115,7 +80,7 @@ const uploadMainImagesSlice = createSlice({
       })
       .addCase(fetchMainImage.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = (action.payload as string) || 'Erro ao buscar imagem principal';
+        state.error = action.payload?.message ?? 'Não foi possível carregar a imagem principal.';
       })
       .addCase(deleteMainImage.pending, (state) => {
         state.status = 'loading';
@@ -125,11 +90,9 @@ const uploadMainImagesSlice = createSlice({
       })
       .addCase(deleteMainImage.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = (action.payload as string) || 'Erro ao deletar imagem principal';
+        state.error = action.payload?.message ?? 'Não foi possível deletar a imagem principal.';
       });
   },
 });
 
 export default uploadMainImagesSlice.reducer;
-
-

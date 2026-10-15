@@ -39,6 +39,6 @@ export interface MovieReviewResponse {
 
 export interface AuthoralReviewState {
   data: MovieReviewResponse | null;
-  error: unknown;
+  error: string | null;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
 }

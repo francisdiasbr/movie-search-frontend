@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
-import { AuthoralReviewState } from './types';
+import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
+import reviewsService from './service';
+import {
+  AuthoralReviewResponse,
+  AuthoralReviewState,
+  CreateAuthoralReviewPayload,
+  MovieReviewResponse,
+  UpdateAuthoralReviewPayload,
+} from './types';
 
 const initialState: AuthoralReviewState = {
   data: null,
@@ -9,112 +16,57 @@ const initialState: AuthoralReviewState = {
   status: 'idle',
 };
 
-interface ContentLanguage {
-  text: string;
-}
-
-interface Content {
-  pt: ContentLanguage;
-  en: ContentLanguage;
-}
-
-interface AuthoralReviewProps {
-  content: Content;
-  primaryTitle: string;
-  references?: string[];
-  tconst: string;
-}
-
-interface AuthoralReviewResponse {
-  _id: string;
-  content: Content;
-  created_at: string;
-  images: string[];
-  primaryTitle: string;
-  references?: string[];
-  tconst: string;
-}
-
-export const fetchAuthoralReview = createAsyncThunk(
-  'authoralReview/fetchById',
-  async (tconst: string, { rejectWithValue }) => {
-    const url = `write-review/${tconst}`;
-    const response = await BaseService.get(url);
+export const fetchAuthoralReview = createAsyncThunk<
+  MovieReviewResponse,
+  string,
+  { rejectValue: ApiErrorPayload }
+>('authoralReview/fetchById', async (tconst, { rejectWithValue }) => {
+  try {
+    const response = await reviewsService.getByTconst(tconst);
     return response.entries[0];
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar o artigo.'));
   }
-);
+});
 
-export const postAuthoralReview = createAsyncThunk(
-  'authoralReview/create',
-  async (review: AuthoralReviewProps, { rejectWithValue }) => {
-    const { tconst } = review;
-    const url = `write-review/${tconst}`;
-    const reviewBody = {
-      content: {
-        pt: { text: review.content.pt.text },
-        en: { text: review.content.en.text },
-      },
-      primaryTitle: review.primaryTitle,
-      references: review.references,
-      tconst: review.tconst,
-    };
-
-    try {
-      const response = await BaseService.post(url, reviewBody);
-      return response.data as AuthoralReviewResponse;
-    } catch (error) {
-      console.error('Error generating authoral review:', error);
-
-      if ((error as any).response && (error as any).response && (error as any).response.message) {
-        return rejectWithValue((error as any).response.message);
-      } else if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
-    }
+export const postAuthoralReview = createAsyncThunk<
+  AuthoralReviewResponse,
+  CreateAuthoralReviewPayload,
+  { rejectValue: ApiErrorPayload }
+>('authoralReview/create', async (review, { rejectWithValue }) => {
+  try {
+    const response = await reviewsService.create(review);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível criar o artigo.'));
   }
-);
+});
 
-export const updateAuthoralReview = createAsyncThunk(
-  'authoralReview/update',
-  async ({ tconst, data }: { tconst: string, data: { content: { pt?: { text: string }, en?: { text: string } } } }, { rejectWithValue }) => {
-    const url = `write-review/${tconst}`;
-    try {
-      const response = await BaseService.put(url, data as any);
-      return response.data;
-    } catch (error) {
-      console.error('Erro ao atualizar o artigo:', error);
-      if ((error as any).response && (error as any).response.message) {
-        return rejectWithValue((error as any).response.message);
-      } else if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
-    }
+export const updateAuthoralReview = createAsyncThunk<
+  MovieReviewResponse,
+  { data: UpdateAuthoralReviewPayload; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('authoralReview/update', async ({ data, tconst }, { rejectWithValue }) => {
+  try {
+    const response = await reviewsService.update(tconst, data);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível atualizar o artigo.'));
   }
-);
+});
 
-export const deleteAuthoralReview = createAsyncThunk(
-  'authoralReview/delete',
-  async (tconst: string, { rejectWithValue }) => {
-    const url = `write-review/${tconst}`;
-    try {
-      const response = await BaseService.delete(url);
-      return response.data;
-    } catch (error) {
-      console.error('Erro ao deletar o artigo:', error);
-      if ((error as any).response && (error as any).response.message) {
-        return rejectWithValue((error as any).response.message);
-      } else if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
-    }
+export const deleteAuthoralReview = createAsyncThunk<
+  unknown,
+  string,
+  { rejectValue: ApiErrorPayload }
+>('authoralReview/delete', async (tconst, { rejectWithValue }) => {
+  try {
+    const response = await reviewsService.removeReview(tconst);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível deletar o artigo.'));
   }
-);
+});
 
 const authoralReviewsSlice = createSlice({
   initialState,
@@ -137,7 +89,7 @@ const authoralReviewsSlice = createSlice({
       })
       .addCase(fetchAuthoralReview.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.payload?.message ?? 'Não foi possível carregar o artigo.';
       })
       .addCase(postAuthoralReview.pending, (state) => {
         state.status = 'loading';
@@ -148,7 +100,7 @@ const authoralReviewsSlice = createSlice({
       })
       .addCase(postAuthoralReview.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.payload?.message ?? 'Não foi possível criar o artigo.';
       })
       .addCase(updateAuthoralReview.pending, (state) => {
         state.status = 'loading';
@@ -159,7 +111,7 @@ const authoralReviewsSlice = createSlice({
       })
       .addCase(updateAuthoralReview.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.payload?.message ?? 'Não foi possível atualizar o artigo.';
       })
       .addCase(deleteAuthoralReview.pending, (state) => {
         state.status = 'loading';
@@ -170,7 +122,7 @@ const authoralReviewsSlice = createSlice({
       })
       .addCase(deleteAuthoralReview.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.payload?.message ?? 'Não foi possível deletar o artigo.';
       });
   },
 });

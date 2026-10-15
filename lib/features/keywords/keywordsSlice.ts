@@ -1,35 +1,27 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
-
-interface Keyword {
-  _id: string;
-  keyword: string;
-}
-
-interface KeywordsState {
-  data: Keyword[];
-  loading: boolean;
-  error: string | null;
-}
+import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
+import keywordsService from './service';
+import { Keyword, KeywordsState } from './types';
 
 const initialState: KeywordsState = {
   data: [],
-  loading: false,
   error: null,
+  loading: false,
 };
 
-export const getKeywords = createAsyncThunk(
-  'keywords/getKeywords',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await BaseService.get('keywords');
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || 'An error occurred');
-    }
+export const getKeywords = createAsyncThunk<
+  Keyword[],
+  void,
+  { rejectValue: ApiErrorPayload }
+>('keywords/getKeywords', async (_, { rejectWithValue }) => {
+  try {
+    const response = await keywordsService.list();
+    return response.data ?? [];
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar as palavras-chave.'));
   }
-);
+});
 
 const keywordsSlice = createSlice({
   name: 'keywords',
@@ -47,7 +39,7 @@ const keywordsSlice = createSlice({
       })
       .addCase(getKeywords.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to get keywords';
+        state.error = action.payload?.message ?? 'Não foi possível carregar as palavras-chave.';
       });
   },
 });

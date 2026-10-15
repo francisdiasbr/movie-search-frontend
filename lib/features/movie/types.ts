@@ -21,7 +21,7 @@ export interface MovieDetailsItem {
 
 export interface MovieDetailsState {
   data: any;
-  error: unknown;
+  error: string | null;
   addStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
   editStatus: 'failed' | 'idle' | 'loading' | 'succeeded';
   deleteStatus: 'failed' | 'idle' | 'loading' | 'succeeded';

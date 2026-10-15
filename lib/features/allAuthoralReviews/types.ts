@@ -9,6 +9,6 @@ export interface MovieReviewResponse {
 export interface MovieReviewState {
   entries: MovieReviewResponse[];
   data: MovieReviewResponse | null;
-  error: unknown;
+  error: string | null;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
 }

@@ -1,121 +1,77 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import baseService from '../../api/service';
-
-interface UploadImageState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  uploadStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-  objectName: string | null;
-  imageUrls: string[];
-  imageNames: string[];
-  imageSubtitles_pt: string[];
-  subtitleStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-}
+import { ApiErrorPayload, toApiErrorPayload } from '../../api/errors';
+import { imagesService } from './service';
+import { UpdateSubtitlePayload, UploadImageResponse, UploadImageState } from './types';
 
 const initialState: UploadImageState = {
-  status: 'idle',
-  uploadStatus: 'idle',
   error: null,
-  objectName: null,
-  imageUrls: [],
   imageNames: [],
   imageSubtitles_pt: [],
+  imageUrls: [],
+  objectName: null,
+  status: 'idle',
   subtitleStatus: 'idle',
+  uploadStatus: 'idle',
 };
 
-
 export const fetchAllImageUrls = createAsyncThunk<
-  { urls: string[]; names: string[]; subtitles_pt: string[] },
-  { tconst: string }
->(
-  'uploadImages/fetchAllImageUrls',
-  async ({ tconst }, { getState, rejectWithValue }) => {
-    try {
-      const response = await baseService.get(`images/${tconst}`);
-      
-      if (response.images) {
-        return {
-          urls: response.images.map((image: { url: string }) => image.url),
-          names: response.images.map((image: { filename: string }) => image.filename),
-          subtitles_pt: response.images.map((image: { subtitle_pt: string }) => image.subtitle_pt)
-        };
-      }
-
-      throw new Error('Formato de resposta inválido');
-    } catch (error) {
-      return rejectWithValue('Erro ao buscar imagens');
-    }
+  { names: string[]; subtitles_pt: string[]; urls: string[] },
+  { tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadImages/fetchAllImageUrls', async ({ tconst }, { rejectWithValue }) => {
+  try {
+    const response = await imagesService.list(tconst);
+    const images = response.images ?? [];
+    return {
+      names: images.map(image => image.filename),
+      subtitles_pt: images.map(image => image.subtitle_pt ?? ''),
+      urls: images.map(image => image.url),
+    };
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível carregar as imagens.'));
   }
-);
+});
 
 export const uploadMovieImage = createAsyncThunk<
-  { object_name: string },
-  { tconst: string; file: File }
->(
-  'uploadImages/uploadMovieImage',
-  async ({ tconst, file }, { rejectWithValue }) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await baseService.post(
-        `images/${tconst}`,
-        formData
-      );
-      if (response.object_name) {
-        return response;
-      } else {
-        throw new Error('Invalid response structure');
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
+  UploadImageResponse,
+  { file: File; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadImages/uploadMovieImage', async ({ file, tconst }, { rejectWithValue }) => {
+  try {
+    const response = await imagesService.upload(tconst, file);
+    if (!response?.object_name) {
+      throw new Error('Formato de resposta inválido');
     }
+    return response;
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível enviar a imagem.'));
   }
-);
+});
 
 export const deleteImage = createAsyncThunk<
   void,
-  { tconst: string; filename: string }
->(
-  'uploadImages/deleteImage',
-  async ({ tconst, filename }, { rejectWithValue }) => {
-    try {
-      await baseService.delete(
-        `images/${tconst}/${filename}`
-      );
-    } catch (error) {
-      console.error('Erro ao deletar imagem:', error);
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
-    }
+  { filename: string; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadImages/deleteImage', async ({ filename, tconst }, { rejectWithValue }) => {
+  try {
+    await imagesService.removeImage(tconst, filename);
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível deletar a imagem.'));
   }
-);
+});
 
-export const updateImageSubtitle = createAsyncThunk(
-  'uploadImages/updateSubtitle',
-  async ({ tconst, filename, subtitle_en, subtitle_pt }: { tconst: string, filename: string, subtitle_en: string, subtitle_pt: string }) => {
-    const body = {
-      subtitle_en: subtitle_en,
-      subtitle_pt: subtitle_pt,
-    }
-    const response = await baseService.put(`images/${tconst}/${filename}`, body as any);
-    
-    if (!response.ok) {
-      throw new Error('Falha ao atualizar legenda');
-    }
-    
-    return await response.json();
+export const updateImageSubtitle = createAsyncThunk<
+  void,
+  UpdateSubtitlePayload & { filename: string; tconst: string },
+  { rejectValue: ApiErrorPayload }
+>('uploadImages/updateSubtitle', async ({ filename, subtitle_en, subtitle_pt, tconst }, { rejectWithValue }) => {
+  try {
+    await imagesService.updateSubtitle(tconst, filename, { subtitle_en, subtitle_pt });
+  } catch (error) {
+    return rejectWithValue(toApiErrorPayload(error, 'Não foi possível atualizar a legenda.'));
   }
-);
+});
 
 const uploadImagesSlice = createSlice({
   name: 'uploadImages',
@@ -131,9 +87,9 @@ const uploadImagesSlice = createSlice({
         state.uploadStatus = 'succeeded';
         state.objectName = action.payload.object_name;
       })
-      .addCase(uploadMovieImage.rejected, (state) => {
+      .addCase(uploadMovieImage.rejected, (state, action) => {
         state.uploadStatus = 'failed';
-        state.error = 'An unexpected error occurred';
+        state.error = action.payload?.message ?? 'Não foi possível enviar a imagem.';
       })
       .addCase(fetchAllImageUrls.pending, state => {
         state.status = 'loading';
@@ -147,7 +103,7 @@ const uploadImagesSlice = createSlice({
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload as string;
+        state.error = action.payload?.message ?? 'Não foi possível carregar as imagens.';
       })
       .addCase(deleteImage.pending, state => {
         state.status = 'loading';
@@ -159,7 +115,7 @@ const uploadImagesSlice = createSlice({
       })
       .addCase(deleteImage.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload as string;
+        state.error = action.payload?.message ?? 'Não foi possível deletar a imagem.';
       })
       .addCase(updateImageSubtitle.pending, (state) => {
         state.subtitleStatus = 'loading';
@@ -167,8 +123,9 @@ const uploadImagesSlice = createSlice({
       .addCase(updateImageSubtitle.fulfilled, (state) => {
         state.subtitleStatus = 'succeeded';
       })
-      .addCase(updateImageSubtitle.rejected, (state) => {
+      .addCase(updateImageSubtitle.rejected, (state, action) => {
         state.subtitleStatus = 'failed';
+        state.error = action.payload?.message ?? 'Não foi possível atualizar a legenda.';
       });
   },
 });
