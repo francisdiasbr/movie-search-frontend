@@ -1,26 +1,24 @@
 import { toast } from 'sonner';
 
 interface ToastNotificationOptions {
-  title: string;
   duration?: number;
+  title: string;
 }
 
+const DEFAULT_DURATION = 3000;
+
+const show =
+  (kind: 'error' | 'info' | 'success' | 'warning') =>
+  ({ duration = DEFAULT_DURATION, title }: ToastNotificationOptions) =>
+    toast[kind](title, { duration });
+
+const notifications = {
+  showError: show('error'),
+  showInfo: show('info'),
+  showSuccess: show('success'),
+  showWarning: show('warning'),
+};
+
 export function useToastNotifications() {
-  const showSuccess = ({ title, duration }: ToastNotificationOptions) => {
-    toast.success(title, { duration: duration ?? 3000 });
-  };
-
-  const showError = ({ title, duration }: ToastNotificationOptions) => {
-    toast.error(title, { duration: duration ?? 3000 });
-  };
-
-  const showWarning = ({ title, duration }: ToastNotificationOptions) => {
-    toast.warning(title, { duration: duration ?? 3000 });
-  };
-
-  const showInfo = ({ title, duration }: ToastNotificationOptions) => {
-    toast.info(title, { duration: duration ?? 3000 });
-  };
-
-  return { showSuccess, showError, showWarning, showInfo };
+  return notifications;
 }

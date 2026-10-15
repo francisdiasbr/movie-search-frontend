@@ -42,8 +42,7 @@ export default function MovieDetailsPage() {
     return () => {
       dispatch(resetState());
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, tconst]);
+  }, [dispatch, loadKeywords, tconst]);
 
   if (!data) {
     if (fetchStatus === 'loading') return <LoadingSpinner />;

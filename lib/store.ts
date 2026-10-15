@@ -3,7 +3,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import movieDetailsSlice from '../app/dashboard/favorites/reducer/movieDetailsSlice';
 import movieFavoritesSlice from '../app/dashboard/favorites/reducer/favoritesSlice';
 import mainImagesSlice from '../app/dashboard/favorites/reducer/mainImagesSlice';
-import keywordsSlice from '../app/dashboard/keywords/reducer/keywordsSlice';
 import readSlice from '../app/dashboard/read/reducer/readSlice';
 import authoralReviewsSlice from '../app/dashboard/reviews/reducer/authoralReviewSlice';
 import reviewImagesSlice from '../app/dashboard/reviews/reducer/imagesSlice';
@@ -14,7 +13,6 @@ export const makeStore = () => {
   return configureStore({
     reducer: {
       authoralReviews: authoralReviewsSlice,
-      keywords: keywordsSlice,
       moviesDetails: movieDetailsSlice,
       moviesFavorites: movieFavoritesSlice,
       read: readSlice,

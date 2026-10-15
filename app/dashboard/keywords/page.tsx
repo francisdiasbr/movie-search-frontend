@@ -1,34 +1,26 @@
 import { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useAsyncAction } from '../../hooks/useAsyncAction';
 import Button from '../../ui/Button';
 import { Row } from '../../ui/Layout';
+import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
 import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
-import { getKeywords } from './reducer/keywordsSlice';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
+import { useKeywords } from './useKeywords';
 
 export default function Page() {
-  const dispatch = useAppDispatch();
-  const { data: keywords = [], status, error } = useAppSelector(state => state.keywords);
+  const { keywords, load, status } = useKeywords();
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
-  const [existingKeywords, setExistingKeywords] = useState<string[]>([]);
   const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[]>([]);
 
-  const loading = status === 'loading';
-
   useEffect(() => {
-    dispatch(getKeywords()).then(action => {
-      if (getKeywords.fulfilled.match(action)) {
-        setExistingKeywords(action.payload.map(kw => kw.keyword));
-      }
-    });
-  }, [dispatch]);
+    load();
+  }, [load]);
 
-  const handleKeywordClick = (keyword: string) => {
+  const toggleKeyword = (keyword: string) => {
     setSelectedKeywords(prev =>
       prev.includes(keyword) ? prev.filter(kw => kw !== keyword) : [...prev, keyword]
     );
@@ -51,15 +43,10 @@ export default function Page() {
         title='Palavras-chave'
         description='Selecione as palavras-chave que você deseja usar para descobrir novos filmes!'
       />
-      {loading && <div>Carregando...</div>}
-      {error && <div>Error: {error}</div>}
-      {!loading && !error && (
-        <FavoriteTag
-          existingItems={existingKeywords}
-          isSelected={selectedKeywords}
-          items={Array.isArray(keywords) ? keywords.map(kw => kw.keyword) : []}
-          onItemClick={handleKeywordClick}
-        />
+      {status === 'loading' && <LoadingSpinner />}
+      {status === 'failed' && <p>Não foi possível carregar as palavras-chave.</p>}
+      {status === 'succeeded' && (
+        <FavoriteTag existingItems={keywords} isSelected={selectedKeywords} items={keywords} onItemClick={toggleKeyword} />
       )}
       <Row $mt='md'>
         <Button onClick={() => handleFetchMovies()} disabled={selectedKeywords.length === 0} loading={loadingMovies}>

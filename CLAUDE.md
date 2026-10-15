@@ -43,7 +43,7 @@ app/dashboard/
   read/           page, useBlogPosts.ts, service/ReadService.ts, reducer/readSlice.ts, types.ts
   write/          page, service/WriteService.ts          # no redux: the page calls the service directly
   write-review/   page, Form/, service/WriteReviewService.ts, reducer/writeReviewSlice.ts, types.ts
-  keywords/       page, useKeywords.ts, service/KeywordsService.ts, reducer/keywordsSlice.ts, types.ts
+  keywords/       page, useKeywords.ts, service/KeywordsService.ts, types.ts   # no redux: useKeywords calls the service
 ```
 
 Folder names do not define URLs; `app/router.tsx` does. Importing another feature's **slice** or **types** is fine (e.g. `search/service` types its response with `favorites/types`). A screen whose result is only used locally (like `write`) calls its service straight from the page, as siga's `actions.js` files do, instead of adding a slice.

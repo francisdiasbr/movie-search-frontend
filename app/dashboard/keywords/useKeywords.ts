@@ -1,21 +1,27 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { isApiError } from '../../../lib/api/errors';
+import { AsyncStatus } from '../../../lib/api/types';
 import keywordsService from './service/KeywordsService';
 
 export type AddKeywordResult = 'added' | 'conflict' | 'duplicate' | 'error';
 
+// The favourite keywords list, shared by the keywords page and the movie
+// detail page. The result is only used locally, so there is no slice.
 export function useKeywords() {
   const [keywords, setKeywords] = useState<string[]>([]);
+  const [status, setStatus] = useState<AsyncStatus>('idle');
 
-  const load = async () => {
+  const load = useCallback(async () => {
+    setStatus('loading');
     try {
       const response = await keywordsService.list();
       setKeywords((response.data ?? []).map(item => item.keyword));
+      setStatus('succeeded');
     } catch {
-      // The list simply stays as it was.
+      setStatus('failed');
     }
-  };
+  }, []);
 
   const add = async (keyword: string): Promise<AddKeywordResult> => {
     try {
@@ -40,5 +46,5 @@ export function useKeywords() {
     }
   };
 
-  return { keywords, load, add, remove };
+  return { add, keywords, load, remove, status };
 }
