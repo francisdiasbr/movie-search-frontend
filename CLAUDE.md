@@ -33,7 +33,7 @@ Redux store is in `lib/store.ts`. All slices live under `lib/features/<feature>/
 
 Three layers, mirroring `gav/siga-front`. No URL is ever built outside a service.
 
-1. `lib/api/BaseApi.ts` — typed singleton over `fetch` (`get/getBlob/post/put/patch/remove`). Prepends `VITE_BASE_URL`, sends FormData as multipart and everything else as JSON, and throws `ApiError` (from `lib/api/errors.ts`) with `status`, `body` and the readable backend message. The option `cancelPrevious: true` aborts an in-flight request to the same method + URL. Features never import it directly.
+1. `lib/api/BaseApi.ts` — typed singleton over an axios instance (`get/getBlob/post/put/patch/remove`). Uses `VITE_BASE_URL` as `baseURL`, sends FormData as multipart and everything else as JSON, and a response interceptor converts every failure into `ApiError` (from `lib/api/errors.ts`) with `status`, `body` and the readable backend message. The option `cancelPrevious: true` aborts an in-flight request to the same method + URL. Features never import it directly.
 2. `lib/service/BaseService.ts` — abstract class. Subclasses set `protected prefix = '<resource>'` and inherit `get(id?)`, `search(params)`, `post(body, path?)`, `put(id, body)`, `remove(id)`, `delete(body)`, `getBlob(params)`, plus the helper `this.path(...segments)` to build sub-routes.
 3. `lib/features/<feature>/service.ts` — one service per feature, exported as a singleton, with methods named after the business operation and typed with the feature's `types.ts` (e.g. `favoritesService.searchFavorites(params)`, `keywordsService.suggestMovies(keywords)`).
 

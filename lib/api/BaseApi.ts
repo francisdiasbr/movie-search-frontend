@@ -1,3 +1,5 @@
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+
 import { ApiError } from './errors';
 
 export type HttpMethod = 'DELETE' | 'GET' | 'PATCH' | 'POST' | 'PUT';
@@ -28,7 +30,21 @@ export const toQueryString = (params: QueryParams | string = {}): string => {
 };
 
 class BaseApi {
+  private client: AxiosInstance;
+
   private requestsMap = new Map<string, AbortController>();
+
+  constructor() {
+    this.client = axios.create({ baseURL: this.url });
+
+    // Every failed request leaves here as an ApiError, so callers never deal
+    // with AxiosError directly. 401/403 handling would be added here if the
+    // app ever gets authentication.
+    this.client.interceptors.response.use(
+      response => response,
+      (error: unknown) => Promise.reject(this.toApiError(error))
+    );
+  }
 
   get url(): string {
     return import.meta.env.VITE_BASE_URL;
@@ -36,51 +52,27 @@ class BaseApi {
 
   async fetch<T>(url: string, options: RequestOptions = {}): Promise<T> {
     const { blob = false, body, cancelPrevious = false, headers = {}, method = 'GET' } = options;
-    const requestUrl = `${this.url}${url}`;
-    const isFormData = body instanceof FormData;
-    const requestId = `${method} ${requestUrl}`;
+    const requestId = `${method} ${url}`;
 
-    const init: RequestInit = {
-      headers: {
-        ...(!isFormData && body !== undefined && body !== null && { 'Content-Type': 'application/json' }),
-        ...headers,
-      },
+    const config: AxiosRequestConfig = {
+      data: body,
+      headers,
       method,
+      responseType: blob ? 'blob' : 'json',
+      url,
     };
-    if (body !== undefined && body !== null) {
-      init.body = isFormData ? body : JSON.stringify(body);
-    }
 
     let controller: AbortController | null = null;
     if (cancelPrevious) {
       this.cancelRequest(requestId);
       controller = new AbortController();
       this.requestsMap.set(requestId, controller);
-      init.signal = controller.signal;
+      config.signal = controller.signal;
     }
 
     try {
-      const response = await fetch(requestUrl, init);
-      if (!response.ok) {
-        throw ApiError.fromResponse(response.status, await response.text());
-      }
-      if (blob) {
-        return (await response.blob()) as T;
-      }
-      const contentType = response.headers.get('content-type') ?? '';
-      if (contentType.includes('application/json')) {
-        return (await response.json()) as T;
-      }
-      return (await response.text()) as T;
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        throw ApiError.cancelled();
-      }
-      if (error instanceof ApiError) {
-        throw error;
-      }
-      // Network failure, backend offline, CORS, etc.
-      throw new ApiError(error instanceof Error ? error.message : 'Network error', 0);
+      const response = await this.client.request<T>(config);
+      return response.data;
     } finally {
       if (controller && this.requestsMap.get(requestId) === controller) {
         this.requestsMap.delete(requestId);
@@ -94,6 +86,19 @@ class BaseApi {
       controller.abort();
       this.requestsMap.delete(requestId);
     }
+  }
+
+  private toApiError(error: unknown): ApiError {
+    if (error instanceof ApiError) return error;
+    if (axios.isCancel(error)) return ApiError.cancelled();
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        return ApiError.fromResponse(error.response.status, error.response.data);
+      }
+      // Network failure, backend offline, CORS, etc.
+      return new ApiError(error.message || 'Network error', 0);
+    }
+    return new ApiError(error instanceof Error ? error.message : 'Unexpected error', 0);
   }
 
   get<T>(url: string, options: RequestOptions = {}): Promise<T> {

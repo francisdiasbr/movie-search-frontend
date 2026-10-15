@@ -18,12 +18,16 @@ export class ApiError extends Error {
     return new ApiError('Request cancelled', 0, null, true);
   }
 
-  static fromResponse(status: number, text: string): ApiError {
-    let body: unknown = text;
-    try {
-      body = text ? JSON.parse(text) : null;
-    } catch {
-      body = text;
+  // Axios already parses JSON bodies; a plain string arrives when the backend
+  // answers text or when the body could not be parsed.
+  static fromResponse(status: number, rawBody: unknown): ApiError {
+    let body: unknown = rawBody;
+    if (typeof rawBody === 'string') {
+      try {
+        body = rawBody ? JSON.parse(rawBody) : null;
+      } catch {
+        body = rawBody;
+      }
     }
     const { data, message } = (body ?? {}) as { data?: unknown; message?: unknown };
     const readable =
