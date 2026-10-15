@@ -7,7 +7,7 @@ import { Row } from '../../ui/Layout';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
 import TagList from '../../ui/TagList';
-import { imdbSearchUrl } from '../../util/url';
+import { imdbTitleUrl } from '../../util/url';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
@@ -16,7 +16,7 @@ import { useKeywords } from './useKeywords';
 export default function Page() {
   const { keywords, load, status } = useKeywords();
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
-  const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[]>([]);
+  const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[] | null>(null);
 
   useEffect(() => {
     load();
@@ -30,7 +30,7 @@ export default function Page() {
 
   const { loading: loadingMovies, run: handleFetchMovies } = useAsyncAction(async () => {
     if (selectedKeywords.length === 0) return;
-    setSuggestedMovies([]);
+    setSuggestedMovies(null);
     try {
       const response = await keywordsService.suggestMovies(selectedKeywords);
       setSuggestedMovies(response?.data?.movies ?? []);
@@ -58,16 +58,21 @@ export default function Page() {
           Limpar seleção
         </Button>
       </Row>
-      {suggestedMovies.length > 0 && (
+      {suggestedMovies && suggestedMovies.length === 0 && (
+        <S.Results>Nenhum filme encontrado no IMDb para essas palavras-chave. Tente de novo ou mude a seleção.</S.Results>
+      )}
+      {suggestedMovies && suggestedMovies.length > 0 && (
         <S.Results>
           <h3>Filmes sugeridos:</h3>
           <ul>
-            {suggestedMovies.map((movie, index) => (
-              <li key={movie.tconst || index}>
+            {suggestedMovies.map(movie => (
+              <li key={movie.tconst}>
                 <strong>
-                  <ExternalLink href={imdbSearchUrl(movie.title, movie.year)}>{movie.title}</ExternalLink>
+                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.title}</ExternalLink>
                 </strong>{' '}
-                ({movie.year})<br />
+                ({movie.year})
+                {movie.original_title && movie.original_title !== movie.title && <> · {movie.original_title}</>}
+                <br />
                 <em>{movie.description}</em>
                 {movie.relevance && <S.Relevance>{movie.relevance}</S.Relevance>}
               </li>

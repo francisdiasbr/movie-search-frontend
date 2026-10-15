@@ -1,9 +1,5 @@
 export const imdbTitleUrl = (tconst: string): string => `https://www.imdb.com/title/${tconst}/`;
 
-// IMDb title search. Used when we only trust the title and year, not the id.
-export const imdbSearchUrl = (title: string, year?: number | string): string =>
-  `https://www.imdb.com/find/?s=tt&q=${encodeURIComponent([title, year].filter(Boolean).join(' '))}`;
-
 export const pirateBaySearchUrl = (title: string): string =>
   `https://thepiratebay.party/search/${encodeURIComponent(title)}/0/99/0`;
 

@@ -5,9 +5,11 @@ export interface Keyword {
 
 export interface SuggestedMovie {
   description?: string;
+  // Title as listed on IMDb; `title` may be the Portuguese one.
+  original_title?: string;
   relevance?: string;
-  // Guessed by the language model; not reliable enough to link to.
-  tconst?: string;
+  // Confirmed by the backend against IMDb.
+  tconst: string;
   title: string;
   year?: number | string;
 }
