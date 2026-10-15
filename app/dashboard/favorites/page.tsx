@@ -18,8 +18,8 @@ const INITIAL_SEARCH: SearchValues = { searchTerm: '' };
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  const { countries, entries, total_documents, status, startYears } = useAppSelector(state => state.moviesFavorites);
-  const { deleteStatus } = useAppSelector(state => state.moviesDetails);
+  const { countries, entries, total_documents, status, startYears } = useAppSelector(state => state.favorites);
+  const { deleteStatus } = useAppSelector(state => state.favoriteDetails);
   const { showSuccess, showError, showInfo } = useToastNotifications();
   const [search, setSearch] = useState<SearchValues>(INITIAL_SEARCH);
 

@@ -18,7 +18,7 @@ import * as S from './styles';
 export default function ReviewPage() {
   const { tconst } = useParams() as { tconst: string };
   const dispatch = useAppDispatch();
-  const { data, status } = useAppSelector(state => state.authoralReviews);
+  const { data, status } = useAppSelector(state => state.review);
   const { images, uploadStatus } = useAppSelector(state => state.reviewImages);
   const [isEditing, setIsEditing] = useState(false);
   const [editPt, setEditPt] = useState('');

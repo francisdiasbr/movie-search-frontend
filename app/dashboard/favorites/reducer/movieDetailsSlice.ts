@@ -32,7 +32,7 @@ export const editDetails = createApiThunk<MovieDetailsItem, EditDetailsPayload>(
 
 const movieDetailsSlice = createSlice({
   initialState,
-  name: 'movieDetails',
+  name: 'favoriteDetails',
   reducers: {
     resetDeleteStatus(state) {
       state.deleteStatus = 'idle';

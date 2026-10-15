@@ -1,24 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import movieFavoritesSlice from '../app/dashboard/favorites/reducer/favoritesSlice';
+import favoritesSlice from '../app/dashboard/favorites/reducer/favoritesSlice';
 import mainImagesSlice from '../app/dashboard/favorites/reducer/mainImagesSlice';
 import movieDetailsSlice from '../app/dashboard/favorites/reducer/movieDetailsSlice';
-import readSlice from '../app/dashboard/read/reducer/readSlice';
-import authoralReviewsSlice from '../app/dashboard/reviews/reducer/authoralReviewSlice';
+import authoralReviewSlice from '../app/dashboard/reviews/reducer/authoralReviewSlice';
 import reviewImagesSlice from '../app/dashboard/reviews/reducer/imagesSlice';
 import searchSlice from '../app/dashboard/search/reducer/searchSlice';
 import writeReviewSlice from '../app/dashboard/write-review/reducer/writeReviewSlice';
 
+// Keys follow the feature folder that owns each slice.
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      authoralReviews: authoralReviewsSlice,
-      moviesDetails: movieDetailsSlice,
-      moviesFavorites: movieFavoritesSlice,
-      read: readSlice,
-      search: searchSlice,
-      reviewImages: reviewImagesSlice,
+      favoriteDetails: movieDetailsSlice,
+      favorites: favoritesSlice,
       mainImages: mainImagesSlice,
+      review: authoralReviewSlice,
+      reviewImages: reviewImagesSlice,
+      search: searchSlice,
       writeReview: writeReviewSlice,
     },
   });

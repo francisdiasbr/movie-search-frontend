@@ -27,7 +27,7 @@ export const updateAuthoralReview = createApiThunk<
 
 const authoralReviewsSlice = createSlice({
   initialState,
-  name: 'authoralReviews',
+  name: 'review',
   reducers: {
     clearState: () => initialState,
   },

@@ -40,7 +40,7 @@ app/dashboard/
   search/         page, service/SearchService.ts, reducer/searchSlice.ts, types.ts
   reviews/        [tconst]/, service/{ReviewsService,ImagesService}.ts,
                   reducer/{authoralReviewSlice,imagesSlice}.ts, types.ts
-  read/           page, useBlogPosts.ts, service/ReadService.ts, reducer/readSlice.ts, types.ts
+  read/           page, useReviews.ts, service/ReadService.ts, types.ts        # no redux: useReviews calls the service
   write/          page, service/WriteService.ts          # no redux: the page calls the service directly
   write-review/   page, Form/, service/WriteReviewService.ts, reducer/writeReviewSlice.ts, types.ts
   keywords/       page, useKeywords.ts, service/KeywordsService.ts, types.ts   # no redux: useKeywords calls the service
@@ -97,4 +97,4 @@ Cross-cutting code lives directly under `app/`, never inside a feature:
 - `useDebouncedEffect(fn, deps, delay)` — runs `fn` after the deps settle, skipping the mount render.
 - `useFilePicker(onFile, { accept })` — returns `{ input, open }`: render `input` and call `open()` from a button.
 
-Hooks tied to one feature live in that feature's folder (`keywords/useKeywords.ts`, `read/useBlogPosts.ts`), not in `app/hooks/`.
+Hooks tied to one feature live in that feature's folder (`keywords/useKeywords.ts`, `read/useReviews.ts`), not in `app/hooks/`.

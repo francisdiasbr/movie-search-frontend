@@ -29,7 +29,7 @@ export default function MovieDetailsPage() {
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
 
-  const { data, fetchStatus } = useAppSelector(state => state.moviesDetails);
+  const { data, fetchStatus } = useAppSelector(state => state.favoriteDetails);
   const { images, status: updateImageStatus } = useAppSelector(state => state.mainImages);
   const { keywords: favoritedKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 

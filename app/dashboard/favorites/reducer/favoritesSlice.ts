@@ -35,7 +35,7 @@ export const fetchFavorites = createApiThunk<FavoritesSearchResponse, FavoritesS
 
 const movieFavoritesSlice = createSlice({
   initialState,
-  name: 'moviesFavorites',
+  name: 'favorites',
   reducers: {
     resetState: () => initialState,
   },
