@@ -5,7 +5,8 @@ export interface Keyword {
 
 export interface SuggestedMovie {
   description?: string;
-  // Title as listed on IMDb; `title` may be the Portuguese one.
+  // Title as listed on IMDb (verified). `title` is the model's Portuguese
+  // title and can be wrong, so it is shown second.
   original_title?: string;
   relevance?: string;
   // Confirmed by the backend against IMDb.

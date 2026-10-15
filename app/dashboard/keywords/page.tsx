@@ -68,10 +68,10 @@ export default function Page() {
             {suggestedMovies.map(movie => (
               <li key={movie.tconst}>
                 <strong>
-                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.title}</ExternalLink>
+                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.original_title ?? movie.title}</ExternalLink>
                 </strong>{' '}
                 ({movie.year})
-                {movie.original_title && movie.original_title !== movie.title && <> · {movie.original_title}</>}
+                {movie.original_title && movie.original_title !== movie.title && <> · {movie.title}</>}
                 <br />
                 <em>{movie.description}</em>
                 {movie.relevance && <S.Relevance>{movie.relevance}</S.Relevance>}
