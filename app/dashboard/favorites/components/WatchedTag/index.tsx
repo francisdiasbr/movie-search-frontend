@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../../../../lib/hooks';
 import { WATCHED_LABEL, YES_NO } from '../../../../formatter';
 import { useAsyncAction } from '../../../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
+import * as S from './styles';
 
 interface WatchedTagProps {
   onUpdate?: () => void;
@@ -28,15 +29,8 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
   });
 
   return (
-    <span
-      style={{
-        cursor: isUpdating ? 'not-allowed' : 'pointer',
-        opacity: isUpdating ? 0.6 : 1,
-      }}
-      onClick={handleClick}
-      title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}
-    >
+    <S.Toggle $busy={isUpdating} onClick={() => handleClick()} title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}>
       {YES_NO(watched)}
-    </span>
+    </S.Toggle>
   );
 }

@@ -7,7 +7,9 @@ import { editDetails } from '../../reducer/movieDetailsSlice';
 import { MovieDetailsItem } from '../../types';
 import { useAppDispatch } from '../../../../../lib/hooks';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
+import Button from '../../../../ui/Button';
 import Dialog, { DialogField, DialogFooter, DialogRow } from '../../../../ui/Dialog';
+import IconButton from '../../../../ui/IconButton';
 
 interface EditInfoModalProps {
   data: MovieDetailsItem;
@@ -28,9 +30,7 @@ const ReferenceInput = ({ onChange, onRemove, value }: ReferenceInputProps) => (
       onChange={(e) => onChange(e.target.value)}
       placeholder='Digite a URL da referência'
     />
-    <button type='button' onClick={onRemove} title='Remover referência'>
-      <FaTrash />
-    </button>
+    <IconButton icon={FaTrash} onClick={onRemove} title='Remover referência' />
   </DialogRow>
 );
 
@@ -122,14 +122,14 @@ export default function EditInfoModal({ data, isOpen, onClose }: EditInfoModalPr
             onRemove={() => handleReferenceRemove(index)}
           />
         ))}
-        <button type='button' onClick={handleAddReference}>
+        <Button variant='outline' size='small' onClick={handleAddReference}>
           Adicionar Referência
-        </button>
+        </Button>
       </DialogField>
 
       <DialogFooter>
-        <button type='button' onClick={onClose}>Cancelar</button>
-        <button type='button' onClick={handleUpdate}>Salvar</button>
+        <Button variant='outline' onClick={onClose}>Cancelar</Button>
+        <Button onClick={handleUpdate}>Salvar</Button>
       </DialogFooter>
     </Dialog>
   );

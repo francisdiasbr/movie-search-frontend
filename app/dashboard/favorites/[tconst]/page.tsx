@@ -1,34 +1,37 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import MediaCard from '../../../ui/MediaCard';
-import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
-import { fetchMainImage, uploadMainImage, deleteMainImage } from '../reducer/mainImagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { ImageItem } from '../../../../lib/service/ImagesBaseService';
 import { ROUTES } from '../../../const';
-import { useKeywords } from '../../keywords/useKeywords';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
+import Card from '../../../ui/Card';
+import ExternalLink from '../../../ui/ExternalLink';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
+import MediaCard from '../../../ui/MediaCard';
+import PageHeader from '../../../ui/PageHeader';
+import { imdbTitleUrl } from '../../../util/url';
 import GoBack from '../../components/GoBack';
+import { useKeywords } from '../../keywords/useKeywords';
+import { deleteMainImage, fetchMainImage, uploadMainImage } from '../reducer/mainImagesSlice';
+import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
+import EditInfoModal from './components/EditInfoModal';
+import FavoriteTag from './components/FavoriteTag';
 import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
 import MovieInfoCard from './components/MovieInfoCard';
-import FavoriteTag from './components/FavoriteTag';
-import { sanitizeTrivia, formatQuote } from './utils';
-import EditInfoModal from './components/EditInfoModal';
-import { imdbTitleUrl } from '../../../util/url';
 import * as S from './styles';
+import { formatQuote, sanitizeTrivia } from './utils';
 
 export default function MovieDetailsPage() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMainImageModalOpen, setIsMainImageModalOpen] = useState(false);
-  const [selectedMainImage, setSelectedMainImage] = useState<{ url: string, filename: string } | null>(null);
+  const [selectedMainImage, setSelectedMainImage] = useState<ImageItem | null>(null);
 
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
 
-  const { data, fetchStatus } = useAppSelector((state) => state.moviesDetails);
-  const { images, status: updateImageStatus } = useAppSelector((state) => state.mainImages);
+  const { data, fetchStatus } = useAppSelector(state => state.moviesDetails);
+  const { images, status: updateImageStatus } = useAppSelector(state => state.mainImages);
   const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
   const { keywords: existingKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 
@@ -36,7 +39,10 @@ export default function MovieDetailsPage() {
     dispatch(fetchDetails(tconst));
     dispatch(fetchMainImage({ tconst }));
     loadKeywords();
-    return () => { dispatch(resetState()); };
+    return () => {
+      dispatch(resetState());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, tconst]);
 
   if (!data) {
@@ -45,6 +51,7 @@ export default function MovieDetailsPage() {
   }
 
   const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
+  const imdbUrl = data.imdb_url ?? imdbTitleUrl(data.tconst);
 
   const handleKeywordClick = async (keyword: string) => {
     const result = await addKeyword(keyword);
@@ -60,19 +67,15 @@ export default function MovieDetailsPage() {
     else showError({ title: 'Erro ao remover palavra-chave.' });
   };
 
-  const handleDeleteMain = async (filename: string) => {
-    await dispatch(deleteMainImage({ tconst, filename }));
-    dispatch(fetchMainImage({ tconst }));
-  };
+  const refreshMainImages = () => dispatch(fetchMainImage({ tconst }));
 
   return (
     <S.PageContainer>
-      <GoBack to={ROUTES.favorites} />
-      <h2>{data.primaryTitle}</h2>
+      <PageHeader title={data.primaryTitle}>
+        <GoBack to={ROUTES.favorites} />
+      </PageHeader>
 
-      {isOpen && (
-        <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      )}
+      {isOpen && <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} />}
 
       <MovieInfoCard
         data={data}
@@ -82,110 +85,86 @@ export default function MovieDetailsPage() {
         onKeywordDelete={handleKeywordDelete}
       />
 
-      <S.CardsContainer>
-        <S.Card>
-          <S.CardHeader><S.CardTitle>Links</S.CardTitle></S.CardHeader>
-          <S.CardBody>
-            <S.LinksGrid>
-              <S.LinkItem>
-                <S.LinkLabel>IMDB</S.LinkLabel>
-                <S.LinkValue>
-                  <a
-                    href={data.imdb_url ?? imdbTitleUrl(data.tconst)}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    style={{ textDecoration: 'underline', color: 'blue' }}
-                  >
-                    {data.imdb_url ?? imdbTitleUrl(data.tconst)}
-                  </a>
-                </S.LinkValue>
-              </S.LinkItem>
-              {data.wiki && (
-                <S.LinkItem>
-                  <S.LinkLabel>Wiki</S.LinkLabel>
-                  <S.LinkValue>
-                    <a href={data.wiki} target='_blank' rel='noopener noreferrer' style={{ textDecoration: 'underline', color: 'blue' }}>
-                      {data.wiki}
-                    </a>
-                  </S.LinkValue>
-                </S.LinkItem>
-              )}
-              {Array.isArray(data.references) && data.references.length > 0 && (
-                <S.LinkItem>
-                  <S.LinkLabel>Referências</S.LinkLabel>
-                  <S.LinkValue>
-                    <ol style={{ marginLeft: '20px', paddingBottom: '10px' }}>
-                      {data.references.map((reference: string, index: number) => (
-                        <li key={index}>
-                          <a href={reference} target='_blank' rel='noopener noreferrer' style={{ color: 'blue', textDecoration: 'underline' }}>
-                            {reference}
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  </S.LinkValue>
-                </S.LinkItem>
-              )}
-            </S.LinksGrid>
-          </S.CardBody>
-        </S.Card>
-        {data.trivia && (
-          <S.Card>
-            <S.CardHeader><S.CardTitle>Trivia</S.CardTitle></S.CardHeader>
-            <S.CardBody>
-              <S.Content>
-                <ul style={{ margin: 0, padding: 0 }}>
-                  {sanitizeTrivia(data.trivia).map(({ key, text }) => (
-                    <li key={key} style={{ marginLeft: '20px', paddingBottom: '10px' }}>{text}</li>
+      <Card title='Links'>
+        <S.LinksGrid>
+          <S.Item>
+            <S.Label>IMDB</S.Label>
+            <S.Value>
+              <ExternalLink href={imdbUrl} />
+            </S.Value>
+          </S.Item>
+          {data.wiki && (
+            <S.Item>
+              <S.Label>Wiki</S.Label>
+              <S.Value>
+                <ExternalLink href={data.wiki} />
+              </S.Value>
+            </S.Item>
+          )}
+          {Array.isArray(data.references) && data.references.length > 0 && (
+            <S.Item>
+              <S.Label>Referências</S.Label>
+              <S.Value>
+                <S.NumberedList>
+                  {data.references.map((reference, index) => (
+                    <li key={index}>
+                      <ExternalLink href={reference} />
+                    </li>
                   ))}
-                </ul>
-              </S.Content>
-            </S.CardBody>
-          </S.Card>
-        )}
-        {data.quote && (
-          <S.Card>
-            <S.CardHeader><S.CardTitle>Citações</S.CardTitle></S.CardHeader>
-            <S.CardBody>
-              <S.Content>{formatQuote(data.quote)}</S.Content>
-            </S.CardBody>
-          </S.Card>
-        )}
-        {plotKeywords.length > 0 && (
-          <S.Card>
-            <S.CardHeader><S.CardTitle>Palavras-chave</S.CardTitle></S.CardHeader>
-            <S.CardBody>
-              <S.Content>
-                <FavoriteTag
-                  existingItems={existingKeywords}
-                  items={plotKeywords}
-                  onItemClick={handleKeywordClick}
-                  onItemDelete={handleKeywordDelete}
-                />
-              </S.Content>
-            </S.CardBody>
-          </S.Card>
-        )}
-      </S.CardsContainer>
+                </S.NumberedList>
+              </S.Value>
+            </S.Item>
+          )}
+        </S.LinksGrid>
+      </Card>
+
+      {data.trivia && (
+        <Card title='Trivia'>
+          <S.Content>
+            <S.BulletList>
+              {sanitizeTrivia(data.trivia).map(({ key, text }) => (
+                <li key={key}>{text}</li>
+              ))}
+            </S.BulletList>
+          </S.Content>
+        </Card>
+      )}
+
+      {data.quote && (
+        <Card title='Citações'>
+          <S.Content>{formatQuote(data.quote)}</S.Content>
+        </Card>
+      )}
+
+      {plotKeywords.length > 0 && (
+        <Card title='Palavras-chave'>
+          <FavoriteTag
+            existingItems={existingKeywords}
+            items={plotKeywords}
+            onItemClick={handleKeywordClick}
+            onItemDelete={handleKeywordDelete}
+          />
+        </Card>
+      )}
+
       <MediaCard spotifyUrl={data.soundtrack} />
 
       <MainImageUpload
         images={images}
-        onDeleteMain={handleDeleteMain}
-        onMainImageClick={(image) => { setSelectedMainImage(image); setIsMainImageModalOpen(true); }}
+        onDeleteMain={async filename => {
+          await dispatch(deleteMainImage({ tconst, filename }));
+          refreshMainImages();
+        }}
+        onMainImageClick={setSelectedMainImage}
         onUploadMainImage={async file => {
           await dispatch(uploadMainImage({ tconst, file }));
-          dispatch(fetchMainImage({ tconst }));
+          refreshMainImages();
         }}
         updateImageStatus={updateImageStatus}
       />
 
-      {isMainImageModalOpen && (
-        <MainImageModal
-          isOpen={isMainImageModalOpen}
-          onClose={() => setIsMainImageModalOpen(false)}
-          selectedMainImage={selectedMainImage}
-        />
+      {selectedMainImage && (
+        <MainImageModal isOpen onClose={() => setSelectedMainImage(null)} selectedMainImage={selectedMainImage} />
       )}
     </S.PageContainer>
   );

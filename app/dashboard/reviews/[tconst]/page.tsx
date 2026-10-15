@@ -10,6 +10,8 @@ import { useFilePicker } from '../../../hooks/useFilePicker';
 import { RootState } from '../../../../lib/store';
 import Button from '../../../ui/Button';
 import Card from '../../../ui/Card';
+import IconButton from '../../../ui/IconButton';
+import PageHeader from '../../../ui/PageHeader';
 import GoBack from '../../components/GoBack';
 import * as S from './styles';
 
@@ -108,13 +110,10 @@ function Reviews() {
 
   return (
     <S.Page>
-      <S.PageHeader>
-        <S.TitleGroup>
-          <GoBack />
-          <h1>{data.primaryTitle}</h1>
-        </S.TitleGroup>
-        <S.HeaderActions>
-          {isEditing ? (
+      <PageHeader
+        title={data.primaryTitle}
+        actions={
+          isEditing ? (
             <>
               <Button variant='outline' onClick={() => setIsEditing(false)} disabled={isLoading}>
                 Cancelar
@@ -127,9 +126,11 @@ function Reviews() {
             <Button iconLeft={FaEdit} onClick={handleEditOpen}>
               Editar
             </Button>
-          )}
-        </S.HeaderActions>
-      </S.PageHeader>
+          )
+        }
+      >
+        <GoBack />
+      </PageHeader>
 
       <S.LanguageGrid as={isEditing ? 'form' : 'div'} onSubmit={isEditing ? handleEditSubmit : undefined}>
         {renderLanguageCard('PT', 'Português', data.content?.pt?.text, editPt, setEditPt)}
@@ -152,12 +153,8 @@ function Reviews() {
                 <S.ReviewImage src={image.url} alt={image.subtitle_pt || `Imagem ${index + 1} do filme`} />
                 {image.subtitle_pt && <S.ImageCaption>{image.subtitle_pt}</S.ImageCaption>}
                 <S.ImageActions>
-                  <button type='button' onClick={() => handleEditImage(image.filename)} title='Editar legenda'>
-                    <FaEdit />
-                  </button>
-                  <button type='button' onClick={() => handleDeleteImage(image.filename)} title='Deletar imagem'>
-                    <FaTrash />
-                  </button>
+                  <IconButton icon={FaEdit} onClick={() => handleEditImage(image.filename)} title='Editar legenda' />
+                  <IconButton icon={FaTrash} onClick={() => handleDeleteImage(image.filename)} title='Deletar imagem' />
                 </S.ImageActions>
                 {editingImage === image.filename && (
                   <S.CaptionForm>

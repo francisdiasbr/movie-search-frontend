@@ -1,6 +1,8 @@
+import { FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import { ROUTES } from '../../const';
+import IconButton from '../../ui/IconButton';
 import { Column } from '../../ui/Table';
 import WatchedTag from './components/WatchedTag';
 import { FavoriteEntry } from './types';
@@ -42,9 +44,7 @@ export const buildColumns = ({ onDelete, onDeleteReview, onWatchedChange }: Colu
     label: 'Excluir review',
     render: entry =>
       entry.hasReview ? (
-        <S.LinkButton type='button' onClick={() => onDeleteReview(entry.tconst)} title='Deletar review'>
-          x
-        </S.LinkButton>
+        <IconButton icon={FaTrash} onClick={() => onDeleteReview(entry.tconst)} title='Deletar review' />
       ) : null,
     style: { minWidth: '50px', width: '5%' },
   },
@@ -52,9 +52,7 @@ export const buildColumns = ({ onDelete, onDeleteReview, onWatchedChange }: Colu
     key: 'delete',
     label: 'Excluir favorito',
     render: entry => (
-      <S.LinkButton type='button' onClick={() => onDelete(entry.tconst)} title='Deletar'>
-        x
-      </S.LinkButton>
+      <IconButton icon={FaTrash} onClick={() => onDelete(entry.tconst)} title='Deletar favorito' />
     ),
     style: { minWidth: '50px', width: '3%' },
   },

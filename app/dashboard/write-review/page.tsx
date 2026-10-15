@@ -1,16 +1,15 @@
 import { ROUTES } from '../../const';
+import PageHeader from '../../ui/PageHeader';
 import GoBack from '../components/GoBack';
 import AuthoralReviewForm from './Form';
 
-const WriteReviewPage = () => {
-  return (
-    <>
+const WriteReviewPage = () => (
+  <>
+    <PageHeader title='Escrever' description='Escreva a resenha do filme.'>
       <GoBack to={ROUTES.favorites} />
-      <h2>Escrever</h2>
-      <p>Escreva a resenha do filme.</p>
-      <AuthoralReviewForm />
-    </>
-  );
-};
+    </PageHeader>
+    <AuthoralReviewForm />
+  </>
+);
 
 export default WriteReviewPage;

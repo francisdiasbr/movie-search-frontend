@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { PARAGRAPHS } from '../../../formatter';
 import { useStatusToast } from '../../../hooks/useStatusToast';
 import { useToastNotifications } from '../../../hooks/useToastNotifications';
+import Button from '../../../ui/Button';
 import { isValidTconst } from '../../../util/tconst';
 import { createReview, resetWriteReview } from '../reducer/writeReviewSlice';
 import * as S from './styles';
@@ -23,16 +24,8 @@ const AuthoralReviewForm = () => {
   const [contentEn, setContentEn] = useState('');
   const [tconst, setTconst] = useState(urlTconst);
 
-  useEffect(() => {
-    setPrimaryTitle(urlPrimaryTitle);
-    setTconst(urlTconst);
-  }, [urlPrimaryTitle, urlTconst]);
-
-  useEffect(() => {
+  useEffect(() => () => {
     dispatch(resetWriteReview());
-    return () => {
-      dispatch(resetWriteReview());
-    };
   }, [dispatch]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -73,7 +66,7 @@ const AuthoralReviewForm = () => {
   });
 
   return (
-    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap:'16px'}}>
+    <S.Form onSubmit={handleSubmit}>
       <S.InputGroup>
         <label htmlFor='primaryTitle'>Título do Filme</label>
         <input
@@ -118,10 +111,12 @@ const AuthoralReviewForm = () => {
           required
         />
       </S.InputGroup>
-      <button disabled={status === 'loading'} type='submit'>
-        {status === 'loading' ? 'Adicionando' : 'Enviar'}
-      </button>
-    </form>
+      <S.Actions>
+        <Button loading={status === 'loading'} type='submit'>
+          Enviar
+        </Button>
+      </S.Actions>
+    </S.Form>
   );
 };
 

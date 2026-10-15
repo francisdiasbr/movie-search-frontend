@@ -4,6 +4,7 @@ import type { ButtonSize, ButtonVariant } from './types';
 
 interface StyledProps {
   $fullWidth: boolean;
+  $iconOnly: boolean;
   $loading: boolean;
   $size: ButtonSize;
   $variant: ButtonVariant;
@@ -89,9 +90,12 @@ export const StyledButton = styled.button<StyledProps>`
   justify-content: center;
   line-height: 1;
   min-height: ${({ $size }) => sizes[$size]};
-  padding: 0 ${({ theme }) => theme.spacing.md};
+  padding: 0 ${({ $iconOnly, theme }) => ($iconOnly ? 0 : theme.spacing.md)};
+  text-decoration: none;
+  width: ${({ $iconOnly, $size }) => ($iconOnly ? sizes[$size] : 'auto')};
   position: relative;
-  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
+
+  ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
 
   ${({ $variant, theme }) => variantStyles(theme)[$variant]}
 

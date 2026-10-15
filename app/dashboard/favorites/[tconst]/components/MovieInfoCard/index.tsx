@@ -1,4 +1,8 @@
+import { FaEdit } from 'react-icons/fa';
+
 import { JOIN_LIST, NOT_AVAILABLE, NOT_AVAILABLE_LABEL } from '../../../../../formatter';
+import Button from '../../../../../ui/Button';
+import Card from '../../../../../ui/Card';
 import { pirateBaySearchUrl } from '../../../../../util/url';
 import { MovieDetailsItem } from '../../../types';
 import FavoriteTag from '../FavoriteTag';
@@ -12,6 +16,17 @@ interface MovieInfoCardProps {
   onKeywordDelete: (keyword: string) => void;
 }
 
+const INFO_FIELDS: Array<{ key: 'country' | 'genres' | 'stars' | 'startYear' | 'writers'; label: string }> = [
+  { key: 'writers', label: 'Roteiristas' },
+  { key: 'stars', label: 'Stars' },
+  { key: 'startYear', label: 'Ano' },
+  { key: 'country', label: 'País' },
+  { key: 'genres', label: 'Gêneros' },
+];
+
+const formatField = (value: MovieDetailsItem[(typeof INFO_FIELDS)[number]['key']]) =>
+  Array.isArray(value) ? JOIN_LIST(value) : NOT_AVAILABLE(value);
+
 export default function MovieInfoCard({
   data,
   existingKeywords,
@@ -20,83 +35,60 @@ export default function MovieInfoCard({
   onKeywordDelete,
 }: MovieInfoCardProps) {
   return (
-    <S.Card>
-      <S.CardHeader>
-        <S.MovieTitle>{data.primaryTitle}</S.MovieTitle>
-        <div style={{ alignItems: 'center', display: 'flex', gap: '12px' }}>
-          {onEditClick && <button onClick={onEditClick}>Editar</button>}
-        </div>
-      </S.CardHeader>
+    <Card
+      title={data.primaryTitle}
+      actions={
+        onEditClick && (
+          <Button iconLeft={FaEdit} size='small' onClick={onEditClick}>
+            Editar
+          </Button>
+        )
+      }
+    >
+      <S.InfoGrid>
+        <S.Item>
+          <S.Label>Diretor</S.Label>
+          <S.Value>
+            {data.director ? (
+              <FavoriteTag
+                existingItems={existingKeywords}
+                items={[data.director]}
+                onItemClick={onKeywordClick}
+                onItemDelete={onKeywordDelete}
+              />
+            ) : (
+              NOT_AVAILABLE_LABEL
+            )}
+          </S.Value>
+        </S.Item>
+        {INFO_FIELDS.map(({ key, label }) => (
+          <S.Item key={key}>
+            <S.Label>{label}</S.Label>
+            <S.Value>{formatField(data[key])}</S.Value>
+          </S.Item>
+        ))}
+      </S.InfoGrid>
 
-      <S.CardBody>
-        <S.InfoGrid>
-          <S.InfoItem>
-            <S.InfoLabel>Diretor</S.InfoLabel>
-            <S.InfoValue>
-              {data.director ? (
-                <FavoriteTag
-                  existingItems={existingKeywords}
-                  items={[data.director]}
-                  onItemClick={onKeywordClick}
-                  onItemDelete={onKeywordDelete}
-                />
-              ) : NOT_AVAILABLE_LABEL}
-            </S.InfoValue>
-          </S.InfoItem>
+      <S.SynopsisSection>
+        <S.Label>Sinopse</S.Label>
+        <S.SynopsisText>{NOT_AVAILABLE(data.plot)}</S.SynopsisText>
+      </S.SynopsisSection>
 
-          <S.InfoItem>
-            <S.InfoLabel>Roteiristas</S.InfoLabel>
-            <S.InfoValue>
-              {JOIN_LIST(data.writers)}
-            </S.InfoValue>
-          </S.InfoItem>
-
-          <S.InfoItem>
-            <S.InfoLabel>Stars</S.InfoLabel>
-            <S.InfoValue>{JOIN_LIST(data.stars)}</S.InfoValue>
-          </S.InfoItem>
-
-          <S.InfoItem>
-            <S.InfoLabel>Ano</S.InfoLabel>
-            <S.InfoValue>{NOT_AVAILABLE(data.startYear)}</S.InfoValue>
-          </S.InfoItem>
-
-          <S.InfoItem>
-            <S.InfoLabel>País</S.InfoLabel>
-            <S.InfoValue>{NOT_AVAILABLE(data.country)}</S.InfoValue>
-          </S.InfoItem>
-
-          <S.InfoItem>
-            <S.InfoLabel>Gêneros</S.InfoLabel>
-            <S.InfoValue>{JOIN_LIST(data.genres)}</S.InfoValue>
-          </S.InfoItem>
-        </S.InfoGrid>
-
-        <S.SynopsisSection>
-          <S.InfoLabel>Sinopse</S.InfoLabel>
-          <S.SynopsisText>{NOT_AVAILABLE(data.plot)}</S.SynopsisText>
-        </S.SynopsisSection>
-
-        <S.ActionsSection>
-          {data.magnet_link && (
-            <a href={data.magnet_link} rel='noopener noreferrer' style={{ fontSize: '12px', wordBreak: 'break-all' }}>
-              {data.magnet_link}
-            </a>
-          )}
-          {data.subtitle_url && (
-            <a href={encodeURI(data.subtitle_url)} rel='noopener noreferrer' target='_blank'>
-              <button>Baixar Legendas</button>
-            </a>
-          )}
-          <a
-            href={pirateBaySearchUrl(data.primaryTitle)}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            <button>Baixar Filme</button>
-          </a>
-        </S.ActionsSection>
-      </S.CardBody>
-    </S.Card>
+      <S.ActionsSection>
+        {data.magnet_link && (
+          <S.MagnetLink href={data.magnet_link} rel='noopener noreferrer'>
+            {data.magnet_link}
+          </S.MagnetLink>
+        )}
+        {data.subtitle_url && (
+          <Button variant='outline' size='small' href={encodeURI(data.subtitle_url)}>
+            Baixar Legendas
+          </Button>
+        )}
+        <Button variant='outline' size='small' href={pirateBaySearchUrl(data.primaryTitle)}>
+          Baixar Filme
+        </Button>
+      </S.ActionsSection>
+    </Card>
   );
 }

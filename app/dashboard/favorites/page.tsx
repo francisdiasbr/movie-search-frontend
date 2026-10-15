@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { useStatusToast } from '../../hooks/useStatusToast';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
+import PageHeader from '../../ui/PageHeader';
 import Table from '../../ui/Table';
 import { toSelectOptions } from '../../util/select';
 import { buildColumns } from './columns';
@@ -74,7 +75,7 @@ export default function Page() {
 
   return (
     <>
-      <h2>Favoritos</h2>
+      <PageHeader title='Favoritos' />
       <Search countryOptions={countryOptions} onChange={setSearch} values={search} yearOptions={yearOptions} />
       <Table
         columns={columns}

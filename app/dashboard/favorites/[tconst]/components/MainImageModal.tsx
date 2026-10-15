@@ -1,20 +1,18 @@
+import { ImageItem } from '../../../../../lib/service/ImagesBaseService';
 import Dialog from '../../../../ui/Dialog';
+import * as S from '../styles';
 
 interface MainImageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedMainImage: { url: string; filename: string } | null;
+  selectedMainImage: ImageItem | null;
 }
 
 export default function MainImageModal({ isOpen, onClose, selectedMainImage }: MainImageModalProps) {
   return (
     <Dialog isOpen={isOpen} onClose={onClose} title='Visualizar Imagem Principal'>
       {selectedMainImage && (
-        <img
-          src={selectedMainImage.url}
-          alt={selectedMainImage.filename}
-          style={{ borderRadius: 8, maxHeight: '70vh', maxWidth: '100%', objectFit: 'contain' }}
-        />
+        <S.PreviewImage src={selectedMainImage.url} alt={selectedMainImage.filename} />
       )}
     </Dialog>
   );

@@ -8,6 +8,7 @@ const Button = ({
   children,
   disabled = false,
   fullWidth = false,
+  href,
   iconLeft: IconLeft,
   iconRight: IconRight,
   loading = false,
@@ -18,11 +19,13 @@ const Button = ({
 }: ButtonProps) => (
   <S.StyledButton
     $fullWidth={fullWidth}
+    $iconOnly={!children}
     $loading={loading}
     $size={size}
     $variant={variant}
     disabled={disabled || loading}
-    type={type}
+    type={href ? undefined : type}
+    {...(href ? { as: 'a', href, rel: 'noopener noreferrer', target: '_blank' } : {})}
     {...rest}
   >
     <S.Content $show={!loading}>

@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { ROUTES } from '../../const';
 import { useStatusToast } from '../../hooks/useStatusToast';
+import Button from '../../ui/Button';
+import { Row } from '../../ui/Layout';
 import LoadingModal from '../../ui/LoadingModal';
+import PageHeader from '../../ui/PageHeader';
 import { addFavorite, resetAddStatus } from './reducer/searchSlice';
+import * as S from './styles';
 
 export default function SearchPage() {
   const dispatch = useAppDispatch();
@@ -15,15 +19,9 @@ export default function SearchPage() {
 
   const isLoading = addStatus === 'loading';
 
-  const handleAdd = (tconst: string) => {
+  const handleAdd = () => {
     if (!tconst || isLoading) return;
     dispatch(addFavorite(tconst));
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleAdd(tconst);
-    }
   };
 
   useStatusToast({
@@ -37,24 +35,20 @@ export default function SearchPage() {
 
   return (
     <div>
-      <h2>Adicionar filme na coleção</h2>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <input
-          type="text"
+      <PageHeader title='Adicionar filme na coleção' />
+      <Row>
+        <S.TconstInput
+          type='text'
           value={tconst}
-          onChange={(e) => setTconst(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Informe o tconst do filme a ser adicionado (ex: tt0084805)"
+          onChange={e => setTconst(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleAdd()}
+          placeholder='Informe o tconst do filme a ser adicionado (ex: tt0084805)'
           disabled={isLoading}
-          style={{ width: '460px' }}
         />
-        <button
-          onClick={() => handleAdd(tconst)}
-          disabled={isLoading || !tconst}
-        >
-          {isLoading ? 'Adicionando' : 'Adicionar na coleção'}
-        </button>
-      </div>
+        <Button onClick={handleAdd} disabled={!tconst} loading={isLoading}>
+          Adicionar na coleção
+        </Button>
+      </Row>
 
       <LoadingModal isOpen={isLoading} message='Adicionando filme na coleção...' />
     </div>

@@ -10,11 +10,8 @@ export function useBlogPosts() {
   const dispatch = useAppDispatch();
   const { entries, status } = useAppSelector(state => state.read);
 
-  useEffect(() => {
+  useEffect(() => () => {
     dispatch(clearReviews());
-    return () => {
-      dispatch(clearReviews());
-    };
   }, [dispatch]);
 
   const handleSearch = useCallback(() => dispatch(fetchReviews()), [dispatch]);

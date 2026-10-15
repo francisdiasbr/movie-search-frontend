@@ -58,7 +58,7 @@ Three layers. No URL is ever built outside a service, and features never import 
 
 Response envelopes `ApiResponse<T>` (`{ data }`), `EntriesResponse<T>` (`{ entries }`) and `AsyncStatus` live in `lib/api/types.ts`.
 
-Thunks follow one shape: call the service, return the payload, and on error `return rejectWithValue(toApiErrorPayload(error, '<fallback message in pt-BR>'))` with `{ rejectValue: ApiErrorPayload }` in the thunk generics. Reducers store only `action.payload?.message` in `state.error`.
+Thunks are built with `createApiThunk(type, fn, fallbackMessage)` from `lib/api/thunk.ts`, which wraps the service call and rejects with `toApiErrorPayload`. Reducers wire them with `addStatusCases(builder, thunk, 'statusKey', onFulfilled?)`, which moves the status field, stores `payload.message` in `state.error` and ignores cancelled requests. A slice never spells out pending/fulfilled/rejected by hand.
 
 ### Theme (mirrors `@gav/theme` used by siga-front)
 
@@ -69,11 +69,11 @@ Thunks follow one shape: call the service, return the payload, and on error `ret
 - `theme.spacing`: `spacing(n)` returns `n * 8px`; named steps `xxs(2) xs(4) sm(8) md(16) lg(24) xl(32) xxl(48)`.
 - `theme.radius` (`sm/md/lg/pill`), `theme.shadows` (`sm/md/lg`), `theme.breakpoints` (`sm/md/lg`), `theme.zIndex` (`nav/dialog/toast`).
 
-No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: every `styles.ts` reads from `theme`, and colours never go in inline `style={{}}` props. Global element styles (`a`, `button`, `input`, `dialog`, headings) live in `GlobalStyle.ts`, there is no `globals.css`.
+No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: every `styles.ts` reads from `theme`, and there are no inline `style={{}}` props at all (use `Stack`/`Row` or a styled component). Global element styles (`a`, `button`, `input`, `dialog`, headings) live in `GlobalStyle.ts`, there is no `globals.css`.
 
 ### Component conventions
 
-- `app/ui/` — components shared across the whole app (Button, Card, Table, Dialog, MediaCard, LoadingSpinner). `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
+- `app/ui/` — components shared across the whole app (Button, IconButton, Card, PageHeader, ExternalLink, Table, Dialog, MediaCard, LoadingSpinner, and the `Stack`/`Row` flex primitives in `Layout`). Every page starts with `<PageHeader title description actions>`; a `GoBack` goes in its children. `Table` takes typed `Column<Row>[]` with an optional `render(row)` per column plus `rowKey`. `Dialog` exports `DialogField`, `DialogFooter` and `DialogRow` for its forms. `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
 - `app/dashboard/components/` — components shared within the dashboard but not globally. `GoBack` is the single back button of the app (`<GoBack to={ROUTES.favorites} />`, or `<GoBack />` for history back): an outline `Button` with a left arrow, as in siga-front.
 - Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.
@@ -93,5 +93,8 @@ Cross-cutting code lives directly under `app/`, never inside a feature:
 
 - `useStatusToast({ status, error, successMessage, errorMessage, onSuccess, onFailure, reset })` — reacts once when a thunk status becomes `succeeded` or `failed`: shows the toast, runs the callback and resets the slice. Use it instead of writing a `useEffect` on a status field.
 - `useToastNotifications` — thin wrapper over sonner (`showSuccess/showError/showWarning/showInfo`).
+- `useAsyncAction(fn)` — returns `{ run, loading }`; wraps a handler with a loading flag and ignores calls while one is running. Use it instead of a local `isLoading` state with try/finally.
+- `useDebouncedEffect(fn, deps, delay)` — runs `fn` after the deps settle, skipping the mount render.
+- `useFilePicker(onFile, { accept })` — returns `{ input, open }`: render `input` and call `open()` from a button.
 
 Hooks tied to one feature live in that feature's folder (`keywords/useKeywords.ts`, `read/useBlogPosts.ts`), not in `app/hooks/`.

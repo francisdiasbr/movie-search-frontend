@@ -1,34 +1,11 @@
 import styled from 'styled-components';
 
-// ── Page header ───────────────────────────────────────────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────────────
 
 export const Page = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
-`;
-
-export const PageHeader = styled.header`
-  align-items: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.md};
-  justify-content: space-between;
-`;
-
-export const TitleGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm};
-
-  h1 {
-    margin: 0;
-  }
-`;
-
-export const HeaderActions = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 // ── Review blocks (pt / en) ───────────────────────────────────────────────────
@@ -112,17 +89,7 @@ export const ImageActions = styled.div`
   top: ${({ theme }) => theme.spacing.sm};
 
   button {
-    align-items: center;
     background: ${({ theme }) => theme.colors.background.surface};
-    border: 1px solid ${({ theme }) => theme.colors.neutral.level8};
-    border-radius: ${({ theme }) => theme.radius.sm};
-    color: ${({ theme }) => theme.colors.primary.main};
-    display: inline-flex;
-    padding: ${({ theme }) => theme.spacing.xs};
-
-    &:hover {
-      background: ${({ theme }) => theme.colors.primary.light};
-    }
   }
 `;
 

@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { ROUTES } from '../../const';
 import { useAsyncAction } from '../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
+import Button from '../../ui/Button';
+import { Row } from '../../ui/Layout';
+import PageHeader from '../../ui/PageHeader';
 import writeService from './service/WriteService';
 
 export default function WritePage() {
@@ -29,20 +32,20 @@ export default function WritePage() {
 
   return (
     <div>
-      <h2>Escrever resenha</h2>
-      <p>Insira o tconst do filme e escolha como criar a resenha.</p>
-      <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+      <PageHeader title='Escrever resenha' description='Insira o tconst do filme e escolha como criar a resenha.' />
+      <Row>
         <input
           type='text'
           value={tconst}
-          onChange={(e) => setTconst(e.target.value.trim())}
+          onChange={e => setTconst(e.target.value.trim())}
+          onKeyDown={e => e.key === 'Enter' && handleWriteAuthoral()}
           placeholder='Ex: tt0084805'
           disabled={isLoading}
         />
-        <button onClick={handleWriteAuthoral} disabled={isLoading || !tconst}>
-          {isLoading ? 'Adicionando' : 'Escrever'}
-        </button>
-      </div>
+        <Button onClick={() => handleWriteAuthoral()} disabled={!tconst} loading={isLoading}>
+          Escrever
+        </Button>
+      </Row>
     </div>
   );
 }
