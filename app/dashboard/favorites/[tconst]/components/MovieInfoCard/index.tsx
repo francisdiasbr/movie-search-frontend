@@ -3,17 +3,17 @@ import { FaEdit } from 'react-icons/fa';
 import { JOIN_LIST, NOT_AVAILABLE, NOT_AVAILABLE_LABEL } from '../../../../../formatter';
 import Button from '../../../../../ui/Button';
 import Card from '../../../../../ui/Card';
+import TagList from '../../../../../ui/TagList';
 import { pirateBaySearchUrl } from '../../../../../util/url';
 import { MovieDetailsItem } from '../../../types';
 import * as S from '../../styles';
-import FavoriteTag from '../FavoriteTag';
 
 interface MovieInfoCardProps {
   data: MovieDetailsItem;
-  existingKeywords: string[];
+  favoritedKeywords: string[];
   onEditClick?: () => void;
-  onKeywordClick: (keyword: string) => void;
-  onKeywordDelete: (keyword: string) => void;
+  onKeywordRemove: (keyword: string) => void;
+  onKeywordSelect: (keyword: string) => void;
 }
 
 const INFO_FIELDS: Array<{ key: 'country' | 'genres' | 'stars' | 'startYear' | 'writers'; label: string }> = [
@@ -29,10 +29,10 @@ const formatField = (value: MovieDetailsItem[(typeof INFO_FIELDS)[number]['key']
 
 export default function MovieInfoCard({
   data,
-  existingKeywords,
+  favoritedKeywords,
   onEditClick,
-  onKeywordClick,
-  onKeywordDelete,
+  onKeywordRemove,
+  onKeywordSelect,
 }: MovieInfoCardProps) {
   return (
     <Card
@@ -50,11 +50,11 @@ export default function MovieInfoCard({
           <S.Label>Diretor</S.Label>
           <S.Value>
             {data.director ? (
-              <FavoriteTag
-                existingItems={existingKeywords}
+              <TagList
+                favorited={favoritedKeywords}
                 items={[data.director]}
-                onItemClick={onKeywordClick}
-                onItemDelete={onKeywordDelete}
+                onRemove={onKeywordRemove}
+                onSelect={onKeywordSelect}
               />
             ) : (
               NOT_AVAILABLE_LABEL

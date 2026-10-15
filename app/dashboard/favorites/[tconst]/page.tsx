@@ -4,19 +4,18 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { ImageItem } from '../../../../lib/service/ImagesBaseService';
 import { ROUTES } from '../../../const';
-import { useToastNotifications } from '../../../hooks/useToastNotifications';
 import Card from '../../../ui/Card';
 import ExternalLink from '../../../ui/ExternalLink';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 import MediaCard from '../../../ui/MediaCard';
 import PageHeader from '../../../ui/PageHeader';
+import TagList from '../../../ui/TagList';
 import { imdbTitleUrl } from '../../../util/url';
 import GoBack from '../../components/GoBack';
 import { useKeywords } from '../../keywords/useKeywords';
 import { deleteMainImage, fetchMainImage, uploadMainImage } from '../reducer/mainImagesSlice';
 import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
 import EditInfoModal from './components/EditInfoModal';
-import FavoriteTag from './components/FavoriteTag';
 import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
 import MovieInfoCard from './components/MovieInfoCard';
@@ -32,8 +31,7 @@ export default function MovieDetailsPage() {
 
   const { data, fetchStatus } = useAppSelector(state => state.moviesDetails);
   const { images, status: updateImageStatus } = useAppSelector(state => state.mainImages);
-  const { showSuccess, showError, showWarning, showInfo } = useToastNotifications();
-  const { keywords: existingKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
+  const { keywords: favoritedKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 
   useEffect(() => {
     dispatch(fetchDetails(tconst));
@@ -52,20 +50,6 @@ export default function MovieDetailsPage() {
   const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
   const imdbUrl = data.imdb_url ?? imdbTitleUrl(data.tconst);
 
-  const handleKeywordClick = async (keyword: string) => {
-    const result = await addKeyword(keyword);
-    if (result === 'added') showSuccess({ title: 'Palavra-chave adicionada.' });
-    else if (result === 'duplicate') showInfo({ title: 'Palavra-chave já existe.', duration: 2000 });
-    else if (result === 'conflict') showWarning({ title: 'Palavra-chave não permitida.' });
-    else showError({ title: 'Erro ao adicionar palavra-chave.' });
-  };
-
-  const handleKeywordDelete = async (keyword: string) => {
-    const ok = await removeKeyword(keyword);
-    if (ok) showSuccess({ title: 'Palavra-chave removida.' });
-    else showError({ title: 'Erro ao remover palavra-chave.' });
-  };
-
   return (
     <S.PageContainer>
       <PageHeader title={data.primaryTitle}>
@@ -76,10 +60,10 @@ export default function MovieDetailsPage() {
 
       <MovieInfoCard
         data={data}
-        existingKeywords={existingKeywords}
+        favoritedKeywords={favoritedKeywords}
         onEditClick={() => setIsOpen(true)}
-        onKeywordClick={handleKeywordClick}
-        onKeywordDelete={handleKeywordDelete}
+        onKeywordSelect={addKeyword}
+        onKeywordRemove={removeKeyword}
       />
 
       <Card title='Links'>
@@ -135,12 +119,7 @@ export default function MovieDetailsPage() {
 
       {plotKeywords.length > 0 && (
         <Card title='Palavras-chave'>
-          <FavoriteTag
-            existingItems={existingKeywords}
-            items={plotKeywords}
-            onItemClick={handleKeywordClick}
-            onItemDelete={handleKeywordDelete}
-          />
+          <TagList favorited={favoritedKeywords} items={plotKeywords} onRemove={removeKeyword} onSelect={addKeyword} />
         </Card>
       )}
 

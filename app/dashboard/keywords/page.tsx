@@ -5,7 +5,7 @@ import Button from '../../ui/Button';
 import { Row } from '../../ui/Layout';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
-import FavoriteTag from '../favorites/[tconst]/components/FavoriteTag';
+import TagList from '../../ui/TagList';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
@@ -46,7 +46,7 @@ export default function Page() {
       {status === 'loading' && <LoadingSpinner />}
       {status === 'failed' && <p>Não foi possível carregar as palavras-chave.</p>}
       {status === 'succeeded' && (
-        <FavoriteTag existingItems={keywords} isSelected={selectedKeywords} items={keywords} onItemClick={toggleKeyword} />
+        <TagList items={keywords} onSelect={toggleKeyword} selected={selectedKeywords} />
       )}
       <Row $mt='md'>
         <Button onClick={() => handleFetchMovies()} disabled={selectedKeywords.length === 0} loading={loadingMovies}>

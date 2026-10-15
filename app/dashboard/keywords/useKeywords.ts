@@ -2,13 +2,14 @@ import { useCallback, useState } from 'react';
 
 import { isApiError } from '../../../lib/api/errors';
 import { AsyncStatus } from '../../../lib/api/types';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 import keywordsService from './service/KeywordsService';
-
-export type AddKeywordResult = 'added' | 'conflict' | 'duplicate' | 'error';
 
 // The favourite keywords list, shared by the keywords page and the movie
 // detail page. The result is only used locally, so there is no slice.
+// add/remove already show the outcome toast.
 export function useKeywords() {
+  const { showError, showInfo, showSuccess, showWarning } = useToastNotifications();
   const [keywords, setKeywords] = useState<string[]>([]);
   const [status, setStatus] = useState<AsyncStatus>('idle');
 
@@ -23,26 +24,28 @@ export function useKeywords() {
     }
   }, []);
 
-  const add = async (keyword: string): Promise<AddKeywordResult> => {
+  const add = async (keyword: string) => {
     try {
       await keywordsService.add(keyword);
       setKeywords(prev => [...prev, keyword]);
-      return 'added';
+      showSuccess({ title: 'Palavra-chave adicionada.' });
     } catch (error) {
       if (isApiError(error) && error.status === 409) {
-        return keywords.includes(keyword) ? 'duplicate' : 'conflict';
+        if (keywords.includes(keyword)) showInfo({ title: 'Palavra-chave já existe.', duration: 2000 });
+        else showWarning({ title: 'Palavra-chave não permitida.' });
+        return;
       }
-      return 'error';
+      showError({ title: 'Erro ao adicionar palavra-chave.' });
     }
   };
 
-  const remove = async (keyword: string): Promise<boolean> => {
+  const remove = async (keyword: string) => {
     try {
       await keywordsService.removeKeyword(keyword);
       setKeywords(prev => prev.filter(item => item !== keyword));
-      return true;
+      showSuccess({ title: 'Palavra-chave removida.' });
     } catch {
-      return false;
+      showError({ title: 'Erro ao remover palavra-chave.' });
     }
   };
 
