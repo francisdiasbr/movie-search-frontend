@@ -72,7 +72,15 @@ export default function Page() {
                 </strong>{' '}
                 ({movie.year})
                 {movie.original_title && movie.original_title !== movie.title && <> · {movie.title}</>}
-                <br />
+                {movie.genres && movie.genres.length > 0 ? (
+                  <S.Genres>
+                    {movie.genres.map(genre => (
+                      <S.Genre key={genre}>{genre}</S.Genre>
+                    ))}
+                  </S.Genres>
+                ) : (
+                  <br />
+                )}
                 <em>{movie.description}</em>
                 {movie.relevance && <S.Relevance>{movie.relevance}</S.Relevance>}
               </li>

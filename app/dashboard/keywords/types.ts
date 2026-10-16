@@ -5,6 +5,8 @@ export interface Keyword {
 
 export interface SuggestedMovie {
   description?: string;
+  // From the IMDb title page; empty when the page could not be loaded.
+  genres?: string[];
   // Title as listed on IMDb (verified). `title` is the model's Portuguese
   // title and can be wrong, so it is shown second.
   original_title?: string;
