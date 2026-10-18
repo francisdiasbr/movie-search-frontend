@@ -63,14 +63,11 @@ O usuário pode visualizar as informações de um filme favorito:
 
 ### 4. Idioma dos textos (EN / PT)
 
-O seletor EN / PT no canto direito da barra de navegação troca o idioma de
-sinopse, trivia, citações, gêneros e palavras-chave dos filmes favoritos. O
-inglês é o original do IMDb; o português é gerado pelo backend com o Argos
-Translate, um tradutor automático que roda offline na máquina do servidor, sem
-chave de API nem custo. A escolha vale para o app inteiro e fica salva no
-navegador. Na primeira vez que um filme antigo é aberto em PT, o backend o traduz
-na hora (alguns segundos) e mostra o resultado; os textos da interface em si
-continuam em português nos dois modos.
+O seletor EN / PT na barra de navegação troca o idioma dos textos dos filmes
+(sinopse, trivia, citações, gêneros e palavras-chave). O português é gerado pelo
+backend com o Argos Translate, um tradutor offline sem custo. A escolha vale
+para o app inteiro e fica salva no navegador; um favorito antigo é traduzido na
+primeira vez que é aberto em PT.
 
 ### 5. Sugestão de filmes por palavras-chave
 
