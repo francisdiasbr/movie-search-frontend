@@ -31,13 +31,12 @@ Redux store is in `lib/store.ts`; typed hooks (`useAppDispatch`, `useAppSelector
 
 ### Feature folders (mirrors `gav/siga-front`)
 
-Every route folder under `app/dashboard/` is a feature and owns its own `service/`, plus `reducer/` and `types.ts` when the screen keeps state in redux. Two features may hit the same backend resource (`search` and `favorites` both call `favorites`; `write`, `write-review`, `read` and `reviews` all call `write-review`): each one still gets its own small service, exactly like `holidayRegister` and `holidayActivityReport` in siga-front. Never import another feature's service; a feature that needs another resource calls it from its own service by passing the prefix explicitly (see `FavoritesService.findReviewedTconsts`).
+Every route folder under `app/dashboard/` is a feature and owns its own `service/`, plus `reducer/` and `types.ts` when the screen keeps state in redux. Two features may hit the same backend resource (`write`, `write-review`, `read` and `reviews` all call `write-review`): each one still gets its own small service, exactly like `holidayRegister` and `holidayActivityReport` in siga-front. Never import another feature's service; a feature that needs another resource calls it from its own service by passing the prefix explicitly (see `FavoritesService.findReviewedTconsts`).
 
 ```
 app/dashboard/
-  favorites/      page, [tconst]/, components/, service/{FavoritesService,MainImagesService}.ts,
+  favorites/      page, [tconst]/, components/ (AddFavorite, Search, WatchedTag), service/{FavoritesService,MainImagesService}.ts,
                   reducer/{favoritesSlice,movieDetailsSlice,mainImagesSlice}.ts, types.ts
-  search/         page, service/SearchService.ts, reducer/searchSlice.ts, types.ts
   reviews/        [tconst]/, service/{ReviewsService,ImagesService}.ts,
                   reducer/{authoralReviewSlice,imagesSlice}.ts, types.ts
   read/           page, useReviews.ts, service/ReadService.ts, types.ts        # no redux: useReviews calls the service
@@ -73,7 +72,7 @@ No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: e
 
 ### Component conventions
 
-- `app/ui/` — components shared across the whole app (Button, IconButton, Card, PageHeader, ExternalLink, TagList, Table, Dialog, MediaCard, LoadingSpinner, and the `Stack`/`Row` flex primitives in `Layout`). Every page starts with `<PageHeader title description actions>`; a `GoBack` goes in its children. `Table` takes typed `Column<Row>[]` with an optional `render(row)` per column plus `rowKey`. `Dialog` exports `DialogField`, `DialogFooter` and `DialogRow` for its forms. `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
+- `app/ui/` — components shared across the whole app (Button, IconButton, Card, PageHeader, ExternalLink, TagList, Table, Dialog, MediaCard, LoadingSpinner, and the `Stack`/`Row` flex primitives in `Layout`). Every page starts with `<PageHeader title description actions>`; a `GoBack` goes in its children. `Table` takes typed `Column<Row>[]` with an optional `render(row)` and `sort` per column, plus `rowKey`, `page`/`pageSize`/`onPageChange`/`onPageSizeChange` (1-based, sent to the backend) and `isActionLoading` (spinner instead of the skeleton rows when a row action reloads the list). `Dialog` exports `DialogField`, `DialogFooter` and `DialogRow` for its forms. `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
 - `app/dashboard/components/` — components shared within the dashboard but not globally. `GoBack` is the single back button of the app (`<GoBack to={ROUTES.favorites} />`, or `<GoBack />` for history back): an outline `Button` with a left arrow, as in siga-front.
 - Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.

@@ -1,5 +1,6 @@
 import { SelectOption } from '../../../../util/select';
 import { FavoritesFilters } from '../../types';
+import YearRange from '../YearRange';
 import * as S from './styles';
 
 export interface SearchValues extends FavoritesFilters {
@@ -10,7 +11,7 @@ interface SearchProps {
   countryOptions: SelectOption[];
   onChange: (values: SearchValues) => void;
   values: SearchValues;
-  yearOptions: SelectOption[];
+  yearBounds: { max: number; min: number };
 }
 
 const WATCHED_OPTIONS: SelectOption[] = [
@@ -18,7 +19,7 @@ const WATCHED_OPTIONS: SelectOption[] = [
   { label: 'Não assistidos', value: 'false' },
 ];
 
-const Search = ({ countryOptions, onChange, values, yearOptions }: SearchProps) => {
+const Search = ({ countryOptions, onChange, values, yearBounds }: SearchProps) => {
   const update = (patch: Partial<SearchValues>) => onChange({ ...values, ...patch });
 
   return (
@@ -35,16 +36,12 @@ const Search = ({ countryOptions, onChange, values, yearOptions }: SearchProps) 
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
       </select>
-      <select
-        aria-label='Ano'
-        onChange={e => update({ startYear: e.target.value ? Number(e.target.value) : undefined })}
-        value={values.startYear?.toString() ?? ''}
-      >
-        <option value=''>Ano</option>
-        {yearOptions.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
+      <YearRange
+        max={yearBounds.max}
+        min={yearBounds.min}
+        onChange={range => update({ startYearFrom: range.from, startYearTo: range.to })}
+        value={{ from: values.startYearFrom, to: values.startYearTo }}
+      />
       <select
         aria-label='Status'
         onChange={e => update({ watched: e.target.value === '' ? undefined : e.target.value === 'true' })}

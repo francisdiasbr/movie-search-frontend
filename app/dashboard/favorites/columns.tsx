@@ -25,12 +25,20 @@ export const buildColumns = ({ onDelete, onDeleteReview, onWatchedChange }: Colu
     key: 'primaryTitle',
     label: 'Title',
     render: entry => <Link to={ROUTES.favorite(entry.tconst)}>{entry.primaryTitle}</Link>,
+    sort: true,
     style: { minWidth: '200px', width: '35%' },
+  },
+  {
+    key: 'startYear',
+    label: 'Ano',
+    sort: true,
+    style: { minWidth: '70px', width: '7%' },
   },
   {
     key: 'watched',
     label: 'Assistido',
     render: entry => <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={onWatchedChange} />,
+    sort: true,
     style: { minWidth: '100px', width: '10%' },
   },
   {

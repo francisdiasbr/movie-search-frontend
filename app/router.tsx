@@ -7,7 +7,6 @@ import KeywordsPage from './dashboard/keywords/page'
 import DashboardLayout from './dashboard/layout'
 import ReadPage from './dashboard/read/page'
 import ReviewPage from './dashboard/reviews/[tconst]/page'
-import SearchPage from './dashboard/search/page'
 import WriteReviewPage from './dashboard/write-review/page'
 import WritePage from './dashboard/write/page'
 
@@ -23,7 +22,6 @@ export default createBrowserRouter([
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'favorites/:tconst', element: <FavoriteDetailPage /> },
       { path: 'reviews/:tconst', element: <ReviewPage /> },
-      { path: 'search', element: <SearchPage /> },
       { path: 'keywords', element: <KeywordsPage /> },
       { path: 'read', element: <ReadPage /> },
       { path: 'write', element: <WritePage /> },

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
-export const RecordCount = styled.p`
-  color: ${({ theme }) => theme.colors.neutral.level5};
-  font-size: 0.875rem;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+export const Footer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-top: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const StyledTable = styled.table`

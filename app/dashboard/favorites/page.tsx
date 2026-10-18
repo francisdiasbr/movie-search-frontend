@@ -9,12 +9,14 @@ import PageHeader from '../../ui/PageHeader';
 import Table from '../../ui/Table';
 import { toSelectOptions } from '../../util/select';
 import { buildColumns } from './columns';
+import AddFavorite from './components/AddFavorite';
 import Search, { SearchValues } from './components/Search';
 import { fetchFavorites } from './reducer/favoritesSlice';
 import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
 import favoritesService from './service/FavoritesService';
 
 const INITIAL_SEARCH: SearchValues = { searchTerm: '' };
+const INITIAL_PAGE_SIZE = 10;
 
 export default function Page() {
   const dispatch = useAppDispatch();
@@ -22,27 +24,57 @@ export default function Page() {
   const { deleteStatus } = useAppSelector(state => state.favoriteDetails);
   const { showSuccess, showError, showInfo } = useToastNotifications();
   const [search, setSearch] = useState<SearchValues>(INITIAL_SEARCH);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(INITIAL_PAGE_SIZE);
+
+  // A row action (delete, watched toggle) reloads the same page: the table
+  // shows a spinner instead of the skeleton rows until that reload ends.
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   const isLoading = status === 'loading';
 
   const handleSearch = () => {
     const { searchTerm, ...filters } = search;
-    dispatch(fetchFavorites({ filters, searchTerm }));
+    dispatch(fetchFavorites({ filters, page, pageSize, searchTerm }));
+  };
+
+  const reloadAfterAction = () => {
+    setIsActionLoading(true);
+    handleSearch();
+  };
+
+  useEffect(() => {
+    if (status !== 'loading') setIsActionLoading(false);
+  }, [status]);
+
+  // A new search term or filter always starts from the first page.
+  const handleSearchChange = (values: SearchValues) => {
+    setSearch(values);
+    setPage(1);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setPage(1);
   };
 
   useEffect(() => {
     handleSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, pageSize]);
 
   useDebouncedEffect(handleSearch, [search]);
 
   const countryOptions = useMemo(() => toSelectOptions(countries), [countries]);
-  const yearOptions = useMemo(() => toSelectOptions(startYears), [startYears]);
+  // Slider limits come from the years present in the collection.
+  const yearBounds = useMemo(
+    () => ({ max: startYears.length ? Math.max(...startYears) : 0, min: startYears.length ? Math.min(...startYears) : 0 }),
+    [startYears]
+  );
 
   useStatusToast({
     errorMessage: 'Não foi possível remover o filme dos favoritos.',
-    onSuccess: handleSearch,
+    onSuccess: reloadAfterAction,
     reset: () => dispatch(resetDeleteStatus()),
     status: deleteStatus,
     successMessage: 'Filme removido dos favoritos com sucesso.',
@@ -52,7 +84,7 @@ export default function Page() {
     try {
       await favoritesService.removeReview(tconst);
       showSuccess({ title: 'Resenha deletada com sucesso!' });
-      handleSearch();
+      reloadAfterAction();
     } catch (error) {
       if (isApiError(error) && error.status === 404) {
         showInfo({ title: 'Nenhuma resenha encontrada para deletar.' });
@@ -67,20 +99,26 @@ export default function Page() {
       buildColumns({
         onDelete: tconst => dispatch(deleteFavorite(tconst)),
         onDeleteReview: handleDeleteReview,
-        onWatchedChange: handleSearch,
+        onWatchedChange: reloadAfterAction,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]
+    [search, page, pageSize]
   );
 
   return (
     <>
       <PageHeader title='Favoritos' />
-      <Search countryOptions={countryOptions} onChange={setSearch} values={search} yearOptions={yearOptions} />
+      <AddFavorite onAdded={handleSearch} />
+      <Search countryOptions={countryOptions} onChange={handleSearchChange} values={search} yearBounds={yearBounds} />
       <Table
         columns={columns}
         entries={entries}
+        isActionLoading={isActionLoading}
         isLoading={isLoading}
+        onPageChange={setPage}
+        onPageSizeChange={handlePageSizeChange}
+        page={page}
+        pageSize={pageSize}
         rowKey={entry => entry.tconst}
         totalDocuments={total_documents}
       />

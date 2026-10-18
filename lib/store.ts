@@ -5,7 +5,6 @@ import mainImagesSlice from '../app/dashboard/favorites/reducer/mainImagesSlice'
 import movieDetailsSlice from '../app/dashboard/favorites/reducer/movieDetailsSlice';
 import authoralReviewSlice from '../app/dashboard/reviews/reducer/authoralReviewSlice';
 import reviewImagesSlice from '../app/dashboard/reviews/reducer/imagesSlice';
-import searchSlice from '../app/dashboard/search/reducer/searchSlice';
 import writeReviewSlice from '../app/dashboard/write-review/reducer/writeReviewSlice';
 
 // Keys follow the feature folder that owns each slice.
@@ -17,7 +16,6 @@ export const makeStore = () => {
       mainImages: mainImagesSlice,
       review: authoralReviewSlice,
       reviewImages: reviewImagesSlice,
-      search: searchSlice,
       writeReview: writeReviewSlice,
     },
   });

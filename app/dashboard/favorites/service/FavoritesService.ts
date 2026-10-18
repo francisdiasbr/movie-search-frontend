@@ -2,13 +2,27 @@ import { ApiResponse, EntriesResponse } from '../../../../lib/api/types';
 import BaseService from '../../../../lib/service/BaseService';
 import {
   EditDetailsPayload,
+  FavoritesFilters,
   FavoritesSearchParams,
   FavoritesSearchResponse,
   MovieDetailsItem,
 } from '../types';
 
+// The year bounds become one range condition; the other filters go as-is.
+const toMongoFilters = ({ startYearFrom, startYearTo, ...filters }: FavoritesFilters) => {
+  const startYear = {
+    ...(startYearFrom !== undefined && { $gte: startYearFrom }),
+    ...(startYearTo !== undefined && { $lte: startYearTo }),
+  };
+  return Object.keys(startYear).length ? { ...filters, startYear } : filters;
+};
+
 class FavoritesService extends BaseService {
   protected prefix = 'favorites';
+
+  addFavorite(tconst: string): Promise<ApiResponse<MovieDetailsItem>> {
+    return this.post(undefined, this.path(tconst));
+  }
 
   edit(tconst: string, body: EditDetailsPayload): Promise<ApiResponse<MovieDetailsItem>> {
     return this.put(tconst, body);
@@ -39,7 +53,9 @@ class FavoritesService extends BaseService {
   // overwrites a newer one while the user is typing.
   searchFavorites(params: FavoritesSearchParams = {}): Promise<FavoritesSearchResponse> {
     const body = {
-      filters: params.filters ?? {},
+      filters: toMongoFilters(params.filters ?? {}),
+      page: params.page ?? 1,
+      page_size: params.pageSize ?? 0,
       search_term: params.searchTerm ?? '',
     };
     return this.post(body, this.path('search'), { cancelPrevious: true });

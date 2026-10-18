@@ -1,18 +1,27 @@
-import { Column } from '../types';
+import { FaSortDown, FaSortUp } from 'react-icons/fa';
+
+import { TableHeaderProps } from '../types';
 import * as S from './styles';
 
-interface TableHeaderProps<Row> {
-  columns: Column<Row>[];
-}
-
-const TableHeader = <Row,>({ columns }: TableHeaderProps<Row>) => (
+const TableHeader = <Row,>({ columns, onSort, sortConfig }: TableHeaderProps<Row>) => (
   <thead>
     <tr>
-      {columns.map(column => (
-        <S.Header key={column.key} style={column.style}>
-          {column.label}
-        </S.Header>
-      ))}
+      {columns.map(column => {
+        const isSorted = column.sort && sortConfig?.key === column.key;
+        return (
+          <S.Header
+            $sortable={Boolean(column.sort)}
+            key={column.key}
+            onClick={column.sort ? () => onSort(column.key) : undefined}
+            style={column.style}
+          >
+            <S.Label>
+              {column.label}
+              {isSorted && (sortConfig?.direction === 'ascending' ? <FaSortUp /> : <FaSortDown />)}
+            </S.Label>
+          </S.Header>
+        );
+      })}
     </tr>
   </thead>
 );

@@ -16,6 +16,7 @@ export interface FavoriteEntry {
 }
 
 export interface MovieFavoritesState {
+  addStatus: AsyncStatus;
   countries: string[];
   entries: FavoriteEntry[];
   error: null | string;
@@ -26,12 +27,17 @@ export interface MovieFavoritesState {
 
 export interface FavoritesFilters {
   country?: string;
-  startYear?: number;
+  // Inclusive bounds; the service turns them into a Mongo range on startYear.
+  startYearFrom?: number;
+  startYearTo?: number;
   watched?: boolean;
 }
 
 export interface FavoritesSearchParams {
   filters?: FavoritesFilters;
+  // 1-based; the backend skips (page - 1) * pageSize documents.
+  page?: number;
+  pageSize?: number;
   searchTerm?: string;
 }
 

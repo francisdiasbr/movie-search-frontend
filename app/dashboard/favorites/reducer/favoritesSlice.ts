@@ -1,10 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { isApiError } from '../../../../lib/api/errors';
 import { addStatusCases, createApiThunk } from '../../../../lib/api/thunk';
 import favoritesService from '../service/FavoritesService';
-import { FavoritesSearchParams, FavoritesSearchResponse, MovieFavoritesState } from '../types';
+import {
+  FavoritesSearchParams,
+  FavoritesSearchResponse,
+  MovieDetailsItem,
+  MovieFavoritesState,
+} from '../types';
 
 const initialState: MovieFavoritesState = {
+  addStatus: 'idle',
   countries: [],
   entries: [],
   error: null,
@@ -33,13 +40,33 @@ export const fetchFavorites = createApiThunk<FavoritesSearchResponse, FavoritesS
   'Não foi possível carregar os favoritos.'
 );
 
+export const addFavorite = createApiThunk<MovieDetailsItem, string>(
+  'movies/addFavorite',
+  async tconst => {
+    try {
+      const response = await favoritesService.addFavorite(tconst);
+      return response.data;
+    } catch (error) {
+      if (isApiError(error) && error.status === 409) {
+        throw new Error('Este filme já está na coleção.');
+      }
+      throw error;
+    }
+  },
+  'Não foi possível adicionar o filme na coleção.'
+);
+
 const movieFavoritesSlice = createSlice({
   initialState,
   name: 'favorites',
   reducers: {
+    resetAddStatus(state) {
+      state.addStatus = 'idle';
+    },
     resetState: () => initialState,
   },
   extraReducers: builder => {
+    addStatusCases(builder, addFavorite, 'addStatus');
     addStatusCases(builder, fetchFavorites, 'status', (state, action) => {
       state.countries = action.payload.countries ?? [];
       state.entries = action.payload.entries;
@@ -49,5 +76,5 @@ const movieFavoritesSlice = createSlice({
   },
 });
 
-export const { resetState } = movieFavoritesSlice.actions;
+export const { resetAddStatus, resetState } = movieFavoritesSlice.actions;
 export default movieFavoritesSlice.reducer;

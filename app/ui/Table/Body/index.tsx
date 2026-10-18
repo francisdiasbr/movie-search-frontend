@@ -1,10 +1,21 @@
 import { ReactNode } from 'react';
 
 import LoadingSpinner from '../../LoadingSpinner';
+import RowsLoader from '../RowsLoader';
 import { TableBodyProps } from '../types';
 import * as S from './styles';
 
-const TableBody = <Row,>({ columns, entries, isLoading, rowKey }: TableBodyProps<Row>) => {
+const SKELETON_ROWS = 10;
+
+const TableBody = <Row,>({ columns, entries, isActionLoading, isLoading, rowKey }: TableBodyProps<Row>) => {
+  if (isLoading && !isActionLoading) {
+    return (
+      <S.TableBody>
+        <RowsLoader columnsNum={columns.length} rowsNum={SKELETON_ROWS} />
+      </S.TableBody>
+    );
+  }
+
   if (isLoading) {
     return (
       <S.TableBody>

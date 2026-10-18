@@ -4,7 +4,6 @@ import { ROUTES } from '../const'
 import * as S from './styles'
 
 const links = [
-  { href: ROUTES.search, name: 'Adicionar na coleção' },
   { href: ROUTES.favorites, name: 'Minha coleção' },
   { href: ROUTES.keywords, name: 'Palavras-chave favoritadas' },
   { href: ROUTES.write, name: 'Escrever' },
