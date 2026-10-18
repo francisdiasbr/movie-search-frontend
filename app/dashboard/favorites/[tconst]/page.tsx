@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { ImageItem } from '../../../../lib/service/ImagesBaseService';
 import { ROUTES } from '../../../const';
+import { useStatusToast } from '../../../hooks/useStatusToast';
+import { useLanguage } from '../../../language/LanguageProvider';
 import Card from '../../../ui/Card';
 import ExternalLink from '../../../ui/ExternalLink';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
@@ -14,7 +16,7 @@ import { imdbTitleUrl } from '../../../util/url';
 import GoBack from '../../components/GoBack';
 import { useKeywords } from '../../keywords/useKeywords';
 import { deleteMainImage, fetchMainImage, uploadMainImage } from '../reducer/mainImagesSlice';
-import { fetchDetails, resetState } from '../reducer/movieDetailsSlice';
+import { fetchDetails, resetState, resetTranslateStatus, translateDetails } from '../reducer/movieDetailsSlice';
 import EditInfoModal from './components/EditInfoModal';
 import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
@@ -29,18 +31,39 @@ export default function MovieDetailsPage() {
   const dispatch = useAppDispatch();
   const { tconst } = useParams() as { tconst: string };
 
-  const { data, fetchStatus } = useAppSelector(state => state.favoriteDetails);
+  const { changeLanguage, language } = useLanguage();
+
+  const { data, error, fetchStatus, translateStatus } = useAppSelector(state => state.favoriteDetails);
   const { images, status: updateImageStatus } = useAppSelector(state => state.mainImages);
   const { keywords: favoritedKeywords, load: loadKeywords, add: addKeyword, remove: removeKeyword } = useKeywords();
 
   useEffect(() => {
-    dispatch(fetchDetails(tconst));
     dispatch(fetchMainImage({ tconst }));
     loadKeywords();
     return () => {
       dispatch(resetState());
     };
   }, [dispatch, loadKeywords, tconst]);
+
+  // Reloads the texts whenever the global language changes. Older favorites
+  // have no Portuguese version yet: the first time they are opened in PT the
+  // backend translates them (a few seconds) and the page shows the result.
+  useEffect(() => {
+    const load = async () => {
+      const movie = await dispatch(fetchDetails({ tconst, lang: language })).unwrap().catch(() => null);
+      if (movie && language === 'pt' && movie.lang !== 'pt') dispatch(translateDetails(tconst));
+    };
+    load();
+  }, [dispatch, language, tconst]);
+
+  useStatusToast({
+    error,
+    errorMessage: 'Não foi possível traduzir o filme.',
+    onFailure: () => changeLanguage('en'),
+    reset: () => dispatch(resetTranslateStatus()),
+    status: translateStatus,
+    successMessage: 'Filme traduzido para o português.',
+  });
 
   if (!data) {
     if (fetchStatus === 'loading') return <LoadingSpinner />;

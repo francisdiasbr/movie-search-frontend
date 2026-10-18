@@ -85,6 +85,8 @@ Cross-cutting code lives directly under `app/`, never inside a feature:
 - `app/formatter/` — display formatters exported in upper case from the barrel, like siga's `formatter/index.js`: `JOIN_LIST(values)`, `NOT_AVAILABLE(value)`, `PARAGRAPHS(text)`, `YES_NO(bool)`. Add one file per formatter and re-export it from `index.ts`.
 - `app/util/` — pure helpers: `url.ts` (`imdbTitleUrl`, `spotifyEmbedUrl`, `pirateBaySearchUrl`), `tconst.ts` (`isValidTconst`), `select.ts` (`toSelectOptions`).
 - `lib/api/types.ts` — `AsyncStatus`; use it instead of spelling out the `'idle' | 'loading' | ...` union.
+- `app/userPreferences/` — mirrors siga-front's `app/userPreferences`: `reducer/userPreferencesSlice.ts` (store key `userPreferences`, `selectUserLanguage`), `action/userPreferencesAction.ts` (`dispatchLanguage` persists and sets) and `service/UserPreferencesStorage.ts` (localStorage, since there is no user account; falls back to `navigator.language`).
+- `app/language/LanguageProvider.tsx` — mirrors siga-front's `LanguageProvider`: mounted once in `App.tsx` inside the `StoreProvider`, reads the language from the store and exposes `useLanguage()` (`{ language, changeLanguage }`). Screens and the nav `LanguageSelector` (`app/dashboard/components/LanguageSelector`) use the hook, never the slice. The language only changes the movie texts the backend translates (`GET /favorites/<tconst>?lang=pt`); the UI chrome stays in Portuguese.
 
 ### Custom hooks
 

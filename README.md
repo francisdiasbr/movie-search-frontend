@@ -61,6 +61,24 @@ O usuário pode visualizar as informações de um filme favorito:
 - Trilha sonora do filme (integração com o Spotify)
 - Magnet Link para download do filme
 
+### 4. Idioma dos textos (EN / PT)
+
+O seletor EN / PT no canto direito da barra de navegação troca o idioma de
+sinopse, trivia, citações, gêneros e palavras-chave dos filmes favoritos. O
+inglês é o original do IMDb; o português é gerado pelo backend com o Argos
+Translate, um tradutor automático que roda offline na máquina do servidor, sem
+chave de API nem custo. A escolha vale para o app inteiro e fica salva no
+navegador. Na primeira vez que um filme antigo é aberto em PT, o backend o traduz
+na hora (alguns segundos) e mostra o resultado; os textos da interface em si
+continuam em português nos dois modos.
+
+### 5. Sugestão de filmes por palavras-chave
+
+Na tela de palavras-chave favoritadas, o usuário seleciona uma ou mais e recebe
+os filmes que o IMDb associa a elas, com gêneros e sinopse. A busca é feita pelo
+backend na API do próprio IMDb; filmes que casam com mais palavras-chave vêm
+primeiro.
+
 ## Estrutura do projeto
 
 Cada pasta de rota em `app/dashboard/` é uma feature e tem seu próprio `service/` (chamadas à API), além de `reducer/` e `types.ts` quando a tela guarda estado no Redux. Duas features podem usar o mesmo recurso do backend e ainda assim cada uma tem o seu service.
@@ -74,6 +92,11 @@ Cada pasta de rota em `app/dashboard/` é uma feature e tem seu próprio `servic
 | `write/` | `WriteService` | nenhum | `write-review`, `favorites` |
 | `write-review/` | `WriteReviewService` | `writeReviewSlice` | `write-review` |
 | `keywords/` | `KeywordsService` | `keywordsSlice` | `keywords` |
+
+O idioma dos textos é uma preferência global: `app/userPreferences/` (slice,
+action e storage em localStorage) guarda a escolha e `app/language/LanguageProvider.tsx`
+a expõe pelo hook `useLanguage()`, usado pelo seletor da barra de navegação
+(`app/dashboard/components/LanguageSelector`) e pela página do filme.
 
 A infraestrutura fica em `lib/`: `api/BaseApi.ts` (axios + `ApiError`), `service/BaseService.ts` (classe base dos services, por `prefix`), `store.ts` e `hooks.ts`. Utilitários transversais ficam em `app/const.ts`, `app/formatter/`, `app/util/` e `app/hooks/`. Mais detalhes em [CLAUDE.md](CLAUDE.md).
 

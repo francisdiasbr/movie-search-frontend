@@ -1,6 +1,7 @@
 import { Link, Outlet } from 'react-router-dom'
 
 import { ROUTES } from '../const'
+import LanguageSelector from './components/LanguageSelector'
 import * as S from './styles'
 
 const links = [
@@ -21,6 +22,7 @@ export default function Layout() {
             </li>
           ))}
         </S.NavList>
+        <LanguageSelector />
       </S.Nav>
       <S.ContentWrapper as='main'>
         <Outlet />

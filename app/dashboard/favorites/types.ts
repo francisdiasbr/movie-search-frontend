@@ -1,5 +1,6 @@
 import { AsyncStatus } from '../../../lib/api/types';
 import { ImageItem } from '../../../lib/service/ImagesBaseService';
+import { Language } from '../../userPreferences/types';
 
 // One row of the favorites list. The backend sends the whole document, these
 // are the fields the table reads.
@@ -48,12 +49,17 @@ export interface FavoritesSearchResponse {
   years?: number[];
 }
 
+export type MovieLanguage = Language;
+
 export interface MovieDetailsItem {
   director: string;
   _id: string;
   country: string;
   genres: string[];
   imdb_url?: string;
+  // Language the texts actually came in: 'en' when the Portuguese version
+  // does not exist yet, even if it was requested.
+  lang?: MovieLanguage;
   magnet_link: string | null;
   plot: string;
   plot_keywords: string[];
@@ -77,6 +83,12 @@ export interface MovieDetailsState {
   editStatus: AsyncStatus;
   deleteStatus: AsyncStatus;
   fetchStatus: AsyncStatus;
+  translateStatus: AsyncStatus;
+}
+
+export interface FetchDetailsParams {
+  lang?: MovieLanguage;
+  tconst: string;
 }
 
 // Só o tconst é obrigatório: o backend grava apenas os campos enviados, então

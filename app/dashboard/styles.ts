@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
+  align-items: center;
   background: ${({ theme }) => theme.colors.primary.main};
   box-shadow: ${({ theme }) => theme.shadows.sm};
+  display: flex;
+  justify-content: space-between;
   left: 0;
   padding: ${({ theme }) => theme.spacing(1.5)} ${({ theme }) => theme.spacing.md};
   position: fixed;

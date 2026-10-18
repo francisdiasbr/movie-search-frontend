@@ -5,13 +5,12 @@ export interface Keyword {
 
 export interface SuggestedMovie {
   description?: string;
-  // From the IMDb title page; empty when the page could not be loaded.
   genres?: string[];
-  // Title as listed on IMDb (verified). `title` is the model's Portuguese
-  // title and can be wrong, so it is shown second.
+  // Both come from IMDb's keyword search: `title` is the localized title,
+  // `original_title` the one shown first.
   original_title?: string;
+  // Which of the selected keywords IMDb associates with the movie.
   relevance?: string;
-  // Confirmed by the backend against IMDb.
   tconst: string;
   title: string;
   year?: number | string;

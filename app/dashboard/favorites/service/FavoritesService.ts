@@ -6,6 +6,7 @@ import {
   FavoritesSearchParams,
   FavoritesSearchResponse,
   MovieDetailsItem,
+  MovieLanguage,
 } from '../types';
 
 // The year bounds become one range condition; the other filters go as-is.
@@ -37,8 +38,10 @@ class FavoritesService extends BaseService {
     return new Set((response.entries ?? []).map(entry => entry.tconst));
   }
 
-  getDetails(tconst: string): Promise<ApiResponse<MovieDetailsItem>> {
-    return this.get(tconst);
+  // The backend stores English plus a Portuguese translation and applies the
+  // requested one; `lang` in the answer says which one actually came.
+  getDetails(tconst: string, lang: MovieLanguage = 'en'): Promise<ApiResponse<MovieDetailsItem>> {
+    return this.api.get(`${this.path(tconst)}?lang=${lang}`);
   }
 
   removeFavorite(tconst: string): Promise<ApiResponse<unknown>> {
@@ -59,6 +62,11 @@ class FavoritesService extends BaseService {
       search_term: params.searchTerm ?? '',
     };
     return this.post(body, this.path('search'), { cancelPrevious: true });
+  }
+
+  // Generates the Portuguese version (Claude) and returns the movie in it.
+  translate(tconst: string): Promise<ApiResponse<MovieDetailsItem>> {
+    return this.post(undefined, this.path(tconst, 'translate'));
   }
 }
 
