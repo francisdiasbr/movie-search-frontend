@@ -1,26 +1,45 @@
 import { useEffect, useState } from 'react';
 
+import { isApiError } from '../../../lib/api/errors';
 import { useAsyncAction } from '../../hooks/useAsyncAction';
+import { useToastNotifications } from '../../hooks/useToastNotifications';
 import Button from '../../ui/Button';
-import ExternalLink from '../../ui/ExternalLink';
 import { Row } from '../../ui/Layout';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import PageHeader from '../../ui/PageHeader';
 import TagList from '../../ui/TagList';
-import { imdbTitleUrl } from '../../util/url';
+import SuggestedMovieCard from './components/SuggestedMovieCard';
 import keywordsService from './service/KeywordsService';
 import * as S from './styles';
 import { SuggestedMovie } from './types';
 import { useKeywords } from './useKeywords';
 
 export default function Page() {
-  const { keywords, load, status } = useKeywords();
+  const { keywords, load, refresh, status } = useKeywords();
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [suggestedMovies, setSuggestedMovies] = useState<SuggestedMovie[] | null>(null);
+  // Suggestions already in the collection show a filled star.
+  const [collectedTconsts, setCollectedTconsts] = useState<Set<string>>(new Set());
+  const [addingTconst, setAddingTconst] = useState<string | null>(null);
+  const { showError, showInfo, showSuccess } = useToastNotifications();
 
   useEffect(() => {
     load();
   }, [load]);
+
+  // Keywords are favourited from the movie page, often in another tab, so the
+  // list is refreshed whenever this tab comes back to the front.
+  useEffect(() => {
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible') refresh();
+    };
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', handleVisible);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', handleVisible);
+    };
+  }, [refresh]);
 
   const toggleKeyword = (keyword: string) => {
     setSelectedKeywords(prev =>
@@ -33,11 +52,36 @@ export default function Page() {
     setSuggestedMovies(null);
     try {
       const response = await keywordsService.suggestMovies(selectedKeywords);
-      setSuggestedMovies(response?.data?.movies ?? []);
+      const movies = response?.data?.movies ?? [];
+      setSuggestedMovies(movies);
+      setCollectedTconsts(
+        await keywordsService.findCollectedTconsts(movies.map(movie => movie.tconst)).catch(() => new Set<string>())
+      );
     } catch {
       setSuggestedMovies([]);
     }
   });
+
+  const markCollected = (tconst: string) => setCollectedTconsts(prev => new Set(prev).add(tconst));
+
+  const handleAddToCollection = async (tconst: string) => {
+    if (addingTconst) return;
+    setAddingTconst(tconst);
+    try {
+      await keywordsService.addToCollection(tconst);
+      markCollected(tconst);
+      showSuccess({ title: 'Filme adicionado na coleção.' });
+    } catch (error) {
+      if (isApiError(error) && error.status === 409) {
+        markCollected(tconst);
+        showInfo({ title: 'Este filme já está na coleção.' });
+        return;
+      }
+      showError({ title: 'Não foi possível adicionar o filme na coleção.' });
+    } finally {
+      setAddingTconst(null);
+    }
+  };
 
   return (
     <div>
@@ -64,28 +108,17 @@ export default function Page() {
       {suggestedMovies && suggestedMovies.length > 0 && (
         <S.Results>
           <h3>Filmes sugeridos:</h3>
-          <ul>
+          <S.List>
             {suggestedMovies.map(movie => (
-              <li key={movie.tconst}>
-                <strong>
-                  <ExternalLink href={imdbTitleUrl(movie.tconst)}>{movie.original_title ?? movie.title}</ExternalLink>
-                </strong>{' '}
-                ({movie.year})
-                {movie.original_title && movie.original_title !== movie.title && <> · {movie.title}</>}
-                {movie.genres && movie.genres.length > 0 ? (
-                  <S.Genres>
-                    {movie.genres.map(genre => (
-                      <S.Genre key={genre}>{genre}</S.Genre>
-                    ))}
-                  </S.Genres>
-                ) : (
-                  <br />
-                )}
-                <em>{movie.description}</em>
-                {movie.relevance && <S.Relevance>{movie.relevance}</S.Relevance>}
-              </li>
+              <SuggestedMovieCard
+                collected={collectedTconsts.has(movie.tconst)}
+                key={movie.tconst}
+                loading={addingTconst === movie.tconst}
+                movie={movie}
+                onCollect={handleAddToCollection}
+              />
             ))}
-          </ul>
+          </S.List>
         </S.Results>
       )}
     </div>

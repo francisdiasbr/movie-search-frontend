@@ -24,6 +24,17 @@ export function useKeywords() {
     }
   }, []);
 
+  // Refetches without touching `status`, so the list is updated in place
+  // (no spinner) when keywords were added from another tab or screen.
+  const refresh = useCallback(async () => {
+    try {
+      const response = await keywordsService.list();
+      setKeywords((response.data ?? []).map(item => item.keyword));
+    } catch {
+      // Keeps the list already on screen; the next full load reports errors.
+    }
+  }, []);
+
   const add = async (keyword: string) => {
     try {
       await keywordsService.add(keyword);
@@ -49,5 +60,5 @@ export function useKeywords() {
     }
   };
 
-  return { add, keywords, load, remove, status };
+  return { add, keywords, load, refresh, remove, status };
 }
