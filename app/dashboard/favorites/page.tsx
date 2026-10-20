@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { isApiError } from '../../../lib/api/errors';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import { ROUTES } from '../../const';
+import { useAsyncAction } from '../../hooks/useAsyncAction';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { useStatusToast } from '../../hooks/useStatusToast';
 import { useToastNotifications } from '../../hooks/useToastNotifications';
+import ConfirmDialog from '../../ui/ConfirmDialog';
 import PageHeader from '../../ui/PageHeader';
 import Table from '../../ui/Table';
 import { toSelectOptions } from '../../util/select';
@@ -14,18 +18,27 @@ import Search, { SearchValues } from './components/Search';
 import { fetchFavorites } from './reducer/favoritesSlice';
 import { deleteFavorite, resetDeleteStatus } from './reducer/movieDetailsSlice';
 import favoritesService from './service/FavoritesService';
+import { FavoriteEntry } from './types';
 
 const INITIAL_SEARCH: SearchValues = { searchTerm: '' };
 const INITIAL_PAGE_SIZE = 10;
 
+// A removal waiting for the user to confirm it in the dialog.
+interface PendingRemoval {
+  entry: FavoriteEntry;
+  kind: 'favorite' | 'review';
+}
+
 export default function Page() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { countries, entries, total_documents, status, startYears } = useAppSelector(state => state.favorites);
   const { deleteStatus } = useAppSelector(state => state.favoriteDetails);
   const { showSuccess, showError, showInfo } = useToastNotifications();
   const [search, setSearch] = useState<SearchValues>(INITIAL_SEARCH);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(INITIAL_PAGE_SIZE);
+  const [pending, setPending] = useState<PendingRemoval | null>(null);
 
   // A row action (delete, watched toggle) reloads the same page: the table
   // shows a spinner instead of the skeleton rows until that reload ends.
@@ -80,25 +93,34 @@ export default function Page() {
     successMessage: 'Filme removido dos favoritos com sucesso.',
   });
 
-  const handleDeleteReview = async (tconst: string) => {
+  const { loading: isDeletingReview, run: deleteReview } = useAsyncAction(async (tconst: string) => {
     try {
       await favoritesService.removeReview(tconst);
-      showSuccess({ title: 'Resenha deletada com sucesso!' });
+      showSuccess({ title: 'Resenha excluída com sucesso!' });
       reloadAfterAction();
     } catch (error) {
       if (isApiError(error) && error.status === 404) {
-        showInfo({ title: 'Nenhuma resenha encontrada para deletar.' });
+        showInfo({ title: 'Nenhuma resenha encontrada para excluir.' });
         return;
       }
-      showError({ title: 'Erro ao deletar resenha.' });
+      showError({ title: 'Erro ao excluir resenha.' });
     }
+  });
+
+  // Both removals ask for confirmation first; the dialog knows which one.
+  const handleConfirm = async () => {
+    if (!pending) return;
+    if (pending.kind === 'favorite') dispatch(deleteFavorite(pending.entry.tconst));
+    else await deleteReview(pending.entry.tconst);
+    setPending(null);
   };
 
   const columns = useMemo(
     () =>
       buildColumns({
-        onDelete: tconst => dispatch(deleteFavorite(tconst)),
-        onDeleteReview: handleDeleteReview,
+        onDelete: entry => setPending({ entry, kind: 'favorite' }),
+        onDeleteReview: entry => setPending({ entry, kind: 'review' }),
+        onOpenReview: entry => navigate(ROUTES.review(entry.tconst)),
         onWatchedChange: reloadAfterAction,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,9 +129,23 @@ export default function Page() {
 
   return (
     <>
-      <PageHeader title='Favoritos' />
-      <AddFavorite onAdded={handleSearch} />
+      <PageHeader
+        actions={<AddFavorite onAdded={handleSearch} />}
+        description={total_documents ? `${total_documents} filmes na coleção` : undefined}
+        title='Favoritos'
+      />
       <Search countryOptions={countryOptions} onChange={handleSearchChange} values={search} yearBounds={yearBounds} />
+      <ConfirmDialog
+        isOpen={pending !== null}
+        loading={isDeletingReview || deleteStatus === 'loading'}
+        onCancel={() => setPending(null)}
+        onConfirm={handleConfirm}
+        title={pending?.kind === 'review' ? 'Excluir resenha' : 'Excluir favorito'}
+      >
+        {pending?.kind === 'review' ? 'Excluir a resenha de ' : 'Remover '}
+        <strong>{pending?.entry.primaryTitle}</strong>
+        {pending?.kind === 'review' ? '? O filme continua na coleção.' : ' da coleção? Essa ação não pode ser desfeita.'}
+      </ConfirmDialog>
       <Table
         columns={columns}
         entries={entries}

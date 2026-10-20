@@ -1,3 +1,4 @@
+import Select from '../../../../ui/Select';
 import { SelectOption } from '../../../../util/select';
 import { FavoritesFilters } from '../../types';
 import YearRange from '../YearRange';
@@ -30,28 +31,28 @@ const Search = ({ countryOptions, onChange, values, yearBounds }: SearchProps) =
         type='search'
         value={values.searchTerm}
       />
-      <select aria-label='País' onChange={e => update({ country: e.target.value || undefined })} value={values.country ?? ''}>
-        <option value=''>País</option>
-        {countryOptions.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
+      <Select
+        clearable
+        label='País'
+        onChange={country => update({ country: country || undefined })}
+        options={countryOptions}
+        placeholder='País'
+        value={values.country ?? ''}
+      />
       <YearRange
         max={yearBounds.max}
         min={yearBounds.min}
         onChange={range => update({ startYearFrom: range.from, startYearTo: range.to })}
         value={{ from: values.startYearFrom, to: values.startYearTo }}
       />
-      <select
-        aria-label='Status'
-        onChange={e => update({ watched: e.target.value === '' ? undefined : e.target.value === 'true' })}
+      <Select
+        clearable
+        label='Status'
+        onChange={watched => update({ watched: watched === '' ? undefined : watched === 'true' })}
+        options={WATCHED_OPTIONS}
+        placeholder='Status'
         value={values.watched === undefined ? '' : String(values.watched)}
-      >
-        <option value=''>Status</option>
-        {WATCHED_OPTIONS.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
+      />
     </S.SearchContainer>
   );
 };

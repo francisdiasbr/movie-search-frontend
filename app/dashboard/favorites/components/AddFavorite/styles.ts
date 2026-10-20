@@ -1,13 +1,7 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-export const TconstInput = styled.input`
-  flex: 0 0 25%;
+export const Hint = styled.span`
+  color: ${({ theme }) => theme.colors.neutral.level5};
+  font-size: 0.8rem;
+  margin-top: ${({ theme }) => theme.spacing.xs};
 `;

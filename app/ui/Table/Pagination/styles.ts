@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PageSizeSelect = styled.select`
+export const PageSize = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.sm};
 `;
 

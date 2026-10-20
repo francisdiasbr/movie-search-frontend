@@ -1,5 +1,7 @@
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 import { useAppDispatch } from '../../../../../lib/hooks';
-import { WATCHED_LABEL, YES_NO } from '../../../../formatter';
+import { WATCHED_LABEL } from '../../../../formatter';
 import { useAsyncAction } from '../../../../hooks/useAsyncAction';
 import { useToastNotifications } from '../../../../hooks/useToastNotifications';
 import { editDetails } from '../../reducer/movieDetailsSlice';
@@ -28,9 +30,20 @@ export default function WatchedTag({ onUpdate, tconst, watched }: WatchedTagProp
     }
   });
 
+  const Icon = watched ? FaEye : FaEyeSlash;
+
   return (
-    <S.Toggle $busy={isUpdating} onClick={() => handleClick()} title={isUpdating ? 'Atualizando...' : 'Clique para alterar'}>
-      {YES_NO(watched)}
+    <S.Toggle
+      $busy={isUpdating}
+      $watched={watched}
+      aria-pressed={watched}
+      disabled={isUpdating}
+      onClick={() => handleClick()}
+      title={isUpdating ? 'Atualizando...' : `Marcar como ${WATCHED_LABEL(!watched)}`}
+      type='button'
+    >
+      <Icon size={12} />
+      {watched ? 'Assistido' : 'Não assistido'}
     </S.Toggle>
   );
 }

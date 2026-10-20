@@ -1,5 +1,4 @@
-import { FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaBookOpen, FaTrash } from 'react-icons/fa';
 
 import { ROUTES } from '../../const';
 import IconButton from '../../ui/IconButton';
@@ -9,59 +8,58 @@ import * as S from './styles';
 import { FavoriteEntry } from './types';
 
 interface ColumnHandlers {
-  onDelete: (tconst: string) => void;
-  onDeleteReview: (tconst: string) => void;
+  onDelete: (entry: FavoriteEntry) => void;
+  onDeleteReview: (entry: FavoriteEntry) => void;
+  onOpenReview: (entry: FavoriteEntry) => void;
   onWatchedChange: () => void;
 }
 
-export const buildColumns = ({ onDelete, onDeleteReview, onWatchedChange }: ColumnHandlers): Column<FavoriteEntry>[] => [
+export const buildColumns = ({
+  onDelete,
+  onDeleteReview,
+  onOpenReview,
+  onWatchedChange,
+}: ColumnHandlers): Column<FavoriteEntry>[] => [
   {
     key: 'poster',
-    label: 'Image',
+    label: 'Pôster',
     render: entry => (entry.poster_url ? <S.Poster src={entry.poster_url} alt={entry.primaryTitle} loading='lazy' /> : null),
     style: { minWidth: '75px', width: '10%' },
   },
   {
     key: 'primaryTitle',
-    label: 'Title',
-    render: entry => <Link to={ROUTES.favorite(entry.tconst)}>{entry.primaryTitle}</Link>,
+    label: 'Título',
+    render: entry => <S.TitleLink to={ROUTES.favorite(entry.tconst)}>{entry.primaryTitle}</S.TitleLink>,
     sort: true,
-    style: { minWidth: '200px', width: '35%' },
+    style: { minWidth: '200px', width: '45%' },
   },
   {
     key: 'startYear',
     label: 'Ano',
     sort: true,
-    style: { minWidth: '70px', width: '7%' },
+    style: { minWidth: '70px', width: '10%' },
   },
   {
     key: 'watched',
     label: 'Assistido',
     render: entry => <WatchedTag tconst={entry.tconst} watched={entry.watched} onUpdate={onWatchedChange} />,
     sort: true,
-    style: { minWidth: '100px', width: '10%' },
+    style: { minWidth: '150px', width: '15%' },
   },
   {
-    key: 'review',
-    label: 'Review',
-    render: entry => (entry.hasReview ? <Link to={ROUTES.review(entry.tconst)}>ver</Link> : null),
-    style: { minWidth: '80px', width: '10%' },
-  },
-  {
-    key: 'deleteReview',
-    label: 'Excluir review',
-    render: entry =>
-      entry.hasReview ? (
-        <IconButton icon={FaTrash} onClick={() => onDeleteReview(entry.tconst)} title='Deletar review' />
-      ) : null,
-    style: { minWidth: '50px', width: '5%' },
-  },
-  {
-    key: 'delete',
-    label: 'Excluir favorito',
+    key: 'actions',
+    label: 'Ações',
     render: entry => (
-      <IconButton icon={FaTrash} onClick={() => onDelete(entry.tconst)} title='Deletar favorito' />
+      <S.Actions>
+        {entry.hasReview && (
+          <>
+            <IconButton icon={FaBookOpen} onClick={() => onOpenReview(entry)} title='Ler resenha' />
+            <S.DangerIconButton icon={FaTrash} onClick={() => onDeleteReview(entry)} title='Excluir resenha' />
+          </>
+        )}
+        <S.DangerIconButton icon={FaTrash} onClick={() => onDelete(entry)} title='Excluir favorito' />
+      </S.Actions>
     ),
-    style: { minWidth: '50px', width: '3%' },
+    style: { minWidth: '130px', width: '20%' },
   },
 ];

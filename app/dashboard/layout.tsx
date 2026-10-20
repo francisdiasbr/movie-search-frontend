@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 
 import { ROUTES } from '../const'
 import LanguageSelector from './components/LanguageSelector'
@@ -19,7 +19,7 @@ export default function Layout() {
         <S.NavList>
           {links.map(link => (
             <li key={link.name}>
-              <Link to={link.href}>{link.name}</Link>
+              <NavLink to={link.href}>{link.name}</NavLink>
             </li>
           ))}
         </S.NavList>
