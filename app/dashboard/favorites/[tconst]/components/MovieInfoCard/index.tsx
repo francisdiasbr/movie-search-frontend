@@ -3,10 +3,12 @@ import { FaEdit } from 'react-icons/fa';
 import { JOIN_LIST, NOT_AVAILABLE, NOT_AVAILABLE_LABEL } from '../../../../../formatter';
 import Button from '../../../../../ui/Button';
 import Card from '../../../../../ui/Card';
+import ExternalLink from '../../../../../ui/ExternalLink';
 import TagList from '../../../../../ui/TagList';
-import { pirateBaySearchUrl } from '../../../../../util/url';
+import { imdbTitleUrl, pirateBaySearchUrl } from '../../../../../util/url';
 import { MovieDetailsItem } from '../../../types';
 import * as S from '../../styles';
+import { sanitizeTrivia } from '../../utils';
 
 interface MovieInfoCardProps {
   data: MovieDetailsItem;
@@ -34,45 +36,79 @@ export default function MovieInfoCard({
   onKeywordRemove,
   onKeywordSelect,
 }: MovieInfoCardProps) {
-  return (
-    <Card
-      title={data.primaryTitle}
-      actions={
-        onEditClick && (
-          <Button iconLeft={FaEdit} size='small' onClick={onEditClick}>
-            Editar
-          </Button>
-        )
-      }
-    >
-      <S.InfoGrid>
-        <S.Item>
-          <S.Label>Diretor</S.Label>
-          <S.Value>
-            {data.director ? (
-              <TagList
-                favorited={favoritedKeywords}
-                items={[data.director]}
-                onRemove={onKeywordRemove}
-                onSelect={onKeywordSelect}
-              />
-            ) : (
-              NOT_AVAILABLE_LABEL
-            )}
-          </S.Value>
-        </S.Item>
-        {INFO_FIELDS.map(({ key, label }) => (
-          <S.Item key={key}>
-            <S.Label>{label}</S.Label>
-            <S.Value>{formatField(data[key])}</S.Value>
-          </S.Item>
-        ))}
-      </S.InfoGrid>
+  const title = (
+    <>
+      {data.primaryTitle}
+      <S.TitleLink>
+        <ExternalLink href={data.imdb_url ?? imdbTitleUrl(data.tconst)}>{data.tconst}</ExternalLink>
+      </S.TitleLink>
+    </>
+  );
+  const actions = onEditClick && (
+    <Button iconLeft={FaEdit} size='small' onClick={onEditClick}>
+      Editar
+    </Button>
+  );
 
-      <S.SynopsisSection>
-        <S.Label>Sinopse</S.Label>
-        <S.SynopsisText>{NOT_AVAILABLE(data.plot)}</S.SynopsisText>
-      </S.SynopsisSection>
+  // With a banner the title and the actions sit over the image instead of
+  // in the card header.
+  const cover = data.backdrop_url && (
+    <S.Hero>
+      <S.HeroImage alt={data.primaryTitle} src={data.backdrop_url} />
+      <S.HeroContent>
+        <S.HeroTitle>{title}</S.HeroTitle>
+        {actions}
+      </S.HeroContent>
+    </S.Hero>
+  );
+
+  return (
+    <Card actions={cover ? undefined : actions} cover={cover} title={cover ? undefined : title}>
+      <S.InfoGrid>
+        <S.InfoColumn>
+          <S.Item>
+            <S.Label>Diretor</S.Label>
+            <S.Value>
+              {data.director ? (
+                <TagList
+                  favorited={favoritedKeywords}
+                  items={[data.director]}
+                  onRemove={onKeywordRemove}
+                  onSelect={onKeywordSelect}
+                />
+              ) : (
+                NOT_AVAILABLE_LABEL
+              )}
+            </S.Value>
+          </S.Item>
+          {INFO_FIELDS.map(({ key, label }) => (
+            <S.Item key={key}>
+              <S.Label>{label}</S.Label>
+              <S.Value>{formatField(data[key])}</S.Value>
+            </S.Item>
+          ))}
+        </S.InfoColumn>
+
+        <S.Item>
+          <S.Label>Sinopse</S.Label>
+          <S.SynopsisText>{NOT_AVAILABLE(data.plot)}</S.SynopsisText>
+        </S.Item>
+
+        <S.Item>
+          <S.Label>Trivia</S.Label>
+          {data.trivia ? (
+            <S.SynopsisText>
+              <S.BulletList>
+                {sanitizeTrivia(data.trivia).map(({ key, text }) => (
+                  <li key={key}>{text}</li>
+                ))}
+              </S.BulletList>
+            </S.SynopsisText>
+          ) : (
+            <S.SynopsisText>{NOT_AVAILABLE_LABEL}</S.SynopsisText>
+          )}
+        </S.Item>
+      </S.InfoGrid>
 
       <S.ActionsSection>
         {data.magnet_link && (

@@ -50,23 +50,75 @@ export const NumberedList = styled(BulletList).attrs({ as: 'ol' })``;
 
 // ── MovieInfoCard ─────────────────────────────────────────────────────────────
 
-export const InfoGrid = styled.div`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.md};
-  grid-template-columns: 1fr;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+export const TitleLink = styled.span`
+  font-size: 14px;
+  font-weight: ${({ theme }) => theme.fonts.regular};
+  margin-left: ${({ theme }) => theme.spacing.sm};
+`;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+export const Hero = styled.div`
+  aspect-ratio: 21 / 9;
+  max-height: 420px;
+  position: relative;
+  width: 100%;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  &::after {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0) 60%);
+    content: '';
+    inset: 0;
+    position: absolute;
   }
 `;
 
-export const SynopsisSection = styled.div`
+export const HeroImage = styled.img`
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+`;
+
+export const HeroContent = styled.div`
+  align-items: flex-end;
+  bottom: 0;
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md};
+  justify-content: space-between;
+  left: 0;
+  padding: ${({ theme }) => theme.spacing(2.5)};
+  position: absolute;
+  right: 0;
+  z-index: 1;
+`;
+
+export const HeroTitle = styled.h2`
+  align-items: baseline;
+  color: ${({ theme }) => theme.colors.neutral.white};
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+
+  a {
+    color: ${({ theme }) => theme.colors.neutral.white};
+  }
+`;
+
+// Info fields | synopsis | trivia; stacked on narrow screens.
+export const InfoGrid = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.lg};
+  grid-template-columns: 1fr;
   margin-bottom: ${({ theme }) => theme.spacing(2.5)};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+    grid-template-columns: 1fr 1.5fr 2fr;
+  }
+`;
+
+export const InfoColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const SynopsisText = styled.div`

@@ -14,12 +14,8 @@ const Table = <Row,>({
   entries,
   isActionLoading = false,
   isLoading,
-  onPageChange,
-  onPageSizeChange,
-  page,
-  pageSize,
+  pagination,
   rowKey,
-  totalDocuments,
 }: TableProps<Row>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
@@ -46,15 +42,11 @@ const Table = <Row,>({
           rowKey={rowKey}
         />
       </S.StyledTable>
-      <S.Footer>
-        <Pagination
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-          page={page}
-          pageSize={pageSize}
-          totalDocuments={totalDocuments}
-        />
-      </S.Footer>
+      {pagination && (
+        <S.Footer>
+          <Pagination {...pagination} />
+        </S.Footer>
+      )}
     </S.TableContainer>
   );
 };

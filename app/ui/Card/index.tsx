@@ -7,12 +7,15 @@ interface CardProps {
   badge?: string;
   children: ReactNode;
   className?: string;
+  // Full-bleed content above the header, such as a banner image.
+  cover?: ReactNode;
   footer?: ReactNode;
   title?: ReactNode;
 }
 
-const Card = ({ actions, badge, children, className, footer, title }: CardProps) => (
+const Card = ({ actions, badge, children, className, cover, footer, title }: CardProps) => (
   <S.Card className={className}>
+    {cover}
     {(title || actions) && (
       <S.CardHeader>
         <S.CardTitle>

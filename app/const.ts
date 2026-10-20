@@ -2,6 +2,7 @@
 export const TCONST_REGEX = /^tt\d{7,8}$/;
 
 export const ROUTES = {
+  belasArtes: '/dashboard/belas-artes',
   favorite: (tconst: string) => `/dashboard/favorites/${tconst}`,
   favorites: '/dashboard/favorites',
   keywords: '/dashboard/keywords',

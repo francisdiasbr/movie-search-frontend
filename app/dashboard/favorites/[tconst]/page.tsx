@@ -12,7 +12,6 @@ import LoadingSpinner from '../../../ui/LoadingSpinner';
 import MediaCard from '../../../ui/MediaCard';
 import PageHeader from '../../../ui/PageHeader';
 import TagList from '../../../ui/TagList';
-import { imdbTitleUrl } from '../../../util/url';
 import GoBack from '../../components/GoBack';
 import { useKeywords } from '../../keywords/useKeywords';
 import { deleteMainImage, fetchMainImage, uploadMainImage } from '../reducer/mainImagesSlice';
@@ -22,7 +21,7 @@ import MainImageModal from './components/MainImageModal';
 import MainImageUpload from './components/MainImageUpload';
 import MovieInfoCard from './components/MovieInfoCard';
 import * as S from './styles';
-import { formatQuote, sanitizeTrivia } from './utils';
+import { formatQuote } from './utils';
 
 export default function MovieDetailsPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +70,7 @@ export default function MovieDetailsPage() {
   }
 
   const plotKeywords = Array.isArray(data.plot_keywords) ? data.plot_keywords : [];
-  const imdbUrl = data.imdb_url ?? imdbTitleUrl(data.tconst);
+  const references = Array.isArray(data.references) ? data.references : [];
 
   return (
     <S.PageContainer>
@@ -89,14 +88,9 @@ export default function MovieDetailsPage() {
         onKeywordRemove={removeKeyword}
       />
 
-      <Card title='Links'>
-        <S.LinksGrid>
-          <S.Item>
-            <S.Label>IMDB</S.Label>
-            <S.Value>
-              <ExternalLink href={imdbUrl} />
-            </S.Value>
-          </S.Item>
+      {(data.wiki || references.length > 0) && (
+        <Card title='Links'>
+          <S.LinksGrid>
           {data.wiki && (
             <S.Item>
               <S.Label>Wiki</S.Label>
@@ -105,12 +99,12 @@ export default function MovieDetailsPage() {
               </S.Value>
             </S.Item>
           )}
-          {Array.isArray(data.references) && data.references.length > 0 && (
+          {references.length > 0 && (
             <S.Item>
               <S.Label>Referências</S.Label>
               <S.Value>
                 <S.NumberedList>
-                  {data.references.map((reference, index) => (
+                  {references.map((reference, index) => (
                     <li key={index}>
                       <ExternalLink href={reference} />
                     </li>
@@ -119,18 +113,7 @@ export default function MovieDetailsPage() {
               </S.Value>
             </S.Item>
           )}
-        </S.LinksGrid>
-      </Card>
-
-      {data.trivia && (
-        <Card title='Trivia'>
-          <S.Content>
-            <S.BulletList>
-              {sanitizeTrivia(data.trivia).map(({ key, text }) => (
-                <li key={key}>{text}</li>
-              ))}
-            </S.BulletList>
-          </S.Content>
+          </S.LinksGrid>
         </Card>
       )}
 

@@ -9,6 +9,7 @@ const links = [
   { href: ROUTES.keywords, name: 'Palavras-chave favoritadas' },
   { href: ROUTES.write, name: 'Escrever' },
   { href: ROUTES.read, name: 'Ler' },
+  { href: ROUTES.belasArtes, name: 'Belas Artes' },
 ]
 
 export default function Layout() {

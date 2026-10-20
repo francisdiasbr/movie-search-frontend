@@ -24,13 +24,9 @@ export interface TableProps<Row> {
   // instead of the skeleton so the table does not flicker.
   isActionLoading?: boolean;
   isLoading: boolean;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-  // 1-based, as the backend expects it.
-  page: number;
-  pageSize: number;
+  // Without it every entry is shown and there is no footer.
+  pagination?: PaginationProps;
   rowKey: (row: Row) => string;
-  totalDocuments: number;
 }
 
 export interface TableBodyProps<Row> {
@@ -50,6 +46,7 @@ export interface TableHeaderProps<Row> {
 export interface PaginationProps {
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  // 1-based, as the backend expects it.
   page: number;
   pageSize: number;
   totalDocuments: number;

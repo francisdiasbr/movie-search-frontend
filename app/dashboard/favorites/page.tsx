@@ -115,12 +115,14 @@ export default function Page() {
         entries={entries}
         isActionLoading={isActionLoading}
         isLoading={isLoading}
-        onPageChange={setPage}
-        onPageSizeChange={handlePageSizeChange}
-        page={page}
-        pageSize={pageSize}
+        pagination={{
+          onPageChange: setPage,
+          onPageSizeChange: handlePageSizeChange,
+          page,
+          pageSize,
+          totalDocuments: total_documents,
+        }}
         rowKey={entry => entry.tconst}
-        totalDocuments={total_documents}
       />
     </>
   );

@@ -52,6 +52,8 @@ export interface FavoritesSearchResponse {
 export type MovieLanguage = Language;
 
 export interface MovieDetailsItem {
+  // Landscape still from IMDb for the banner; '' when IMDb has none.
+  backdrop_url?: string;
   director: string;
   _id: string;
   country: string;
