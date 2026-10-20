@@ -103,7 +103,50 @@ export const HeroTitle = styled.h2`
   }
 `;
 
-// Info fields | synopsis | trivia; stacked on narrow screens.
+// Year · country · director under the title. Over the banner it is white;
+// without a banner it sits at the top of the card body.
+export const HeroMeta = styled.p`
+  color: ${({ theme }) => theme.colors.neutral.level9};
+  font-size: 0.9rem;
+  margin: ${({ theme }) => theme.spacing.xs} 0 0;
+`;
+
+// The Brazilian title, right under the original one.
+export const HeroSubtitle = styled.p`
+  color: ${({ theme }) => theme.colors.neutral.white};
+  font-family: ${({ theme }) => theme.fonts.fontPrimary};
+  font-size: 1.1rem;
+  font-weight: ${({ theme }) => theme.fonts.medium};
+  margin: ${({ theme }) => theme.spacing.xxs} 0 0;
+`;
+
+export const Subtitle = styled.p`
+  color: ${({ theme }) => theme.colors.neutral.level3};
+  font-family: ${({ theme }) => theme.fonts.fontPrimary};
+  font-size: 1.1rem;
+  font-weight: ${({ theme }) => theme.fonts.medium};
+  margin: 0 0 ${({ theme }) => theme.spacing.xs};
+`;
+
+export const Meta = styled.p`
+  color: ${({ theme }) => theme.colors.neutral.level4};
+  font-size: 0.9rem;
+  margin: 0 0 ${({ theme }) => theme.spacing.md};
+`;
+
+export const Poster = styled.img`
+  border-radius: ${({ theme }) => theme.radius.md};
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  display: block;
+  max-width: 180px;
+  width: 100%;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    margin: 0 auto;
+  }
+`;
+
+// Poster | info fields | synopsis | trivia; stacked on narrow screens.
 export const InfoGrid = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.lg};
@@ -111,7 +154,7 @@ export const InfoGrid = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing(2.5)};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    grid-template-columns: 1fr 1.5fr 2fr;
+    grid-template-columns: auto 1fr 1.5fr 2fr;
   }
 `;
 
@@ -205,25 +248,42 @@ export const EmptyText = styled.p`
 
 // ── Quotes (formatQuote in utils.tsx) ─────────────────────────────────────────
 
-export const QuoteLine = styled.div`
-  align-items: flex-start;
+// Laid out like a screenplay page: the character name in small caps above
+// the line, the line indented, the whole dialogue in one bordered block.
+export const QuoteBlock = styled.div`
+  border-left: 3px solid ${({ theme }) => theme.colors.primary.light};
   display: flex;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing(1.5)};
+  max-width: 720px;
+  padding-left: ${({ theme }) => theme.spacing.md};
+`;
+
+export const QuoteLine = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xxs};
 `;
 
 export const QuoteCharacter = styled.span`
   color: ${({ theme }) => theme.colors.primary.main};
-  flex-shrink: 0;
-  font-weight: ${({ theme }) => theme.fonts.medium};
-  margin-right: ${({ theme }) => theme.spacing(0.75)};
+  font-family: ${({ theme }) => theme.fonts.fontPrimary};
+  font-size: 0.75rem;
+  font-weight: ${({ theme }) => theme.fonts.bold};
+  letter-spacing: 1px;
+  text-transform: uppercase;
 `;
 
 export const QuoteSpeech = styled.span`
   color: ${({ theme }) => theme.colors.neutral.level1};
-  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  padding-left: ${({ theme }) => theme.spacing.md};
 `;
 
 export const QuotePlain = styled.div`
   color: ${({ theme }) => theme.colors.neutral.level3};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.5;
 `;

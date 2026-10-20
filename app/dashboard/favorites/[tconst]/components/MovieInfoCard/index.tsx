@@ -18,11 +18,10 @@ interface MovieInfoCardProps {
   onKeywordSelect: (keyword: string) => void;
 }
 
-const INFO_FIELDS: Array<{ key: 'country' | 'genres' | 'stars' | 'startYear' | 'writers'; label: string }> = [
+// Year and country go in the line under the title instead.
+const INFO_FIELDS: Array<{ key: 'genres' | 'stars' | 'writers'; label: string }> = [
   { key: 'writers', label: 'Roteiristas' },
-  { key: 'stars', label: 'Stars' },
-  { key: 'startYear', label: 'Ano' },
-  { key: 'country', label: 'País' },
+  { key: 'stars', label: 'Elenco' },
   { key: 'genres', label: 'Gêneros' },
 ];
 
@@ -44,6 +43,13 @@ export default function MovieInfoCard({
       </S.TitleLink>
     </>
   );
+
+  // The Brazilian title under the original one, when they differ.
+  const titlePt = data.title_pt && data.title_pt !== data.primaryTitle ? data.title_pt : null;
+
+  // The one-line technical sheet: year · country · director.
+  const meta = [data.startYear, data.country, data.director].filter(Boolean).map(String);
+
   const actions = onEditClick && (
     <Button iconLeft={FaEdit} size='small' onClick={onEditClick}>
       Editar
@@ -56,7 +62,11 @@ export default function MovieInfoCard({
     <S.Hero>
       <S.HeroImage alt={data.primaryTitle} src={data.backdrop_url} />
       <S.HeroContent>
-        <S.HeroTitle>{title}</S.HeroTitle>
+        <div>
+          <S.HeroTitle>{title}</S.HeroTitle>
+          {titlePt && <S.HeroSubtitle lang='pt-BR'>{titlePt}</S.HeroSubtitle>}
+          {meta.length > 0 && <S.HeroMeta>{meta.join(' · ')}</S.HeroMeta>}
+        </div>
         {actions}
       </S.HeroContent>
     </S.Hero>
@@ -64,7 +74,12 @@ export default function MovieInfoCard({
 
   return (
     <Card actions={cover ? undefined : actions} cover={cover} title={cover ? undefined : title}>
+      {!cover && titlePt && <S.Subtitle lang='pt-BR'>{titlePt}</S.Subtitle>}
+      {!cover && meta.length > 0 && <S.Meta>{meta.join(' · ')}</S.Meta>}
+
       <S.InfoGrid>
+        {data.poster_url && <S.Poster alt={`Pôster de ${data.primaryTitle}`} src={data.poster_url} />}
+
         <S.InfoColumn>
           <S.Item>
             <S.Label>Diretor</S.Label>

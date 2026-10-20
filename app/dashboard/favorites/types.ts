@@ -65,6 +65,7 @@ export interface MovieDetailsItem {
   magnet_link: string | null;
   plot: string;
   plot_keywords: string[];
+  poster_url?: string;
   primaryTitle: string;
   quote: string;
   references?: string[];
@@ -73,6 +74,8 @@ export interface MovieDetailsItem {
   startYear: number;
   subtitle_url?: string;
   tconst: string;
+  // Title as released in Brazil; '' when it is the same as the original.
+  title_pt?: string;
   trivia: string;
   watched: boolean;
   wiki: string;

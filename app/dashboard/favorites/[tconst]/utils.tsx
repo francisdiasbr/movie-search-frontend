@@ -19,7 +19,7 @@ export function formatQuote(quote: string): JSX.Element[] {
 
     elements.push(
       <S.QuoteLine key={idx++}>
-        <S.QuoteCharacter>{character}:</S.QuoteCharacter>
+        <S.QuoteCharacter>{character}</S.QuoteCharacter>
         <S.QuoteSpeech>{speech}</S.QuoteSpeech>
       </S.QuoteLine>
     );

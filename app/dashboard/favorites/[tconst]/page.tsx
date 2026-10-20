@@ -10,7 +10,6 @@ import Card from '../../../ui/Card';
 import ExternalLink from '../../../ui/ExternalLink';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 import MediaCard from '../../../ui/MediaCard';
-import PageHeader from '../../../ui/PageHeader';
 import TagList from '../../../ui/TagList';
 import GoBack from '../../components/GoBack';
 import { useKeywords } from '../../keywords/useKeywords';
@@ -74,9 +73,7 @@ export default function MovieDetailsPage() {
 
   return (
     <S.PageContainer>
-      <PageHeader title={data.primaryTitle}>
-        <GoBack to={ROUTES.favorites} />
-      </PageHeader>
+      <GoBack to={ROUTES.favorites} />
 
       {isOpen && <EditInfoModal data={data} isOpen={isOpen} onClose={() => setIsOpen(false)} />}
 
@@ -119,7 +116,7 @@ export default function MovieDetailsPage() {
 
       {data.quote && (
         <Card title='Citações'>
-          <S.Content>{formatQuote(data.quote)}</S.Content>
+          <S.QuoteBlock>{formatQuote(data.quote)}</S.QuoteBlock>
         </Card>
       )}
 
