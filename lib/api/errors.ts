@@ -45,6 +45,17 @@ export interface ApiErrorPayload {
 
 export const isApiError = (error: unknown): error is ApiError => error instanceof ApiError;
 
+// Some resources answer 404 for "nothing here yet" (a movie without a review).
+// That is an expected answer, not a failure, so it becomes null.
+export const nullIfNotFound = async <T>(promise: Promise<T>): Promise<T | null> => {
+  try {
+    return await promise;
+  } catch (error) {
+    if (isApiError(error) && error.status === 404) return null;
+    throw error;
+  }
+};
+
 export const toApiErrorPayload = (error: unknown, fallback: string): ApiErrorPayload => {
   if (isApiError(error)) {
     return {

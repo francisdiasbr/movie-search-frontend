@@ -1,3 +1,4 @@
+import { nullIfNotFound } from '../../../../lib/api/errors';
 import { ApiResponse, EntriesResponse } from '../../../../lib/api/types';
 import BaseService from '../../../../lib/service/BaseService';
 import { MovieDetailsItem } from '../../favorites/types';
@@ -9,8 +10,9 @@ class WriteService extends BaseService {
   protected prefix = 'write-review';
 
   async findReview(tconst: string): Promise<MovieReviewResponse | null> {
-    const response = await this.get<EntriesResponse<MovieReviewResponse>>(tconst);
-    return response.entries?.[0] ?? null;
+    // The backend answers 404 when the movie has no review yet.
+    const response = await nullIfNotFound(this.get<EntriesResponse<MovieReviewResponse>>(tconst));
+    return response?.entries?.[0] ?? null;
   }
 
   async getMovieTitle(tconst: string): Promise<string> {

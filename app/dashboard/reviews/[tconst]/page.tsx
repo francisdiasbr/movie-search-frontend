@@ -18,7 +18,7 @@ import * as S from './styles';
 export default function ReviewPage() {
   const { tconst } = useParams() as { tconst: string };
   const dispatch = useAppDispatch();
-  const { data, status } = useAppSelector(state => state.review);
+  const { data, error, status } = useAppSelector(state => state.review);
   const { images, uploadStatus } = useAppSelector(state => state.reviewImages);
   const [isEditing, setIsEditing] = useState(false);
   const [editPt, setEditPt] = useState('');
@@ -46,9 +46,16 @@ export default function ReviewPage() {
 
   const filePicker = useFilePicker(file => dispatch(uploadMovieImage({ tconst, file })));
 
-  if (status === 'loading') return <div>Carregando...</div>;
-  if (!data) return null;
-  if (!data.content?.pt?.text && !data.content?.en?.text) return <p>Nenhuma resenha encontrada!</p>;
+  if (status === 'loading' || status === 'idle') return <div>Carregando...</div>;
+  if (!data || (!data.content?.pt?.text && !data.content?.en?.text)) {
+    return (
+      <S.Page>
+        <PageHeader title={error ?? 'Nenhuma resenha encontrada para este filme.'}>
+          <GoBack />
+        </PageHeader>
+      </S.Page>
+    );
+  }
 
   const hasImages = images.length > 0;
 

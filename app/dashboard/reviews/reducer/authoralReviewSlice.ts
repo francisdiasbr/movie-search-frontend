@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { nullIfNotFound } from '../../../../lib/api/errors';
 import { addStatusCases, createApiThunk } from '../../../../lib/api/thunk';
 import reviewsService from '../service/ReviewsService';
 import { AuthoralReviewState, MovieReviewResponse, UpdateAuthoralReviewPayload } from '../types';
@@ -10,9 +11,10 @@ const initialState: AuthoralReviewState = {
   status: 'idle',
 };
 
-export const fetchAuthoralReview = createApiThunk<MovieReviewResponse, string>(
+export const fetchAuthoralReview = createApiThunk<MovieReviewResponse | null, string>(
   'authoralReview/fetchById',
-  tconst => reviewsService.getByTconst(tconst).then(response => response.entries[0]),
+  // The backend answers 404 when the movie has no review yet.
+  async tconst => (await nullIfNotFound(reviewsService.getByTconst(tconst)))?.entries[0] ?? null,
   'Não foi possível carregar o artigo.'
 );
 
