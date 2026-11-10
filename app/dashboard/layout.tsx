@@ -6,6 +6,7 @@ import * as S from './styles'
 
 const links = [
   { href: ROUTES.favorites, name: 'Minha coleção' },
+  { href: ROUTES.series, name: 'Séries' },
   { href: ROUTES.keywords, name: 'Palavras-chave favoritadas' },
   { href: ROUTES.write, name: 'Escrever' },
   { href: ROUTES.read, name: 'Ler' },

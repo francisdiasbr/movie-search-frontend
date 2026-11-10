@@ -8,6 +8,7 @@ export const ROUTES = {
   keywords: '/dashboard/keywords',
   read: '/dashboard/read',
   review: (tconst: string) => `/dashboard/reviews/${tconst}`,
+  series: '/dashboard/series',
   write: '/dashboard/write',
   writeReview: (params: { primaryTitle?: string; tconst: string }) => {
     const query = new URLSearchParams({ tconst: params.tconst });

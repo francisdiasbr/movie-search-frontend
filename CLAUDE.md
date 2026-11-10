@@ -43,6 +43,7 @@ app/dashboard/
   write/          page, service/WriteService.ts          # no redux: the page calls the service directly
   write-review/   page, Form/, service/WriteReviewService.ts, reducer/writeReviewSlice.ts, types.ts
   keywords/       page, useKeywords.ts, service/KeywordsService.ts, types.ts   # no redux: useKeywords calls the service
+  series/         page, columns, useSeries.ts, service/SeriesService.ts, types.ts, styles.ts   # no redux: useSeries calls the service
 ```
 
 Folder names do not define URLs; `app/router.tsx` does. Importing another feature's **slice** or **types** is fine (e.g. `search/service` types its response with `favorites/types`). A screen whose result is only used locally (like `write`) calls its service straight from the page, as siga's `actions.js` files do, instead of adding a slice.
@@ -73,7 +74,7 @@ No hex colour, radius, shadow or `px` spacing is written outside `app/theme/`: e
 ### Component conventions
 
 - `app/ui/` — components shared across the whole app (Button, IconButton, Card, PageHeader, ExternalLink, TagList, Table, Dialog, MediaCard, LoadingSpinner, and the `Stack`/`Row` flex primitives in `Layout`). Every page starts with `<PageHeader title description actions>`; a `GoBack` goes in its children. `Table` takes typed `Column<Row>[]` with an optional `render(row)` and `sort` per column, plus `rowKey`, `page`/`pageSize`/`onPageChange`/`onPageSizeChange` (1-based, sent to the backend) and `isActionLoading` (spinner instead of the skeleton rows when a row action reloads the list). `Dialog` exports `DialogField`, `DialogFooter` and `DialogRow` for its forms. `Button` mirrors `@gav/components`' Button: `variant` (`primary | secondary | outline | transparent | danger | success`), `size`, `iconLeft/iconRight` (a react-icons component), `loading`, `fullWidth`. Use it instead of a bare `<button>` whenever the button has a role (save, cancel, back, upload).
-- `app/dashboard/components/` — components shared within the dashboard but not globally. `GoBack` is the single back button of the app (`<GoBack to={ROUTES.favorites} />`, or `<GoBack />` for history back): an outline `Button` with a left arrow, as in siga-front.
+- `app/dashboard/components/` — components shared within the dashboard but not globally. `GoBack` is the single back button of the app (`<GoBack to={ROUTES.favorites} />`, or `<GoBack />` for history back): an outline `Button` with a left arrow, as in siga-front. `AddTitleDialog` is the "type an IMDb tconst" dialog the favorites and series lists open from their header button; `WatchedBadge` is the watched / not watched pill-button of the lists (looks only; each list wires the click).
 - Feature-specific components live inside their own page folder (e.g., `app/dashboard/favorites/components/`), next to that feature's `service/`, `reducer/` and `types.ts`.
 - Styled components are always in a `styles.ts` sibling and imported as `* as S`.
 

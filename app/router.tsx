@@ -8,6 +8,7 @@ import KeywordsPage from './dashboard/keywords/page'
 import DashboardLayout from './dashboard/layout'
 import ReadPage from './dashboard/read/page'
 import ReviewPage from './dashboard/reviews/[tconst]/page'
+import SeriesPage from './dashboard/series/page'
 import WriteReviewPage from './dashboard/write-review/page'
 import WritePage from './dashboard/write/page'
 
@@ -26,6 +27,7 @@ export default createBrowserRouter([
       { path: 'keywords', element: <KeywordsPage /> },
       { path: 'read', element: <ReadPage /> },
       { path: 'belas-artes', element: <BelasArtesPage /> },
+      { path: 'series', element: <SeriesPage /> },
       { path: 'write', element: <WritePage /> },
       { path: 'write-review', element: <WriteReviewPage /> },
     ],
