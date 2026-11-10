@@ -97,6 +97,16 @@ a expõe pelo hook `useLanguage()`, usado pelo seletor da barra de navegação
 
 A infraestrutura fica em `lib/`: `api/BaseApi.ts` (axios + `ApiError`), `service/BaseService.ts` (classe base dos services, por `prefix`), `store.ts` e `hooks.ts`. Utilitários transversais ficam em `app/const.ts`, `app/formatter/`, `app/util/` e `app/hooks/`. Mais detalhes em [CLAUDE.md](CLAUDE.md).
 
+## Documentação
+
+A documentação técnica detalhada fica em [`docs/`](docs/README.md):
+
+- [Arquitetura](docs/arquitetura.md): pastas, rotas, store, camada de API, tema e idioma.
+- [Telas](docs/telas.md): o que cada rota mostra, o estado que usa e as chamadas que dispara.
+- [Componentes](docs/componentes.md): componentes de `app/ui/` e compartilhados do dashboard.
+- [API consumida](docs/api-consumida.md): rotas do backend chamadas pelo frontend.
+- [Desenvolvimento](docs/desenvolvimento.md): instalação, scripts, lint e variáveis de ambiente.
+
 ## Rodando a aplicação
 
 Antes de iniciar a aplicação, é imprescindível que o backend esteja em execução. Você pode encontrar as instruções para configurar e rodar o backend neste repositório: [movie-search-backend](https://github.com/francisdiasbr/movie-search-backend).
